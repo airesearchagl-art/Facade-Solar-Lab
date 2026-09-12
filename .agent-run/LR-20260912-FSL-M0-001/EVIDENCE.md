@@ -60,3 +60,12 @@ Performed: `2026-09-12` (Asia/Tokyo)
 | Browser runtime | No Vite error overlay and no warning/error console entries | PASS |
 
 The first registry lookup failed because npm's default cache was outside the writable workspace. Retrying with `.npm-cache` succeeded; the cache is ignored and is not a product failure.
+
+## Wave 3 — Documentation
+
+- `README.md` records purpose, M0 status, commands, structure, legacy policy, and the absolute-value warning.
+- `docs/PRODUCT_DIRECTION.md` records the design loop, intended parameters/outputs, product principles, and M0 boundary.
+- `docs/MODEL_LIMITATIONS.md` preserves all supplied legacy MVP known issues and unit/precision constraints without claiming fixes.
+- `docs/ROADMAP.md` records M0 through M6 and Human Gates.
+- `docs/VALIDATION_PLAN.md` records future Golden, geometry, weather, third-party comparison, and boundary tests without fabricating results.
+- `AGENTS.md` records architecture, domain constraints, checks, public boundary, legacy preservation, and Git/deployment gates for future sessions.

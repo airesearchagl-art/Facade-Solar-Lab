@@ -10,8 +10,8 @@
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
 - Current head: resolve symbolic `HEAD` with `git rev-parse HEAD`
-- Current wave: `Wave 2 — Project bootstrap`
-- Last successful checkpoint: Wave 1 commit `83a8cf4`
+- Current wave: `Wave 3 — Documentation`
+- Last successful checkpoint: Wave 2 commit `82e3db9`
 
 ## Task Packet binding
 
@@ -34,7 +34,7 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 | test, typecheck, build pass | PASS (preliminary) | Wave 2 checks; repeat in Wave 5 |
 | Run artifacts and digest binding | PASS | Seven required artifacts, stable digest, Wave 0 binding |
 | Session can resume from this file | PASS | Resume instructions below |
-| Product and validation documentation | PENDING | Wave 3 |
+| Product and validation documentation | PASS | README, Product Direction, Limitations, Roadmap, Validation Plan |
 | MVP preservation or accurate missing record | PENDING | Wave 4 |
 | Public repository boundary | PASS | `EVIDENCE.md` |
 | Human Gates preserved | PASS | No push, PR, main mutation, merge, or deploy |
@@ -49,10 +49,11 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 - Completed the seven-file Long-Run artifact set, queue, debt policy, decision log, and resume contract.
 - Created the Vite + React + TypeScript application, Vitest baseline, pure engine boundary, model/weather status markers, and minimal responsive M0 screen.
 - Installed locked dependencies and passed the initial test, typecheck, build, and Browser runtime checks.
+- Documented product direction, known model limitations, roadmap, validation plan, commands, repository structure, and future-agent constraints.
 
 ## Current implementation state
 
-Waves 0 and 1 are checkpointed. The M0 application bootstrap is implemented and verified in the working tree. Solar calculations and weather data remain deliberately unimplemented.
+Waves 0 through 2 are checkpointed. Required M0 documentation is synchronized with the implemented bootstrap in the working tree. Solar calculations and weather data remain deliberately unimplemented.
 
 ## Checks
 
@@ -94,14 +95,13 @@ Waves 0 and 1 are checkpointed. The M0 application bootstrap is implemented and 
 
 ## Remaining tasks
 
-- Commit the Wave 2 project bootstrap checkpoint.
-- Wave 3: write required product and validation documentation.
+- Commit the Wave 3 documentation checkpoint.
 - Wave 4: search for and preserve MVP sources only if present.
 - Wave 5: run checks, review scope/privacy, finalize state, checkpoint, push branch, and create a Draft PR if authorized access works.
 
 ## Next action
 
-Commit the Wave 2 checkpoint, then write and synchronize the required documentation in Wave 3.
+Commit the Wave 3 checkpoint, then perform the evidence-only MVP preservation audit in Wave 4.
 
 ## Stop conditions status
 
