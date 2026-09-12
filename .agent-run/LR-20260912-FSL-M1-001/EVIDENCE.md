@@ -53,3 +53,14 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - `node scripts/generate-legacy-v01-golden.mjs --check` reproduced `tests/fixtures/legacy-v01-golden.json` byte-for-byte.
 - G1 reference sanity: annual no-overhang `25890.12... kWh`, annual reduction `44.05...%`, cooling reduction `57.95...%`, heating reduction `35.13...%`.
 - G2–G6 reference cases include no-overhang, azimuth symmetry, width scaling, eta scaling, fixed `D/H + O/H` similarity, and the deliberately non-similar fixed-`O` regression.
+
+## Wave 3 — Pure TypeScript legacy engine
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added `src/engine/legacy-v01/{constants,types,solar,shading,simulation,index}.ts` and exposed the API from `src/engine/index.ts`.
+- Public calculation API: `simulateLegacyV01`, `simulateLegacyV01Monthly`, `summarizeLegacyV01`, and `calculateLegacyHourlyGain`.
+- Units and conventions are explicit at the type boundary: metres, degrees north, south-zero/west-positive azimuth, kWh, and percent.
+- ASHRAE constants, month days, representative days, 20 strips, quarter-hour midpoint sampling, shadow comparison, sky view factor, and period month sets preserve original semantics and operation order.
+- Engine manifest states `legacy-baseline` and `not-validated-physical-model`.
+- `npm run typecheck`, the current manifest test, reference fixture check, and authored-file whitespace check pass before checkpointing.

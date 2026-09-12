@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 3 — Pure TypeScript Legacy Engine`
-- Last successful checkpoint: `Wave 1 — 1feabbc`; Wave 2 reference harness is the current live HEAD after its checkpoint commit
+- Current wave: `Wave 4 — Golden Tests / Engine Boundary`
+- Last successful checkpoint: `Wave 2 — e3b0861`; Wave 3 Pure TypeScript engine is the current live HEAD after its checkpoint commit
 
 ## Task Packet binding
 
@@ -32,7 +32,7 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | M1 run artifacts and digest binding | COMPLETE |
 | Human legacy originals byte-preserved in Git | COMPLETE |
 | Independent original-source reference harness | COMPLETE |
-| Pure TypeScript legacy engine | PENDING |
+| Pure TypeScript legacy engine | COMPLETE |
 | G1–G6 Golden comparisons | PENDING |
 | Mechanical React/DOM/Canvas boundary test | PENDING |
 | Documentation and minimal M1 status | PENDING |
@@ -62,11 +62,11 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Remaining tasks
 
-- Complete Waves 3–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Waves 4–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
 
 ## Next action
 
-Implement the typed Pure TypeScript `legacy-v01` engine directly from the mapped original calculation block without importing the test-only reference harness.
+Compare the new engine to the independent fixture for G1–G6 and replace QD-M1-001 with a mechanical dependency-boundary test.
 
 ## Stop conditions
 

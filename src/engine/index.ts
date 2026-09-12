@@ -1,12 +1,9 @@
-/**
- * Framework-independent engine entry point.
- *
- * M0 deliberately exposes metadata only. Solar geometry and weather-backed
- * calculations begin in M1 and must remain free of browser or React imports.
- */
+export * from "./legacy-v01";
+
 export const engineManifest = Object.freeze({
-  milestone: "M0",
-  calculationStatus: "not-implemented",
+  milestone: "M1",
+  calculationStatus: "legacy-baseline",
+  modelStatus: "not-validated-physical-model",
   runtimeTargets: ["browser", "node", "batch"] as const,
   frameworkDependencies: [] as const,
 });
