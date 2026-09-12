@@ -11,6 +11,6 @@ Binding: `LRP-20260912-FSL-M1-001` rev `1` / `BEF00BD0BA6B96A027EB6BE7BB5186B382
 | 5 | Wave 4 | G1–G6 Golden tests and boundary enforcement | COMPLETE | 15 tests pass; QD-M1-001 closed; checkpoint `9c00fa3` |
 | 6 | Wave 5 | Documentation and minimal M1 status | COMPLETE | Required docs and browser-verified M1 status; checkpoint `fdeaea3` |
 | 7 | Wave 6 | Full convergence and self-review | COMPLETE | All required checks, source/blob verification, scans, and self-review pass at the live Wave 6 checkpoint |
-| 8 | Wave 7 | Normal push and Draft PR | ACTIVE | OPEN/Draft PR; Ready=false; merged=false; Human Gate |
+| 8 | Wave 7 | Normal push and Draft PR | HUMAN_GATE | PR #2 OPEN/Draft; Ready=false; merged=false; awaiting Independent FULL Review |
 
-M2 and all non-goals are out of scope and must not start automatically.
+Draft PR creation is complete and must not be repeated. M2 and all non-goals are out of scope and must not start automatically.

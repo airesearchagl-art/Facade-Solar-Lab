@@ -23,5 +23,5 @@ The normalized Task Packet snapshot is immutable after Wave 0. Every M1 checkpoi
 | Wave 3 — Pure TypeScript legacy engine | `12189d6` | Task Packet ID, revision, and SHA-256 above |
 | Wave 4 — Golden and boundary tests | `9c00fa3` | Task Packet ID, revision, and SHA-256 above |
 | Wave 5 — Documentation / minimal status | `fdeaea3` | Task Packet ID, revision, and SHA-256 above |
-| Wave 6 — Full convergence | pending | Task Packet ID, revision, and SHA-256 above |
+| Wave 6 — Full convergence | `7a659ac` | Task Packet ID, revision, and SHA-256 above |
 | Wave 7 — Draft PR Human Gate | pending | Task Packet ID, revision, and SHA-256 above |

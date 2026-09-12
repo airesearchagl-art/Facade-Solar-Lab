@@ -5,13 +5,15 @@
 - Run ID: `LR-20260912-FSL-M1-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `ACTIVE`
+- Current state: `HUMAN_GATE`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 7 — Draft PR`
-- Last successful checkpoint: `Wave 5 — fdeaea3`; Wave 6 convergence evidence is the current live HEAD after its checkpoint commit
+- Current wave: `Wave 7 — Draft PR / Independent FULL Review Human Gate`
+- Last successful checkpoint: `Wave 6 — 7a659ac`; Wave 7 closeout is the current live HEAD after its checkpoint commit
+- Pull request: `#2` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/2`
+- Pull request state: `OPEN / Draft / Ready=false / merged=false`
 
 ## Task Packet binding
 
@@ -37,7 +39,7 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | Mechanical React/DOM/Canvas boundary test | COMPLETE |
 | Documentation and minimal M1 status | COMPLETE |
 | Full required checks and public-boundary scan | COMPLETE |
-| Draft PR, still Draft and unmerged | PENDING |
+| Draft PR, still Draft and unmerged | COMPLETE |
 
 ## Required checks
 
@@ -61,11 +63,11 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Remaining tasks
 
-- Complete Wave 7 in `TASK_QUEUE.md`: normal push, create the authorized Draft PR, verify its fresh state, record the result, and stop at the Human Gate.
+- Independent FULL Review of PR #2 by a separate reviewer. No further mutation is authorized in this run.
 
 ## Next action
 
-Resolve live `HEAD`, normally push `feat/m1-engine-baseline`, create only the authorized Draft PR to `main`, verify `OPEN / Draft / Ready=false / merged=false`, record the fresh PR state, and stop. Do not repeat source intake or implementation waves.
+Independent FULL Review of PR #2 at the live GitHub head. A resumed agent must not create another PR or repeat the completed Draft PR mutation.
 
 ## Stop conditions
 
@@ -80,4 +82,5 @@ Resolve live `HEAD`, normally push `feat/m1-engine-baseline`, create only the au
 4. Resolve live `HEAD`; do not confuse it with any prior checkpoint SHA.
 5. Verify both legacy workspace files still match the Human-provided byte counts and SHA-256 values before touching the index.
 6. Continue only from **Current wave** / **Next action** and stop on any listed condition.
-7. If the Draft PR already exists, do not create another one; inspect and synchronize its fresh state instead.
+7. Confirm PR #2 remains `OPEN / Draft / Ready=false / merged=false`, base `main`, and head `feat/m1-engine-baseline`.
+8. Do not create another PR, mark Ready, merge, deploy, release, or begin M2 without a new Human instruction.

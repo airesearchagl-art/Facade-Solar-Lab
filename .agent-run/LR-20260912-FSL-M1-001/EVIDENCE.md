@@ -138,3 +138,16 @@ The current head is deliberately resolved as symbolic `HEAD` at resume time. `fd
 - Commits: 6
 
 These counts identify the verified Wave 5 checkpoint before this evidence-only checkpoint. Final PR metrics must be freshly measured after the Wave 7 closeout commit; they must not be inferred from this snapshot.
+
+## Wave 7 — Draft PR / Human Gate
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Human authorized only a Draft PR from `feat/m1-engine-baseline` to `main` with title `M1: establish legacy engine baseline`.
+- Browser creation succeeded: PR #2 — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/2`.
+- Fresh GitHub state at creation: `OPEN / Draft / Not ready / merged=false`.
+- GitHub displayed base `main`, head `feat/m1-engine-baseline`, 7 commits, and 35 changed files at the Wave 6 head `7a659ac59bb516105c4ccfa0990b42f98907c1b8`.
+- Fresh remote verification immediately after creation: `origin/main = b633a2b9651b63ea1224f8a4becefa1062a6b12d`; remote feature head = local `HEAD = 7a659ac59bb516105c4ccfa0990b42f98907c1b8`.
+- This Run Artifact synchronization is the eighth and final branch commit. Resolve the resulting live PR head instead of embedding a self-referential SHA here; the changed-file count remains 35.
+- Ready, merge, auto-merge, branch deletion, rebase, force-push, `main`, Vercel, Production, Release, permissions, visibility, secrets, additional implementation, and M2 were not mutated.
+- Next permitted activity: Independent FULL Review. Human Gate: STOP.
