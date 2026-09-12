@@ -42,3 +42,14 @@ Performed: `2026-09-12` (Asia/Tokyo)
 | Required diff whitespace | Originals use path-specific `-whitespace`; authored files remain checked | `git diff --cached --check` has no findings | Recheck after commit required | PASS |
 
 Staged bytes were materialized independently with `git checkout-index --temp` and hashed. The original workspace files were not rewritten, formatted, or normalized.
+
+## Wave 2 — Independent original-source reference harness
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- `scripts/generate-legacy-v01-golden.mjs` reads the immutable HTML bytes and refuses execution unless SHA-256 is `EF896E0D...D4CB5`.
+- The script extracts the actual block from `const ASHRAE=` through the marker immediately before drawing code, then executes that exact source in a Node.js `vm` context.
+- Only original `decl`, `hourGain`, `simulate`, and `summarize` functions generate the fixture; the new TypeScript engine is not imported or called.
+- `node scripts/generate-legacy-v01-golden.mjs --check` reproduced `tests/fixtures/legacy-v01-golden.json` byte-for-byte.
+- G1 reference sanity: annual no-overhang `25890.12... kWh`, annual reduction `44.05...%`, cooling reduction `57.95...%`, heating reduction `35.13...%`.
+- G2–G6 reference cases include no-overhang, azimuth symmetry, width scaling, eta scaling, fixed `D/H + O/H` similarity, and the deliberately non-similar fixed-`O` regression.

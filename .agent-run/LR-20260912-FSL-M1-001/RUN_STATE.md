@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 2 — Independent Reference Harness`
-- Last successful checkpoint: `Wave 0 — e445de8`; Wave 1 source intake is the current live HEAD after its checkpoint commit
+- Current wave: `Wave 3 — Pure TypeScript Legacy Engine`
+- Last successful checkpoint: `Wave 1 — 1feabbc`; Wave 2 reference harness is the current live HEAD after its checkpoint commit
 
 ## Task Packet binding
 
@@ -31,7 +31,7 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | M0 post-merge closeout | COMPLETE |
 | M1 run artifacts and digest binding | COMPLETE |
 | Human legacy originals byte-preserved in Git | COMPLETE |
-| Independent original-source reference harness | PENDING |
+| Independent original-source reference harness | COMPLETE |
 | Pure TypeScript legacy engine | PENDING |
 | G1–G6 Golden comparisons | PENDING |
 | Mechanical React/DOM/Canvas boundary test | PENDING |
@@ -57,17 +57,16 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Explicit unverified items
 
-- Independent reference execution is not yet established.
 - Golden fixture and new-engine equivalence are not yet established.
 - Absolute energy results remain a legacy baseline, not validated physical-performance evidence.
 
 ## Remaining tasks
 
-- Complete Waves 2–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Waves 3–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
 
 ## Next action
 
-Read the actual HTML calculation script and build an independent test-only reference execution path without importing the new engine.
+Implement the typed Pure TypeScript `legacy-v01` engine directly from the mapped original calculation block without importing the test-only reference harness.
 
 ## Stop conditions
 
