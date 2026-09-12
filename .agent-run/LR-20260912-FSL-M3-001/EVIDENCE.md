@@ -41,3 +41,12 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Facade azimuth is north-zero/clockwise and normalized only after finite validation.
 - Derived facade-local sun vector uses `x=-cos(e)sin(S-A)`, `y=cos(e)cos(S-A)`, `z=sin(e)` from the declared front-view basis.
 - Focused result: 1 file / 5 tests; typecheck and whitespace check PASS.
+
+## Wave 2 — Polygon primitives
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Defined one `GEOMETRY_EPSILON = 1e-9` for clipping, duplicate, and zero-area boundaries.
+- Implemented finite-point validation, adjacent/closing vertex deduplication, shoelace polygon area, and Sutherland–Hodgman clipping against an axis-aligned opening rectangle.
+- P1–P6 cover area, partial/full/empty intersection, edge-touch zero area, and numerical duplicate vertices.
+- Focused result: 2 files / 11 tests; typecheck and whitespace check PASS.

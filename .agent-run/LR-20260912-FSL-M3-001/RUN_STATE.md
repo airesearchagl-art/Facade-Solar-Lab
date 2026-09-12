@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 2 — Polygon Primitives`
-- Last successful checkpoint: `Wave 0 — b2965da`; Wave 1 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 3 — Finite Direct Shadow`
+- Last successful checkpoint: `Wave 1 — 10892e1`; Wave 2 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -35,10 +35,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - M2 post-merge closeout prepared without changing its immutable Task Packet.
 - Public-safe M3 Task Packet snapshot created by replacing only the personal project root with `${PROJECT_ROOT}` and normalizing LF; digest bound above.
 - Geometry contracts, validation, derived opening/overhang metrics, azimuth normalization, and facade-local sun-vector basis implemented.
+- Shared geometry epsilon, adjacent-vertex deduplication, shoelace area, and Sutherland–Hodgman rectangle clipping implemented.
 
 ## Current work
 
-- Implement convex polygon primitives and the shared geometry epsilon.
+- Implement finite horizontal-overhang shadow projection and analytical direct-shading tests.
 
 ## Required checks
 
@@ -67,7 +68,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Next action
 
-Implement Wave 2 polygon area, rectangle clipping, duplicate handling, and P1–P6 tests.
+Implement Wave 3 shadow polygon/projection/intersection and G1–G6 tests.
 
 ## Stop conditions
 
