@@ -39,6 +39,7 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 - Weather interval irradiance, 2D overhang shading, interval energy, aggregation, periods, and result provenance implemented.
 - Synthetic regression, M1 Golden/hash regression, and local EnergyPlus Tokyo Hyakuri EPW smoke validation completed.
 - Required weather documentation, milestone guidance, limitations/validation plans, and minimal M2 status UI completed.
+- Full convergence passed and the feature branch was normally pushed.
 
 ## Current work
 
@@ -68,11 +69,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Normal push, action-time Draft PR confirmation, browser-created Draft PR, fresh state, and final artifact sync.
+- Action-time Draft PR confirmation, browser-created Draft PR, fresh state, and final artifact sync.
 
 ## Next action
 
-Commit and push the verified branch, then request action-time confirmation immediately before creating the Draft PR. Do not mark Ready or merge.
+After explicit action-time Human confirmation, create one Draft PR from `feat/m2-weather-foundation` to `main`, verify fresh state, sync artifacts, and stop. Do not mark Ready or merge.
 
 ## Stop conditions
 
@@ -85,4 +86,4 @@ Commit and push the verified branch, then request action-time confirmation immed
 2. Verify branch `feat/m2-weather-foundation`, resolve live `HEAD`, and inspect the working tree.
 3. Verify the Task Packet digest above and both immutable M1 source byte hashes.
 4. Read all seven M2 artifacts; continue only from Current wave / Next action.
-5. Do not repeat completed external mutations. Draft PR is permitted only after Wave 7 convergence.
+5. The branch push is complete and must not be repeated without new commits. Draft PR creation still requires the recorded action-time Human confirmation.

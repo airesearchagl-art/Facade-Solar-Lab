@@ -180,3 +180,12 @@ Implementation verification head: `ad486d82f147de03d08f846b80fd1cdaac1994b2`.
 - 9 commits.
 
 The following Wave 7 evidence checkpoint changes only resumable artifacts. Current head remains symbolic and must be resolved live.
+
+## Wave 8 — Push / Draft PR gate
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Normal push created remote branch `origin/feat/m2-weather-foundation`.
+- Pushed verified head before this gate-sync commit: `925fb90676b8e451185f3d908572869b2c08233d`.
+- Draft PR has not been created yet. Action-time Human confirmation is required immediately before that representational browser action.
+- Ready, merge, auto-merge, branch deletion, `main`, Vercel, Production, Release, permissions, visibility, secrets, and M3 remain untouched.

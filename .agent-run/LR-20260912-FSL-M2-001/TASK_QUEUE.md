@@ -12,4 +12,4 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | 6 | Wave 5 | Validation and optional real EPW smoke | COMPLETE | Synthetic/M1/real smoke and comparison; checkpoint `149f283` |
 | 7 | Wave 6 | Documentation and minimal status | COMPLETE | Required docs/status and browser check; checkpoint `2927df7` |
 | 8 | Wave 7 | Full convergence and self-review | COMPLETE | Full checks/scans/review pass at `ad486d8`; evidence checkpoint follows |
-| 9 | Wave 8 | Normal push and Draft PR | HUMAN_GATE | Push branch, then action-time confirmation required before PR creation |
+| 9 | Wave 8 | Normal push and Draft PR | HUMAN_GATE | Branch pushed; action-time confirmation required before one Draft PR |
