@@ -61,3 +61,15 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Hand calculations: G2 drop 1 m, shaded 2 m² / opening 4 m² = 0.5; G3 drop 2 m = full shade; G4 z=2.5 to 1.5 intersection gives 1 m² / 4 m² = 0.25.
 - Translation and uniform-scale invariance PASS.
 - Focused result: 3 files / 17 tests; typecheck and whitespace check PASS.
+
+## Wave 4 — Orientation / finite width
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Rotation invariance PASS for N/E/S/W and 45°/135°/225°/315° facades with fixed relative sun geometry.
+- Symmetric left/right extensions give equal shade under mirrored sun.
+- Asymmetric extensions produce a directional difference; mirroring the sun and swapping extensions restores equality.
+- Growing the relevant-side extension does not reduce shaded area.
+- 100 m side extensions reproduce the analytical infinite-width fraction `sqrt(2)/2` for D=1 m, e=45°, beta=45°, H=2 m.
+- Behind-facade and exact/near-grazing cases return finite values and fractions within 0–1.
+- Focused result: direct-shadow/orientation 2 files / 22 tests; typecheck and whitespace check PASS.

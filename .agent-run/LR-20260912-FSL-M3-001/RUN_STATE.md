@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 4 — Orientation / Side Extensions`
-- Last successful checkpoint: `Wave 2 — 81d1a9a`; Wave 3 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 5 — Weather Integration`
+- Last successful checkpoint: `Wave 3 — b4dd948`; Wave 4 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -37,10 +37,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - Geometry contracts, validation, derived opening/overhang metrics, azimuth normalization, and facade-local sun-vector basis implemented.
 - Shared geometry epsilon, adjacent-vertex deduplication, shoelace area, and Sutherland–Hodgman rectangle clipping implemented.
 - Finite horizontal-overhang shadow polygon, wall projection, opening intersection, and bounded shaded/lit fractions implemented.
+- All cardinal/intermediate rotations, mirror symmetry, asymmetric extensions, monotonic relevant-side extension, infinite-width limit, behind-facade, and grazing boundaries verified.
 
 ## Current work
 
-- Complete all-orientation, finite-width, mirror, monotonic, behind, and grazing tests.
+- Add the new `facade-v1-weather` path while reusing M2 weather/solar without modifying M2 source.
 
 ## Required checks
 
@@ -69,7 +70,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Next action
 
-Implement Wave 4 G7–G9, F1–F4, cardinal/intermediate rotations, and boundary tests.
+Implement Wave 5 facade-v1 irradiance/simulation/result identity and provenance tests.
 
 ## Stop conditions
 
