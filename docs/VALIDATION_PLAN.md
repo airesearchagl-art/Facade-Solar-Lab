@@ -1,6 +1,6 @@
 # Validation Plan
 
-M3ではLegacy/M2 regressionに加え、解析解polygon、全方位rotation、有限幅庇、Tokyo Hyakuri IWEC local smokeを実施済みです。第三者solverとの物理validationは将来計画です。
+M4ではM1–M3 regressionに加え、Comparison domain、browser-local EPW adapter、case state、baseline delta、monthly alignment、UI contract、Tokyo Hyakuri IWEC local smokeを検証します。第三者solverとの物理validationはM5以降です。
 
 ## 1. Golden tests
 
@@ -36,6 +36,15 @@ M3ではLegacy/M2 regressionに加え、解析解polygon、全方位rotation、�
 - 0および負値、上下端逆転、極端な寸法、範囲外方位を扱う。
 - polar day/night、太陽高度0°近傍、欠測時刻、DST/time-zone境界を扱う。
 - invalid inputを黙って補正せず、errorまたは明示的なnormalization結果を返す。
+
+## 6. M4 comparison / browser checks
+
+- 1–4 Case、duplicate deep copy、baseline切替・削除時再割当、zero-baseline percentage、annual/cooling/heating/monthly deltaをPure TS testで検証する。
+- azimuth、opening、overhang enable/disable、SHGCの入力差分とunchanged omissionを検証する。
+- `src/comparison/**`をrecursive boundary scanへ含め、React、DOM、File API、Node filesystem dependencyを拒否する。
+- synthetic EPWでbrowser adapterの`.epw` boundaryとprovenanceを検証する。
+- hash一致したTokyo Hyakuri EPWがlocal-onlyで存在する場合、8760 intervals、2 Case、12 months、finite KPI、direct `simulateFacadeV1`一致を検証する。
+- final Vercel Previewでfile selection、Case duplicate、input edit、explicit Run、KPI、chart、delta、geometry、assumptions、warning、console、assetを操作確認する。
 
 ## Evidence policy
 

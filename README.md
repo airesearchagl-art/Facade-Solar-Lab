@@ -6,21 +6,22 @@
 
 ## Current state
 
-現在は **M3 — Facade Geometry** です。M1 Legacy baselineとM2 Weather Foundationを維持したまま、鉛直ファサード・矩形開口・有限幅水平庇のPure TypeScript geometry foundationを追加しています。
+現在は **M4 — Comparison UX** です。M1–M3の計算baselineを維持したまま、同一EPW条件で1–4案を比較するbrowser-local Facade Comparison Workspaceを実装しています。
 
 - Minimal UI: 実装済み
 - Pure TypeScript engine境界: 実装済み
 - Legacy日射計算engine: 実装済み（M1 regression baseline）
 - Original-source reference / Golden test: 実装済み
-- 実気象data: EPW foundation実装済み（import UIは未実装）
+- 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
+- Comparison: Case追加・複製・baseline・期間別/月別KPI・入力差分・geometry説明図を実装済み
 - Backend / Database: なし
 - Production deployment: 未実施
 
-旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M1、M2、M3は明示的に別modelです。M3はweather-backedですが、最終modelや検証済み物理modelではありません。
+旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainは既存`facade-v1-weather`を呼ぶadapterであり、別のsolar calculationを持ちません。weather-backedですが、最終modelや検証済み物理modelではありません。
 
 > [!WARNING]
-> M3の実EPW smokeはparser/simulation完走と方位差の確認です。第三者solverとの物理validationが完了するまで、M1/M2/M3の絶対値 `[kWh]` を正式な性能評価や実務判断の根拠に使用できません。
+> M4の比較値を含め、第三者solverとの物理validationが完了するまで絶対値 `[kWh]` をBEI、法適合、HVAC sizing、最終認証、保証値に使用できません。同一前提での設計比較を支援し、最終判断はHumanが行います。
 
 ## Development
 
@@ -50,6 +51,7 @@ npm audit
 .
 ├─ src/
 │  ├─ app/       # React UI
+│  ├─ comparison/ # Pure TS Case / baseline / delta / difference domain
 │  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1 engine
 │  ├─ geometry/  # Facade-local geometry / clipping / direct shadow
 │  ├─ models/    # Domain model領域
@@ -73,7 +75,8 @@ npm audit
 - [Legacy baseline](docs/LEGACY_BASELINE.md)
 - [Weather foundation](docs/WEATHER_FOUNDATION.md)
 - [Facade geometry foundation](docs/FACADE_GEOMETRY.md)
+- [Comparison UX](docs/COMPARISON_UX.md)
 
 ## Development status
 
-M3完了後はDraft PRでHuman Gate停止します。M4への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。
+M4完了後はDraft PRでHuman Gate停止します。M5への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。

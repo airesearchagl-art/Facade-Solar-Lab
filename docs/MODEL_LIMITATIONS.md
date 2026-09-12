@@ -1,8 +1,17 @@
 # Model Limitations
 
-## Current M3 state
+## Current M4 state
 
-M1 Legacy engineとM2 weather-v1 foundationに加え、有限幅水平庇のdirect shadowを扱う`facade-v1-weather`があります。実EPW smokeは完了しましたが、絶対性能の外部validationではありません。
+M1 Legacy engine、M2 weather-v1、M3 `facade-v1-weather`を保持し、M4は1–4 Caseを同一EPW条件で比較するUIとPure TypeScript adapterを追加します。比較値の外部validationではありません。
+
+## Comparison UX limitations
+
+- 同時比較は最大4 Caseです。自動最適化、score、推奨案判定を行いません。
+- full-year計算は明示的な`Run Comparison`だけで実行し、入力変更後はlast-run結果をdirty表示します。
+- baseline差は`case - baseline`です。負値を一律に良いと解釈しません。
+- baselineが0の場合、percentage deltaは`null`としてUIで`—`表示します。
+- EPWはbrowser-localでparseし、raw本文を表示・保存・送信しません。automatic download、geocoding、cloud saveはありません。
+- geometry SVGは説明図であり、CAD寸法取得や施工図用途ではありません。
 
 ## Facade-v1 limitations
 
@@ -53,6 +62,7 @@ M1 Legacy engineとM2 weather-v1 foundationに加え、有限幅水平庇のdire
 
 - 第三者比較を含むM5 validation完了前の `[kWh]` は正式な実務判断根拠に使用できません。
 - 相対比較であっても、同一のgeometry・weather・glass・period前提を明示する必要があります。
+- M4結果はBEI、法適合、HVAC sizing、最終認証、保証energy predictionへ使用できません。
 
 ## Units and numerical precision
 
