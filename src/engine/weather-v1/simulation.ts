@@ -1,6 +1,8 @@
 import {
   assertWeatherDatasetUsable,
   type WeatherDataset,
+  type WeatherIntervalTime,
+  type LocalStandardTime,
 } from "../../weather";
 import { calculateWeatherIntervalGain } from "./irradiance";
 import { calculateSolarPosition } from "./solar-position";
@@ -40,6 +42,31 @@ function summarize(
   };
 }
 
+/**
+ * EPW typical-year files may retain different source years for each month.
+ * Their 8760/8784 structure, not those source years, defines the solar calendar.
+ */
+export function resolveWeatherV1SolarTime(
+  dataset: Pick<WeatherDataset, "coverage" | "intervals">,
+  intervalTime: WeatherIntervalTime,
+): LocalStandardTime {
+  let canonicalYear: number | undefined;
+  if (dataset.coverage === "full-year-8760") {
+    canonicalYear = 2001;
+  } else if (dataset.coverage === "full-leap-year-8784") {
+    canonicalYear = 2000;
+  } else if (dataset.coverage === "full-year-subhour") {
+    canonicalYear = dataset.intervals.some(
+      (interval) => interval.time.month === 2 && interval.time.day === 29,
+    )
+      ? 2000
+      : 2001;
+  }
+  return canonicalYear === undefined
+    ? intervalTime.midpointLocalStandardTime
+    : { ...intervalTime.midpointLocalStandardTime, year: canonicalYear };
+}
+
 export function simulateWeatherV1(
   dataset: WeatherDataset,
   parameters: WeatherV1Parameters,
@@ -54,7 +81,7 @@ export function simulateWeatherV1(
   for (const interval of dataset.intervals) {
     const solar = calculateSolarPosition({
       location: dataset.location,
-      localStandardTime: interval.time.midpointLocalStandardTime,
+      localStandardTime: resolveWeatherV1SolarTime(dataset, interval.time),
     });
     const gain = calculateWeatherIntervalGain(
       parameters,

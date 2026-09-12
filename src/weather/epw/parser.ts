@@ -181,7 +181,7 @@ export function parseEpw(text: string, options: WeatherParseOptions): WeatherDat
   }
 
   const provenance: WeatherSourceProvenance = {
-    sourceType: options.sourceName.startsWith("synthetic") ? "synthetic" : "epw",
+    sourceType: options.sourceType ?? "epw",
     sourceName: options.sourceName,
     ...(options.sourceReference === undefined
       ? {}

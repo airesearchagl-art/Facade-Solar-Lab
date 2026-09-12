@@ -12,6 +12,7 @@ export interface WeatherSourceProvenance {
 
 export interface WeatherParseOptions {
   readonly sourceName: string;
+  readonly sourceType?: WeatherSourceProvenance["sourceType"];
   readonly sourceReference?: string;
   readonly retrievedOn?: string;
   readonly sourceSha256?: string;

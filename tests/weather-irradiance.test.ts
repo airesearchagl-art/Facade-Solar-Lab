@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   calculateWeatherIntervalGain,
   calculateWeatherIntervalIrradiance,
+  resolveWeatherV1SolarTime,
   simulateWeatherV1,
   type SolarPosition,
   type WeatherV1Parameters,
@@ -136,5 +137,26 @@ describe("weather-v1 interval irradiance and energy", () => {
     const invalid = subhourFixture.replace(",25,50,7.5", ",25,9999,7.5");
     const dataset = parseEpw(invalid, { sourceName: "synthetic-missing" });
     expect(() => simulateWeatherV1(dataset, PARAMETERS)).toThrow(WeatherDataError);
+  });
+
+  it("uses year structure rather than mixed EPW source years for a typical-year solar calendar", () => {
+    const dataset = parseEpw(subhourFixture, {
+      sourceName: "synthetic-subhour",
+      sourceType: "synthetic",
+    });
+    const intervalTime = dataset.intervals[0]!.time;
+
+    expect(
+      resolveWeatherV1SolarTime(
+        { ...dataset, coverage: "full-year-8760" },
+        { ...intervalTime, year: 1988 },
+      ).year,
+    ).toBe(2001);
+    expect(
+      resolveWeatherV1SolarTime(
+        { ...dataset, coverage: "full-leap-year-8784" },
+        { ...intervalTime, year: 1987 },
+      ).year,
+    ).toBe(2000);
   });
 });

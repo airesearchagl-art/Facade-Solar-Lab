@@ -51,6 +51,15 @@ describe("weather-v1 NOAA-style solar position", () => {
     expect(result.isAboveHorizon).toBe(false);
   });
 
+  it("rejects a local-standard-time value outside one civil day", () => {
+    expect(() =>
+      calculateSolarPosition({
+        location: TOKYO,
+        localStandardTime: { ...time(3, 20, 0), minuteOfDay: 1440 },
+      }),
+    ).toThrow(/minuteOfDay/u);
+  });
+
   it("shows the expected east-to-west azimuth tendency around noon", () => {
     const morning = calculateSolarPosition({
       location: TOKYO,

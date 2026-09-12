@@ -59,6 +59,13 @@ export function calculateSolarPosition(input: SolarPositionInput): SolarPosition
   if (!Number.isFinite(timeZoneOffsetHours)) {
     throw new RangeError("timeZoneOffsetHours must be finite");
   }
+  if (
+    !Number.isFinite(input.localStandardTime.minuteOfDay) ||
+    input.localStandardTime.minuteOfDay < 0 ||
+    input.localStandardTime.minuteOfDay >= 1440
+  ) {
+    throw new RangeError("local-standard-time minuteOfDay must be in [0, 1440)");
+  }
 
   const localStandardHour = input.localStandardTime.minuteOfDay / 60;
   const ordinalDay = dayOfYear(

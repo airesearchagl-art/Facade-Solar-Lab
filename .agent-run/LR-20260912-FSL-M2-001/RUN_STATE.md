@@ -9,8 +9,8 @@
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 6 — Documentation / Minimal Status`
-- Last successful checkpoint: `Wave 5 — 149f283`
+- Current wave: `Wave 7 — Full Convergence`
+- Last successful checkpoint: `Wave 6 — 2927df7`
 
 ## Task Packet binding
 
@@ -42,7 +42,7 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Current work
 
-- Wave 6 checkpoint.
+- Wave 7 convergence and self-review.
 
 ## Required checks
 
@@ -68,11 +68,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Waves 7–8 from the bound Task Packet.
+- Wave 7 convergence checkpoint and Wave 8 Draft PR.
 
 ## Next action
 
-Commit the Wave 6 checkpoint, then freeze features and run full convergence/self-review.
+Complete Wave 7 checks/scans/review, checkpoint the evidence, then request action-time confirmation before the Draft PR mutation.
 
 ## Stop conditions
 

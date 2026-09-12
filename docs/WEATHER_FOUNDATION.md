@@ -31,6 +31,8 @@ EPW location Local Standard Time is canonical. DST, host `Date`, host time zone,
 
 For raw EPW `year/month/day/hour/minute`, the represented radiation interval ends at the encoded time. Solar position and shading are evaluated once at the preceding interval's midpoint. For example, hourly `Hour=1, Minute=60` contains energy for 00:00–01:00 and uses 00:30 solar geometry. `Hour=24, Minute=60` ends at next-day 00:00 while its midpoint remains 23:30 on the record date.
 
+Typical-year EPW files can retain different historical source years month by month. The raw year remains available in each interval, but full 8,760-record solar evaluation uses a canonical non-leap Gregorian year and 8,784-record evaluation uses a canonical leap year. This prevents a source leap-year March from shifting a non-leap typical-year solar calendar.
+
 GHI, DNI, and DHI remain `Wh/m² interval`. Facade interval energy is:
 
 ```text
@@ -89,11 +91,11 @@ Common geometry: H 2.4 m, D 1.6 m, O 0.3 m, W 6 m, south facade, SHGC 1, ground 
 | Model/period | With overhang [kWh] | Without [kWh] | Reduction |
 | --- | ---: | ---: | ---: |
 | legacy-v01 annual | 14,486.66 | 25,890.12 | 44.05% |
-| weather-v1 annual | 8,388.95 | 13,604.20 | 38.34% |
+| weather-v1 annual | 8,399.84 | 13,610.63 | 38.28% |
 | legacy-v01 cooling | 4,254.15 | 10,115.80 | 57.95% |
 | weather-v1 cooling | 3,398.52 | 6,111.48 | 44.39% |
 | legacy-v01 heating | 10,232.51 | 15,774.32 | 35.13% |
-| weather-v1 heating | 4,990.43 | 7,492.72 | 33.40% |
+| weather-v1 heating | 5,001.32 | 7,499.15 | 33.31% |
 
 M1 is a clear-sky regression baseline at its own legacy location/sky assumptions. M2 uses real weather and independent solar position. The numerical difference is expected and is not a pass/fail accuracy comparison.
 

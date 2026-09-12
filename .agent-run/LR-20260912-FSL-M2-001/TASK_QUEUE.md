@@ -10,6 +10,6 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | 4 | Wave 3 | NOAA-style solar position v1 | COMPLETE | Five NOAA numeric references plus night/tendency tests; checkpoint `1e6ca0c` |
 | 5 | Wave 4 | Weather irradiance and simulation | COMPLETE | S3–S8 and sub-hour accounting; checkpoint `b2f0c32` |
 | 6 | Wave 5 | Validation and optional real EPW smoke | COMPLETE | Synthetic/M1/real smoke and comparison; checkpoint `149f283` |
-| 7 | Wave 6 | Documentation and minimal status | IN_PROGRESS | Required docs and browser-verified status; no simulator/import UI |
-| 8 | Wave 7 | Full convergence and self-review | PENDING | All checks, scans, hashes, scope review |
+| 7 | Wave 6 | Documentation and minimal status | COMPLETE | Required docs/status and browser check; checkpoint `2927df7` |
+| 8 | Wave 7 | Full convergence and self-review | IN_PROGRESS | Feature freeze; typical-year audit fix and final checks in progress |
 | 9 | Wave 8 | Normal push and Draft PR | PENDING | Fresh OPEN/Draft state then Human Gate |
