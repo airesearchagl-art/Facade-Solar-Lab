@@ -6,6 +6,15 @@
 - Revision: `1`
 - Snapshot SHA-256: `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`
 
+## Current pull request binding
+
+- Pull request: `#1` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/1`
+- State: `OPEN / Draft / Ready=false / merged=false`
+- Base: `main` at `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
+- Head branch: `chore/m0-bootstrap-long-run`
+- Prior reviewed head: `76bab2a15044147c52736084c6f51382f208a10a`
+- Final-head rule: resolve the live commit with `git rev-parse HEAD` and confirm it equals `origin/chore/m0-bootstrap-long-run`; the prior reviewed head above is historical and is not the required-fix head.
+
 ## Wave 0 — Fresh preflight
 
 Performed: `2026-09-12` (Asia/Tokyo)
@@ -82,7 +91,7 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - `legacy/mvp-v0.1/README.md` records the missing-source preservation contract; it is not an MVP source artifact.
 - MVP source SHA-256: not available because both source files are missing.
 
-## Wave 5 — Convergence
+## Wave 5 — Final-head convergence after Required Fix
 
 Performed: `2026-09-12` (Asia/Tokyo)
 
@@ -93,14 +102,16 @@ Performed: `2026-09-12` (Asia/Tokyo)
 | npm run build | Vite transformed 17 modules and produced `dist/` | PASS |
 | npm audit | 0 vulnerabilities | PASS |
 | Browser runtime | Meaningful content, expected H1/status, no overlay, no warning/error log | PASS |
-| Full diff | 29 files, 3,443 insertions, 1 deletion; M0 scope only | PASS |
+| Full diff | 29 files, 3,524 additions, 1 deletion; M0 scope and run-artifact synchronization only | PASS |
 | Diff whitespace | `git diff --check origin/main...HEAD` returned no findings | PASS |
 | Task Packet digest | `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253` | PASS |
 | Checkpoint binding | All five checkpoint messages use the same ID, revision, and digest | PASS |
-| Secret scan | No credential, token, private-key marker, or API-key token pattern in tracked files | PASS |
-| Privacy scan | No user-specific absolute path in the current branch or its branch history | PASS |
+| Secret scan | Fresh tracked-file and branch-history scan found no credential, token, private-key marker, or API-key token pattern | PASS |
+| Privacy scan | Fresh tracked-file and branch-history scan found no user-specific absolute path | PASS |
 | Remote main | Still `a4c90163725f8a9d610aaaeac24057facc0b2fa9` | PASS |
-| Feature branch push | New remote branch `chore/m0-bootstrap-long-run` created without force | PASS |
-| Draft PR | `gh pr create --draft` returned GraphQL HTTP 401 | BLOCKED |
+| Feature branch push | Required-fix commit pushed normally to `chore/m0-bootstrap-long-run` without force | PASS |
+| Pull request | PR #1 is OPEN / Draft / Ready=false / merged=false; base `main`, head `chore/m0-bootstrap-long-run` | PASS |
 
 The initial Task Packet checkpoint never reached the remote. Before publication, its local checkpoint history was reconstructed from `origin/main` so the path-example normalization and EOF cleanup are present from Wave 0. The pushed branch contains neither the prior digest nor the user-specific path.
+
+The convergence target is the commit containing this evidence file. Its SHA is intentionally not embedded here because doing so would be self-referential; resolve symbolic `HEAD` at verification or resume time and keep it distinct from the prior reviewed head.

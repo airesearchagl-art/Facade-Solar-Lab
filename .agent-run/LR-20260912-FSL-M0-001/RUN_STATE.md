@@ -5,13 +5,15 @@
 - Run ID: `LR-20260912-FSL-M0-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `BLOCKED`
+- Current state: `HUMAN_GATE`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
-- Current head: resolve symbolic `HEAD` with `git rev-parse HEAD`
-- Current wave: `Wave 5 — Convergence / Draft PR Human Gate`
-- Last successful checkpoint: Wave 4 commit `3323caa`
+- Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; do not replace this line with the SHA of the commit that contains this file
+- Current wave: `Wave 5 — Required Fix / Focused Independent Re-Review Human Gate`
+- Last reviewed head: `76bab2a15044147c52736084c6f51382f208a10a` (Independent FULL Review input; historical after the required-fix commit)
+- Pull request: `#1` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/1`
+- Pull request state: `OPEN / Draft / Ready=false / merged=false`
 
 ## Task Packet binding
 
@@ -37,7 +39,7 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 | Product and validation documentation | PASS | README, Product Direction, Limitations, Roadmap, Validation Plan |
 | MVP preservation or accurate missing record | PASS (missing recorded) | Exact-name search found no originals; absence is preserved in evidence and legacy status |
 | Public repository boundary | PASS | `EVIDENCE.md` |
-| Human Gates preserved | PASS | Feature branch push only; no main mutation, Ready, merge, or deploy |
+| Human Gates preserved | PASS | PR #1 remains OPEN/Draft; no main mutation, Ready, merge, or deploy |
 | Final diff review is in scope | PASS | Diff, history, security/privacy, dependency, and scope review complete |
 
 ## Completed
@@ -53,10 +55,12 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 - Searched for both named MVP source artifacts, found neither, created no inferred source, and recorded the missing state.
 - Reconstructed the unpushed checkpoint history so the immutable Wave 0 snapshot is public-safe and whitespace-clean from its first commit.
 - Completed fresh convergence checks and pushed the feature branch without mutating `main`.
+- Created Draft PR #1 from `chore/m0-bootstrap-long-run` to `main` through the Human-authorized browser flow.
+- Synchronized the run artifacts after Independent FULL Review and reran final-head convergence checks for the required-fix commit.
 
 ## Current implementation state
 
-M0 implementation and verification are complete. Waves 0 through 4 are checkpointed and pushed on the feature branch. Both expected MVP sources are absent and were not reconstructed. Solar calculations and weather data remain deliberately unimplemented. Draft PR creation is the only blocked workflow step.
+M0 implementation and required-fix verification are complete on the feature branch. PR #1 exists and remains OPEN/Draft with `main` as its base. Both expected MVP sources are absent and were not reconstructed. Solar calculations and weather data remain deliberately unimplemented. The next permitted step is Focused Independent Re-Review; Ready, merge, and any M1 work remain Human Gates.
 
 ## Checks
 
@@ -73,20 +77,20 @@ M0 implementation and verification are complete. Waves 0 through 4 are checkpoin
 - Secret/privacy/history scan: PASS
 - Remote main unchanged: PASS
 - Feature branch push: PASS
+- PR #1: PASS — OPEN / Draft / Ready=false / merged=false
 
 ## Quality Debt
 
-- None accepted.
+- Advisory only: strengthen `tests/engine-boundary.test.ts` in future M1 planning so it mechanically rejects React, DOM, and browser-global dependencies from `src/engine`; no implementation was added in this M0 fix.
 
 ## Explicit unverified items
 
 - MVP原本未配置: `solar_overhang_simulator.html`.
 - MVP原本未配置: `HANDOVER_solar_overhang_simulator.md`.
-- Draft PR is not created; GitHub CLI GraphQL authentication remains unverified for write operations.
 
 ## Known failures
 
-- `gh repo view` and `gh pr create --draft` return HTTP 401 even though `gh auth status` detects an active credential. Git fetch/push work.
+- Historical environment limitation: `gh repo view` and `gh pr create --draft` returned HTTP 401 even though `gh auth status` detected an active credential. The Human-authorized browser flow created PR #1; Git fetch/push work.
 
 ## Decisions
 
@@ -94,7 +98,7 @@ M0 implementation and verification are complete. Waves 0 through 4 are checkpoin
 - Normalize user-specific paths in the Task Packet snapshot to `<PROJECT_ROOT>` and `<USER_HOME>\...` for the Public Repository Boundary.
 - Keep M0 UI and engine placeholders intentionally minimal; do not port the legacy MVP.
 - Reconstruct all unpushed checkpoints rather than publishing a commit that ever contained the forbidden path example.
-- Do not modify credentials or permissions to work around the Draft PR HTTP 401.
+- Keep PR #1 Draft and stop at the Focused Independent Re-Review Human Gate; do not mark Ready, merge, or begin M1.
 
 ## Files changed
 
@@ -130,16 +134,16 @@ M0 implementation and verification are complete. Waves 0 through 4 are checkpoin
 
 ## Remaining tasks
 
-- Create a Draft PR from `chore/m0-bootstrap-long-run` to `main` after the Human Gate.
-- Record the PR URL and clear the blocked state; do not mark Ready or merge.
+- Perform Focused Independent Re-Review of PR #1 at the live head resolved from GitHub and local `HEAD`.
+- Keep Ready, merge, release, Production, and M1 behind new Human instructions.
 
 ## Next action
 
-Human chooses one: repair GitHub CLI authentication and rerun the existing Draft PR command, or explicitly confirm browser submission at the repository's new-PR URL.
+Focused Independent Re-Review of PR #1. A resumed agent must not create another PR or repeat the completed Draft PR mutation.
 
 ## Stop conditions status
 
-- Active Human Gate: Draft PR creation requires working GitHub API authentication or browser action confirmation.
+- Active Human Gate: Focused Independent Re-Review; Ready, merge, and M1 require new Human instructions.
 - Expected repository identity and initial history verified.
 - No pre-existing user change conflict.
 - No security, privacy, permission, or data-integrity failure detected.
@@ -151,6 +155,7 @@ Human chooses one: repair GitHub CLI authentication and rerun the existing Draft
 2. Verify the Task Packet digest with `Get-FileHash -Algorithm SHA256 .agent-run/LR-20260912-FSL-M0-001/TASK_PACKET_SNAPSHOT.md`.
 3. Confirm it equals `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`.
 4. Run `git status --short --branch` and preserve unrelated changes if any appear.
-5. Confirm `origin/chore/m0-bootstrap-long-run` matches local `HEAD`.
-6. Continue only with the Draft PR Human Gate described in **Next action**.
-7. After Draft PR creation, record its URL, set the campaign state to `COMPLETE_VERIFIED`, commit, and push normally. Do not mark Ready or merge.
+5. Fetch and confirm `origin/chore/m0-bootstrap-long-run` matches the live local `HEAD`; treat `76bab2a...` only as the prior reviewed head, not the current head.
+6. Open PR #1 and confirm `OPEN / Draft / Ready=false / merged=false`, base `main`, and head `chore/m0-bootstrap-long-run`.
+7. Do not create another PR or repeat any completed mutation. Continue only with the Focused Independent Re-Review in **Next action**.
+8. Do not mark Ready, merge, deploy, release, or begin M1 without a new Human instruction.
