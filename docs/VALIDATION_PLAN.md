@@ -1,6 +1,6 @@
 # Validation Plan
 
-M1ではLegacy behaviorのregression validationだけを実施済みです。物理model、実気象data、第三者解析とのvalidationは将来計画です。
+M2ではLegacy regressionに加え、synthetic EPW、独立NOAA reference、interval energy、Tokyo Hyakuri IWEC local smokeを実施済みです。第三者solverとの物理validationは将来計画です。
 
 ## 1. Golden tests
 
@@ -18,9 +18,10 @@ M1ではLegacy behaviorのregression validationだけを実施済みです。物
 
 ## 3. Weather validation
 
-- EPWまたは採用data sourceの地点、期間、time zone、欠測、単位を検証する。
-- 水平面から鉛直面への変換modelと天空日射modelを分離して検証する。
-- Clear Skyと実気象dataの差を定量化し、provenanceを保持する。
+- EPW LOCATION、DATA PERIODS、8760/8784、sub-hour、interval end/midpoint、required radiation欠測をsynthetic testで検証済み。
+- DNI beam、DHI isotropic sky、GHI ground reflectionを独立synthetic caseで検証済み。
+- EnergyPlus Tokyo Hyakuri IWEC 8760 recordsをlocal-onlyでparse/simulateし、provenance・hash・radiation sumを記録済み。
+- Legacy Clear Skyと実気象dataの差を同一geometryで記録済み。差は精度PASSを意味しない。
 
 ## 4. Third-party solar analysis comparison
 
@@ -30,7 +31,7 @@ M1ではLegacy behaviorのregression validationだけを実施済みです。物
 
 ## 5. Boundary tests
 
-- M1 engine dependency testはReact、DOM、Canvas、browser globalsを機械的に拒否する。
+- Engine/weather dependency testはReact、Node filesystem、DOM、Canvas、File API、browser globalsを機械的に拒否する。
 - 0および負値、上下端逆転、極端な寸法、範囲外方位を扱う。
 - polar day/night、太陽高度0°近傍、欠測時刻、DST/time-zone境界を扱う。
 - invalid inputを黙って補正せず、errorまたは明示的なnormalization結果を返す。

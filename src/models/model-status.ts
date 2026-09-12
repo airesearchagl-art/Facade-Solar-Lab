@@ -1,1 +1,1 @@
-export const modelStatus = "legacy-v01-baseline-in-engine" as const;
+export const modelStatus = "m2-weather-foundation-not-validated" as const;

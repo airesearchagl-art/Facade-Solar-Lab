@@ -123,3 +123,14 @@ Common geometry: H 2.4 m, D 1.6 m, O 0.3 m, W 6 m, south facade, SHGC 1, ground 
 | weather-v1 heating | 4,990.43 | 7,492.72 | 33.40% |
 
 The difference is expected evidence of replacing the legacy clear-sky source with a real-weather input; it is not external validation of either absolute result.
+
+## Wave 6 — Documentation / minimal status
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added `docs/WEATHER_FOUNDATION.md` with current EnergyPlus/NOAA source URLs and access date, canonical/time/unit/missing/provenance contracts, solar algorithm/tolerance, license boundary, model limitations, real-file status, M1 comparison, and M3/M5 work.
+- Updated README, AGENTS, roadmap, model limitations, and validation plan from M1 to the M2 boundary.
+- Added LF normalization for committed synthetic `.epw` fixtures; the licensed real EPW remains ignored and untracked.
+- Updated only existing status copy/manifest/model status to M2; no picker, location browser, chart, simulator, or case-comparison UI was added.
+- Browser check at `http://127.0.0.1:5175/`: `M2 · WEATHER FOUNDATION`, engine `M2`, `EPW weather foundation available`, and `Legacy baseline preserved` visible; no Vite overlay.
+- 6 files / 42 tests, typecheck, build (37 modules), Golden check, and whitespace check pass.

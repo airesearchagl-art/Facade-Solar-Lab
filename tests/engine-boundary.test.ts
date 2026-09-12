@@ -32,12 +32,12 @@ const forbiddenDependencies = [
   { name: "File API", pattern: /\bFileReader\b|\bFile\b/u },
 ] as const;
 
-describe("M1 engine boundary", () => {
-  it("identifies the legacy baseline without claiming physical validation", () => {
-    expect(engineManifest.milestone).toBe("M1");
+describe("M2 engine and weather boundary", () => {
+  it("identifies both model paths without claiming physical validation", () => {
+    expect(engineManifest.milestone).toBe("M2");
     expect(engineManifest.frameworkDependencies).toEqual([]);
-    expect(engineManifest.calculationStatus).toBe("legacy-baseline");
-    expect(engineManifest.modelStatus).toBe("not-validated-physical-model");
+    expect(engineManifest.calculationStatus).toBe("legacy-and-weather-foundations");
+    expect(engineManifest.modelStatus).toBe("weather-backed-not-validated");
     expect(engineManifest.runtimeTargets).toContain("node");
   });
 

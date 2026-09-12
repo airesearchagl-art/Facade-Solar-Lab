@@ -9,8 +9,8 @@
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 5 — Validation`
-- Last successful checkpoint: `Wave 4 — b2f0c32`
+- Current wave: `Wave 6 — Documentation / Minimal Status`
+- Last successful checkpoint: `Wave 5 — 149f283`
 
 ## Task Packet binding
 
@@ -38,10 +38,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 - Independent NOAA-style weather-v1 solar position and external calculator references implemented.
 - Weather interval irradiance, 2D overhang shading, interval energy, aggregation, periods, and result provenance implemented.
 - Synthetic regression, M1 Golden/hash regression, and local EnergyPlus Tokyo Hyakuri EPW smoke validation completed.
+- Required weather documentation, milestone guidance, limitations/validation plans, and minimal M2 status UI completed.
 
 ## Current work
 
-- Wave 5 checkpoint.
+- Wave 6 checkpoint.
 
 ## Required checks
 
@@ -67,11 +68,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Waves 6–8 from the bound Task Packet.
+- Waves 7–8 from the bound Task Packet.
 
 ## Next action
 
-Commit the Wave 5 checkpoint, then document the weather foundation and update only milestone/status UI.
+Commit the Wave 6 checkpoint, then freeze features and run full convergence/self-review.
 
 ## Stop conditions
 
