@@ -46,25 +46,42 @@ function summarize(
  * EPW typical-year files may retain different source years for each month.
  * Their 8760/8784 structure, not those source years, defines the solar calendar.
  */
-export function resolveWeatherV1SolarTime(
+export function resolveWeatherV1SolarCalendarYear(
   dataset: Pick<WeatherDataset, "coverage" | "intervals">,
-  intervalTime: WeatherIntervalTime,
-): LocalStandardTime {
-  let canonicalYear: number | undefined;
+): number | undefined {
   if (dataset.coverage === "full-year-8760") {
-    canonicalYear = 2001;
-  } else if (dataset.coverage === "full-leap-year-8784") {
-    canonicalYear = 2000;
-  } else if (dataset.coverage === "full-year-subhour") {
-    canonicalYear = dataset.intervals.some(
+    return 2001;
+  }
+  if (dataset.coverage === "full-leap-year-8784") {
+    return 2000;
+  }
+  if (dataset.coverage === "full-year-subhour") {
+    return dataset.intervals.some(
       (interval) => interval.time.month === 2 && interval.time.day === 29,
     )
       ? 2000
       : 2001;
   }
+  return undefined;
+}
+
+function applySolarCalendarYear(
+  intervalTime: WeatherIntervalTime,
+  canonicalYear: number | undefined,
+): LocalStandardTime {
   return canonicalYear === undefined
     ? intervalTime.midpointLocalStandardTime
     : { ...intervalTime.midpointLocalStandardTime, year: canonicalYear };
+}
+
+export function resolveWeatherV1SolarTime(
+  dataset: Pick<WeatherDataset, "coverage" | "intervals">,
+  intervalTime: WeatherIntervalTime,
+): LocalStandardTime {
+  return applySolarCalendarYear(
+    intervalTime,
+    resolveWeatherV1SolarCalendarYear(dataset),
+  );
 }
 
 export function simulateWeatherV1(
@@ -78,10 +95,14 @@ export function simulateWeatherV1(
     withOverhangKWh: 0,
     withoutOverhangKWh: 0,
   }));
+  const solarCalendarYear = resolveWeatherV1SolarCalendarYear(dataset);
   for (const interval of dataset.intervals) {
     const solar = calculateSolarPosition({
       location: dataset.location,
-      localStandardTime: resolveWeatherV1SolarTime(dataset, interval.time),
+      localStandardTime: applySolarCalendarYear(
+        interval.time,
+        solarCalendarYear,
+      ),
     });
     const gain = calculateWeatherIntervalGain(
       parameters,
