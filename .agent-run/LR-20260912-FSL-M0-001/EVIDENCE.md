@@ -81,3 +81,26 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - No guessed, reconstructed, normalized, or reformatted MVP content was created.
 - `legacy/mvp-v0.1/README.md` records the missing-source preservation contract; it is not an MVP source artifact.
 - MVP source SHA-256: not available because both source files are missing.
+
+## Wave 5 — Convergence
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| npm test | 1 test in 1 file passed | PASS |
+| npm run typecheck | TypeScript completed with exit code 0 | PASS |
+| npm run build | Vite transformed 17 modules and produced `dist/` | PASS |
+| npm audit | 0 vulnerabilities | PASS |
+| Browser runtime | Meaningful content, expected H1/status, no overlay, no warning/error log | PASS |
+| Full diff | 29 files, 3,443 insertions, 1 deletion; M0 scope only | PASS |
+| Diff whitespace | `git diff --check origin/main...HEAD` returned no findings | PASS |
+| Task Packet digest | `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253` | PASS |
+| Checkpoint binding | All five checkpoint messages use the same ID, revision, and digest | PASS |
+| Secret scan | No credential, token, private-key marker, or API-key token pattern in tracked files | PASS |
+| Privacy scan | No user-specific absolute path in the current branch or its branch history | PASS |
+| Remote main | Still `a4c90163725f8a9d610aaaeac24057facc0b2fa9` | PASS |
+| Feature branch push | New remote branch `chore/m0-bootstrap-long-run` created without force | PASS |
+| Draft PR | `gh pr create --draft` returned GraphQL HTTP 401 | BLOCKED |
+
+The initial Task Packet checkpoint never reached the remote. Before publication, its local checkpoint history was reconstructed from `origin/main` so the path-example normalization and EOF cleanup are present from Wave 0. The pushed branch contains neither the prior digest nor the user-specific path.

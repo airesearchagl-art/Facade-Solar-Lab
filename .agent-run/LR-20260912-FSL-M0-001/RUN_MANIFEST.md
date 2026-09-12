@@ -21,3 +21,4 @@ The Task Packet snapshot is immutable. Every checkpoint in this run is bound to 
 | Wave 1 — Long-Run foundation | `83a8cf4` | Task Packet ID, revision, and SHA-256 above |
 | Wave 2 — Project bootstrap | `82e3db9` | Task Packet ID, revision, and SHA-256 above |
 | Wave 3 — Documentation | `2f09f7c` | Task Packet ID, revision, and SHA-256 above |
+| Wave 4 — MVP preservation audit | `3323caa` | Task Packet ID, revision, and SHA-256 above |

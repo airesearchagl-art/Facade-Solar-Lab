@@ -5,13 +5,13 @@
 - Run ID: `LR-20260912-FSL-M0-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `IN_PROGRESS`
+- Current state: `BLOCKED`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
 - Current head: resolve symbolic `HEAD` with `git rev-parse HEAD`
-- Current wave: `Wave 4 — MVP preservation`
-- Last successful checkpoint: Wave 3 commit `2f09f7c`
+- Current wave: `Wave 5 — Convergence / Draft PR Human Gate`
+- Last successful checkpoint: Wave 4 commit `3323caa`
 
 ## Task Packet binding
 
@@ -31,14 +31,14 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 | Vite + TypeScript + React baseline | PASS | Wave 2 source and lockfile |
 | Framework-independent engine boundary | PASS | `src/engine/index.ts` and boundary test |
 | Minimal browser screen builds | PASS | Vite build and Browser verification |
-| test, typecheck, build pass | PASS (preliminary) | Wave 2 checks; repeat in Wave 5 |
+| test, typecheck, build pass | PASS | Fresh Wave 5 rerun |
 | Run artifacts and digest binding | PASS | Seven required artifacts, stable digest, Wave 0 binding |
 | Session can resume from this file | PASS | Resume instructions below |
 | Product and validation documentation | PASS | README, Product Direction, Limitations, Roadmap, Validation Plan |
 | MVP preservation or accurate missing record | PASS (missing recorded) | Exact-name search found no originals; absence is preserved in evidence and legacy status |
 | Public repository boundary | PASS | `EVIDENCE.md` |
-| Human Gates preserved | PASS | No push, PR, main mutation, merge, or deploy |
-| Final diff review is in scope | PENDING | Wave 5 |
+| Human Gates preserved | PASS | Feature branch push only; no main mutation, Ready, merge, or deploy |
+| Final diff review is in scope | PASS | Diff, history, security/privacy, dependency, and scope review complete |
 
 ## Completed
 
@@ -51,10 +51,12 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 - Installed locked dependencies and passed the initial test, typecheck, build, and Browser runtime checks.
 - Documented product direction, known model limitations, roadmap, validation plan, commands, repository structure, and future-agent constraints.
 - Searched for both named MVP source artifacts, found neither, created no inferred source, and recorded the missing state.
+- Reconstructed the unpushed checkpoint history so the immutable Wave 0 snapshot is public-safe and whitespace-clean from its first commit.
+- Completed fresh convergence checks and pushed the feature branch without mutating `main`.
 
 ## Current implementation state
 
-Waves 0 through 3 are checkpointed. The MVP audit is complete in the working tree: both expected source files are absent, and no source was reconstructed. Solar calculations and weather data remain deliberately unimplemented.
+M0 implementation and verification are complete. Waves 0 through 4 are checkpointed and pushed on the feature branch. Both expected MVP sources are absent and were not reconstructed. Solar calculations and weather data remain deliberately unimplemented. Draft PR creation is the only blocked workflow step.
 
 ## Checks
 
@@ -66,6 +68,11 @@ Waves 0 through 3 are checkpointed. The MVP audit is complete in the working tre
 - npm run typecheck: PASS
 - npm run build: PASS
 - Browser verification: PASS — content present, no error overlay, no console warnings/errors
+- npm audit: PASS — 0 vulnerabilities
+- git diff --check: PASS
+- Secret/privacy/history scan: PASS
+- Remote main unchanged: PASS
+- Feature branch push: PASS
 
 ## Quality Debt
 
@@ -73,20 +80,21 @@ Waves 0 through 3 are checkpointed. The MVP audit is complete in the working tre
 
 ## Explicit unverified items
 
-- Remote write access is not yet proven.
 - MVP原本未配置: `solar_overhang_simulator.html`.
 - MVP原本未配置: `HANDOVER_solar_overhang_simulator.md`.
-- Final convergence rerun has not yet been performed.
+- Draft PR is not created; GitHub CLI GraphQL authentication remains unverified for write operations.
 
 ## Known failures
 
-- `gh repo view` returned HTTP 401 even though `gh auth status` detected an active credential. Git remote reads work; investigate only when Draft PR creation is reached.
+- `gh repo view` and `gh pr create --draft` return HTTP 401 even though `gh auth status` detects an active credential. Git fetch/push work.
 
 ## Decisions
 
 - Treat the one-line README commit as the expected repository initialization history, not an unexpected product implementation.
-- Normalize the user-specific local path in the Task Packet snapshot to `<PROJECT_ROOT>` for the Public Repository Boundary.
+- Normalize user-specific paths in the Task Packet snapshot to `<PROJECT_ROOT>` and `<USER_HOME>\...` for the Public Repository Boundary.
 - Keep M0 UI and engine placeholders intentionally minimal; do not port the legacy MVP.
+- Reconstruct all unpushed checkpoints rather than publishing a commit that ever contained the forbidden path example.
+- Do not modify credentials or permissions to work around the Draft PR HTTP 401.
 
 ## Files changed
 
@@ -94,22 +102,48 @@ Waves 0 through 3 are checkpointed. The MVP audit is complete in the working tre
 - `.agent-run/LR-20260912-FSL-M0-001/RUN_MANIFEST.md`
 - `.agent-run/LR-20260912-FSL-M0-001/RUN_STATE.md`
 - `.agent-run/LR-20260912-FSL-M0-001/EVIDENCE.md`
+- `.agent-run/LR-20260912-FSL-M0-001/DECISIONS.md`
+- `.agent-run/LR-20260912-FSL-M0-001/QUALITY_DEBT.md`
+- `.agent-run/LR-20260912-FSL-M0-001/TASK_QUEUE.md`
+- `.gitattributes`
+- `.gitignore`
+- `AGENTS.md`
+- `README.md`
+- `docs/MODEL_LIMITATIONS.md`
+- `docs/PRODUCT_DIRECTION.md`
+- `docs/ROADMAP.md`
+- `docs/VALIDATION_PLAN.md`
+- `index.html`
+- `legacy/mvp-v0.1/README.md`
+- `package.json`
+- `package-lock.json`
+- `src/app/App.tsx`
+- `src/app/styles.css`
+- `src/engine/index.ts`
+- `src/main.tsx`
+- `src/models/model-status.ts`
+- `src/vite-env.d.ts`
+- `src/weather/weather-status.ts`
+- `tests/engine-boundary.test.ts`
+- `tsconfig.json`
+- `vite.config.ts`
 
 ## Remaining tasks
 
-- Commit the Wave 4 MVP audit checkpoint.
-- Wave 5: run checks, review scope/privacy, finalize state, checkpoint, push branch, and create a Draft PR if authorized access works.
+- Create a Draft PR from `chore/m0-bootstrap-long-run` to `main` after the Human Gate.
+- Record the PR URL and clear the blocked state; do not mark Ready or merge.
 
 ## Next action
 
-Commit the Wave 4 checkpoint, then run convergence checks and final review in Wave 5.
+Human chooses one: repair GitHub CLI authentication and rerun the existing Draft PR command, or explicitly confirm browser submission at the repository's new-PR URL.
 
 ## Stop conditions status
 
-- No active hard stop.
+- Active Human Gate: Draft PR creation requires working GitHub API authentication or browser action confirmation.
 - Expected repository identity and initial history verified.
 - No pre-existing user change conflict.
 - No security, privacy, permission, or data-integrity failure detected.
+- `main` remains unchanged. Ready, merge, release, Vercel, Production, permission, and credential mutations remain untouched.
 
 ## Resume instructions
 
@@ -117,4 +151,6 @@ Commit the Wave 4 checkpoint, then run convergence checks and final review in Wa
 2. Verify the Task Packet digest with `Get-FileHash -Algorithm SHA256 .agent-run/LR-20260912-FSL-M0-001/TASK_PACKET_SNAPSHOT.md`.
 3. Confirm it equals `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`.
 4. Run `git status --short --branch` and preserve unrelated changes if any appear.
-5. Read `TASK_QUEUE.md`, continue from **Next action**, and update this file at every checkpoint.
+5. Confirm `origin/chore/m0-bootstrap-long-run` matches local `HEAD`.
+6. Continue only with the Draft PR Human Gate described in **Next action**.
+7. After Draft PR creation, record its URL, set the campaign state to `COMPLETE_VERIFIED`, commit, and push normally. Do not mark Ready or merge.
