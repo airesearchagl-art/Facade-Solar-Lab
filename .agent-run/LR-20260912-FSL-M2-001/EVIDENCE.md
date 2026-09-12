@@ -4,7 +4,7 @@
 
 - Task Packet ID: `LRP-20260912-FSL-M2-001`
 - Revision: `1`
-- Snapshot SHA-256: `D528CD2A4923B29356E36D538893E7DEC78ABB9FFF5ADAFF386425667437370F`
+- Snapshot SHA-256: `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999`
 
 ## Wave 0 — Fresh preflight / M1 closeout
 
@@ -34,3 +34,14 @@ URLs and access date will be recorded in `docs/WEATHER_FOUNDATION.md`.
 - M2 snapshot contains no user-specific project root.
 - No external EPW file has been committed.
 - No `main`, Vercel, Production, Ready, merge, permission, visibility, secret, force-push, rebase, branch deletion, release, or M3 mutation occurred.
+
+## Wave 1 — Canonical weather contract
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added Pure TypeScript contracts for `WeatherDataset`, `WeatherLocation`, `WeatherInterval`, `WeatherSourceProvenance`, and `WeatherParseIssue`.
+- Radiation properties encode `Wh/m2 interval` in their names and allow explicit `null` for missing required values.
+- EPW interval-end and midpoint Local Standard Time are separate immutable values.
+- Pure Gregorian helpers normalize date boundaries and sub-hour fractional midpoints without `Date`, UTC conversion, DST, or host-timezone input.
+- Five focused time-contract tests pass; full suite is 3 files / 20 tests.
+- TypeScript no-emit check and authored-file whitespace check pass.

@@ -9,15 +9,15 @@
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 0 — Fresh Preflight / M1 Closeout`
-- Last successful checkpoint: none
+- Current wave: `Wave 1 — Canonical Weather Contract`
+- Last successful checkpoint: `Wave 0 — bf5f229`
 
 ## Task Packet binding
 
 - Task Packet ID: `LRP-20260912-FSL-M2-001`
 - Revision: `1`
 - Snapshot: `.agent-run/LR-20260912-FSL-M2-001/TASK_PACKET_SNAPSHOT.md`
-- SHA-256: `D528CD2A4923B29356E36D538893E7DEC78ABB9FFF5ADAFF386425667437370F`
+- SHA-256: `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999`
 
 ## Objective
 
@@ -33,10 +33,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 - M1 post-merge closeout prepared on the M2 branch.
 - M2 Task Packet public-safe LF snapshot and digest binding created.
 - Branch `feat/m2-weather-foundation` created from the exact canonical base.
+- Canonical location, interval, radiation, provenance, issue, and local-standard-time contracts implemented.
 
 ## Current work
 
-- Wave 0 checkpoint.
+- Wave 1 checkpoint.
 
 ## Required checks
 
@@ -63,11 +64,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Waves 1–8 from the bound Task Packet.
+- Waves 2–8 from the bound Task Packet.
 
 ## Next action
 
-Commit the Wave 0 checkpoint, then define the canonical weather/time/provenance/error contract.
+Commit the Wave 1 checkpoint, then implement the EPW parser and synthetic fixtures.
 
 ## Stop conditions
 

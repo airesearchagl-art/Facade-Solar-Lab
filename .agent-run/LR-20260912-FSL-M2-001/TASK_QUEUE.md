@@ -1,11 +1,11 @@
 # Task Queue
 
-Binding: `LRP-20260912-FSL-M2-001` rev `1` / `D528CD2A4923B29356E36D538893E7DEC78ABB9FFF5ADAFF386425667437370F`
+Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999`
 
 | Order | Wave | Task | State | Exit evidence |
 | ---: | --- | --- | --- | --- |
-| 1 | Wave 0 | Fresh preflight, M1 closeout, M2 artifacts | IN_PROGRESS | Exact base, hashes, immutable snapshot, checkpoint |
-| 2 | Wave 1 | Canonical weather/time/provenance/error contract | PENDING | Pure TS public types and contract tests |
+| 1 | Wave 0 | Fresh preflight, M1 closeout, M2 artifacts | COMPLETE | Exact base, hashes, immutable snapshot; checkpoint `bf5f229` |
+| 2 | Wave 1 | Canonical weather/time/provenance/error contract | IN_PROGRESS | Pure TS public types and 5 contract tests pass |
 | 3 | Wave 2 | EPW parser and synthetic fixtures | PENDING | Headers, records/hour, radiation/missing, 8760/8784/subhour tests |
 | 4 | Wave 3 | NOAA-style solar position v1 | PENDING | Independent reference cases and tolerances |
 | 5 | Wave 4 | Weather irradiance and simulation | PENDING | Beam/diffuse/ground/shading/provenance tests |

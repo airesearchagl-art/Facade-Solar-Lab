@@ -1524,5 +1524,3 @@ M3 — Facade Geometry
 M3には自動で進まないでください。
 
 **M2完了後はDraft PRを作成し、Independent FULL Review待ちで停止してください。**
-
-

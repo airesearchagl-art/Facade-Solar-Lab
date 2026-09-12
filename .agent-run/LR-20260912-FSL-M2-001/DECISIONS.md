@@ -1,6 +1,6 @@
 # Decisions
 
-Binding: `LRP-20260912-FSL-M2-001` rev `1` / `D528CD2A4923B29356E36D538893E7DEC78ABB9FFF5ADAFF386425667437370F`
+Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999`
 
 | ID | Decision | Reason | Consequence |
 | --- | --- | --- | --- |
@@ -10,3 +10,4 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `D528CD2A4923B29356E36D538893E7DEC7
 | M2-D-004 | Treat EPW radiation as interval energy preceding the encoded end time | Official EnergyPlus EPW semantics | Solar geometry uses the interval midpoint in local standard time; no extra duration multiplier |
 | M2-D-005 | Reject required solar missing/invalid values rather than copying EnergyPlus zero substitution | Silent zero-fill would understate gains | Issues retain line and field evidence; simulation requires usable radiation |
 | M2-D-006 | Use explicit civil fields and UTC offset, never host `Date` or DST | EPW uses local standard time | Results are deterministic across Browser/Node/OS time zones |
+| M2-D-007 | Represent civil time as date plus minutes since local-standard-time midnight | Sub-hour midpoint may include seconds and midnight may cross a date boundary | No lossy string parsing or implicit timezone conversion enters the core |
