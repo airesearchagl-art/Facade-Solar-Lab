@@ -9,8 +9,8 @@
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 4 — Weather Irradiance Foundation`
-- Last successful checkpoint: `Wave 3 — 1e6ca0c`
+- Current wave: `Wave 5 — Validation`
+- Last successful checkpoint: `Wave 4 — b2f0c32`
 
 ## Task Packet binding
 
@@ -37,10 +37,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 - Pure TypeScript EPW headers/data parser, strict missing policy, coverage classification, and synthetic fixtures implemented.
 - Independent NOAA-style weather-v1 solar position and external calculator references implemented.
 - Weather interval irradiance, 2D overhang shading, interval energy, aggregation, periods, and result provenance implemented.
+- Synthetic regression, M1 Golden/hash regression, and local EnergyPlus Tokyo Hyakuri EPW smoke validation completed.
 
 ## Current work
 
-- Wave 4 checkpoint.
+- Wave 5 checkpoint.
 
 ## Required checks
 
@@ -58,7 +59,6 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Explicit unverified items
 
-- Real Japanese EPW smoke validation has not yet run.
 - Weather-v1 absolute energy results are not formal performance evidence.
 
 ## Known failures
@@ -67,11 +67,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Waves 5–8 from the bound Task Packet.
+- Waves 6–8 from the bound Task Packet.
 
 ## Next action
 
-Commit the Wave 4 checkpoint, then run synthetic/M1/real-EPW validation and comparison.
+Commit the Wave 5 checkpoint, then document the weather foundation and update only milestone/status UI.
 
 ## Stop conditions
 

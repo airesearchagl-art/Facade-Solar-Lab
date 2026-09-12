@@ -55,7 +55,7 @@ function finiteNumber(value: string | undefined, field: string, line: number): n
 }
 
 function parseMonthDay(value: string | undefined, field: string): [number, number] {
-  const match = /^(\d{1,2})\/(\d{1,2})$/u.exec(value ?? "");
+  const match = /^\s*(\d{1,2})\s*\/\s*(\d{1,2})\s*$/u.exec(value ?? "");
   if (match === null) {
     throw new WeatherDataError(`Invalid EPW ${field}`, [
       {

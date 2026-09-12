@@ -84,3 +84,42 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Strict simulation rejects any error-bearing dataset before calculation.
 - Browser/framework boundary now recursively scans both `src/engine` and `src/weather`, including Node built-ins and File API.
 - Full suite: 6 files / 41 tests pass. TypeScript no-emit and whitespace checks pass.
+
+## Wave 5 — Validation
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+### Synthetic and M1 regression
+
+- Added the padded `1/ 1` DATA PERIODS date form observed in the official distribution; parser test coverage now includes it.
+- Synthetic automated suite after this addition: 6 files / 42 tests.
+- `npm run golden:check`: PASS against immutable HTML hash `EF896E0D...D4CB5`.
+- Legacy HTML: 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5`.
+- Legacy handover: 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4`.
+
+### Real EPW local smoke — PASS
+
+- Distribution: EnergyPlus weather S3, `JPN_Tokyo.Hyakuri.477150_IWEC.zip`.
+- Retrieved: `2026-09-12`.
+- ZIP SHA-256: `65F7DFC78762753A8CCCA36F47C76F37397237247DC755E46D648A8D0505BF69`.
+- EPW SHA-256: `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`.
+- LOCATION: Tokyo Hyakuri / JPN / WMO 477150 / 36.18 N / 140.42 E / UTC+9 / 35 m.
+- Parser: 8,760 records, `full-year-8760`, zero parse issues, zero missing required solar values.
+- Radiation sums: GHI 1,306,833; DNI 935,343; DHI 736,369 Wh/m2.
+- Weather-v1 simulation completed with no NaN/Infinity and retained dataset ID/source provenance.
+- License: bundled ASHRAE IWEC license restricts copying/transfer and third-party distribution. Raw ZIP/EPW/license remain only under ignored `.local-validation/`; committed to repository: no.
+
+### Legacy-v01 versus weather-v1
+
+Common geometry: H 2.4 m, D 1.6 m, O 0.3 m, W 6 m, south facade, SHGC 1, ground reflectance 0.2. Weather-v1 uses the Tokyo Hyakuri location; legacy-v01 retains its own 35.2° clear-sky baseline inputs.
+
+| Model/period | With overhang [kWh] | Without [kWh] | Reduction |
+| --- | ---: | ---: | ---: |
+| legacy-v01 annual | 14,486.66 | 25,890.12 | 44.05% |
+| weather-v1 annual | 8,388.95 | 13,604.20 | 38.34% |
+| legacy-v01 cooling | 4,254.15 | 10,115.80 | 57.95% |
+| weather-v1 cooling | 3,398.52 | 6,111.48 | 44.39% |
+| legacy-v01 heating | 10,232.51 | 15,774.32 | 35.13% |
+| weather-v1 heating | 4,990.43 | 7,492.72 | 33.40% |
+
+The difference is expected evidence of replacing the legacy clear-sky source with a real-weather input; it is not external validation of either absolute result.

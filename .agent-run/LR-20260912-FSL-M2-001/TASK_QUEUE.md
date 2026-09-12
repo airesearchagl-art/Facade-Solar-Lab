@@ -8,8 +8,8 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | 2 | Wave 1 | Canonical weather/time/provenance/error contract | COMPLETE | Pure TS public types and 5 contract tests; checkpoint `3395d13` |
 | 3 | Wave 2 | EPW parser and synthetic fixtures | COMPLETE | P1–P11 covered; checkpoint `8bece33` |
 | 4 | Wave 3 | NOAA-style solar position v1 | COMPLETE | Five NOAA numeric references plus night/tendency tests; checkpoint `1e6ca0c` |
-| 5 | Wave 4 | Weather irradiance and simulation | IN_PROGRESS | S3–S8 and sub-hour accounting; full suite 6 files / 41 tests |
-| 6 | Wave 5 | Validation and optional real EPW smoke | PENDING | Synthetic suite, M1 regression, local dataset result |
+| 5 | Wave 4 | Weather irradiance and simulation | COMPLETE | S3–S8 and sub-hour accounting; checkpoint `b2f0c32` |
+| 6 | Wave 5 | Validation and optional real EPW smoke | IN_PROGRESS | Synthetic/M1 pass; licensed Tokyo Hyakuri EPW local smoke pass |
 | 7 | Wave 6 | Documentation and minimal status | PENDING | Required docs/status, no simulator UI |
 | 8 | Wave 7 | Full convergence and self-review | PENDING | All checks, scans, hashes, scope review |
 | 9 | Wave 8 | Normal push and Draft PR | PENDING | Fresh OPEN/Draft state then Human Gate |

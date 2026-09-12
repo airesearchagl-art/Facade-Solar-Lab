@@ -106,6 +106,20 @@ describe("EPW parser", () => {
     ).toEqual([7.5, 22.5, 37.5, 52.5]);
   });
 
+  it("accepts padded M/D fields used by official EnergyPlus distributions", () => {
+    const source = [
+      ...headers(1).slice(0, 7),
+      "DATA PERIODS,1,1,Data,Sunday, 1/ 1,12/31",
+      row(2025, 1, 1, 1, 60),
+    ].join("\n");
+    expect(parseEpw(source, { sourceName: "synthetic-padded-date" }).dataPeriods[0]).toMatchObject({
+      startMonth: 1,
+      startDay: 1,
+      endMonth: 12,
+      endDay: 31,
+    });
+  });
+
   it("classifies 8760 and 8784 record datasets", () => {
     const ordinary = parseEpw(fullYear(2025), { sourceName: "synthetic-8760" });
     const leap = parseEpw(fullYear(2024), { sourceName: "synthetic-8784" });
