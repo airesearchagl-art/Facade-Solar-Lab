@@ -55,9 +55,9 @@ The default weather-v1 simulation rejects any error-bearing dataset. No implicit
 
 ## Solar position v1
 
-`noaa-fractional-year-v1` uses NOAA's documented fractional-year equation-of-time and declination approximation with latitude, longitude, UTC offset, calendar date, and Local Standard Time. Azimuth is degrees clockwise from north. Geometric elevation drives incidence/shading; NOAA's piecewise approximate refraction correction is exposed separately for calculator comparison.
+`noaa-fractional-year-v1` uses NOAA's documented fractional-year equation-of-time and declination approximation with latitude, longitude, UTC offset, calendar date, and Local Standard Time. Its fractional-year denominator is 365 days in a normal year and 366 days in a Gregorian leap year. Azimuth is degrees clockwise from north. Geometric elevation drives incidence/shading; NOAA's piecewise approximate refraction correction is exposed separately for calculator comparison.
 
-Independent values were transcribed from the NOAA/GML calculator for Tokyo (35°42′ N, 139°46′ E, UTC+9) at equinox morning/noon/afternoon and summer/winter noon. NOAA rounds to 0.01°; the simplified implementation is bounded to 0.5°. NOAA states that the calculator is no longer actively maintained and is approximate, so M2 makes no SPA/high-precision claim.
+Independent values were transcribed from the NOAA/GML calculator for Tokyo (35°42′ N, 139°46′ E, UTC+9) on 2026-09-12. Normal-year references cover 2025 equinox morning/noon/afternoon and summer/winter noon. Leap-year references cover 2024-02-29, 2024-06-21, and the late-year date 2024-12-21 at noon. NOAA rounds its output to 0.01°; the simplified implementation retains the established 0.5° comparison tolerance. NOAA states that the calculator is no longer actively maintained and is approximate, so M2 makes no SPA/high-precision claim.
 
 ## Irradiance and geometry limits
 

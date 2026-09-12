@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  calculateSolarPosition,
   calculateWeatherIntervalGain,
   calculateWeatherIntervalIrradiance,
   resolveWeatherV1SolarTime,
@@ -29,6 +30,7 @@ function solar(
   const zenithDeg = 90 - elevationDeg;
   return {
     algorithm: "noaa-fractional-year-v1",
+    fractionalYearDays: 365,
     equationOfTimeMinutes: 0,
     declinationDeg: 0,
     trueSolarMinuteOfDay: 720,
@@ -152,11 +154,16 @@ describe("weather-v1 interval irradiance and energy", () => {
         { ...intervalTime, year: 1988 },
       ).year,
     ).toBe(2001);
+    const leapSolarTime = resolveWeatherV1SolarTime(
+      { ...dataset, coverage: "full-leap-year-8784" },
+      { ...intervalTime, year: 1987 },
+    );
+    expect(leapSolarTime.year).toBe(2000);
     expect(
-      resolveWeatherV1SolarTime(
-        { ...dataset, coverage: "full-leap-year-8784" },
-        { ...intervalTime, year: 1987 },
-      ).year,
-    ).toBe(2000);
+      calculateSolarPosition({
+        location: dataset.location,
+        localStandardTime: leapSolarTime,
+      }).fractionalYearDays,
+    ).toBe(366);
   });
 });

@@ -15,6 +15,8 @@ export interface SolarPositionInput {
 
 export interface SolarPosition {
   readonly algorithm: "noaa-fractional-year-v1";
+  /** Calendar denominator used by the NOAA fractional-year approximation. */
+  readonly fractionalYearDays: 365 | 366;
   readonly equationOfTimeMinutes: number;
   readonly declinationDeg: number;
   readonly trueSolarMinuteOfDay: number;

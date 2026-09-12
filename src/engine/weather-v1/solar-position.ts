@@ -1,4 +1,4 @@
-import { dayOfYear } from "../../weather/time";
+import { dayOfYear, isLeapYear } from "../../weather/time";
 import type { SolarPosition, SolarPositionInput } from "./types";
 
 const DEG_TO_RAD = Math.PI / 180;
@@ -73,8 +73,10 @@ export function calculateSolarPosition(input: SolarPositionInput): SolarPosition
     input.localStandardTime.month,
     input.localStandardTime.day,
   );
+  const fractionalYearDays = isLeapYear(input.localStandardTime.year) ? 366 : 365;
   const fractionalYearRadians =
-    (2 * Math.PI * (ordinalDay - 1 + (localStandardHour - 12) / 24)) / 365;
+    (2 * Math.PI * (ordinalDay - 1 + (localStandardHour - 12) / 24)) /
+    fractionalYearDays;
   const equationOfTimeMinutes =
     229.18 *
     (0.000075 +
@@ -125,6 +127,7 @@ export function calculateSolarPosition(input: SolarPositionInput): SolarPosition
 
   return {
     algorithm: "noaa-fractional-year-v1",
+    fractionalYearDays,
     equationOfTimeMinutes,
     declinationDeg: declinationRadians * RAD_TO_DEG,
     trueSolarMinuteOfDay,
