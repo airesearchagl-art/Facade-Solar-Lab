@@ -4,13 +4,16 @@
 
 - Run ID: `LR-20260912-FSL-M3-001`
 - Mode: `LONG_RUN_ENDURANCE`
-- Current state: `ACTIVE`
+- Current state: `HUMAN_GATE`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 9 — Normal Push / Draft PR`
-- Last successful checkpoint: `Wave 7 — 741eb37`; Wave 8 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 11 — Focused Independent Re-Review gate`
+- Previous reviewed head: `e63f73a97d6488aa1df6a6ff870e8cff5a5cde88`
+- Last verified implementation checkpoint: `2bf672493632e217afe05f0f0078ca4f150579d7`
+- Pull request: `#4` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/4`
+- Pull request state: `OPEN / Draft / Ready=false / merged=false`
 
 ## Task Packet binding
 
@@ -43,10 +46,12 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - Facade geometry coordinate, projection, clipping, weather-model identity, limits, validation plan, repository guidance, and minimal M3 status copy documented.
 - Local browser rendered the M3 status and scope warning correctly.
 - Exact implementation-head convergence passed: 86 full-suite tests, 41 M3-focused tests, 32 M2 regression tests, typecheck, build, audit, Golden, diff check, source/digest hashes, local real-EPW smoke, privacy, licensing, scope, and self-review.
+- PR #4 was created from this branch to `main` and remains `OPEN / Draft / Ready=false / merged=false`.
+- Independent FULL Review Required Fix synchronized the Run Artifact to existing PR #4 and corrected only the inaccurate right-handed coordinate label; coordinate signs, projection formula, implementation, and expected values remain unchanged.
 
 ## Current work
 
-- Commit this evidence-only checkpoint, rerun required final-head checks, normal-push the branch, then create only the authorized Draft PR.
+- Required Fix implementation and convergence are complete. PR #4 remains Draft and awaits Focused Independent Re-Review.
 
 ## Required checks
 
@@ -70,11 +75,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Remaining tasks
 
-- Wave 9 one Draft PR, fresh verification, and Independent FULL Review Human Gate.
+- Focused Independent Re-Review and a new Human instruction after that review.
 
 ## Next action
 
-Normal-push `feat/m3-facade-geometry`; then create exactly one Draft PR to `main` only after the Computer Use action-time confirmation gate is satisfied.
+Wait for Focused Independent Re-Review. PR #4 already exists: do not recreate it, mark it Ready, merge it, operate Vercel, or begin M4.
 
 ## Stop conditions
 
@@ -82,8 +87,8 @@ Normal-push `feat/m3-facade-geometry`; then create exactly one Draft PR to `main
 
 ## Resume instructions
 
-1. Fresh-fetch and require `origin/main` at the exact base above without rebasing.
-2. Verify branch, live `HEAD`, worktree, Task Packet digest, and both M1 hashes.
-3. Read all seven M3 artifacts and resume only from Current wave / Next action.
-4. Preserve `src/weather/**`, `src/engine/weather-v1/**`, M1 originals, and all existing expected values.
-5. Do not start M4 or mutate `main`, Ready, merge, Vercel, Production, permissions, visibility, or secrets.
+1. Fresh-fetch and verify `origin/main`, branch, live `HEAD`, worktree, Task Packet digest, and both M1 hashes without rebasing.
+2. Verify PR #4 still exists and remains `OPEN / Draft / Ready=false / merged=false`; do not recreate it.
+3. Read all seven M3 artifacts and treat the Required Fix as complete pending Focused Independent Re-Review.
+4. Preserve `src/weather/**`, `src/engine/weather-v1/**`, M1 originals, coordinate signs, projection formula, and all existing expected values.
+5. Do not mark Ready, merge, operate Vercel, or begin M4. Wait for Focused Independent Re-Review.

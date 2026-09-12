@@ -13,4 +13,6 @@ Binding: `LRP-20260912-FSL-M3-001` rev `1` / `AFF8B77962787C01B61FE059353FE33B7B
 | 7 | Wave 6 | Regression, real smoke, comparisons | COMPLETE | M1/M2, C1–C3, 8,760-record four-orientation real EPW |
 | 8 | Wave 7 | Documentation and minimal status | COMPLETE | Geometry contract/model boundary docs and local browser status verification |
 | 9 | Wave 8 | Full convergence and self-review | COMPLETE | 86 full / 41 focused / 32 M2 tests; all checks, hashes, scans, smoke, self-review PASS |
-| 10 | Wave 9 | Normal push and one Draft PR | ACTIVE | Fresh Draft PR state; Human Gate |
+| 10 | Wave 9 | Normal push and one Draft PR | COMPLETE | PR #4 exists and is `OPEN / Draft / Ready=false / merged=false` |
+| 11 | Wave 10 | Independent FULL Review Required Fix | COMPLETE | Artifact sync and right-hand wording correction; implementation checkpoint `2bf6724` |
+| 12 | Wave 11 | Focused Independent Re-Review | HUMAN_GATE | PR #4 remains Draft; do not recreate, Ready, merge, operate Vercel, or begin M4 |

@@ -166,3 +166,44 @@ Verification anchor: implementation/documentation head `741eb372b5fbb2bbcfe40bb9
 - Local dataset stayed under ignored `.local-validation/`; its EPW SHA-256 remains `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`.
 - Self-review found no Blocking defect. Accepted limitations remain finite-width diffuse omission, midpoint solar sampling, and unvalidated absolute `[kWh]`.
 - Local `main` remains untouched at `a4c90163725f8a9d610aaaeac24057facc0b2fa9`; only `origin/main` was read/fetched.
+
+## Wave 9 — Draft PR
+
+Recorded: `2026-09-13` (Asia/Tokyo)
+
+- PR: `#4` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/4`.
+- State after creation: `OPEN / Draft / Ready=false / merged=false`.
+- Base: `main @ c3f314134137da9b35b4cde53320a610bba15f72`.
+- Head reviewed by Independent FULL Review: `feat/m3-facade-geometry @ e63f73a97d6488aa1df6a6ff870e8cff5a5cde88`.
+- At reviewed head: 9 commits / 39 changed files.
+- No Ready, merge, Vercel, Production, M4, or `main` mutation occurred.
+
+## Wave 10 — Independent FULL Review Required Fix
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+- Previous reviewed head: `e63f73a97d6488aa1df6a6ff870e8cff5a5cde88`.
+- Verified implementation checkpoint: `2bf672493632e217afe05f0f0078ca4f150579d7`; the following artifact-only checkpoint is followed by a fresh final-head rerun before normal push.
+- RF-01: synchronized `RUN_STATE.md`, `TASK_QUEUE.md`, and `EVIDENCE.md` to existing PR #4. Resume behavior explicitly prohibits recreating PR #4, Ready, merge, Vercel, and M4; next gate is Focused Independent Re-Review.
+- RF-02: replaced only the inaccurate `右手系` documentation label and explicitly stated that the defined `+x/+y/+z` axes are not a standard right-handed xyz basis.
+- Cross-document scan outside the immutable Task Packet found no other right-hand claim. The only remaining `right-handed` occurrence is the new explicit negation.
+- Coordinate axes, sun-vector equation, wall-projection equation, geometry code, polygon code, tests, and analytical expected values were not changed.
+
+| Check | Fresh result at implementation checkpoint | Result |
+| --- | --- | --- |
+| `npm test` | 11 files / 86 tests | PASS |
+| M3 focused geometry / orientation / finite width | 6 files / 41 tests | PASS |
+| M2 regression | 4 files / 32 tests; M2 source has no diff | PASS |
+| `npm run typecheck` | no diagnostics | PASS |
+| `npm run build` | 49 modules; Vite production build | PASS |
+| `npm audit` | 0 vulnerabilities | PASS |
+| `npm run golden:check` | M1 hash-guarded fixture verified | PASS |
+| `git diff --check origin/main...HEAD` | no findings | PASS |
+| Local real EPW smoke | 1 test / 8,760 intervals / N-E-S-W finite results | PASS |
+| Privacy / secret scan | no token, private-key, or personal absolute-path findings | PASS |
+| Licensed-data scan | only two synthetic EPW fixtures tracked; raw real EPW/ZIP/license absent | PASS |
+| Scope | only coordinate wording plus M3 Run Artifact changes; no M4 or runtime implementation | PASS |
+
+- M1 HTML: 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5`.
+- M1 handover: 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4`.
+- M3 Task Packet remains immutable at `AFF8B77962787C01B61FE059353FE33B7B3FC9971A1BD126313A1547660DDACB`.
