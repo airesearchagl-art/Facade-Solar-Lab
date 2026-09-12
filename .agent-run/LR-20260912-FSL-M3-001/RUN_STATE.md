@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 5 — Weather Integration`
-- Last successful checkpoint: `Wave 3 — b4dd948`; Wave 4 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 6 — Regression / Real Smoke`
+- Last successful checkpoint: `Wave 4 — f637c88`; Wave 5 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -38,10 +38,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - Shared geometry epsilon, adjacent-vertex deduplication, shoelace area, and Sutherland–Hodgman rectangle clipping implemented.
 - Finite horizontal-overhang shadow polygon, wall projection, opening intersection, and bounded shaded/lit fractions implemented.
 - All cardinal/intermediate rotations, mirror symmetry, asymmetric extensions, monotonic relevant-side extension, infinite-width limit, behind-facade, and grazing boundaries verified.
+- New `facade-v1-weather` interval/simulation path implemented with explicit geometry/model identities and retained weather provenance.
 
 ## Current work
 
-- Add the new `facade-v1-weather` path while reusing M2 weather/solar without modifying M2 source.
+- Run M1/M2 regressions, C1–C3 comparisons, and the optional local real-EPW M3 smoke.
 
 ## Required checks
 
@@ -70,7 +71,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Next action
 
-Implement Wave 5 facade-v1 irradiance/simulation/result identity and provenance tests.
+Complete Wave 6 regression, comparison, real smoke, and data-boundary evidence.
 
 ## Stop conditions
 

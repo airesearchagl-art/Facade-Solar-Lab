@@ -73,3 +73,15 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - 100 m side extensions reproduce the analytical infinite-width fraction `sqrt(2)/2` for D=1 m, e=45°, beta=45°, H=2 m.
 - Behind-facade and exact/near-grazing cases return finite values and fractions within 0–1.
 - Focused result: direct-shadow/orientation 2 files / 22 tests; typecheck and whitespace check PASS.
+
+## Wave 5 — Weather integration
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+- Added `facade-v1-weather` without changing `src/weather/**` or `src/engine/weather-v1/**`.
+- Reuses M2 NOAA solar position and full-year calendar normalization; interval radiation remains `Wh/m² interval` and is converted to kWh exactly once.
+- Result retains normalized facade azimuth, opening/overhang input, dataset ID, weather provenance, and all model identities.
+- Direct: `finite-rectangular-overhang-shadow-polygon-v1`; diffuse: `isotropic-2d-infinite-width-v1`; ground: `ghi-ground-reflection-0.5-v1`.
+- Behind-facade direct beam is zero; finite direct shade, 2D diffuse reduction, and unshaded ground reflection are separate components.
+- C1 synthetic D=0 produces exact M2/M3 monthly and period summaries.
+- Focused result: weather/direct/orientation 3 files / 26 tests; typecheck and whitespace check PASS.

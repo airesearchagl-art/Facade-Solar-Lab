@@ -59,10 +59,13 @@ export function calculateDirectShadow(
   const frontFacing =
     sunVector.y > GEOMETRY_EPSILON && sunVector.z > GEOMETRY_EPSILON;
 
-  if (input.overhang === undefined || input.overhang.depthM === 0) {
+  if (input.overhang === undefined) {
     return emptyShadowResult(openingMetrics.areaM2, sunVector, frontFacing);
   }
   validateHorizontalOverhang(input.opening, input.overhang);
+  if (input.overhang.depthM === 0) {
+    return emptyShadowResult(openingMetrics.areaM2, sunVector, frontFacing);
+  }
   if (!frontFacing) {
     return emptyShadowResult(openingMetrics.areaM2, sunVector, false);
   }
