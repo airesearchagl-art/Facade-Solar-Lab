@@ -7,6 +7,7 @@ const engineSources = import.meta.glob(
     "../src/engine/**/*.ts",
     "../src/geometry/**/*.ts",
     "../src/weather/**/*.ts",
+    "../src/comparison/**/*.ts",
   ],
   {
   eager: true,
@@ -36,12 +37,12 @@ const forbiddenDependencies = [
   { name: "File API", pattern: /\bFileReader\b|\bFile\b/u },
 ] as const;
 
-describe("M3 engine, geometry, and weather boundary", () => {
+describe("M4 engine, geometry, weather, and comparison boundary", () => {
   it("identifies all model paths without claiming physical validation", () => {
-    expect(engineManifest.milestone).toBe("M3");
+    expect(engineManifest.milestone).toBe("M4");
     expect(engineManifest.frameworkDependencies).toEqual([]);
     expect(engineManifest.calculationStatus).toBe(
-      "legacy-weather-and-facade-geometry-foundations",
+      "facade-comparison-workspace",
     );
     expect(engineManifest.modelStatus).toBe("weather-backed-not-validated");
     expect(engineManifest.runtimeTargets).toContain("node");

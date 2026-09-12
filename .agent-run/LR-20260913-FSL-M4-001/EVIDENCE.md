@@ -50,3 +50,15 @@ Performed: `2026-09-13` (Asia/Tokyo)
 | Production baseline | `dpl_FV899...`; aliases unchanged | PASS |
 
 No deployment was deleted or retried. The Hard Gate permits M4 product implementation to continue.
+
+## Wave 2 — Comparison pure domain
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+- Added `src/comparison/**` as a Pure TypeScript adapter over `simulateFacadeV1`; no solar, weather, or geometry calculation was duplicated.
+- Case operations enforce 1–4 cases, unique caller-provided IDs, deep-cloned duplicate parameters, deterministic baseline reassignment, and no random IDs in tests.
+- Delta semantics are exactly `case - baseline`; percentage is `null` when baseline is zero.
+- Annual, cooling, heating, and aligned 12-month values are retained with the complete facade-v1 simulation result.
+- Validation rejects non-finite values, invalid opening/overhang geometry, `SHGC <= 0 || > 1`, and ground reflectance outside `0..1` without clamping.
+- Input differences cover normalized azimuth, opening, overhang enable/disable and dimensions, SHGC, and ground reflectance while omitting unchanged fields.
+- Focused result: 3 files / 18 tests; typecheck PASS; diff check PASS.

@@ -10,8 +10,8 @@
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
 - Current head: resolve live `HEAD`; initialization checkpoint is `85181a4d4cbd77f76e199da6c7acca7947096ad5`
-- Current wave: `Wave 2 — Comparison pure domain`
-- Last successful checkpoint: initialization push and Git-triggered Preview Hard Gate
+- Current wave: `Wave 3–7 — browser workspace and UX convergence`
+- Last successful checkpoint: Comparison pure domain focused convergence
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -31,9 +31,9 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 6. [x] Initialization deployment is Git-triggered Preview with no Production alias mutation.
 7. [ ] Browser-local EPW load implemented.
 8. [ ] Weather provenance displayed.
-9. [ ] One-to-four Case management implemented.
-10. [ ] Duplicate Case implemented.
-11. [ ] Baseline selection implemented.
+9. [x] Pure domain enforces one-to-four Case management; UI pending.
+10. [x] Deterministic Duplicate Case operation implemented; UI pending.
+11. [x] Baseline selection and deletion reassignment implemented; UI pending.
 12. [ ] Geometry inputs implemented.
 13. [ ] Overhang enable/disable implemented.
 14. [ ] SHGC input implemented.
@@ -42,20 +42,20 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 17. [ ] Annual KPI displayed.
 18. [ ] Summer KPI displayed.
 19. [ ] Winter KPI displayed.
-20. [ ] Baseline delta displayed.
+20. [x] Baseline delta model implemented; UI pending.
 21. [ ] Monthly comparison chart implemented.
 22. [ ] Accessible monthly values provided.
 23. [ ] Section geometry visualization implemented.
 24. [ ] Front geometry visualization implemented.
-25. [ ] Baseline input differences implemented.
+25. [x] Baseline input difference model implemented; UI pending.
 26. [ ] Assumptions and model identity displayed.
 27. [ ] Absolute-kWh warning displayed.
 28. [ ] No automatic “optimal” judgment introduced.
-29. [ ] Invalid input handling implemented.
+29. [x] Pure validation model implemented; UI messages pending.
 30. [x] M1 baseline regression passed at preflight.
 31. [x] M2 baseline regression passed at preflight.
 32. [x] M3 baseline regression passed at preflight.
-33. [ ] M4 tests pass.
+33. [x] M4 pure-domain focused tests pass; final suite pending.
 34. [x] Typecheck passed at preflight; final rerun pending.
 35. [x] Build passed at preflight; final rerun pending.
 36. [x] Audit passed at preflight; final rerun pending.
@@ -75,10 +75,11 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Saved byte-identical Task Packet and immutable snapshot files and bound their SHA-256.
 - Synchronized M3 historical state and the roadmap on the M4 branch only.
 - Pushed initialization checkpoint `85181a4...`; Vercel created exactly one Git Preview at `dpl_4juDN8...`, `target=null`, `READY`, exact branch and source SHA.
+- Added browser-independent case operations, comparison runner, period/month deltas, input differences, formatting, validation, and recursive comparison boundary coverage.
 
 ## Current implementation state
 
-M4 product implementation has not started. Initialization and the first Preview gate are complete; the Pure TypeScript comparison domain is next.
+Pure domain is implemented and covered by 18 focused tests. Browser-local weather adapter, editor, visualizations, results, accessibility, and documentation remain.
 
 ## Checks
 
@@ -118,7 +119,7 @@ Waves 1–10 in `TASK_QUEUE.md`.
 
 ## Next action
 
-Implement and test the browser-independent Comparison domain without changing M1–M3 engine behavior.
+Implement the browser-local Facade Comparison Workspace against the completed comparison domain and existing EPW parser.
 
 ## Stop conditions status
 
