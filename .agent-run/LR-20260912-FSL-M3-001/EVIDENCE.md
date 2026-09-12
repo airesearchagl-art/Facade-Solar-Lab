@@ -30,3 +30,14 @@ Only the Human-provided absolute project-root string was replaced with `${PROJEC
 
 - No `main`, Ready, merge, Vercel, Production, Release, permission, visibility, secret, Notion, Vault, or M4 mutation occurred.
 - No external EPW, ZIP, or license file was added.
+
+## Wave 1 — Geometry contract
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added metre-based rectangular opening and horizontal overhang contracts without redundant height/area storage.
+- Opening height/area and opening/overhang edges are derived; full-height and waist-wall openings use the same type.
+- Invalid width, head/sill order, depth, extension, elevation, and non-finite values are rejected rather than clamped.
+- Facade azimuth is north-zero/clockwise and normalized only after finite validation.
+- Derived facade-local sun vector uses `x=-cos(e)sin(S-A)`, `y=cos(e)cos(S-A)`, `z=sin(e)` from the declared front-view basis.
+- Focused result: 1 file / 5 tests; typecheck and whitespace check PASS.
