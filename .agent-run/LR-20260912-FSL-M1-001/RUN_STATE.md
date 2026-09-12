@@ -5,15 +5,17 @@
 - Run ID: `LR-20260912-FSL-M1-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `HUMAN_GATE`
+- Current state: `COMPLETE_VERIFIED / HUMAN_CLOSEOUT`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 7 — Draft PR / Independent FULL Review Human Gate`
+- Current wave: `Post-merge closeout`
 - Last successful checkpoint: `Wave 6 — 7a659ac`; Wave 7 closeout is the current live HEAD after its checkpoint commit
 - Pull request: `#2` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/2`
-- Pull request state: `OPEN / Draft / Ready=false / merged=false`
+- Pull request state: `MERGED` by squash
+- Reviewed feature head: `cdacd6c2020030b5bde1a745281c9e4d358d1c36`
+- Squash merge commit: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 
 ## Task Packet binding
 
@@ -63,11 +65,11 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Remaining tasks
 
-- Independent FULL Review of PR #2 by a separate reviewer. No further mutation is authorized in this run.
+- None. M1 is complete, independently reviewed, and merged.
 
 ## Next action
 
-Independent FULL Review of PR #2 at the live GitHub head. A resumed agent must not create another PR or repeat the completed Draft PR mutation.
+Do not resume M1 implementation. Continue only under a separately authorized milestone packet.
 
 ## Stop conditions
 
@@ -76,11 +78,7 @@ Independent FULL Review of PR #2 at the live GitHub head. A resumed agent must n
 
 ## Resume instructions
 
-1. Confirm branch `feat/m1-engine-baseline` and a clean or explicitly recorded working tree.
-2. Fresh-fetch `origin/main` and require exact SHA `b633a2b9651b63ea1224f8a4becefa1062a6b12d`.
-3. Verify this Task Packet SHA-256 equals `BEF00BD0BA6B96A027EB6BE7BB5186B38244B4BEEA1B16FA0F38C64D6FC22B07`.
-4. Resolve live `HEAD`; do not confuse it with any prior checkpoint SHA.
-5. Verify both legacy workspace files still match the Human-provided byte counts and SHA-256 values before touching the index.
-6. Continue only from **Current wave** / **Next action** and stop on any listed condition.
-7. Confirm PR #2 remains `OPEN / Draft / Ready=false / merged=false`, base `main`, and head `feat/m1-engine-baseline`.
-8. Do not create another PR, mark Ready, merge, deploy, release, or begin M2 without a new Human instruction.
+1. Treat this run as closed; do not recreate PR #2 or repeat any M1 mutation.
+2. Verify this immutable Task Packet SHA-256 equals `BEF00BD0BA6B96A027EB6BE7BB5186B38244B4BEEA1B16FA0F38C64D6FC22B07` if auditing M1.
+3. Preserve both legacy originals and Golden fixtures unchanged.
+4. Use the reviewed head and squash merge commit above as historical identities, not as the current repository `HEAD`.
