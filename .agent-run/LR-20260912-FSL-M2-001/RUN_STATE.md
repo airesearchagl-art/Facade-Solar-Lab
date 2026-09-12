@@ -4,14 +4,18 @@
 
 - Run ID: `LR-20260912-FSL-M2-001`
 - Mode: `LONG_RUN_ENDURANCE`
-- Current state: `HUMAN_GATE`
+- Current state: `COMPLETE_VERIFIED / HUMAN_CLOSEOUT`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 10 — Focused Independent Re-Review gate`
+- Current wave: `Post-merge closeout`
 - Previous reviewed head: `7073950a05ccbbadbc21ba87958e80f4db4cb70c`
 - Last verified implementation checkpoint: `f5600021b1a5f6ddf8d05c989a4968cf25eaa8c2`
+- Final reviewed feature head: `406a896818b5462549a1aab447a4a6ef3f8baa18`
+- Pull request: `#3` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/3`
+- Pull request state: `MERGED` by squash
+- Squash merge commit: `c3f314134137da9b35b4cde53320a610bba15f72`
 
 ## Task Packet binding
 
@@ -48,7 +52,7 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Current work
 
-- Required Fix implementation and convergence are complete. PR #3 remains Draft and awaits Focused Independent Re-Review.
+- M2 is independently reviewed, verified, and squash-merged. This run is historical and closed.
 
 ## Required checks
 
@@ -74,11 +78,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Focused Independent Re-Review and a new Human instruction after that review.
+- None. M2 is complete.
 
 ## Next action
 
-Wait for Focused Independent Re-Review. PR #3 already exists: do not recreate it, mark it Ready, merge it, or begin M3.
+Do not resume M2 implementation. Continue only under the separately authorized M3 Task Packet.
 
 ## Stop conditions
 
@@ -87,9 +91,7 @@ Wait for Focused Independent Re-Review. PR #3 already exists: do not recreate it
 
 ## Resume instructions
 
-1. Fresh-fetch `origin/main` and verify the base relationship without rebasing.
-2. Verify branch `feat/m2-weather-foundation`, resolve live `HEAD`, and inspect the working tree.
-3. Verify the Task Packet digest above and both immutable M1 source byte hashes.
-4. Read all seven M2 artifacts; continue only from Current wave / Next action.
-5. Verify PR #3 still exists and remains `OPEN / Draft / Ready=false / merged=false`; do not recreate it.
-6. Do not mark Ready, merge, or begin M3. Wait for Focused Independent Re-Review.
+1. Treat this run as closed; do not recreate PR #3 or repeat any M2 mutation.
+2. Verify this immutable Task Packet digest and the M1 source hashes only when auditing M2.
+3. Preserve `weather-v1`, its tests, and both M1 originals as regression baselines.
+4. Use the reviewed head and squash merge commit above as historical identities, not current `HEAD`.
