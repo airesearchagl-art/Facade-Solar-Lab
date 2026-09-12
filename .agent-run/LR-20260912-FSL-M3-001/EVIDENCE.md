@@ -85,3 +85,37 @@ Performed: `2026-09-13` (Asia/Tokyo)
 - Behind-facade direct beam is zero; finite direct shade, 2D diffuse reduction, and unshaded ground reflection are separate components.
 - C1 synthetic D=0 produces exact M2/M3 monthly and period summaries.
 - Focused result: weather/direct/orientation 3 files / 26 tests; typecheck and whitespace check PASS.
+
+## Wave 6 — Regression / comparison / real smoke
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+### Baseline regression
+
+- M1 originals retain 16,835 / 22,635 bytes and SHA-256 `EF896E0D...D4CB5` / `B3C2C8E...CD6C4`.
+- M1 Golden hash guard PASS.
+- `src/weather/**` and `src/engine/weather-v1/**` have no diff from `origin/main`.
+- M2 parser, Local Standard Time, NOAA 365/366 references, and interval accounting remain in the passing suite.
+- Full suite after extending the boundary test: 11 files / 86 tests PASS. The initial run correctly exposed the M2 milestone string in the status assertion; only that status assertion and recursive scan scope were updated, then the suite passed.
+
+### C1–C3
+
+- C1 D=0: M2 and M3 synthetic monthly/annual/cooling/heating results are exactly equal.
+- C2 at D=1 m, H=2 m, e=45°, beta=-45°, DNI=100 Wh/m²: exact wide M3 shaded fraction `0.7071067812`, direct with overhang `14.6446609407 Wh/m²`; M2 20-strip shaded fraction `0.7`, direct `15.0000000000 Wh/m²`. The difference is the declared polygon-versus-strip discretization boundary.
+- C3 at the same sun with opening-width overhang: finite shaded fraction `0.5303300859`, direct `23.4834957055 Wh/m²`; the very-wide values above demonstrate the finite-side effect.
+
+### Real EPW local smoke — PASS
+
+- Dataset: EnergyPlus Tokyo Hyakuri IWEC; EPW SHA-256 `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`.
+- Parser: 8,760 intervals, `full-year-8760`, zero issues.
+- Geometry: opening 6 m × 2.4 m; overhang D=1.6 m, O=0.3 m, left/right extension 0.5 m; SHGC 1; ground reflectance 0.2.
+
+| Facade azimuth | With overhang [kWh] | Without [kWh] | Reduction |
+| ---: | ---: | ---: | ---: |
+| 0° North | 5,258.38 | 7,252.96 | 27.50% |
+| 90° East | 6,785.24 | 10,116.22 | 32.93% |
+| 180° South | 8,579.93 | 13,610.63 | 36.96% |
+| 270° West | 7,016.10 | 10,497.24 | 33.16% |
+
+- All four simulations completed with finite summaries and retained the exact dataset provenance object.
+- Raw EPW/ZIP/license and the temporary smoke test remain ignored under `.local-validation/`; none is committed.

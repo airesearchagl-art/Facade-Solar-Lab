@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 6 — Regression / Real Smoke`
-- Last successful checkpoint: `Wave 4 — f637c88`; Wave 5 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 7 — Documentation / Minimal Status`
+- Last successful checkpoint: `Wave 5 — 9d2b19c`; Wave 6 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -39,10 +39,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - Finite horizontal-overhang shadow polygon, wall projection, opening intersection, and bounded shaded/lit fractions implemented.
 - All cardinal/intermediate rotations, mirror symmetry, asymmetric extensions, monotonic relevant-side extension, infinite-width limit, behind-facade, and grazing boundaries verified.
 - New `facade-v1-weather` interval/simulation path implemented with explicit geometry/model identities and retained weather provenance.
+- C1–C3, M1/M2 regression, recursive engine/weather/geometry boundary, and local real-EPW four-orientation smoke validation passed.
 
 ## Current work
 
-- Run M1/M2 regressions, C1–C3 comparisons, and the optional local real-EPW M3 smoke.
+- Document M3 contracts/limits and update only milestone/status UI copy.
 
 ## Required checks
 
@@ -71,7 +72,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Next action
 
-Complete Wave 6 regression, comparison, real smoke, and data-boundary evidence.
+Complete Wave 7 documentation and minimal status updates without adding simulator UX.
 
 ## Stop conditions
 

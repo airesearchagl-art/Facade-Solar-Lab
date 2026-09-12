@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   calculateFacadeV1IntervalIrradiance,
+  calculateWeatherIntervalIrradiance,
   simulateFacadeV1,
   simulateWeatherV1,
   type FacadeV1Parameters,
@@ -89,6 +90,106 @@ describe("facade-v1 weather integration", () => {
       irradiance.diffuseWithoutOverhangWhPerM2,
     );
     expect(irradiance.groundReflectedWhPerM2).toBe(10);
+  });
+
+  it("C2 distinguishes exact infinite-width geometry from M2 strip discretization", () => {
+    const radiation = {
+      globalHorizontalWhPerM2: 0,
+      directNormalWhPerM2: 100,
+      diffuseHorizontalWhPerM2: 0,
+    };
+    const solar = {
+      algorithm: "noaa-fractional-year-v1" as const,
+      fractionalYearDays: 365 as const,
+      equationOfTimeMinutes: 0,
+      declinationDeg: 0,
+      trueSolarMinuteOfDay: 720,
+      hourAngleDeg: 0,
+      zenithDeg: 45,
+      elevationDeg: 45,
+      apparentElevationDeg: 45,
+      azimuthDeg: 135,
+      cosineOfZenith: Math.SQRT1_2,
+      isAboveHorizon: true,
+    };
+    const m2 = calculateWeatherIntervalIrradiance(
+      {
+        ...WEATHER_PARAMETERS,
+        windowWidthM: 2,
+        overhangDepthM: 1,
+      },
+      radiation,
+      solar,
+    );
+    const m3 = calculateFacadeV1IntervalIrradiance(
+      {
+        ...FACADE_PARAMETERS,
+        opening: { centerXM: 0, widthM: 2, sillZM: 0, headZM: 2 },
+        overhang: {
+          depthM: 1,
+          elevationZM: 2,
+          leftExtensionM: 100,
+          rightExtensionM: 100,
+        },
+      },
+      radiation,
+      solar,
+    );
+
+    expect(m2.factors.directLitFraction).toBe(0.3);
+    expect(m3.factors.directShadow.directShadedFraction).toBeCloseTo(
+      Math.SQRT2 / 2,
+      12,
+    );
+    expect(m3.directWithOverhangWhPerM2).not.toBe(
+      m2.directWithOverhangWhPerM2,
+    );
+  });
+
+  it("C3 records a direct-gain difference between finite and very wide overhangs", () => {
+    const base = {
+      ...FACADE_PARAMETERS,
+      opening: { centerXM: 0, widthM: 2, sillZM: 0, headZM: 2 },
+    };
+    const radiation = {
+      globalHorizontalWhPerM2: 0,
+      directNormalWhPerM2: 100,
+      diffuseHorizontalWhPerM2: 0,
+    };
+    const solar = { azimuthDeg: 135, elevationDeg: 45 };
+    const finite = calculateFacadeV1IntervalIrradiance(
+      {
+        ...base,
+        overhang: {
+          depthM: 1,
+          elevationZM: 2,
+          leftExtensionM: 0,
+          rightExtensionM: 0,
+        },
+      },
+      radiation,
+      solar,
+    );
+    const wide = calculateFacadeV1IntervalIrradiance(
+      {
+        ...base,
+        overhang: {
+          depthM: 1,
+          elevationZM: 2,
+          leftExtensionM: 100,
+          rightExtensionM: 100,
+        },
+      },
+      radiation,
+      solar,
+    );
+
+    expect(finite.directWithOverhangWhPerM2).toBeGreaterThan(
+      wide.directWithOverhangWhPerM2,
+    );
+    expect(finite.factors.directShadow.directShadedFraction).toBeLessThan(
+      wide.factors.directShadow.directShadedFraction,
+    );
   });
 
   it("rejects invalid facade material inputs and intersecting geometry", () => {
