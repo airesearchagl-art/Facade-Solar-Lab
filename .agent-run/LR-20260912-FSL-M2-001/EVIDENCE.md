@@ -134,3 +134,49 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Updated only existing status copy/manifest/model status to M2; no picker, location browser, chart, simulator, or case-comparison UI was added.
 - Browser check at `http://127.0.0.1:5175/`: `M2 · WEATHER FOUNDATION`, engine `M2`, `EPW weather foundation available`, and `Legacy baseline preserved` visible; no Vite overlay.
 - 6 files / 42 tests, typecheck, build (37 modules), Golden check, and whitespace check pass.
+
+## Wave 7 — Full convergence / self-review
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+Implementation verification head: `ad486d82f147de03d08f846b80fd1cdaac1994b2`.
+
+| Check | Fresh result | Status |
+| --- | --- | --- |
+| Branch/base | `feat/m2-weather-foundation`; merge-base and fresh `origin/main` both `a7a9cbb7af2386b6b0b5266ea390568a8b537d69` | PASS |
+| Task Packet | normalized snapshot equals the Human source; SHA-256 `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999` | PASS |
+| `npm test` | 6 files / 44 tests | PASS |
+| `npm run typecheck` | TypeScript no-emit exited 0 | PASS |
+| `npm run build` | Vite build; 37 modules transformed | PASS |
+| `npm audit` | 0 vulnerabilities | PASS |
+| `npm run golden:check` | fixture verified from hash-guarded original source | PASS |
+| Diff whitespace | `git diff --check origin/main...HEAD` has no findings | PASS |
+| Core boundary | recursive engine/weather source test has no React, DOM, Canvas, browser globals, File API, or Node filesystem import | PASS |
+| M1 tracked regression | no diff in either original, legacy engine, Golden fixture, or Golden test | PASS |
+| External raw weather | only two authored synthetic fixtures are tracked; `.local-validation/` is ignored | PASS |
+| Secret/privacy | tracked tree and branch history token/private-key/personal-path/email/sensitive-filename scans have no findings | PASS |
+| Scope | no M3 geometry, import UI, charts, Perez/SPA, deployment, permission, Ready, or merge mutation | PASS |
+| `main` | local `main` remains pre-existing `a4c9016...`; remote canonical main remains `a7a9cbb...` | PASS |
+
+### Immutable M1 bytes
+
+| Original | Workspace | Restored committed blob | Status |
+| --- | --- | --- | --- |
+| HTML | 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5` | same | PASS |
+| HANDOVER | 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4` | same | PASS |
+
+### Full self-review
+
+- Found and fixed mixed historical `Year` values in typical-year IWEC data: raw years remain preserved, while 8,760/8,784 solar calendars now normalize to non-leap/leap structure.
+- Re-ran the real smoke after that fix and replaced all affected annual/heating comparison values with measured outputs.
+- Found and removed repeated full-dataset leap-day scans inside sub-hour simulation; the canonical solar year is computed once before iteration.
+- Reviewed EPW field mapping, interval-end/midpoint semantics, missing rejection, longitude/timezone sign, NOAA reference independence, Wh-to-kWh accounting, 2D shading, aggregation/provenance, M1 separation, docs, UI scope, licensing, and public boundary.
+- Known failures: none.
+
+### Diff snapshot at the verified implementation head
+
+- 45 changed files.
+- 3,852 additions / 61 deletions.
+- 9 commits.
+
+The following Wave 7 evidence checkpoint changes only resumable artifacts. Current head remains symbolic and must be resolved live.

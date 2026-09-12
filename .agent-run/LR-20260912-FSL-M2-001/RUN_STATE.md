@@ -4,13 +4,13 @@
 
 - Run ID: `LR-20260912-FSL-M2-001`
 - Mode: `LONG_RUN_ENDURANCE`
-- Current state: `IN_PROGRESS`
+- Current state: `HUMAN_GATE`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 7 — Full Convergence`
-- Last successful checkpoint: `Wave 6 — 2927df7`
+- Current wave: `Wave 8 — Draft PR action-time confirmation`
+- Last successful checkpoint: `Wave 7 implementation verification — ad486d8`; the evidence-only checkpoint is the live `HEAD` after it is committed
 
 ## Task Packet binding
 
@@ -42,7 +42,7 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Current work
 
-- Wave 7 convergence and self-review.
+- Wave 7 complete; Draft PR awaits action-time Human confirmation.
 
 ## Required checks
 
@@ -68,11 +68,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Wave 7 convergence checkpoint and Wave 8 Draft PR.
+- Normal push, action-time Draft PR confirmation, browser-created Draft PR, fresh state, and final artifact sync.
 
 ## Next action
 
-Complete Wave 7 checks/scans/review, checkpoint the evidence, then request action-time confirmation before the Draft PR mutation.
+Commit and push the verified branch, then request action-time confirmation immediately before creating the Draft PR. Do not mark Ready or merge.
 
 ## Stop conditions
 
