@@ -40,3 +40,23 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Every mutable run-control document repeats or references the same Task Packet binding.
 - `RUN_STATE.md` contains the full resume contract and current queue position.
 - `.gitattributes` fixes Markdown to LF so the Task Packet SHA-256 remains stable across normal checkouts.
+
+## Wave 2 — Project bootstrap
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Dependency source | Package versions queried from the npm registry using repository-local cache | PASS |
+| React / React DOM | `19.3.0` | PASS |
+| Vite / plugin-react | `8.3.0` / `6.1.1` | PASS |
+| TypeScript / Vitest | `7.0.2` / `5.0.0` | PASS |
+| npm install | 46 packages added; audit found 0 vulnerabilities | PASS |
+| npm test | 1 file, 1 test passed | PASS |
+| npm run typecheck | TypeScript completed with exit code 0 | PASS |
+| npm run build | Vite transformed 17 modules and produced `dist/` | PASS |
+| Browser page load | `http://127.0.0.1:5173/` loaded with title and H1 `Facade Solar Lab` | PASS |
+| Browser content | 422 rendered body-text characters; M0 ready status present | PASS |
+| Browser runtime | No Vite error overlay and no warning/error console entries | PASS |
+
+The first registry lookup failed because npm's default cache was outside the writable workspace. Retrying with `.npm-cache` succeeded; the cache is ignored and is not a product failure.

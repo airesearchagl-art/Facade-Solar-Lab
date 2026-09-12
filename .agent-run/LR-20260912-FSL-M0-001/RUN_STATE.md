@@ -10,8 +10,8 @@
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
 - Current head: resolve symbolic `HEAD` with `git rev-parse HEAD`
-- Current wave: `Wave 1 — Long-Run foundation`
-- Last successful checkpoint: Wave 0 commit `1fa21e3`
+- Current wave: `Wave 2 — Project bootstrap`
+- Last successful checkpoint: Wave 1 commit `83a8cf4`
 
 ## Task Packet binding
 
@@ -28,10 +28,10 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 
 | Criterion | Status | Evidence |
 | --- | --- | --- |
-| Vite + TypeScript + React baseline | PENDING | Wave 2 |
-| Framework-independent engine boundary | PENDING | Wave 2 |
-| Minimal browser screen builds | PENDING | Wave 2 / Wave 5 checks |
-| test, typecheck, build pass | PENDING | Wave 5 |
+| Vite + TypeScript + React baseline | PASS | Wave 2 source and lockfile |
+| Framework-independent engine boundary | PASS | `src/engine/index.ts` and boundary test |
+| Minimal browser screen builds | PASS | Vite build and Browser verification |
+| test, typecheck, build pass | PASS (preliminary) | Wave 2 checks; repeat in Wave 5 |
 | Run artifacts and digest binding | PASS | Seven required artifacts, stable digest, Wave 0 binding |
 | Session can resume from this file | PASS | Resume instructions below |
 | Product and validation documentation | PENDING | Wave 3 |
@@ -47,10 +47,12 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 - Created the dedicated working branch without modifying `main`.
 - Created and SHA-256-bound the immutable Task Packet snapshot.
 - Completed the seven-file Long-Run artifact set, queue, debt policy, decision log, and resume contract.
+- Created the Vite + React + TypeScript application, Vitest baseline, pure engine boundary, model/weather status markers, and minimal responsive M0 screen.
+- Installed locked dependencies and passed the initial test, typecheck, build, and Browser runtime checks.
 
 ## Current implementation state
 
-Wave 0 is checkpointed at `1fa21e3`. The Long-Run control plane is complete in the working tree. Application bootstrap has not started.
+Waves 0 and 1 are checkpointed. The M0 application bootstrap is implemented and verified in the working tree. Solar calculations and weather data remain deliberately unimplemented.
 
 ## Checks
 
@@ -58,9 +60,10 @@ Wave 0 is checkpointed at `1fa21e3`. The Long-Run control plane is complete in t
 - Origin/main existence: PASS
 - Clean pre-existing state: PASS
 - Task Packet SHA-256: PASS
-- npm test: NOT RUN
-- npm run typecheck: NOT RUN
-- npm run build: NOT RUN
+- npm test: PASS — 1 test
+- npm run typecheck: PASS
+- npm run build: PASS
+- Browser verification: PASS — content present, no error overlay, no console warnings/errors
 
 ## Quality Debt
 
@@ -70,7 +73,7 @@ Wave 0 is checkpointed at `1fa21e3`. The Long-Run control plane is complete in t
 
 - Remote write access is not yet proven.
 - MVP source files have not yet been searched beyond the initially empty local directory.
-- Application checks are not applicable until Wave 2.
+- Final convergence rerun has not yet been performed.
 
 ## Known failures
 
@@ -91,15 +94,14 @@ Wave 0 is checkpointed at `1fa21e3`. The Long-Run control plane is complete in t
 
 ## Remaining tasks
 
-- Commit the Wave 1 Long-Run foundation checkpoint.
-- Wave 2: create the Vite + React + TypeScript + Vitest baseline.
+- Commit the Wave 2 project bootstrap checkpoint.
 - Wave 3: write required product and validation documentation.
 - Wave 4: search for and preserve MVP sources only if present.
 - Wave 5: run checks, review scope/privacy, finalize state, checkpoint, push branch, and create a Draft PR if authorized access works.
 
 ## Next action
 
-Commit the Wave 1 checkpoint, then bootstrap the minimal application and tests in Wave 2.
+Commit the Wave 2 checkpoint, then write and synchronize the required documentation in Wave 3.
 
 ## Stop conditions status
 
