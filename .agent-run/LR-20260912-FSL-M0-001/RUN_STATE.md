@@ -5,15 +5,17 @@
 - Run ID: `LR-20260912-FSL-M0-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `HUMAN_GATE`
+- Current state: `COMPLETE_VERIFIED / HUMAN_CLOSEOUT`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
-- Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; do not replace this line with the SHA of the commit that contains this file
-- Current wave: `Wave 5 — Required Fix / Focused Independent Re-Review Human Gate`
+- Current head: M0 is closed; final feature head was `4d9346d6878c0b54907986c9c2b77c574f0be2f7` and the squash merge commit is `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
+- Current wave: `Post-merge Human closeout`
 - Last reviewed head: `76bab2a15044147c52736084c6f51382f208a10a` (Independent FULL Review input; historical after the required-fix commit)
 - Pull request: `#1` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/1`
-- Pull request state: `OPEN / Draft / Ready=false / merged=false`
+- Pull request state: `MERGED / merged=true`
+- Merge method: `squash`
+- Merge commit: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 
 ## Task Packet binding
 
@@ -60,7 +62,7 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 
 ## Current implementation state
 
-M0 implementation and required-fix verification are complete on the feature branch. PR #1 exists and remains OPEN/Draft with `main` as its base. Both expected MVP sources are absent and were not reconstructed. Solar calculations and weather data remain deliberately unimplemented. The next permitted step is Focused Independent Re-Review; Ready, merge, and any M1 work remain Human Gates.
+M0 implementation, review, required fix, and squash merge are complete. PR #1 merged as `b633a2b9651b63ea1224f8a4becefa1062a6b12d`. The earlier source-absence record remains historical M0 evidence; Human provided the originals separately for M1 intake. M0 must not be resumed or mutated as active work.
 
 ## Checks
 
@@ -77,7 +79,7 @@ M0 implementation and required-fix verification are complete on the feature bran
 - Secret/privacy/history scan: PASS
 - Remote main unchanged: PASS
 - Feature branch push: PASS
-- PR #1: PASS — OPEN / Draft / Ready=false / merged=false
+- PR #1: PASS — merged=true; squash merge `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 
 ## Quality Debt
 
@@ -134,16 +136,15 @@ M0 implementation and required-fix verification are complete on the feature bran
 
 ## Remaining tasks
 
-- Perform Focused Independent Re-Review of PR #1 at the live head resolved from GitHub and local `HEAD`.
-- Keep Ready, merge, release, Production, and M1 behind new Human instructions.
+- None for M0. M1 is tracked independently under `.agent-run/LR-20260912-FSL-M1-001/`.
 
 ## Next action
 
-Focused Independent Re-Review of PR #1. A resumed agent must not create another PR or repeat the completed Draft PR mutation.
+Do not resume M0. Follow the M1 `RUN_STATE.md` only when explicitly continuing M1.
 
 ## Stop conditions status
 
-- Active Human Gate: Focused Independent Re-Review; Ready, merge, and M1 require new Human instructions.
+- M0 Human closeout complete. No active M0 mutation is permitted.
 - Expected repository identity and initial history verified.
 - No pre-existing user change conflict.
 - No security, privacy, permission, or data-integrity failure detected.
@@ -155,7 +156,6 @@ Focused Independent Re-Review of PR #1. A resumed agent must not create another 
 2. Verify the Task Packet digest with `Get-FileHash -Algorithm SHA256 .agent-run/LR-20260912-FSL-M0-001/TASK_PACKET_SNAPSHOT.md`.
 3. Confirm it equals `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`.
 4. Run `git status --short --branch` and preserve unrelated changes if any appear.
-5. Fetch and confirm `origin/chore/m0-bootstrap-long-run` matches the live local `HEAD`; treat `76bab2a...` only as the prior reviewed head, not the current head.
-6. Open PR #1 and confirm `OPEN / Draft / Ready=false / merged=false`, base `main`, and head `chore/m0-bootstrap-long-run`.
-7. Do not create another PR or repeat any completed mutation. Continue only with the Focused Independent Re-Review in **Next action**.
-8. Do not mark Ready, merge, deploy, release, or begin M1 without a new Human instruction.
+5. Confirm PR #1 is merged and `origin/main` contains squash merge `b633a2b9651b63ea1224f8a4becefa1062a6b12d`.
+6. Treat this run as terminal. Do not recreate PR #1 or resume M0 mutations.
+7. For authorized M1 work, switch context to `.agent-run/LR-20260912-FSL-M1-001/RUN_STATE.md`.

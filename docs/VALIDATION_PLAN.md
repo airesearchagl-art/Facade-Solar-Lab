@@ -1,12 +1,13 @@
 # Validation Plan
 
-この文書は将来のvalidation方針です。M0時点で結果を示すものではありません。
+M1ではLegacy behaviorのregression validationだけを実施済みです。物理model、実気象data、第三者解析とのvalidationは将来計画です。
 
 ## 1. Golden tests
 
-- Human-reviewed input/output fixtureをversion管理する。
-- model revisionごとに期待差分をreviewする。
-- legacy MVP値は参照候補であり、物理的な正解値として固定しない。
+- Original HTMLを独立実行して生成したfixtureをversion管理する。
+- M1 Pure TypeScript engineは全月・全期間をabsolute `1e-9` toleranceで比較する。
+- model revisionごとにM1 Legacyとの差分をreviewする。
+- legacy MVP値はregression baselineであり、物理的な正解値として固定しない。
 
 ## 2. Geometry tests
 
@@ -29,6 +30,7 @@
 
 ## 5. Boundary tests
 
+- M1 engine dependency testはReact、DOM、Canvas、browser globalsを機械的に拒否する。
 - 0および負値、上下端逆転、極端な寸法、範囲外方位を扱う。
 - polar day/night、太陽高度0°近傍、欠測時刻、DST/time-zone境界を扱う。
 - invalid inputを黙って補正せず、errorまたは明示的なnormalization結果を返す。

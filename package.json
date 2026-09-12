@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "golden:check": "node scripts/generate-legacy-v01-golden.mjs --check",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

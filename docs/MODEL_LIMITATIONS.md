@@ -1,12 +1,12 @@
 # Model Limitations
 
-## Current M0 state
+## Current M1 state
 
-M0には日射計算modelがありません。UIに表示されるのは開発基盤のstatusだけであり、性能値ではありません。
+M1には旧MVP v0.1の挙動を再現するLegacy engineがあります。Original-source referenceとの一致はGolden testで確認しますが、物理的妥当性を検証したmodelではありません。
 
 ## Legacy MVP v0.1 known issues
 
-以下は既知課題です。MVP原本の保存やM0 bootstrapによって修正済みとは扱いません。
+以下は既知課題です。M1ではregression semanticsとして意図的に維持し、修正済みとは扱いません。
 
 ### Weather model
 
@@ -38,6 +38,6 @@ M0には日射計算modelがありません。UIに表示されるのは開発�
 
 ## Units and numerical precision
 
-- 長さの入力単位（mm）と内部単位（推奨m）を境界で明示的に変換します。
+- M1 public APIの長さはm、緯度・面方位角はdegree、出力はkWh / percentです。mm入力は受け取りません。
 - 角度のdegree/radian、方位角の原点と正方向、時刻のtime zoneを暗黙にしません。
 - geometry境界では固定の完全一致を避け、目的に応じたtoleranceを定義します。

@@ -6,19 +6,20 @@
 
 ## Current state
 
-現在は **M0 — Bootstrap** です。開発・test・build・長時間runのcheckpoint/resumeに必要な基盤のみを実装しています。
+現在は **M1 — Engine Baseline** です。Human提供の旧MVP v0.1をbyte-for-byte保存し、その計算挙動をPure TypeScript engineとGolden testで固定しています。
 
 - Minimal UI: 実装済み
 - Pure TypeScript engine境界: 実装済み
-- 日射計算engine: 未実装（M1）
+- Legacy日射計算engine: 実装済み（M1 regression baseline）
+- Original-source reference / Golden test: 実装済み
 - 実気象data: 未実装（M2）
 - Backend / Database: なし
 - Production deployment: 未実施
 
-既存のMVP v0.1は本開発の参考資料であり、最終modelではありません。原本が提供された場合だけ `legacy/mvp-v0.1/` に改変せず保存します。
+旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M1 engineはその挙動を再現しますが、最終modelや検証済み物理modelではありません。
 
 > [!WARNING]
-> 実気象dataによるvalidationが完了するまで、日射熱取得量の絶対値 `[kWh]` を正式な性能評価や実務判断の根拠に使用できません。M0は計算値を出力しません。
+> 実気象dataによるvalidationが完了するまで、M1の絶対値 `[kWh]` を正式な性能評価や実務判断の根拠に使用できません。これはLegacy regression baselineです。
 
 ## Development
 
@@ -38,6 +39,8 @@ npm run dev
 npm test
 npm run typecheck
 npm run build
+npm run golden:check
+npm audit
 ```
 
 ## Project structure
@@ -46,11 +49,12 @@ npm run build
 .
 ├─ src/
 │  ├─ app/       # React UI
-│  ├─ engine/    # UI frameworkに依存しないPure TypeScript
-│  ├─ models/    # Domain model領域（M1以降）
+│  ├─ engine/    # UI frameworkに依存しないPure TypeScript Legacy engine
+│  ├─ models/    # Domain model領域
 │  ├─ weather/   # Weather adapter領域（M2以降）
 │  └─ main.tsx
-├─ tests/
+├─ tests/        # Golden comparison / engine boundary
+├─ scripts/      # Original-source reference fixture generator
 ├─ docs/
 ├─ legacy/       # 提供済み原本だけを保存
 └─ .agent-run/   # Long-Run checkpoint / resume artifact
@@ -64,7 +68,8 @@ npm run build
 - [Model limitations](docs/MODEL_LIMITATIONS.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Validation plan](docs/VALIDATION_PLAN.md)
+- [Legacy baseline](docs/LEGACY_BASELINE.md)
 
 ## Development status
 
-M0完了後はHuman Gateで停止します。M1への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。
+M1完了後はDraft PRでHuman Gate停止します。M2への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。

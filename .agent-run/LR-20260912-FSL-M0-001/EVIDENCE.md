@@ -115,3 +115,13 @@ Performed: `2026-09-12` (Asia/Tokyo)
 The initial Task Packet checkpoint never reached the remote. Before publication, its local checkpoint history was reconstructed from `origin/main` so the path-example normalization and EOF cleanup are present from Wave 0. The pushed branch contains neither the prior digest nor the user-specific path.
 
 The convergence target is the commit containing this evidence file. Its SHA is intentionally not embedded here because doing so would be self-referential; resolve symbolic `HEAD` at verification or resume time and keep it distinct from the prior reviewed head.
+
+## Post-merge closeout
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- PR #1 completed Independent Review, Required Fix, and Focused Re-Review.
+- Merge method: `squash`.
+- Merge commit: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`.
+- Fresh `origin/main` at M1 preflight equals the merge commit above.
+- The Wave 0–5 evidence remains historical and is not rewritten; M0 is `COMPLETE_VERIFIED / HUMAN_CLOSEOUT`.
