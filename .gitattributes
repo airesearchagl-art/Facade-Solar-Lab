@@ -13,3 +13,7 @@ legacy/mvp-v0.1/HANDOVER_solar_overhang_simulator.md -text -whitespace
 
 # The committed M3 Task Packet snapshot is immutable, including its normalized final LF.
 .agent-run/LR-20260912-FSL-M3-001/TASK_PACKET_SNAPSHOT.md -whitespace
+
+# Human-provided M4 Task Packet copies remain byte-for-byte identical to the attachment.
+.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET.md -text -eol -whitespace
+.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md -text -eol -whitespace

@@ -15,4 +15,5 @@ Binding: `LRP-20260912-FSL-M3-001` rev `1` / `AFF8B77962787C01B61FE059353FE33B7B
 | 9 | Wave 8 | Full convergence and self-review | COMPLETE | 86 full / 41 focused / 32 M2 tests; all checks, hashes, scans, smoke, self-review PASS |
 | 10 | Wave 9 | Normal push and one Draft PR | COMPLETE | PR #4 exists and is `OPEN / Draft / Ready=false / merged=false` |
 | 11 | Wave 10 | Independent FULL Review Required Fix | COMPLETE | Artifact sync and right-hand wording correction; implementation checkpoint `2bf6724` |
-| 12 | Wave 11 | Focused Independent Re-Review | HUMAN_GATE | PR #4 remains Draft; do not recreate, Ready, merge, operate Vercel, or begin M4 |
+| 12 | Wave 11 | Focused Independent Re-Review | COMPLETE | PR #4 approved and merged by the Human-controlled review flow |
+| 13 | Wave 12 | Post-merge closeout | COMPLETE | M3 recorded as merged at main `46f3aabe...`; M4 uses a separate Run Artifact |
