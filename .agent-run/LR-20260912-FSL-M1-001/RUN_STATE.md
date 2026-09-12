@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 0 — Preflight / M0 Closeout`
-- Last successful checkpoint: `origin/main` exact-base and Human source metadata verification
+- Current wave: `Wave 2 — Independent Reference Harness`
+- Last successful checkpoint: `Wave 0 — e445de8`; Wave 1 source intake is the current live HEAD after its checkpoint commit
 
 ## Task Packet binding
 
@@ -29,8 +29,8 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | Criterion | Status |
 | --- | --- |
 | M0 post-merge closeout | COMPLETE |
-| M1 run artifacts and digest binding | IN PROGRESS |
-| Human legacy originals byte-preserved in Git | PENDING |
+| M1 run artifacts and digest binding | COMPLETE |
+| Human legacy originals byte-preserved in Git | COMPLETE |
 | Independent original-source reference harness | PENDING |
 | Pure TypeScript legacy engine | PENDING |
 | G1–G6 Golden comparisons | PENDING |
@@ -57,18 +57,17 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Explicit unverified items
 
-- Staged and committed legacy-blob hashes are not verified until Wave 1.
 - Independent reference execution is not yet established.
 - Golden fixture and new-engine equivalence are not yet established.
 - Absolute energy results remain a legacy baseline, not validated physical-performance evidence.
 
 ## Remaining tasks
 
-- Complete Waves 0–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Waves 2–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
 
 ## Next action
 
-Checkpoint Wave 0, then perform byte-preserving legacy source intake and verify staged/committed hashes.
+Read the actual HTML calculation script and build an independent test-only reference execution path without importing the new engine.
 
 ## Stop conditions
 

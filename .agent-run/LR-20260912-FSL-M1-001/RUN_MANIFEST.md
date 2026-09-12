@@ -17,7 +17,7 @@ The normalized Task Packet snapshot is immutable after Wave 0. Every M1 checkpoi
 
 | Wave | Commit | Binding |
 | --- | --- | --- |
-| Wave 0 — Preflight / M0 closeout | pending | Task Packet ID, revision, and SHA-256 above |
+| Wave 0 — Preflight / M0 closeout | `e445de8` | Task Packet ID, revision, and SHA-256 above |
 | Wave 1 — Legacy source intake | pending | Task Packet ID, revision, and SHA-256 above |
 | Wave 2 — Reference harness | pending | Task Packet ID, revision, and SHA-256 above |
 | Wave 3 — Pure TypeScript legacy engine | pending | Task Packet ID, revision, and SHA-256 above |

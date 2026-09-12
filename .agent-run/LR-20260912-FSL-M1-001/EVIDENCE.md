@@ -29,3 +29,16 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - The M1 Task Packet contains no user-specific absolute path.
 - No legacy source content was reformatted, normalized, or reconstructed.
 - No credential, permission, main, Vercel, Production, release, or M2 mutation occurred in Wave 0.
+
+## Wave 1 — Byte-preserving legacy source intake
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+| Artifact / check | Workspace | Staged bytes | Committed blob | Result |
+| --- | --- | --- | --- | --- |
+| `solar_overhang_simulator.html` | 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5` | 16,835 bytes / same SHA-256 | same SHA-256 | PASS |
+| `HANDOVER_solar_overhang_simulator.md` | 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4` | 22,635 bytes / same SHA-256 | same SHA-256 | PASS |
+| Git text normalization | Path-specific `-text` | Index preserves workspace bytes | Checkout preserves blob bytes | PASS |
+| Required diff whitespace | Originals use path-specific `-whitespace`; authored files remain checked | `git diff --cached --check` has no findings | Recheck after commit required | PASS |
+
+Staged bytes were materialized independently with `git checkout-index --temp` and hashed. The original workspace files were not rewritten, formatted, or normalized.

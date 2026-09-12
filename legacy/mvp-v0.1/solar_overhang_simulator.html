@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>南面庇 日射熱取得 簡易シミュレータ</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#1a212b; --panel2:#222b38; --line:#31404f;
+    --txt:#e6edf3; --sub:#93a4b5; --accent:#4da3ff; --warm:#ff9a52;
+    --cool:#4dd0e1; --base:#6b7c8f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font-family:"Segoe UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+       font-size:14px;line-height:1.6}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);background:var(--panel)}
+  h1{margin:0;font-size:18px;font-weight:600}
+  header p{margin:4px 0 0;color:var(--sub);font-size:12px}
+  .wrap{display:grid;grid-template-columns:310px 1fr;gap:16px;padding:16px;align-items:start}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+  .card h2{margin:0 0 12px;font-size:13px;font-weight:600;color:var(--accent);
+           letter-spacing:.05em;text-transform:uppercase}
+  .ctrl{margin-bottom:14px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+  .ctrl label span:last-child{color:var(--accent);font-variant-numeric:tabular-nums;font-weight:600}
+  input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+  select{width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+         border-radius:4px;padding:6px}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}
+  th:first-child,td:first-child{text-align:left}
+  thead th{color:var(--sub);font-size:11px;font-weight:500}
+  .cut{color:var(--accent);font-weight:600}
+  canvas{width:100%;display:block}
+  .legend{display:flex;gap:16px;font-size:11px;color:var(--sub);margin-top:8px;flex-wrap:wrap}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .note{font-size:11px;color:var(--sub);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+  .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .kpi div{background:var(--panel2);border-radius:6px;padding:10px;text-align:center}
+  .kpi b{display:block;font-size:22px;color:var(--accent);font-variant-numeric:tabular-nums}
+  .kpi small{color:var(--sub);font-size:10px}
+  .pill{background:var(--panel2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--sub)}
+  .pill b{color:var(--txt)}
+</style>
+</head>
+<body>
+<header>
+  <h1>南面庇 日射熱取得 簡易シミュレータ</h1>
+  <p>方位固定・窓高さ・庇の出幅をパラメータとした年間／月別日射熱取得量の比較ツール</p>
+</header>
+
+<div class="wrap">
+  <!-- ============ 入力 ============ -->
+  <div>
+    <div class="card">
+      <h2>開口部・庇の形状</h2>
+      <div class="ctrl">
+        <label><span>窓高さ H</span><span id="vH">2.40 m</span></label>
+        <input type="range" id="H" min="0.6" max="4.0" step="0.1" value="2.4">
+      </div>
+      <div class="ctrl">
+        <label><span>庇の出 D</span><span id="vD">1.60 m</span></label>
+        <input type="range" id="D" min="0" max="4.0" step="0.05" value="1.6">
+      </div>
+      <div class="ctrl">
+        <label><span>庇〜窓頭の離れ</span><span id="vO">0.30 m</span></label>
+        <input type="range" id="O" min="0" max="1.5" step="0.05" value="0.3">
+      </div>
+      <div class="ctrl">
+        <label><span>窓幅（1スパン）</span><span id="vW">6.00 m</span></label>
+        <input type="range" id="W" min="1" max="12" step="0.5" value="6">
+      </div>
+      <div class="pill">D/H 比 <b id="ratio">0.67</b>　窓面積 <b id="area">14.4 m²</b></div>
+    </div>
+
+    <div class="card">
+      <h2>外部条件</h2>
+      <div class="ctrl">
+        <label><span>緯度</span><span id="vL">35.2 °N</span></label>
+        <input type="range" id="L" min="24" max="46" step="0.2" value="35.2">
+      </div>
+      <div class="ctrl">
+        <label><span>面方位（南=0, 西+）</span><span id="vA">0 °</span></label>
+        <input type="range" id="A" min="-90" max="90" step="5" value="0">
+      </div>
+      <div class="ctrl">
+        <label><span>ガラス日射熱取得率 η</span><span id="vG">1.00</span></label>
+        <input type="range" id="G" min="0.1" max="1.0" step="0.01" value="1.0">
+      </div>
+      <div class="ctrl">
+        <label><span>地面反射率</span><span id="vR">0.20</span></label>
+        <input type="range" id="R" min="0" max="0.8" step="0.05" value="0.2">
+      </div>
+      <div class="ctrl">
+        <label style="margin-bottom:5px"><span>天空条件</span></label>
+        <select id="SKY">
+          <option value="1.0">快晴（ASHRAE Clear Sky）</option>
+          <option value="2.0" selected>標準（日本の年平均的な天空）</option>
+          <option value="3.0">曇天がち（拡散成分大）</option>
+        </select>
+      </div>
+      <div class="note">η=1.00 は「ガラス面の遮蔽を考慮せず、窓外側で受照する日射量」を評価する設定。実際の室内取得量を見る場合はガラスのη値を入力。</div>
+    </div>
+  </div>
+
+  <!-- ============ 出力 ============ -->
+  <div>
+    <div class="card">
+      <h2>集計結果（庇なしに対する削減率）</h2>
+      <div class="kpi">
+        <div><small>年間</small><b id="kY">–</b><small>削減率</small></div>
+        <div><small>冷房期 4–9月</small><b id="kC">–</b><small>削減率</small></div>
+        <div><small>暖房期 10–3月</small><b id="kH">–</b><small>削減率</small></div>
+      </div>
+      <table>
+        <thead><tr><th>区分</th><th>庇なし [kWh]</th><th>庇あり [kWh]</th><th>削減量</th><th>削減率</th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div class="note" id="balance"></div>
+    </div>
+
+    <div class="card">
+      <h2>月別 日射熱取得量</h2>
+      <canvas id="c1" height="300"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--base)"></i>庇なし</span>
+        <span><i style="background:var(--accent)"></i>庇あり</span>
+        <span><i style="background:var(--cool)"></i>冷房期</span>
+        <span><i style="background:var(--warm)"></i>暖房期</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>庇の出幅による感度（D を 0〜4m で走査）</h2>
+      <canvas id="c2" height="300"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--cool)"></i>冷房期 削減率</span>
+        <span><i style="background:var(--warm)"></i>暖房期 削減率</span>
+        <span><i style="background:var(--accent)"></i>差分（夏冬バランス指標）</span>
+        <span><i style="background:#fff"></i>現在の設定</span>
+      </div>
+      <div class="note">差分＝冷房期削減率−暖房期削減率。大きいほど「夏は遮り冬は取り込む」性能が高い。このピークが形状上の最適点の目安。</div>
+    </div>
+
+    <div class="card">
+      <h2>断面イメージ（南面）</h2>
+      <canvas id="c3" height="260"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--warm)"></i>夏至 南中</span>
+        <span><i style="background:var(--cool)"></i>冬至 南中</span>
+        <span><i style="background:#2e3b49"></i>直達日射が当たらない範囲</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================= 計算エンジン =================
+const ASHRAE=[[1230,.142,.058],[1215,.144,.060],[1186,.156,.071],[1136,.180,.097],
+ [1104,.196,.121],[1088,.205,.134],[1085,.207,.136],[1107,.201,.122],
+ [1152,.177,.092],[1193,.160,.073],[1221,.149,.063],[1234,.142,.057]];
+const DAYS=[31,28,31,30,31,30,31,31,30,31,30,31];
+const MID=[17,47,75,105,135,162,198,228,258,288,318,344];
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+const STRIPS=20;
+
+function decl(n){return rad(23.45*Math.sin(rad(360*(284+n)/365)));}
+
+function hourGain(p,month,hour){
+  const [A,B,C]=ASHRAE[month];
+  const dec=decl(MID[month]), w=rad(15*(hour-12)), phi=rad(p.lat);
+  const sinAlt=Math.sin(phi)*Math.sin(dec)+Math.cos(phi)*Math.cos(dec)*Math.cos(w);
+  if(sinAlt<=0.01) return [0,0];
+  const alt=Math.asin(sinAlt);
+  let ca=(sinAlt*Math.sin(phi)-Math.sin(dec))/(Math.cos(alt)*Math.cos(phi));
+  ca=Math.max(-1,Math.min(1,ca));
+  const solAz=(w>=0?1:-1)*Math.acos(ca);
+  const Ibn=A*Math.exp(-B/sinAlt);
+  const Idh=C*Ibn*p.sky;
+  const g=solAz-rad(p.surfAz);
+  const cosInc=Math.cos(alt)*Math.cos(g);
+  const beam=cosInc>0?Ibn*cosInc:0;
+  const grd=p.rho*(Ibn*sinAlt+Idh)*0.5;
+  const drop=cosInc>0?p.D*Math.tan(alt)/Math.cos(g):Infinity;
+  let sw=0,sn=0;
+  for(let i=0;i<STRIPS;i++){
+    const y=p.O+p.H*(i+0.5)/STRIPS;
+    const lit=(cosInc>0&&drop<y)?1:0;
+    const F=p.D>0?0.5*Math.sin(Math.atan(y/p.D)):0.5;
+    sw+=beam*lit+Idh*F+grd;
+    sn+=beam+Idh*0.5+grd;
+  }
+  return [sw/STRIPS,sn/STRIPS];
+}
+
+function simulate(p){
+  const area=p.H*p.W, out=[];
+  for(let m=0;m<12;m++){
+    let w=0,n=0;
+    for(let h=0;h<24;h++) for(let s=0;s<4;s++){
+      const r=hourGain(p,m,h+(s+.5)/4); w+=r[0]/4; n+=r[1]/4;
+    }
+    out.push({withOH:w*DAYS[m]*area*p.eta/1000, noOH:n*DAYS[m]*area*p.eta/1000});
+  }
+  return out;
+}
+
+function summarize(mo){
+  const pick=ms=>{let w=0,n=0;ms.forEach(m=>{w+=mo[m-1].withOH;n+=mo[m-1].noOH;});
+    return {w,n,cut:n>0?(1-w/n)*100:0};};
+  return {year:pick([1,2,3,4,5,6,7,8,9,10,11,12]),
+          cool:pick([4,5,6,7,8,9]), heat:pick([10,11,12,1,2,3])};
+}
+
+// ================= 描画 =================
+function prep(cv){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.clientWidth, h=parseInt(cv.getAttribute('height'));
+  cv.width=w*dpr; cv.height=h*dpr;
+  const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
+  x.clearRect(0,0,w,h);
+  x.font='11px "Segoe UI",Meiryo,sans-serif';
+  return [x,w,h];
+}
+const CSS=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function drawMonthly(mo){
+  const [x,W,H]=prep(document.getElementById('c1'));
+  const L=52,R=12,T=14,Bm=32, pw=W-L-R, ph=H-T-Bm;
+  const max=Math.max(...mo.map(d=>d.noOH))*1.1||1;
+  x.strokeStyle=CSS('--line'); x.fillStyle=CSS('--sub');
+  for(let i=0;i<=4;i++){
+    const y=T+ph-ph*i/4;
+    x.beginPath();x.moveTo(L,y);x.lineTo(W-R,y);x.stroke();
+    x.textAlign='right';x.fillText(Math.round(max*i/4).toLocaleString(),L-6,y+4);
+  }
+  const bw=pw/12;
+  mo.forEach((d,i)=>{
+    const cx=L+bw*i, w1=bw*0.34;
+    const cool=i>=3&&i<=8;
+    x.fillStyle=CSS('--base');
+    x.fillRect(cx+bw*0.12,T+ph-ph*d.noOH/max,w1,ph*d.noOH/max);
+    x.fillStyle=cool?CSS('--cool'):CSS('--warm');
+    x.fillRect(cx+bw*0.52,T+ph-ph*d.withOH/max,w1,ph*d.withOH/max);
+    x.fillStyle=CSS('--sub');x.textAlign='center';
+    x.fillText(i+1,cx+bw/2,H-14);
+  });
+  x.fillStyle=CSS('--sub');x.textAlign='left';x.fillText('[kWh]',4,10);
+}
+
+function drawSweep(p){
+  const [x,W,H]=prep(document.getElementById('c2'));
+  const L=44,R=12,T=14,Bm=34, pw=W-L-R, ph=H-T-Bm;
+  const xs=[],cool=[],heat=[],dif=[];
+  for(let d=0;d<=4.001;d+=0.2){
+    const s=summarize(simulate({...p,D:d}));
+    xs.push(d);cool.push(s.cool.cut);heat.push(s.heat.cut);dif.push(s.cool.cut-s.heat.cut);
+  }
+  const px=d=>L+pw*d/4, py=v=>T+ph-ph*v/100;
+  x.strokeStyle=CSS('--line');x.fillStyle=CSS('--sub');
+  for(let i=0;i<=5;i++){const y=py(i*20);
+    x.beginPath();x.moveTo(L,y);x.lineTo(W-R,y);x.stroke();
+    x.textAlign='right';x.fillText(i*20+'%',L-6,y+4);}
+  for(let d=0;d<=4;d+=1){x.textAlign='center';x.fillText(d+'m',px(d),H-14);}
+  const line=(arr,col,wd)=>{x.strokeStyle=col;x.lineWidth=wd;x.beginPath();
+    arr.forEach((v,i)=>i?x.lineTo(px(xs[i]),py(v)):x.moveTo(px(xs[i]),py(v)));x.stroke();};
+  line(heat,CSS('--warm'),2); line(cool,CSS('--cool'),2); line(dif,CSS('--accent'),2.5);
+  // 最適点
+  const bi=dif.indexOf(Math.max(...dif));
+  x.strokeStyle='#5c6b7a';x.setLineDash([3,3]);x.lineWidth=1;
+  x.beginPath();x.moveTo(px(xs[bi]),T);x.lineTo(px(xs[bi]),T+ph);x.stroke();x.setLineDash([]);
+  // 現在値
+  x.strokeStyle='#fff';x.lineWidth=1.5;
+  x.beginPath();x.moveTo(px(p.D),T);x.lineTo(px(p.D),T+ph);x.stroke();
+  x.fillStyle=CSS('--sub');x.textAlign='left';
+  x.fillText('バランス最適 D≈'+xs[bi].toFixed(1)+'m',px(xs[bi])+5,T+12);
+  x.fillText('庇の出 D [m]',L,H-2);
+}
+
+function drawSection(p){
+  const [x,W,H]=prep(document.getElementById('c3'));
+  const dec=decl(MID[5]), decW=decl(MID[11]), phi=rad(p.lat);
+  const altS=deg(Math.asin(Math.sin(phi)*Math.sin(dec)+Math.cos(phi)*Math.cos(dec)));
+  const altW=deg(Math.asin(Math.sin(phi)*Math.sin(decW)+Math.cos(phi)*Math.cos(decW)));
+  const total=p.O+p.H+0.6, scale=Math.min((H-50)/total,(W/2-60)/Math.max(p.D+1.2,1.5));
+  const wallX=W*0.62, ohY=40;
+  const m=v=>v*scale;
+  // 壁
+  x.strokeStyle=CSS('--line');x.lineWidth=2;
+  x.beginPath();x.moveTo(wallX,ohY-10);x.lineTo(wallX,ohY+m(total));x.stroke();
+  // 窓
+  const wt=ohY+m(p.O), wb=wt+m(p.H);
+  x.fillStyle='#2a4a63';x.fillRect(wallX-3,wt,6,wb-wt);
+  // 庇
+  x.strokeStyle=CSS('--txt');x.lineWidth=4;
+  x.beginPath();x.moveTo(wallX,ohY);x.lineTo(wallX-m(p.D),ohY);x.stroke();
+  // 日射
+  const ray=(alt,col,lab)=>{
+    const t=Math.tan(rad(alt));
+    const dropPx=m(p.D)*t;
+    const hitY=ohY+dropPx;
+    x.strokeStyle=col;x.lineWidth=1.5;x.setLineDash([5,4]);
+    x.beginPath();x.moveTo(wallX-m(p.D)-70,ohY-70*t);
+    x.lineTo(wallX-m(p.D),ohY);
+    x.lineTo(wallX,Math.min(hitY,ohY+m(total)));x.stroke();x.setLineDash([]);
+    x.fillStyle=col;x.textAlign='right';
+    x.fillText(lab+' '+alt.toFixed(0)+'°',wallX-m(p.D)-74,ohY-70*t+4);
+    return hitY;
+  };
+  const hS=ray(altS,CSS('--warm'),'夏至');
+  const hW=ray(altW,CSS('--cool'),'冬至');
+  // 影範囲（夏至）
+  x.fillStyle='rgba(46,59,73,.75)';
+  x.fillRect(wallX-3,wt,6,Math.max(0,Math.min(hS,wb)-wt));
+  // 寸法ラベル
+  x.fillStyle=CSS('--sub');x.textAlign='left';
+  x.fillText('窓 H='+p.H.toFixed(2)+'m',wallX+10,(wt+wb)/2);
+  x.fillText('庇 D='+p.D.toFixed(2)+'m',wallX-m(p.D)/2-20,ohY-10);
+  const sun=Math.max(0,wb-Math.max(hS,wt));
+  x.fillText('夏至南中の日照部 '+(sun/scale).toFixed(2)+'m',wallX+10,wb+18);
+}
+
+// ================= 更新 =================
+const ids=['H','D','O','W','L','A','G','R'];
+function read(){
+  const g=i=>parseFloat(document.getElementById(i).value);
+  return {H:g('H'),D:g('D'),O:g('O'),W:g('W'),lat:g('L'),surfAz:g('A'),
+          eta:g('G'),rho:g('R'),sky:parseFloat(document.getElementById('SKY').value)};
+}
+function update(){
+  const p=read();
+  document.getElementById('vH').textContent=p.H.toFixed(2)+' m';
+  document.getElementById('vD').textContent=p.D.toFixed(2)+' m';
+  document.getElementById('vO').textContent=p.O.toFixed(2)+' m';
+  document.getElementById('vW').textContent=p.W.toFixed(2)+' m';
+  document.getElementById('vL').textContent=p.lat.toFixed(1)+' °N';
+  document.getElementById('vA').textContent=p.surfAz+' °';
+  document.getElementById('vG').textContent=p.eta.toFixed(2);
+  document.getElementById('vR').textContent=p.rho.toFixed(2);
+  document.getElementById('ratio').textContent=(p.D/p.H).toFixed(2);
+  document.getElementById('area').textContent=(p.H*p.W).toFixed(1)+' m²';
+
+  const mo=simulate(p), s=summarize(mo);
+  document.getElementById('kY').textContent='▲'+s.year.cut.toFixed(0)+'%';
+  document.getElementById('kC').textContent='▲'+s.cool.cut.toFixed(0)+'%';
+  document.getElementById('kH').textContent='▲'+s.heat.cut.toFixed(0)+'%';
+  const row=(n,o)=>`<tr><td>${n}</td><td>${Math.round(o.n).toLocaleString()}</td>
+    <td>${Math.round(o.w).toLocaleString()}</td>
+    <td>${Math.round(o.n-o.w).toLocaleString()}</td>
+    <td class="cut">▲${o.cut.toFixed(0)}%</td></tr>`;
+  document.getElementById('tb').innerHTML=
+    row('年間',s.year)+row('冷房期 4–9月',s.cool)+row('暖房期 10–3月',s.heat);
+
+  const d=s.cool.cut-s.heat.cut;
+  document.getElementById('balance').innerHTML=
+    `夏冬バランス指標（冷房期−暖房期）= <b style="color:var(--accent)">${d.toFixed(1)} pt</b>　`+
+    (d<5?'庇が深すぎ、冬期の日射取得も大きく失っている領域。':
+     d<12?'遮蔽と冬期取得のバランスは中庸。':
+     '夏期遮蔽を効かせつつ冬期日射を残せている良好な領域。');
+
+  drawMonthly(mo); drawSweep(p); drawSection(p);
+}
+ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
+document.getElementById('SKY').addEventListener('change',update);
+window.addEventListener('resize',update);
+update();
+</script>
+</body>
+</html>
