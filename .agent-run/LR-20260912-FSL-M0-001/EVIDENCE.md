@@ -69,3 +69,15 @@ The first registry lookup failed because npm's default cache was outside the wri
 - `docs/ROADMAP.md` records M0 through M6 and Human Gates.
 - `docs/VALIDATION_PLAN.md` records future Golden, geometry, weather, third-party comparison, and boundary tests without fabricating results.
 - `AGENTS.md` records architecture, domain constraints, checks, public boundary, legacy preservation, and Git/deployment gates for future sessions.
+
+## Wave 4 — MVP preservation audit
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Searched the repository root recursively by exact candidate filename.
+- Excluded generated/dependency/control directories: `.git`, `node_modules`, `.npm-cache`, and `dist`.
+- `solar_overhang_simulator.html`: no match.
+- `HANDOVER_solar_overhang_simulator.md`: no match.
+- No guessed, reconstructed, normalized, or reformatted MVP content was created.
+- `legacy/mvp-v0.1/README.md` records the missing-source preservation contract; it is not an MVP source artifact.
+- MVP source SHA-256: not available because both source files are missing.

@@ -9,3 +9,4 @@ Binding: `LRP-20260912-FSL-M0-001` rev `1` / `DE774A106D9A425E09E8547BF2FAF0DBDD
 | D-003 | Force LF for repository text formats | Makes the recorded SHA-256 reproducible across Windows and CI checkouts | `.gitattributes` is part of the M0 foundation |
 | D-004 | Keep `src/engine` framework-independent and demonstrate the boundary with a trivial metadata export | M0 must prove structure, not migrate calculations | No solar model or MVP logic is introduced |
 | D-005 | Do not create placeholder empty directories | `.gitkeep` use is explicitly discouraged | Directories appear only when they contain a meaningful file |
+| D-006 | Add a preservation-status README but no inferred MVP source | Both named MVP originals are absent from the repository workspace | The intended legacy path exists, while source preservation remains explicitly unverified |
