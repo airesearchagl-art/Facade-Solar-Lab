@@ -12,3 +12,9 @@
 - Task Packet SHA-256: `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`
 
 The Task Packet snapshot is immutable. Every checkpoint in this run is bound to the ID, revision, and digest above. Human gates remain in force during endurance execution.
+
+## Checkpoints
+
+| Wave | Commit | Binding |
+| --- | --- | --- |
+| Wave 0 — Preflight | `1fa21e3` | Task Packet ID, revision, and SHA-256 above |

@@ -10,8 +10,8 @@
 - Working branch: `chore/m0-bootstrap-long-run`
 - Base SHA: `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
 - Current head: resolve symbolic `HEAD` with `git rev-parse HEAD`
-- Current wave: `Wave 0 — Preflight`
-- Last successful checkpoint: base commit `a4c90163725f8a9d610aaaeac24057facc0b2fa9`
+- Current wave: `Wave 1 — Long-Run foundation`
+- Last successful checkpoint: Wave 0 commit `1fa21e3`
 
 ## Task Packet binding
 
@@ -32,7 +32,7 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 | Framework-independent engine boundary | PENDING | Wave 2 |
 | Minimal browser screen builds | PENDING | Wave 2 / Wave 5 checks |
 | test, typecheck, build pass | PENDING | Wave 5 |
-| Run artifacts and digest binding | IN PROGRESS | `RUN_MANIFEST.md`, `EVIDENCE.md`, this file |
+| Run artifacts and digest binding | PASS | Seven required artifacts, stable digest, Wave 0 binding |
 | Session can resume from this file | PASS | Resume instructions below |
 | Product and validation documentation | PENDING | Wave 3 |
 | MVP preservation or accurate missing record | PENDING | Wave 4 |
@@ -46,10 +46,11 @@ Create a checkpointable, resumable, buildable M0 repository baseline for Facade 
 - Cloned the expected repository and verified its single initialization commit.
 - Created the dedicated working branch without modifying `main`.
 - Created and SHA-256-bound the immutable Task Packet snapshot.
+- Completed the seven-file Long-Run artifact set, queue, debt policy, decision log, and resume contract.
 
 ## Current implementation state
 
-Only Wave 0 run-control artifacts exist beyond the original README. Application bootstrap has not started.
+Wave 0 is checkpointed at `1fa21e3`. The Long-Run control plane is complete in the working tree. Application bootstrap has not started.
 
 ## Checks
 
@@ -63,7 +64,7 @@ Only Wave 0 run-control artifacts exist beyond the original README. Application 
 
 ## Quality Debt
 
-- None accepted at this checkpoint.
+- None accepted.
 
 ## Explicit unverified items
 
@@ -90,7 +91,7 @@ Only Wave 0 run-control artifacts exist beyond the original README. Application 
 
 ## Remaining tasks
 
-- Wave 1: complete the Long-Run artifact set and resume contract.
+- Commit the Wave 1 Long-Run foundation checkpoint.
 - Wave 2: create the Vite + React + TypeScript + Vitest baseline.
 - Wave 3: write required product and validation documentation.
 - Wave 4: search for and preserve MVP sources only if present.
@@ -98,7 +99,7 @@ Only Wave 0 run-control artifacts exist beyond the original README. Application 
 
 ## Next action
 
-Commit the Wave 0 checkpoint, then create the remaining Long-Run control files.
+Commit the Wave 1 checkpoint, then bootstrap the minimal application and tests in Wave 2.
 
 ## Stop conditions status
 
@@ -113,4 +114,4 @@ Commit the Wave 0 checkpoint, then create the remaining Long-Run control files.
 2. Verify the Task Packet digest with `Get-FileHash -Algorithm SHA256 .agent-run/LR-20260912-FSL-M0-001/TASK_PACKET_SNAPSHOT.md`.
 3. Confirm it equals `DE774A106D9A425E09E8547BF2FAF0DBDD00F2DE55FDFB0CC16BB5ABE1AC2253`.
 4. Run `git status --short --branch` and preserve unrelated changes if any appear.
-5. Continue from **Next action** and update this file at every checkpoint.
+5. Read `TASK_QUEUE.md`, continue from **Next action**, and update this file at every checkpoint.

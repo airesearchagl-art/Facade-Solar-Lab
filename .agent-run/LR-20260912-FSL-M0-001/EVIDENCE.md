@@ -33,3 +33,10 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - No secret, token, credential, client data, or private URL was copied into repository files.
 - User-specific absolute paths are not recorded. The Task Packet snapshot substitutes `<PROJECT_ROOT>` and `<USER_HOME>\...`.
 - No destructive or permission-changing action was performed.
+
+## Wave 1 — Long-Run foundation
+
+- All seven required run artifacts are present.
+- Every mutable run-control document repeats or references the same Task Packet binding.
+- `RUN_STATE.md` contains the full resume contract and current queue position.
+- `.gitattributes` fixes Markdown to LF so the Task Packet SHA-256 remains stable across normal checkouts.
