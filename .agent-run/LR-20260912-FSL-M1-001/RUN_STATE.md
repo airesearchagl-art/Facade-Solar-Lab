@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 4 — Golden Tests / Engine Boundary`
-- Last successful checkpoint: `Wave 2 — e3b0861`; Wave 3 Pure TypeScript engine is the current live HEAD after its checkpoint commit
+- Current wave: `Wave 5 — Documentation / Minimal Status`
+- Last successful checkpoint: `Wave 3 — 12189d6`; Wave 4 Golden and boundary tests are the current live HEAD after their checkpoint commit
 
 ## Task Packet binding
 
@@ -33,8 +33,8 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | Human legacy originals byte-preserved in Git | COMPLETE |
 | Independent original-source reference harness | COMPLETE |
 | Pure TypeScript legacy engine | COMPLETE |
-| G1–G6 Golden comparisons | PENDING |
-| Mechanical React/DOM/Canvas boundary test | PENDING |
+| G1–G6 Golden comparisons | COMPLETE |
+| Mechanical React/DOM/Canvas boundary test | COMPLETE |
 | Documentation and minimal M1 status | PENDING |
 | Full required checks and public-boundary scan | PENDING |
 | Draft PR, still Draft and unmerged | PENDING |
@@ -53,20 +53,19 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Quality debt
 
-- `QD-M1-001` is active until the engine dependency boundary test mechanically rejects React, DOM, Canvas, and browser-global dependencies.
+- None active. `QD-M1-001` is resolved by the recursive raw-source dependency boundary test.
 
 ## Explicit unverified items
 
-- Golden fixture and new-engine equivalence are not yet established.
 - Absolute energy results remain a legacy baseline, not validated physical-performance evidence.
 
 ## Remaining tasks
 
-- Complete Waves 4–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Waves 5–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
 
 ## Next action
 
-Compare the new engine to the independent fixture for G1–G6 and replace QD-M1-001 with a mechanical dependency-boundary test.
+Synchronize required documentation and the minimal M1 status display without adding simulator UI.
 
 ## Stop conditions
 

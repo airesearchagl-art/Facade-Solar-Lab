@@ -4,9 +4,13 @@ Binding: `LRP-20260912-FSL-M1-001` rev `1` / `BEF00BD0BA6B96A027EB6BE7BB5186B382
 
 ## Active debt
 
-| ID | Scope | Severity | Exit condition |
-| --- | --- | --- | --- |
-| QD-M1-001 | Existing engine test checks metadata only | Required M1 work | A mechanical test fails on React, DOM, Canvas, or browser-global dependencies under `src/engine/**` |
+None.
+
+## Resolved
+
+| ID | Resolution | Evidence |
+| --- | --- | --- |
+| QD-M1-001 | Recursive raw-source test rejects React/React DOM imports plus `window`, `document`, `navigator`, `HTMLCanvasElement`, and `CanvasRenderingContext2D` executable references under `src/engine/**` | `tests/engine-boundary.test.ts`; Wave 4 test run |
 
 ## Policy
 

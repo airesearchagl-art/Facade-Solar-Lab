@@ -64,3 +64,17 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - ASHRAE constants, month days, representative days, 20 strips, quarter-hour midpoint sampling, shadow comparison, sky view factor, and period month sets preserve original semantics and operation order.
 - Engine manifest states `legacy-baseline` and `not-validated-physical-model`.
 - `npm run typecheck`, the current manifest test, reference fixture check, and authored-file whitespace check pass before checkpointing.
+
+## Wave 4 — Golden comparisons / dependency boundary
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- 15 tests in 2 files pass.
+- Every monthly with/without-overhang value and annual/cooling/heating value for all eight fixture records matches the independent original-source reference within `1e-9` absolute tolerance.
+- G1 matches the source-derived default baseline; no sanity value was hand-entered as expected data.
+- G2 has exact zero reduction for `D=0`.
+- G3 matches at surface azimuth `-30 deg` and `+30 deg`.
+- G4 and G5 scale absolute values by one half while preserving reduction rates.
+- G6 preserves reduction rates only when both `D/H` and `O/H` are fixed; keeping `O` unscaled produces a materially different result.
+- `tests/engine-boundary.test.ts` recursively scans raw `src/engine/**/*.ts` executable source and fails on React/React DOM module dependencies, DOM globals, Canvas types, or `navigator`.
+- `QD-M1-001`: RESOLVED.
