@@ -5,13 +5,13 @@
 - Run ID: `LR-20260913-FSL-M4-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `RUNNING`
+- Current state: `COMPLETE_PENDING_FULL_VERIFY`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
 - Current head: resolve live `HEAD`; last verified product checkpoint is `c8c3f7737d31079662120229ed37756533d373f3`
-- Current wave: `Wave 9 — final Preview and artifact convergence`
-- Last successful checkpoint: M4 product, regression, local browser, and local-only real-EPW convergence
+- Current wave: `Wave 10 — Draft PR / Human Gate`
+- Last successful checkpoint: final product head Git Preview and bounded browser verification
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -62,7 +62,7 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 37. [x] Golden passed at final product checkpoint.
 38. [x] Diff check passed at final product checkpoint.
 39. [x] Privacy/raw-EPW/secret scan passes.
-40. [ ] Final browser verification passes or is recorded as explicit unverified and blocked.
+40. [x] Final browser verification boundary recorded; OS-backed EPW selection and result views are explicit unverified items.
 41. [ ] Draft PR created.
 42. [ ] Human Gate reached after Draft PR.
 
@@ -80,10 +80,12 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Re-ran 15 files / 105 tests and focused M1/M2/M3/M4 suites; typecheck, 59-module build, audit, Golden, and diff checks pass.
 - Reused the ignored Tokyo Hyakuri IWEC EPW by verified hash for a local-only smoke: 8760 intervals, two cases, 12 months, finite KPI/delta, and exact direct `simulateFacadeV1` agreement.
 - Exercised the local browser shell, duplicate/edit/invalid-input behavior, visible geometry/disclosures, layout bounds, and console; no fatal error, asset failure, blank page, or overflow was observed.
+- Pushed product checkpoint `cee63594dc26ebbdc35e7fbd319902378890384b`; Git Integration produced Preview `dpl_9hHmMp1LaYeVYzEvgN7e5n5VWfao`, `target=preview`, `READY`, exact branch and source, with the Vite 59-module build in `dist`.
+- Verified the final Preview initial state and interactive Case edit path in authenticated Chrome. App-origin fatal console errors and observed asset 404s are zero; Production remained unchanged.
 
 ## Current implementation state
 
-Product implementation and documentation are complete. Final Git Preview, its browser checks, artifact closeout, and Draft PR remain. The automation surface cannot attach a host file to a browser file input; actual browser file selection is therefore still explicit unverified evidence, although the same real EPW passed the browser adapter and full calculation path in a local-only Vitest smoke.
+Product implementation, documentation, final Git Preview, and bounded browser checks are complete. Draft PR creation remains. The automation surface cannot attach a host file to a browser file input; actual browser file selection and resulting KPI/chart views are therefore explicit unverified evidence, although the same real EPW passed the browser adapter and full calculation path in a local-only Vitest smoke.
 
 ## Checks
 
@@ -105,7 +107,8 @@ No deferred implementation debt. See `QUALITY_DEBT.md`.
 
 - Actual OS-backed browser file selection is unverified because the available browser automation exposes no file-upload or native file-dialog operation.
 - Narrow-viewport behavior is covered by responsive CSS inspection but not a separate physical mobile browser viewport.
-- Final exact-head Git Preview, remote browser verification, and Draft PR are pending.
+- Remote weather provenance, explicit Run, Annual/Summer/Winter KPI, monthly chart, and baseline delta after actual browser file selection are unverified for the same file-attachment limitation.
+- Draft PR is pending.
 
 ## Known failures
 
@@ -123,15 +126,15 @@ See `DECISIONS.md`.
 
 ## Remaining tasks
 
-Waves 9–10 in `TASK_QUEUE.md`.
+Wave 10 in `TASK_QUEUE.md`.
 
 ## Next action
 
-Commit this artifact convergence, push the final branch state, and classify the resulting Git Preview before any Draft PR action.
+Create the single authorized Draft PR with title `M4: build facade comparison workspace`, then fresh-check OPEN/Draft state and stop for Independent FULL Review.
 
 ## Stop conditions status
 
-No stop condition is active. A Production-classified Git deployment or Production alias drift will immediately block the run.
+No security/privacy/Production stop condition is active. Full browser acceptance remains intentionally pending because host file selection is unavailable in the automation surface.
 
 ## Resume instructions
 
@@ -139,5 +142,6 @@ No stop condition is active. A Production-classified Git deployment or Productio
 2. Re-hash `TASK_PACKET_SNAPSHOT.md`; require exact digest `5A3288DF...003E8` and matching Manifest/State binding.
 3. Read `TASK_QUEUE.md`, `QUALITY_DEBT.md`, `DECISIONS.md`, and `EVIDENCE.md`.
 4. Confirm the current Vercel inventory and Production aliases before any push that may trigger a deployment.
-5. Resume from `Next action`; never create a manual Preview while the Git-triggered route works, never delete the smoke ref, deployments, or branch, and never mutate Production.
-6. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve it as explicit unverified evidence if the automation boundary remains.
+5. PR does not yet exist; create it at most once, Draft only, after action-time Human confirmation if the browser requires it.
+6. Never create a manual Preview while the Git-triggered route works, never mark Ready, merge, begin M5, delete the smoke ref/deployments/branch, or mutate Production.
+7. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve the downstream result views as explicit unverified evidence.

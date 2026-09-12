@@ -114,3 +114,26 @@ Performed against product checkpoint `c8c3f7737d31079662120229ed37756533d373f3` 
 ### Explicit browser limitation
 
 The available browser automation has no file-upload method and native file dialogs are outside its surface. Therefore an OS-backed selection of the real EPW through the rendered `<input type="file">` is not claimed. The same adapter plus actual EPW bytes and complete comparison path passed the local-only smoke above. Final state must retain this as explicit unverified evidence unless a later authorized environment can exercise the native selection.
+
+## Wave 9 — Final Git Preview
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Pushed product head | `cee63594dc26ebbdc35e7fbd319902378890384b`; branch `feat/m4-comparison-ux` | PASS |
+| Deployment | `dpl_9hHmMp1LaYeVYzEvgN7e5n5VWfao` | PASS |
+| URL | `https://facade-solar-a3kvtl1fl-airesearchagls-projects.vercel.app` | PASS |
+| Classification | `target=preview`; `READY`; Git clone exact branch / commit `cee6359` | PASS |
+| Build | `npm run build`; `tsc --noEmit`; Vite 59 modules; `dist` output | PASS |
+| Manual fallback | not used; Git-triggered route worked | PASS |
+| Production | existing bootstrap Production retained; no new Production, promote, or alias mutation | PASS |
+
+### Final Preview browser acceptance
+
+- PASS: app/HTTP load, Case A, Duplicate to Case B, Case B overhang depth 0.8 → 1.6 m, baseline input difference, invalid SHGC message, Section, Front elevation, Assumptions, absolute-kWh warning, nonblank layout, and no horizontal overflow at the inspected desktop viewport.
+- PASS: built JS executed; built CSS loaded with 166 accessible rules; app-origin fatal console error count 0; observed app asset 404 count 0.
+- Excluded from app result: four errors came from installed Chrome extension origins, not the application or Vercel asset origin.
+- UNVERIFIED: attaching a host `.epw` through the OS file chooser, populated weather provenance, explicit Run, Annual/Summer/Winter KPI, monthly chart/table, and baseline result delta. These form one causal verification boundary: no supported browser upload primitive exists in this automation surface.
+
+The exact current head remains a resume-time Git resolution. This artifact records the last verified product checkpoint and does not pretend that a commit can self-record its own final SHA or deployment.
