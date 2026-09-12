@@ -1,4 +1,5 @@
 export * from "./legacy-v01";
+export * from "./weather-v1";
 
 export const engineManifest = Object.freeze({
   milestone: "M1",

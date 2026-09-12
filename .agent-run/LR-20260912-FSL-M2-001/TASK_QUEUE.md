@@ -6,8 +6,8 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | ---: | --- | --- | --- | --- |
 | 1 | Wave 0 | Fresh preflight, M1 closeout, M2 artifacts | COMPLETE | Exact base, hashes, immutable snapshot; checkpoint `bf5f229` |
 | 2 | Wave 1 | Canonical weather/time/provenance/error contract | COMPLETE | Pure TS public types and 5 contract tests; checkpoint `3395d13` |
-| 3 | Wave 2 | EPW parser and synthetic fixtures | IN_PROGRESS | P1–P11 covered; full suite 4 files / 28 tests |
-| 4 | Wave 3 | NOAA-style solar position v1 | PENDING | Independent reference cases and tolerances |
+| 3 | Wave 2 | EPW parser and synthetic fixtures | COMPLETE | P1–P11 covered; checkpoint `8bece33` |
+| 4 | Wave 3 | NOAA-style solar position v1 | IN_PROGRESS | Five NOAA numeric references plus night/tendency tests pass |
 | 5 | Wave 4 | Weather irradiance and simulation | PENDING | Beam/diffuse/ground/shading/provenance tests |
 | 6 | Wave 5 | Validation and optional real EPW smoke | PENDING | Synthetic suite, M1 regression, local dataset result |
 | 7 | Wave 6 | Documentation and minimal status | PENDING | Required docs/status, no simulator UI |

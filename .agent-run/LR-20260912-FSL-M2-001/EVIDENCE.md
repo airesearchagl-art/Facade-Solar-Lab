@@ -58,3 +58,14 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Generated in-memory ordinary/leap datasets parse exactly 8,760 and 8,784 intervals and retain February 29.
 - Malformed row, missing radiation, negative radiation, unsupported records/hour, and inconsistent minute cases are exercised.
 - Full suite: 4 files / 28 tests pass. TypeScript no-emit and whitespace checks pass.
+
+## Wave 3 — Solar position v1
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Implemented the documented NOAA fractional-year equation-of-time/declination method using calendar date, local standard time, latitude, east-positive longitude, and UTC offset.
+- Core calculation uses no `Date`, DST, host clock, or host timezone.
+- Returned identity is `noaa-fractional-year-v1`; geometric and NOAA-refraction-adjusted elevations are kept separate.
+- Independent expected values were transcribed from NOAA/GML's old Solar Position Calculator for Tokyo (35°42' N, 139°46' E, UTC+9): equinox 09:00/12:00/15:00, summer noon, and winter noon.
+- Numeric references are rounded by NOAA to 0.01°; tests use a 0.5° bound appropriate to the simplified method. Night and east/west tendency checks are separate.
+- Full suite: 5 files / 35 tests pass. TypeScript no-emit and whitespace checks pass.
