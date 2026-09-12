@@ -5,8 +5,8 @@ Binding: `LRP-20260913-FSL-M4-001` rev `1` / `5A3288DF4A540EB7E40AF42E7D5D84505B
 | Order | Wave | Task | State | Exit evidence |
 | ---: | --- | --- | --- | --- |
 | 1 | Wave 0 | Fresh preflight, immutable packet, M3 closeout | COMPLETE | Exact base; baseline suite; digest-bound artifacts |
-| 2 | Wave 1 | Initialization commit/push and Vercel Hard Gate | ACTIVE | Exact pushed head; target/source/alias evidence or bounded inconclusive |
-| 3 | Wave 2 | Comparison pure domain | PENDING | Case/delta/month alignment tests |
+| 2 | Wave 1 | Initialization commit/push and Vercel Hard Gate | COMPLETE | `85181a4...`; Git Preview `dpl_4juDN8...`; target null; READY; Production aliases unchanged |
+| 3 | Wave 2 | Comparison pure domain | ACTIVE | Case/delta/month alignment tests |
 | 4 | Wave 3 | Weather file UX and provenance | PENDING | Existing parser adapter; local-only handling |
 | 5 | Wave 4 | Case editor, validation, state model | PENDING | One-to-four case operations and invalid-state behavior |
 | 6 | Wave 5 | KPI, baseline delta, monthly chart | PENDING | Annual/summer/winter and accessible monthly values |

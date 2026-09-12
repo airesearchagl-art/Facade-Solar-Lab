@@ -9,9 +9,9 @@
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
-- Current head: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215` before the initialization commit; resolve live `HEAD` after checkpoint creation
-- Current wave: `Wave 1 — initialization push / Git-triggered Preview Hard Gate`
-- Last successful checkpoint: M4 preflight at canonical base
+- Current head: resolve live `HEAD`; initialization checkpoint is `85181a4d4cbd77f76e199da6c7acca7947096ad5`
+- Current wave: `Wave 2 — Comparison pure domain`
+- Last successful checkpoint: initialization push and Git-triggered Preview Hard Gate
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -28,7 +28,7 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 3. [x] Resume-capable Run Artifact initialized.
 4. [x] Historical M3 artifact synchronized to merged/complete.
 5. [x] M4 branch isolated from exact canonical main.
-6. [ ] Git-triggered deployment Hard Gate evaluated when a deployment first appears.
+6. [x] Initialization deployment is Git-triggered Preview with no Production alias mutation.
 7. [ ] Browser-local EPW load implemented.
 8. [ ] Weather provenance displayed.
 9. [ ] One-to-four Case management implemented.
@@ -74,10 +74,11 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Created `feat/m4-comparison-ux` from the exact canonical base.
 - Saved byte-identical Task Packet and immutable snapshot files and bound their SHA-256.
 - Synchronized M3 historical state and the roadmap on the M4 branch only.
+- Pushed initialization checkpoint `85181a4...`; Vercel created exactly one Git Preview at `dpl_4juDN8...`, `target=null`, `READY`, exact branch and source SHA.
 
 ## Current implementation state
 
-M4 product implementation has not started. The initialization-only checkpoint is being prepared for the first push and Git-triggered Preview classification gate.
+M4 product implementation has not started. Initialization and the first Preview gate are complete; the Pure TypeScript comparison domain is next.
 
 ## Checks
 
@@ -95,7 +96,6 @@ None. See `QUALITY_DEBT.md`.
 
 ## Explicit unverified items
 
-- Git-triggered Preview behavior for the real M4 initialization commit is not yet observed.
 - M4 implementation, final regression, real-EPW browser flow, final Preview, and Draft PR are not yet complete.
 
 ## Known failures
@@ -118,7 +118,7 @@ Waves 1–10 in `TASK_QUEUE.md`.
 
 ## Next action
 
-Create the initialization-only commit, push it once, and apply the Vercel Git-triggered deployment Hard Gate before product implementation.
+Implement and test the browser-independent Comparison domain without changing M1–M3 engine behavior.
 
 ## Stop conditions status
 

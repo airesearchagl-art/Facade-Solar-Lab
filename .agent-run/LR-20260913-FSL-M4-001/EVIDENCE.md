@@ -35,3 +35,18 @@ Performed: `2026-09-13` (Asia/Tokyo)
 - M4 work is isolated on `feat/m4-comparison-ux` from exact canonical main.
 - No tracked `.vercel`, `.env.local`, real EPW, credential, bypass value, or new dependency was introduced.
 - No Production, deployment deletion, alias, domain, DNS, secret, permission, Ready, merge, or M5 mutation occurred.
+
+## Wave 1 — Initialization push / Git-triggered Preview Hard Gate
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Initialization commit | `85181a4d4cbd77f76e199da6c7acca7947096ad5`; initialization artifacts only | PASS |
+| Git source | `airesearchagl-art/Facade-Solar-Lab`, `feat/m4-comparison-ux`, exact pushed SHA | PASS |
+| Deployment | `dpl_4juDN8i671219xqvszEV6DUco41p`; `source=git`; `target=null`; `READY` | PASS |
+| Preview URL | `https://facade-solar-rm6jvnh9g-airesearchagls-projects.vercel.app` | PASS |
+| Preview alias | branch-only `facade-solar-lab-git-feat-m4-com-ed292f-airesearchagls-projects.vercel.app` | PASS |
+| Production baseline | `dpl_FV899...`; aliases unchanged | PASS |
+
+No deployment was deleted or retried. The Hard Gate permits M4 product implementation to continue.
