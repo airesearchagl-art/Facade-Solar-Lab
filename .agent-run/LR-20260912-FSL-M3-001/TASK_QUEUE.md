@@ -11,6 +11,6 @@ Binding: `LRP-20260912-FSL-M3-001` rev `1` / `AFF8B77962787C01B61FE059353FE33B7B
 | 5 | Wave 4 | Orientation and finite-width edges | COMPLETE | G7–G9, F1–F4, 8 orientations; 16 focused cases |
 | 6 | Wave 5 | New facade-v1 weather integration | COMPLETE | Identity, provenance, direct/diffuse/ground energy path; 4 tests |
 | 7 | Wave 6 | Regression, real smoke, comparisons | COMPLETE | M1/M2, C1–C3, 8,760-record four-orientation real EPW |
-| 8 | Wave 7 | Documentation and minimal status | ACTIVE | Required docs/status only |
-| 9 | Wave 8 | Full convergence and self-review | PENDING | All checks/scans pass |
+| 8 | Wave 7 | Documentation and minimal status | COMPLETE | Geometry contract/model boundary docs and local browser status verification |
+| 9 | Wave 8 | Full convergence and self-review | ACTIVE | All checks/scans pass |
 | 10 | Wave 9 | Normal push and one Draft PR | PENDING | Fresh Draft PR state; Human Gate |

@@ -11,3 +11,4 @@ Binding: `LRP-20260912-FSL-M3-001` rev `1` / `AFF8B77962787C01B61FE059353FE33B7B
 | M3-D-005 | Use exact convex polygon clipping for direct shade and keep diffuse identity explicit | M3 scope | No raster approximation or false finite-width diffuse claim |
 | M3-D-006 | Reuse M2 NOAA solar and calendar normalization but calculate M3 irradiance in a new engine path | M2 source is immutable while time/solar semantics must remain aligned | D=0 can converge exactly without coupling direct geometry models |
 | M3-D-007 | Extend the existing mechanical boundary test to `src/geometry/**` | Pure TypeScript is an acceptance criterion, not a manifest-only assertion | React, DOM, Canvas, browser globals, File API, and Node filesystem imports are rejected recursively |
+| M3-D-008 | Keep M3 UI work to milestone/status copy and document the full model boundary separately | Comparison/simulator UX belongs to M4 | M3 exposes no new interactive product workflow |

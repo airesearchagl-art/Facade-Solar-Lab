@@ -1,6 +1,6 @@
 # Validation Plan
 
-M2ではLegacy regressionに加え、synthetic EPW、独立NOAA reference、interval energy、Tokyo Hyakuri IWEC local smokeを実施済みです。第三者solverとの物理validationは将来計画です。
+M3ではLegacy/M2 regressionに加え、解析解polygon、全方位rotation、有限幅庇、Tokyo Hyakuri IWEC local smokeを実施済みです。第三者solverとの物理validationは将来計画です。
 
 ## 1. Golden tests
 
@@ -11,10 +11,10 @@ M2ではLegacy regressionに加え、synthetic EPW、独立NOAA reference、inte
 
 ## 2. Geometry tests
 
-- 庇なし、接する境界、全遮蔽、無遮蔽を検証する。
-- `D/H` と `O/H` を独立に変化させる。
-- 方位角・太陽高度の境界、有限幅庇の左右端を検証する。
-- mm/m変換とfloating-point toleranceを明示する。
+- 庇なし、接する境界、全遮蔽、無遮蔽を解析解で検証済み。
+- 正面45 degの手計算reference、`D/H`と`O/H`、translation/scale相似性を検証済み。
+- N/E/S/Wと中間方位、mirror symmetry、非対称張出、左右端単調性を検証済み。
+- 2D infinite-width limit、behind-facade、grazing、NaN/Infinity boundaryを検証する。
 
 ## 3. Weather validation
 
@@ -22,6 +22,7 @@ M2ではLegacy regressionに加え、synthetic EPW、独立NOAA reference、inte
 - DNI beam、DHI isotropic sky、GHI ground reflectionを独立synthetic caseで検証済み。
 - EnergyPlus Tokyo Hyakuri IWEC 8760 recordsをlocal-onlyでparse/simulateし、provenance・hash・radiation sumを記録済み。
 - Legacy Clear Skyと実気象dataの差を同一geometryで記録済み。差は精度PASSを意味しない。
+- M3はTokyo Hyakuri IWECを4方位でlocal-only実行し、有限庇の削減率差をsmoke evidenceとして記録済み。raw EPWはversion管理しない。
 
 ## 4. Third-party solar analysis comparison
 
@@ -31,7 +32,7 @@ M2ではLegacy regressionに加え、synthetic EPW、独立NOAA reference、inte
 
 ## 5. Boundary tests
 
-- Engine/weather dependency testはReact、Node filesystem、DOM、Canvas、File API、browser globalsを機械的に拒否する。
+- Engine/weather/geometry dependency testは対象treeを再帰走査し、React、Node filesystem、DOM、Canvas、File API、browser globalsを機械的に拒否する。
 - 0および負値、上下端逆転、極端な寸法、範囲外方位を扱う。
 - polar day/night、太陽高度0°近傍、欠測時刻、DST/time-zone境界を扱う。
 - invalid inputを黙って補正せず、errorまたは明示的なnormalization結果を返す。

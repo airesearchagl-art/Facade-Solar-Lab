@@ -1,15 +1,23 @@
 # Model Limitations
 
-## Current M2 state
+## Current M3 state
 
-M1 Legacy engineに加え、EPWと独立solar positionを用いるweather-v1 foundationがあります。実EPW smokeは完了しましたが、絶対性能の外部validationではありません。
+M1 Legacy engineとM2 weather-v1 foundationに加え、有限幅水平庇のdirect shadowを扱う`facade-v1-weather`があります。実EPW smokeは完了しましたが、絶対性能の外部validationではありません。
+
+## Facade-v1 limitations
+
+- 単一鉛直平面、単一矩形開口、水平庇0または1枚のみを扱います。
+- 有限幅geometryはdirect shadowだけに適用します。diffuseはM2互換の20-strip isotropic 2D無限幅modelです。
+- side fin、reveal、複数開口・遮蔽物、任意3D mesh、self-shadingを含みません。
+- 地面反射は庇遮蔽を含まず、glass IACも扱いません。
+- polygon clippingは`1e-9`の共有epsilonを使い、極端な寸法scaleの正式な誤差保証は未実施です。
 
 ## Weather-v1 limitations
 
 - EPW radiation intervalを1点のmidpoint solar geometryで代表させ、interval内変動を補間しません。
 - 天空日射はisotropicで、Perez、circumsolar、horizon brighteningを含みません。
 - 地面反射は `GHI × groundReflectance × 0.5` で、庇遮蔽を含みません。
-- 庇は20 stripの2D無限幅modelです。有限幅、左右端、side fin、reveal、複数遮蔽物を含みません。
+- M2庇は20 stripの2D無限幅modelです。M3 direct pathだけが有限幅と左右端を扱います。
 - NOAA-style fractional-year近似であり、SPA級の高精度太陽位置を主張しません。
 - Required solar欠損は計算拒否します。補間・推定modelはありません。
 - Tokyo Hyakuri IWEC確認はparser/完走検証であり、第三者solverとの精度検証ではありません。
@@ -49,6 +57,7 @@ M1 Legacy engineに加え、EPWと独立solar positionを用いるweather-v1 fou
 ## Units and numerical precision
 
 - M1 public APIの長さはm、緯度・面方位角はdegree、出力はkWh / percentです。mm入力は受け取りません。
-- weather-v1は長さm、north-zero/clockwise方位deg、EPW放射Wh/m² interval、結果kWhを使用します。
+- weather-v1 / facade-v1は長さm、north-zero/clockwise方位deg、EPW放射Wh/m² interval、結果kWhを使用します。
+- facade-v1の壁面局所座標は正面から見て`+x`右、`+y`屋外、`+z`上です。
 - 角度のdegree/radian、方位角の原点と正方向、時刻のtime zoneを暗黙にしません。
 - geometry境界では固定の完全一致を避け、目的に応じたtoleranceを定義します。

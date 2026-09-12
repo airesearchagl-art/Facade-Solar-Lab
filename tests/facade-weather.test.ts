@@ -207,6 +207,13 @@ describe("facade-v1 weather integration", () => {
     ).toThrow(/solarHeatGainCoefficient/u);
     expect(() =>
       calculateFacadeV1IntervalIrradiance(
+        { ...FACADE_PARAMETERS, groundReflectance: -0.01 },
+        radiation,
+        { azimuthDeg: 180, elevationDeg: 45 },
+      ),
+    ).toThrow(/groundReflectance/u);
+    expect(() =>
+      calculateFacadeV1IntervalIrradiance(
         {
           ...FACADE_PARAMETERS,
           overhang: {

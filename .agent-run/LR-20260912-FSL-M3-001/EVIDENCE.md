@@ -119,3 +119,13 @@ Performed: `2026-09-13` (Asia/Tokyo)
 
 - All four simulations completed with finite summaries and retained the exact dataset provenance object.
 - Raw EPW/ZIP/license and the temporary smoke test remain ignored under `.local-validation/`; none is committed.
+
+## Wave 7 — Documentation / minimal status
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+- Added `docs/FACADE_GEOMETRY.md` with the coordinate/azimuth derivation, opening and overhang contracts, Legacy H/D/O/W mapping, wall-projection equations, exact clipping/area method, analytical references, validation boundary, model identities, limitations, and M4/M5 boundary.
+- Synchronized README, repository guidance, roadmap, limitations, and validation plan to M3 without adding simulator controls, chart, comparison, export, or upload UX.
+- Changed only the milestone/status copy in the React shell. Local in-app browser rendered `M3 · FACADE GEOMETRY`, `M3 foundation`, engine milestone `M3`, and the not-validated scope warning.
+- After validation-test coverage was made explicit, full suite 11 files / 86 tests, typecheck, and build PASS.
+- No Vercel, Production, external upload, or repository mutation occurred during the local UI check.

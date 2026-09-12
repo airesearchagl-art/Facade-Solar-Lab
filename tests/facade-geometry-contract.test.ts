@@ -85,6 +85,25 @@ describe("facade-v1 geometry contract", () => {
         },
       ),
     ).toThrow(/elevationZM/u);
+    expect(() =>
+      validateHorizontalOverhang(
+        { centerXM: 0, widthM: 2, sillZM: 0, headZM: 2 },
+        {
+          depthM: -0.1,
+          elevationZM: 2,
+          leftExtensionM: 0,
+          rightExtensionM: 0,
+        },
+      ),
+    ).toThrow(/depthM/u);
+    expect(() =>
+      validateRectangularOpening({
+        centerXM: Number.POSITIVE_INFINITY,
+        widthM: 2,
+        sillZM: 0,
+        headZM: 2,
+      }),
+    ).toThrow(/finite/u);
   });
 
   it("normalizes only finite azimuths", () => {

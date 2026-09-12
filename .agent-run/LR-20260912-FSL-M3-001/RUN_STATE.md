@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 7 — Documentation / Minimal Status`
-- Last successful checkpoint: `Wave 5 — 9d2b19c`; Wave 6 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 8 — Full Convergence / Self-Review`
+- Last successful checkpoint: `Wave 6 — daaae8d`; Wave 7 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -40,10 +40,12 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - All cardinal/intermediate rotations, mirror symmetry, asymmetric extensions, monotonic relevant-side extension, infinite-width limit, behind-facade, and grazing boundaries verified.
 - New `facade-v1-weather` interval/simulation path implemented with explicit geometry/model identities and retained weather provenance.
 - C1–C3, M1/M2 regression, recursive engine/weather/geometry boundary, and local real-EPW four-orientation smoke validation passed.
+- Facade geometry coordinate, projection, clipping, weather-model identity, limits, validation plan, repository guidance, and minimal M3 status copy documented.
+- Local browser rendered the M3 status and scope warning correctly.
 
 ## Current work
 
-- Document M3 contracts/limits and update only milestone/status UI copy.
+- Run exact-head full convergence, privacy/scope/data scans, and self-review.
 
 ## Required checks
 
@@ -67,12 +69,12 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Remaining tasks
 
-- Waves 1–8 implementation, validation, documentation, and full convergence.
+- Wave 8 full convergence and self-review.
 - Wave 9 one Draft PR, fresh verification, and Independent FULL Review Human Gate.
 
 ## Next action
 
-Complete Wave 7 documentation and minimal status updates without adding simulator UX.
+Complete Wave 8 full convergence and self-review without changing scope.
 
 ## Stop conditions
 
