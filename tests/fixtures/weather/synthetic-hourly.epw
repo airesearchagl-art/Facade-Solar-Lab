@@ -1,0 +1,9 @@
+LOCATION,Synthetic Tokyo,Test Region,JPN,SYNTHETIC,999999,35.0,139.0,9.0,40
+DESIGN CONDITIONS,0
+TYPICAL/EXTREME PERIODS,0
+GROUND TEMPERATURES,0
+HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0
+COMMENTS 1,Synthetic fixture; values are not observations
+COMMENTS 2,One hourly interval for parser and accounting tests
+DATA PERIODS,1,1,Data,Wednesday,1/1,1/1
+2025,1,1,1,60,?9?9?9?9,10,5,50,101325,0,0,300,100,200,30

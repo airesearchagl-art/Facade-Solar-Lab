@@ -9,8 +9,8 @@
 - Working branch: `feat/m2-weather-foundation`
 - Base SHA: `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 1 — Canonical Weather Contract`
-- Last successful checkpoint: `Wave 0 — bf5f229`
+- Current wave: `Wave 2 — EPW Parser`
+- Last successful checkpoint: `Wave 1 — 3395d13`
 
 ## Task Packet binding
 
@@ -34,10 +34,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 - M2 Task Packet public-safe LF snapshot and digest binding created.
 - Branch `feat/m2-weather-foundation` created from the exact canonical base.
 - Canonical location, interval, radiation, provenance, issue, and local-standard-time contracts implemented.
+- Pure TypeScript EPW headers/data parser, strict missing policy, coverage classification, and synthetic fixtures implemented.
 
 ## Current work
 
-- Wave 1 checkpoint.
+- Wave 2 checkpoint.
 
 ## Required checks
 
@@ -64,11 +65,11 @@ See the bound Task Packet section 33. No criterion is complete until evidence is
 
 ## Remaining tasks
 
-- Waves 2–8 from the bound Task Packet.
+- Waves 3–8 from the bound Task Packet.
 
 ## Next action
 
-Commit the Wave 1 checkpoint, then implement the EPW parser and synthetic fixtures.
+Commit the Wave 2 checkpoint, then implement solar position v1 with independent references.
 
 ## Stop conditions
 

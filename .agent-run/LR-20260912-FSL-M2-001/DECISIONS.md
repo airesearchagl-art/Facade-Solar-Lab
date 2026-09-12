@@ -11,3 +11,4 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | M2-D-005 | Reject required solar missing/invalid values rather than copying EnergyPlus zero substitution | Silent zero-fill would understate gains | Issues retain line and field evidence; simulation requires usable radiation |
 | M2-D-006 | Use explicit civil fields and UTC offset, never host `Date` or DST | EPW uses local standard time | Results are deterministic across Browser/Node/OS time zones |
 | M2-D-007 | Represent civil time as date plus minutes since local-standard-time midnight | Sub-hour midpoint may include seconds and midnight may cross a date boundary | No lossy string parsing or implicit timezone conversion enters the core |
+| M2-D-008 | Treat invalid structure as fatal but retain row/radiation defects as typed issues | A dataset cannot exist without headers, while diagnostics are useful for readable records | Strict simulation rejects any error-bearing dataset |

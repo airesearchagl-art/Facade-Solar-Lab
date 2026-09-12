@@ -1,4 +1,5 @@
 export * from "./canonical";
+export * from "./epw";
 export * from "./issues";
 export * from "./provenance";
 export * from "./time";

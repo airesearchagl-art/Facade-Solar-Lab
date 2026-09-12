@@ -45,3 +45,16 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Pure Gregorian helpers normalize date boundaries and sub-hour fractional midpoints without `Date`, UTC conversion, DST, or host-timezone input.
 - Five focused time-contract tests pass; full suite is 3 files / 20 tests.
 - TypeScript no-emit check and authored-file whitespace check pass.
+
+## Wave 2 — EPW parser
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added a string-in/string-domain parser with no filesystem, process, UI, DOM, or browser APIs.
+- Enforces the eight ordered EPW headers, parses LOCATION and one DATA PERIOD, and validates that records/hour is a positive divisor of 60.
+- Maps fields 14–16 (one-based) to GHI, DNI, and DHI interval energy.
+- Missing/non-numeric/`>=9999` and negative required radiation become `null` plus line/field-scoped errors; no zero substitution occurs.
+- Synthetic hourly and quarter-hour fixtures verify interval end/midpoint semantics.
+- Generated in-memory ordinary/leap datasets parse exactly 8,760 and 8,784 intervals and retain February 29.
+- Malformed row, missing radiation, negative radiation, unsupported records/hour, and inconsistent minute cases are exercised.
+- Full suite: 4 files / 28 tests pass. TypeScript no-emit and whitespace checks pass.
