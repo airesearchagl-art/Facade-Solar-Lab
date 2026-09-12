@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 8 — Full Convergence / Self-Review`
-- Last successful checkpoint: `Wave 6 — daaae8d`; Wave 7 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 9 — Normal Push / Draft PR`
+- Last successful checkpoint: `Wave 7 — 741eb37`; Wave 8 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -42,10 +42,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - C1–C3, M1/M2 regression, recursive engine/weather/geometry boundary, and local real-EPW four-orientation smoke validation passed.
 - Facade geometry coordinate, projection, clipping, weather-model identity, limits, validation plan, repository guidance, and minimal M3 status copy documented.
 - Local browser rendered the M3 status and scope warning correctly.
+- Exact implementation-head convergence passed: 86 full-suite tests, 41 M3-focused tests, 32 M2 regression tests, typecheck, build, audit, Golden, diff check, source/digest hashes, local real-EPW smoke, privacy, licensing, scope, and self-review.
 
 ## Current work
 
-- Run exact-head full convergence, privacy/scope/data scans, and self-review.
+- Commit this evidence-only checkpoint, rerun required final-head checks, normal-push the branch, then create only the authorized Draft PR.
 
 ## Required checks
 
@@ -69,12 +70,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Remaining tasks
 
-- Wave 8 full convergence and self-review.
 - Wave 9 one Draft PR, fresh verification, and Independent FULL Review Human Gate.
 
 ## Next action
 
-Complete Wave 8 full convergence and self-review without changing scope.
+Normal-push `feat/m3-facade-geometry`; then create exactly one Draft PR to `main` only after the Computer Use action-time confirmation gate is satisfied.
 
 ## Stop conditions
 

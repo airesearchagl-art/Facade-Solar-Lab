@@ -129,3 +129,40 @@ Performed: `2026-09-13` (Asia/Tokyo)
 - Changed only the milestone/status copy in the React shell. Local in-app browser rendered `M3 · FACADE GEOMETRY`, `M3 foundation`, engine milestone `M3`, and the not-validated scope warning.
 - After validation-test coverage was made explicit, full suite 11 files / 86 tests, typecheck, and build PASS.
 - No Vercel, Production, external upload, or repository mutation occurred during the local UI check.
+
+## Wave 8 — Full convergence / self-review
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+Verification anchor: implementation/documentation head `741eb372b5fbb2bbcfe40bb9969d13e9dc5cf249`. The evidence-only checkpoint commit that contains this section is intentionally not described as the implementation head; required commands are rerun after it.
+
+| Check | Fresh result | Result |
+| --- | --- | --- |
+| `origin/main` | `c3f314134137da9b35b4cde53320a610bba15f72` after fetch | PASS |
+| `npm test` | 11 files / 86 tests | PASS |
+| M3 focused | 6 files / 41 tests | PASS |
+| M2 regression | 4 files / 32 tests | PASS |
+| `npm run typecheck` | no diagnostics | PASS |
+| `npm run build` | 49 modules; Vite production build | PASS |
+| `npm audit` | 0 vulnerabilities | PASS |
+| `npm run golden:check` | source-hash-guarded fixture verified | PASS |
+| `git diff --check origin/main...HEAD` | no findings after immutable snapshot whitespace attribute | PASS |
+| M2 source boundary | no diff in `src/weather/**` or `src/engine/weather-v1/**` | PASS |
+| Local real EPW | 1 local-only smoke / 8,760 intervals / four cardinal facades | PASS |
+
+### Integrity
+
+- M1 HTML workspace and committed blob: 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5`.
+- M1 handover workspace and committed blob: 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4`.
+- M3 Task Packet workspace and committed blob: `AFF8B77962787C01B61FE059353FE33B7B3FC9971A1BD126313A1547660DDACB`.
+- The snapshot's normalized final LF is immutable. A path-specific `.gitattributes` `-whitespace` rule prevents `blank-at-eof` from invalidating the required range check without changing snapshot bytes or digest; all other changed files remain checked.
+
+### Public repository / scope
+
+- Token/private-key pattern scan: no findings.
+- Personal absolute-path scan: no findings. Historical localhost development URLs are non-secret local evidence.
+- Tracked external-data scan contains only `tests/fixtures/weather/synthetic-hourly.epw` and `synthetic-subhour.epw`; no raw real EPW, ZIP, or external license is tracked.
+- Package manifests/dependencies are unchanged. `src/app/App.tsx` contains status copy only; no comparison, chart, export, upload, simulator, M4, Vercel, or Production implementation was added.
+- Local dataset stayed under ignored `.local-validation/`; its EPW SHA-256 remains `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`.
+- Self-review found no Blocking defect. Accepted limitations remain finite-width diffuse omission, midpoint solar sampling, and unvalidated absolute `[kWh]`.
+- Local `main` remains untouched at `a4c90163725f8a9d610aaaeac24057facc0b2fa9`; only `origin/main` was read/fetched.
