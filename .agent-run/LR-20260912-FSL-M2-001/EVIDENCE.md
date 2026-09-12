@@ -69,3 +69,18 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Independent expected values were transcribed from NOAA/GML's old Solar Position Calculator for Tokyo (35°42' N, 139°46' E, UTC+9): equinox 09:00/12:00/15:00, summer noon, and winter noon.
 - Numeric references are rounded by NOAA to 0.01°; tests use a 0.5° bound appropriate to the simplified method. Night and east/west tendency checks are separate.
 - Full suite: 5 files / 35 tests pass. TypeScript no-emit and whitespace checks pass.
+
+## Wave 4 — Weather irradiance foundation
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Added weather-v1 beam incidence on an explicitly north-zero/clockwise vertical facade.
+- Added separate DNI beam, isotropic DHI sky, and GHI × ground reflectance × 0.5 interval-energy components.
+- Added a weather-v1-only 20-strip 2D horizontal-overhang path; no legacy solar or `legacySkyFactor` is imported.
+- D=0 produces exact with/without-overhang equivalence. A high-sun/deep-overhang case proves direct shading.
+- Interval gain converts EPW Wh/m2 interval to kWh using area and SHGC exactly once; no duration multiplier exists.
+- Four quarter-hour records manually converge to 0.015 kWh for the DHI-only accounting component.
+- Simulation aggregates 12 months plus configurable annual/cooling/heating definitions and retains dataset ID/source provenance.
+- Strict simulation rejects any error-bearing dataset before calculation.
+- Browser/framework boundary now recursively scans both `src/engine` and `src/weather`, including Node built-ins and File API.
+- Full suite: 6 files / 41 tests pass. TypeScript no-emit and whitespace checks pass.

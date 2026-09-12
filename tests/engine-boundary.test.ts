@@ -2,16 +2,23 @@ import { describe, expect, it } from "vitest";
 
 import { engineManifest } from "../src/engine";
 
-const engineSources = import.meta.glob("../src/engine/**/*.ts", {
+const engineSources = import.meta.glob(
+  ["../src/engine/**/*.ts", "../src/weather/**/*.ts"],
+  {
   eager: true,
   import: "default",
   query: "?raw",
-}) as Record<string, string>;
+  },
+) as Record<string, string>;
 
 const forbiddenDependencies = [
   {
     name: "react module",
     pattern: /(?:from\s*|import\s*\(?\s*|require\s*\(\s*)["']react(?:\/[^"']*)?["']/u,
+  },
+  {
+    name: "Node.js built-in module",
+    pattern: /(?:from\s*|import\s*\(?\s*|require\s*\(\s*)["'](?:node:)?(?:fs|path|process)["']/u,
   },
   {
     name: "react-dom module",
@@ -22,6 +29,7 @@ const forbiddenDependencies = [
   { name: "navigator global", pattern: /\bnavigator\b/u },
   { name: "HTML canvas element", pattern: /\bHTMLCanvasElement\b/u },
   { name: "canvas rendering context", pattern: /\bCanvasRenderingContext2D\b/u },
+  { name: "File API", pattern: /\bFileReader\b|\bFile\b/u },
 ] as const;
 
 describe("M1 engine boundary", () => {
@@ -33,7 +41,7 @@ describe("M1 engine boundary", () => {
     expect(engineManifest.runtimeTargets).toContain("node");
   });
 
-  it("mechanically rejects UI framework, DOM, Canvas, and browser-global dependencies", () => {
+  it("mechanically rejects UI, filesystem, DOM, Canvas, and browser-global dependencies", () => {
     const paths = Object.keys(engineSources);
     expect(paths.length).toBeGreaterThan(0);
 
