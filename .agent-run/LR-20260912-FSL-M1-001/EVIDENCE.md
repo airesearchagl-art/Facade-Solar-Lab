@@ -88,3 +88,53 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - Updated only milestone/status copy in the existing React shell; no simulator inputs, chart, section drawing, or output UI was added.
 - Browser verification at `http://127.0.0.1:5175/` showed `M1 · ENGINE BASELINE`, engine milestone `M1`, the Legacy baseline warning, and no Vite error overlay.
 - `npm test`, `npm run typecheck`, `npm run build`, and `npm run golden:check` pass before checkpointing.
+
+## Wave 6 — Full convergence / self-review
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+The current head is deliberately resolved as symbolic `HEAD` at resume time. `fdeaea3cdeefec52200293d69f4861fb2c28ddb6` is the last verified Wave 5 checkpoint, not a self-referential claim about the commit containing this evidence.
+
+| Check | Fresh evidence | Result |
+| --- | --- | --- |
+| Canonical base | fresh `origin/main` = `b633a2b9651b63ea1224f8a4becefa1062a6b12d` | PASS |
+| Branch | `feat/m1-engine-baseline` | PASS |
+| Task Packet | SHA-256 `BEF00BD0BA6B96A027EB6BE7BB5186B38244B4BEEA1B16FA0F38C64D6FC22B07` | PASS |
+| `npm test` | 2 files / 15 tests passed | PASS |
+| `npm run typecheck` | TypeScript no-emit check exited 0 | PASS |
+| `npm run build` | Vite production build exited 0; 22 modules transformed | PASS |
+| `npm audit` | 0 vulnerabilities | PASS |
+| Golden convergence | fixture regenerated in check mode from the hash-guarded original source | PASS |
+| Diff whitespace | `git diff --check origin/main...HEAD` exited 0 | PASS |
+| Engine boundary | recursive source-level React/DOM/Canvas/browser-global test passed | PASS |
+| Scope review | no EPW, Perez, TMY, weather ingestion/parser implementation in engine, tests, or generator | PASS |
+| Full self-review | source mapping, deterministic operation order, Golden properties, docs, status UI, and M1/M2 boundary reviewed | PASS |
+
+### Fresh byte-preservation verification
+
+| Original | Workspace bytes | Committed blob restored bytes | Result |
+| --- | --- | --- | --- |
+| `solar_overhang_simulator.html` | 16,835 / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5` | 16,835 / same SHA-256 | PASS |
+| `HANDOVER_solar_overhang_simulator.md` | 22,635 / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4` | 22,635 / same SHA-256 | PASS |
+
+`git checkout-index --temp` restored both committed blobs for independent hashing. Temporary files were removed after verification. Path-specific `.gitattributes` rules remain `-text -whitespace`, so Git does not normalize the Human-provided bytes while authored-file whitespace checks remain active.
+
+### Public repository boundary
+
+- Tracked-tree secret scan: no findings.
+- Branch-history secret scan for `origin/main..HEAD`: no findings.
+- Tracked-tree personal path/email scan: no findings.
+- Branch-history personal path/email scan for `origin/main..HEAD`: no findings.
+- Sensitive filename scan: no findings.
+- `main` was not checked out or mutated; local `main` remains its pre-existing `a4c9016...`, while the canonical comparison base is fresh `origin/main @ b633a2b...`.
+- Vercel, Production, Release, permissions, visibility, secrets, Ready, merge, auto-merge, branch deletion, force-push, rebase, and M2 were not touched.
+
+### Diff snapshot before the Wave 6 evidence checkpoint
+
+- Comparison: `origin/main...HEAD`
+- Changed files: 35
+- Additions: 3,526
+- Deletions: 63
+- Commits: 6
+
+These counts identify the verified Wave 5 checkpoint before this evidence-only checkpoint. Final PR metrics must be freshly measured after the Wave 7 closeout commit; they must not be inferred from this snapshot.

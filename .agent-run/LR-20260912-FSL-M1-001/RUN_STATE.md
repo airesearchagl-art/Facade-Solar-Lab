@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 6 — Full Convergence`
-- Last successful checkpoint: `Wave 4 — 9c00fa3`; Wave 5 documentation/status is the current live HEAD after its checkpoint commit
+- Current wave: `Wave 7 — Draft PR`
+- Last successful checkpoint: `Wave 5 — fdeaea3`; Wave 6 convergence evidence is the current live HEAD after its checkpoint commit
 
 ## Task Packet binding
 
@@ -36,7 +36,7 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | G1–G6 Golden comparisons | COMPLETE |
 | Mechanical React/DOM/Canvas boundary test | COMPLETE |
 | Documentation and minimal M1 status | COMPLETE |
-| Full required checks and public-boundary scan | PENDING |
+| Full required checks and public-boundary scan | COMPLETE |
 | Draft PR, still Draft and unmerged | PENDING |
 
 ## Required checks
@@ -61,11 +61,11 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Remaining tasks
 
-- Complete Waves 6–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Wave 7 in `TASK_QUEUE.md`: normal push, create the authorized Draft PR, verify its fresh state, record the result, and stop at the Human Gate.
 
 ## Next action
 
-Freeze new feature work and perform exact final-head checks, source/blob verification, scans, and full self-review.
+Resolve live `HEAD`, normally push `feat/m1-engine-baseline`, create only the authorized Draft PR to `main`, verify `OPEN / Draft / Ready=false / merged=false`, record the fresh PR state, and stop. Do not repeat source intake or implementation waves.
 
 ## Stop conditions
 
@@ -80,3 +80,4 @@ Freeze new feature work and perform exact final-head checks, source/blob verific
 4. Resolve live `HEAD`; do not confuse it with any prior checkpoint SHA.
 5. Verify both legacy workspace files still match the Human-provided byte counts and SHA-256 values before touching the index.
 6. Continue only from **Current wave** / **Next action** and stop on any listed condition.
+7. If the Draft PR already exists, do not create another one; inspect and synchronize its fresh state instead.
