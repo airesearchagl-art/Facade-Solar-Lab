@@ -181,11 +181,64 @@ Implementation verification head: `ad486d82f147de03d08f846b80fd1cdaac1994b2`.
 
 The following Wave 7 evidence checkpoint changes only resumable artifacts. Current head remains symbolic and must be resolved live.
 
-## Wave 8 — Push / Draft PR gate
+## Wave 8 — Push / Draft PR
 
 Performed: `2026-09-12` (Asia/Tokyo)
 
 - Normal push created remote branch `origin/feat/m2-weather-foundation`.
 - Pushed verified head before this gate-sync commit: `925fb90676b8e451185f3d908572869b2c08233d`.
-- Draft PR has not been created yet. Action-time Human confirmation is required immediately before that representational browser action.
+- PR #3 exists: `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/3`.
+- Fresh public GitHub browser check: `OPEN / Draft / Ready=false / merged=false`; base `main @ a7a9cbb7af2386b6b0b5266ea390568a8b537d69`; reviewed head `7073950a05ccbbadbc21ba87958e80f4db4cb70c`; 11 commits.
+- PR #3 must not be recreated on resume.
 - Ready, merge, auto-merge, branch deletion, `main`, Vercel, Production, Release, permissions, visibility, secrets, and M3 remain untouched.
+
+## Wave 9 — Independent FULL Review Required Fix
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Previous reviewed head: `7073950a05ccbbadbc21ba87958e80f4db4cb70c`.
+- Required-fix implementation checkpoint: `f5600021b1a5f6ddf8d05c989a4968cf25eaa8c2`.
+- Current head remains symbolic and must be resolved live. The artifact-only convergence checkpoint after the implementation checkpoint is not described as the reviewed or implementation head.
+
+### RF-01 — NOAA leap-year denominator
+
+- Reused `isLeapYear(LocalStandardTime.year)` so the fractional-year denominator is 365 for normal years and 366 for leap years.
+- All five 2025 NOAA reference cases remain and explicitly verify the 365-day path.
+- `full-leap-year-8784` resolves to canonical year 2000 and the composed solar-position path explicitly verifies a 366-day denominator.
+- Independent source: NOAA/GML old Solar Position Calculator, Tokyo (35°42′ N, 139°46′ E, UTC+9), accessed `2026-09-12`.
+
+| Local Standard Time | Equation of time [min] | Declination [°] | Azimuth [°] | Apparent elevation [°] |
+| --- | ---: | ---: | ---: | ---: |
+| 2024-02-29 12:00 | -12.49 | -7.82 | 182.36 | 46.47 |
+| 2024-06-21 12:00 | -1.85 | 23.43 | 198.09 | 77.18 |
+| 2024-12-21 12:00 | 1.86 | -23.44 | 185.58 | 30.68 |
+
+NOAA reports values to 0.01°. The existing 0.5° azimuth/apparent-elevation tolerance is retained because weather-v1 uses NOAA's documented simplified fractional-year approximation rather than making a high-precision SPA claim.
+
+### RF-02 — Current PR state
+
+- `RUN_STATE.md`, `TASK_QUEUE.md`, and this evidence now identify the already-created PR #3 and the Focused Independent Re-Review gate.
+- Resume behavior explicitly forbids recreating PR #3, marking it Ready, merging it, or beginning M3.
+
+### Required-fix convergence at implementation checkpoint
+
+| Check | Fresh result | Status |
+| --- | --- | --- |
+| `npm test` | 6 files / 47 tests | PASS |
+| Leap-year NOAA references | 2024-02-29, 2024-06-21, 2024-12-21 plus explicit 365/366 diagnostics | PASS |
+| 8784 solar calendar | canonical 2000 year reaches 366-day denominator | PASS |
+| EPW parser / sub-hour accounting / boundary | focused 4 files / 29 tests | PASS |
+| `npm run typecheck` | TypeScript no-emit exited 0 | PASS |
+| `npm run build` | Vite build; 37 modules transformed | PASS |
+| `npm audit` | 0 vulnerabilities | PASS |
+| `npm run golden:check` | hash-guarded original source fixture verified | PASS |
+| M1 Golden regression | 1 file / 13 tests | PASS |
+| `git diff --check origin/main...HEAD` | no findings | PASS |
+| Task Packet | `9C7B4E5CB255D9EE3BCA68E86E9C50B20272DD94B29A3B671AD481D52B3F7999` | PASS |
+| M1 originals | workspace and committed blobs: 16,835 / 22,635 bytes with expected SHA-256 values | PASS |
+| Real EPW smoke | ignored Tokyo Hyakuri EPW; 8,760 records; parse/simulation and prior annual results reproduced | PASS |
+| Secret/privacy | tracked tree and branch-history patterns, sensitive filenames, personal-path/mail pattern: no findings | PASS |
+| External-data licensing | only two authored synthetic EPWs tracked; licensed raw EPW/ZIP/license remain ignored under `.local-validation/` | PASS |
+| `main` | merge-base and `origin/main` remain `a7a9cbb7af2386b6b0b5266ea390568a8b537d69`; local `main` remains `a4c9016...` | PASS |
+
+Implementation-checkpoint diff: 45 files, 3,948 additions, 61 deletions, 12 commits. The following artifact-only commit is followed by a fresh exact-head convergence before normal push.
