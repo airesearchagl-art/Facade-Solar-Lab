@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 import { engineManifest } from "../src/engine";
 
 const engineSources = import.meta.glob(
-  ["../src/engine/**/*.ts", "../src/weather/**/*.ts"],
+  [
+    "../src/engine/**/*.ts",
+    "../src/geometry/**/*.ts",
+    "../src/weather/**/*.ts",
+  ],
   {
   eager: true,
   import: "default",
@@ -32,11 +36,13 @@ const forbiddenDependencies = [
   { name: "File API", pattern: /\bFileReader\b|\bFile\b/u },
 ] as const;
 
-describe("M2 engine and weather boundary", () => {
-  it("identifies both model paths without claiming physical validation", () => {
-    expect(engineManifest.milestone).toBe("M2");
+describe("M3 engine, geometry, and weather boundary", () => {
+  it("identifies all model paths without claiming physical validation", () => {
+    expect(engineManifest.milestone).toBe("M3");
     expect(engineManifest.frameworkDependencies).toEqual([]);
-    expect(engineManifest.calculationStatus).toBe("legacy-and-weather-foundations");
+    expect(engineManifest.calculationStatus).toBe(
+      "legacy-weather-and-facade-geometry-foundations",
+    );
     expect(engineManifest.modelStatus).toBe("weather-backed-not-validated");
     expect(engineManifest.runtimeTargets).toContain("node");
   });

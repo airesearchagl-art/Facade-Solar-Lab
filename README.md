@@ -6,20 +6,21 @@
 
 ## Current state
 
-現在は **M2 — Weather Foundation** です。M1 Legacy baselineをbyte-for-byte/Goldenで維持したまま、Pure TypeScriptのEPW parser、Local Standard Time contract、NOAA-style solar position、weather-driven interval energy基盤を追加しています。
+現在は **M3 — Facade Geometry** です。M1 Legacy baselineとM2 Weather Foundationを維持したまま、鉛直ファサード・矩形開口・有限幅水平庇のPure TypeScript geometry foundationを追加しています。
 
 - Minimal UI: 実装済み
 - Pure TypeScript engine境界: 実装済み
 - Legacy日射計算engine: 実装済み（M1 regression baseline）
 - Original-source reference / Golden test: 実装済み
 - 実気象data: EPW foundation実装済み（import UIは未実装）
+- Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
 - Backend / Database: なし
 - Production deployment: 未実施
 
-旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M1とM2は明示的に別modelです。M2はweather-backedですが、最終modelや検証済み物理modelではありません。
+旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M1、M2、M3は明示的に別modelです。M3はweather-backedですが、最終modelや検証済み物理modelではありません。
 
 > [!WARNING]
-> M2の実EPW smokeはparser/simulation完走確認です。第三者solverとの物理validationが完了するまで、M1/M2の絶対値 `[kWh]` を正式な性能評価や実務判断の根拠に使用できません。
+> M3の実EPW smokeはparser/simulation完走と方位差の確認です。第三者solverとの物理validationが完了するまで、M1/M2/M3の絶対値 `[kWh]` を正式な性能評価や実務判断の根拠に使用できません。
 
 ## Development
 
@@ -49,7 +50,8 @@ npm audit
 .
 ├─ src/
 │  ├─ app/       # React UI
-│  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 engine
+│  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1 engine
+│  ├─ geometry/  # Facade-local geometry / clipping / direct shadow
 │  ├─ models/    # Domain model領域
 │  ├─ weather/   # Canonical weather contract / Pure TS EPW parser
 │  └─ main.tsx
@@ -70,7 +72,8 @@ npm audit
 - [Validation plan](docs/VALIDATION_PLAN.md)
 - [Legacy baseline](docs/LEGACY_BASELINE.md)
 - [Weather foundation](docs/WEATHER_FOUNDATION.md)
+- [Facade geometry foundation](docs/FACADE_GEOMETRY.md)
 
 ## Development status
 
-M2完了後はDraft PRでHuman Gate停止します。M3への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。
+M3完了後はDraft PRでHuman Gate停止します。M4への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。

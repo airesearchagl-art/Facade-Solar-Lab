@@ -14,4 +14,7 @@ Binding: `LRP-20260912-FSL-M2-001` rev `1` / `9C7B4E5CB255D9EE3BCA68E86E9C50B202
 | 8 | Wave 7 | Full convergence and self-review | COMPLETE | Full checks/scans/review pass at `ad486d8`; evidence checkpoint follows |
 | 9 | Wave 8 | Normal push and Draft PR | COMPLETE | PR #3 exists and is `OPEN / Draft / Ready=false / merged=false` |
 | 10 | Wave 9 | Independent FULL Review Required Fix | COMPLETE | Leap-year denominator/tests, artifact sync, convergence, and normal push |
-| 11 | Wave 10 | Focused Independent Re-Review | HUMAN_GATE | PR #3 remains Draft; do not recreate, Ready, merge, or begin M3 |
+| 11 | Wave 10 | Focused Independent Re-Review | COMPLETE | Required Fix independently verified at `406a896` |
+| 12 | Closeout | Human squash merge | COMPLETE | PR #3 squash merge `c3f314134137da9b35b4cde53320a610bba15f72` |
+
+M2 is `COMPLETE_VERIFIED / HUMAN_CLOSEOUT`; its implementation must not resume.

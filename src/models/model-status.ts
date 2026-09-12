@@ -1,1 +1,1 @@
-export const modelStatus = "m2-weather-foundation-not-validated" as const;
+export const modelStatus = "m3-facade-geometry-not-validated" as const;

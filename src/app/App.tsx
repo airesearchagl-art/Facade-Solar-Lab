@@ -22,7 +22,7 @@ export function App() {
   return (
     <main className="shell">
       <section className="hero" aria-labelledby="product-title">
-        <p className="eyebrow">M2 · WEATHER FOUNDATION</p>
+        <p className="eyebrow">M3 · FACADE GEOMETRY</p>
         <h1 id="product-title">Facade Solar Lab</h1>
         <p className="lede">
           A foundation for exploring how facade geometry shapes solar heat gain.
@@ -35,7 +35,7 @@ export function App() {
         </div>
       </section>
 
-      <section className="foundation" aria-label="M2 foundation">
+      <section className="foundation" aria-label="M3 foundation">
         {foundations.map((item) => (
           <article className="foundation-card" key={item.label}>
             <p>{item.label}</p>
@@ -46,8 +46,8 @@ export function App() {
       </section>
 
       <p className="scope-note">
-        EPW weather foundation available. Legacy baseline preserved. Absolute values
-        are not a validated physical-performance model.
+        Finite facade geometry foundation available. Weather baseline preserved.
+        Absolute values are not a validated physical-performance model.
       </p>
     </main>
   );
