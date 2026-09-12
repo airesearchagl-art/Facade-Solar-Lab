@@ -9,8 +9,8 @@
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 3 — Finite Direct Shadow`
-- Last successful checkpoint: `Wave 1 — 10892e1`; Wave 2 checkpoint is the live commit containing this artifact update
+- Current wave: `Wave 4 — Orientation / Side Extensions`
+- Last successful checkpoint: `Wave 2 — 81d1a9a`; Wave 3 checkpoint is the live commit containing this artifact update
 
 ## Task Packet binding
 
@@ -36,10 +36,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 - Public-safe M3 Task Packet snapshot created by replacing only the personal project root with `${PROJECT_ROOT}` and normalizing LF; digest bound above.
 - Geometry contracts, validation, derived opening/overhang metrics, azimuth normalization, and facade-local sun-vector basis implemented.
 - Shared geometry epsilon, adjacent-vertex deduplication, shoelace area, and Sutherland–Hodgman rectangle clipping implemented.
+- Finite horizontal-overhang shadow polygon, wall projection, opening intersection, and bounded shaded/lit fractions implemented.
 
 ## Current work
 
-- Implement finite horizontal-overhang shadow projection and analytical direct-shading tests.
+- Complete all-orientation, finite-width, mirror, monotonic, behind, and grazing tests.
 
 ## Required checks
 
@@ -68,7 +69,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Next action
 
-Implement Wave 3 shadow polygon/projection/intersection and G1–G6 tests.
+Implement Wave 4 G7–G9, F1–F4, cardinal/intermediate rotations, and boundary tests.
 
 ## Stop conditions
 
