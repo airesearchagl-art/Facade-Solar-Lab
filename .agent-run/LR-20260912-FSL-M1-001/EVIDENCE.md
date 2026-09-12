@@ -78,3 +78,13 @@ Performed: `2026-09-12` (Asia/Tokyo)
 - G6 preserves reduction rates only when both `D/H` and `O/H` are fixed; keeping `O` unscaled produces a materially different result.
 - `tests/engine-boundary.test.ts` recursively scans raw `src/engine/**/*.ts` executable source and fails on React/React DOM module dependencies, DOM globals, Canvas types, or `navigator`.
 - `QD-M1-001`: RESOLVED.
+
+## Wave 5 — Documentation / minimal status
+
+Performed: `2026-09-12` (Asia/Tokyo)
+
+- Updated `README.md`, `AGENTS.md`, `docs/ROADMAP.md`, `docs/MODEL_LIMITATIONS.md`, and `docs/VALIDATION_PLAN.md` for the M1/M2 boundary.
+- Added `docs/LEGACY_BASELINE.md` with source hashes, parameter mapping, units, conventions, reference method, fixture cases, tolerance, known issues, and M2 boundary.
+- Updated only milestone/status copy in the existing React shell; no simulator inputs, chart, section drawing, or output UI was added.
+- Browser verification at `http://127.0.0.1:5175/` showed `M1 · ENGINE BASELINE`, engine milestone `M1`, the Legacy baseline warning, and no Vite error overlay.
+- `npm test`, `npm run typecheck`, `npm run build`, and `npm run golden:check` pass before checkpointing.

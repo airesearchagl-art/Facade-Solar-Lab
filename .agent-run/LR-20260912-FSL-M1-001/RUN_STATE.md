@@ -10,8 +10,8 @@
 - Working branch: `feat/m1-engine-baseline`
 - Base SHA: `b633a2b9651b63ea1224f8a4becefa1062a6b12d`
 - Current head: resolve symbolic `HEAD` at resume time with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 5 — Documentation / Minimal Status`
-- Last successful checkpoint: `Wave 3 — 12189d6`; Wave 4 Golden and boundary tests are the current live HEAD after their checkpoint commit
+- Current wave: `Wave 6 — Full Convergence`
+- Last successful checkpoint: `Wave 4 — 9c00fa3`; Wave 5 documentation/status is the current live HEAD after its checkpoint commit
 
 ## Task Packet binding
 
@@ -35,7 +35,7 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 | Pure TypeScript legacy engine | COMPLETE |
 | G1–G6 Golden comparisons | COMPLETE |
 | Mechanical React/DOM/Canvas boundary test | COMPLETE |
-| Documentation and minimal M1 status | PENDING |
+| Documentation and minimal M1 status | COMPLETE |
 | Full required checks and public-boundary scan | PENDING |
 | Draft PR, still Draft and unmerged | PENDING |
 
@@ -61,11 +61,11 @@ Reproduce actual legacy MVP v0.1 calculation behavior as a Pure TypeScript engin
 
 ## Remaining tasks
 
-- Complete Waves 5–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
+- Complete Waves 6–7 in `TASK_QUEUE.md` without changing legacy semantics or crossing Human Gates.
 
 ## Next action
 
-Synchronize required documentation and the minimal M1 status display without adding simulator UI.
+Freeze new feature work and perform exact final-head checks, source/blob verification, scans, and full self-review.
 
 ## Stop conditions
 
