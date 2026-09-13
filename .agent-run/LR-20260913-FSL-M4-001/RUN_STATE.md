@@ -5,13 +5,13 @@
 - Run ID: `LR-20260913-FSL-M4-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `COMPLETE_PENDING_FULL_VERIFY`
+- Current state: `HUMAN_GATE`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
 - Current head: resolve live `HEAD`; last verified product checkpoint is `c8c3f7737d31079662120229ed37756533d373f3`
-- Current wave: `Wave 10 — Draft PR / Human Gate`
-- Last successful checkpoint: final product head Git Preview and bounded browser verification
+- Current wave: `Wave 10 — COMPLETE`
+- Last successful checkpoint: Draft PR #5 created OPEN / Draft and fresh-verified
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -63,8 +63,8 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 38. [x] Diff check passed at final product checkpoint.
 39. [x] Privacy/raw-EPW/secret scan passes.
 40. [x] Final browser verification boundary recorded; OS-backed EPW selection and result views are explicit unverified items.
-41. [ ] Draft PR created.
-42. [ ] Human Gate reached after Draft PR.
+41. [x] Draft PR #5 created.
+42. [x] Human Gate reached after Draft PR.
 
 ## Completed
 
@@ -82,10 +82,11 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Exercised the local browser shell, duplicate/edit/invalid-input behavior, visible geometry/disclosures, layout bounds, and console; no fatal error, asset failure, blank page, or overflow was observed.
 - Pushed product checkpoint `cee63594dc26ebbdc35e7fbd319902378890384b`; Git Integration produced Preview `dpl_9hHmMp1LaYeVYzEvgN7e5n5VWfao`, `target=preview`, `READY`, exact branch and source, with the Vite 59-module build in `dist`.
 - Verified the final Preview initial state and interactive Case edit path in authenticated Chrome. App-origin fatal console errors and observed asset 404s are zero; Production remained unchanged.
+- Created Draft PR #5 at `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/5`; fresh GitHub metadata confirmed `OPEN`, `Draft=true`, `merged=false`, `Ready=false`, base `main @ 46f3aabe...`, and creation-checkpoint head `f28f5f088292f6d23cb823c864264e1658dd32ba`.
 
 ## Current implementation state
 
-Product implementation, documentation, final Git Preview, and bounded browser checks are complete. Draft PR creation remains. The automation surface cannot attach a host file to a browser file input; actual browser file selection and resulting KPI/chart views are therefore explicit unverified evidence, although the same real EPW passed the browser adapter and full calculation path in a local-only Vitest smoke.
+Product implementation, documentation, final Git Preview, bounded browser checks, and Draft PR creation are complete. The run is stopped at Human Gate for Independent FULL Review. The automation surface cannot attach a host file to a browser file input; actual browser file selection and resulting KPI/chart views remain explicit unverified evidence, although the same real EPW passed the browser adapter and full calculation path in a local-only Vitest smoke.
 
 ## Checks
 
@@ -108,7 +109,7 @@ No deferred implementation debt. See `QUALITY_DEBT.md`.
 - Actual OS-backed browser file selection is unverified because the available browser automation exposes no file-upload or native file-dialog operation.
 - Narrow-viewport behavior is covered by responsive CSS inspection but not a separate physical mobile browser viewport.
 - Remote weather provenance, explicit Run, Annual/Summer/Winter KPI, monthly chart, and baseline delta after actual browser file selection are unverified for the same file-attachment limitation.
-- Draft PR is pending.
+- No implementation item remains before Independent FULL Review.
 
 ## Known failures
 
@@ -126,11 +127,11 @@ See `DECISIONS.md`.
 
 ## Remaining tasks
 
-Wave 10 in `TASK_QUEUE.md`.
+None. Await Independent FULL Review findings or a new Human instruction.
 
 ## Next action
 
-Create the single authorized Draft PR with title `M4: build facade comparison workspace`, then fresh-check OPEN/Draft state and stop for Independent FULL Review.
+Independent FULL Review of PR #5. Do not modify the PR or repository without a new Human instruction.
 
 ## Stop conditions status
 
@@ -142,6 +143,7 @@ No security/privacy/Production stop condition is active. Full browser acceptance
 2. Re-hash `TASK_PACKET_SNAPSHOT.md`; require exact digest `5A3288DF...003E8` and matching Manifest/State binding.
 3. Read `TASK_QUEUE.md`, `QUALITY_DEBT.md`, `DECISIONS.md`, and `EVIDENCE.md`.
 4. Confirm the current Vercel inventory and Production aliases before any push that may trigger a deployment.
-5. PR does not yet exist; create it at most once, Draft only, after action-time Human confirmation if the browser requires it.
-6. Never create a manual Preview while the Git-triggered route works, never mark Ready, merge, begin M5, delete the smoke ref/deployments/branch, or mutate Production.
-7. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve the downstream result views as explicit unverified evidence.
+5. PR #5 already exists. Do not recreate it, edit it, or mark it Ready without a new Human instruction.
+6. Await Independent FULL Review; never merge, auto-merge, begin M5, delete the smoke ref/deployments/branch, or mutate Production.
+7. Never create a manual Preview while the Git-triggered route works.
+8. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve the downstream result views as explicit unverified evidence.

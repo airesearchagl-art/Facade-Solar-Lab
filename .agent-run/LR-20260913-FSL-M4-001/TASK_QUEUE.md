@@ -14,4 +14,4 @@ Binding: `LRP-20260913-FSL-M4-001` rev `1` / `5A3288DF4A540EB7E40AF42E7D5D84505B
 | 8 | Wave 7 | Responsive/accessibility/UX convergence | COMPLETE_PENDING_FULL_VERIFY | Desktop browser and semantics PASS; narrow physical viewport unverified |
 | 9 | Wave 8 | Regression, real EPW, browser validation | COMPLETE_PENDING_FULL_VERIFY | 105 tests and local real-EPW calculation PASS; OS-backed browser file selection unverified |
 | 10 | Wave 9 | Final Preview, docs, artifact convergence | COMPLETE_PENDING_FULL_VERIFY | Git Preview READY at exact product head; bounded browser PASS; native EPW selection unverified |
-| 11 | Wave 10 | Draft PR and Human Gate | ACTIVE | Draft PR only; Independent FULL Review required |
+| 11 | Wave 10 | Draft PR and Human Gate | COMPLETE | PR #5 OPEN / Draft; Independent FULL Review required |

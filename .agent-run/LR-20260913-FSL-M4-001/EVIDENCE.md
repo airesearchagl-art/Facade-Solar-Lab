@@ -137,3 +137,19 @@ Performed: `2026-09-13` (Asia/Tokyo)
 - UNVERIFIED: attaching a host `.epw` through the OS file chooser, populated weather provenance, explicit Run, Annual/Summer/Winter KPI, monthly chart/table, and baseline result delta. These form one causal verification boundary: no supported browser upload primitive exists in this automation surface.
 
 The exact current head remains a resume-time Git resolution. This artifact records the last verified product checkpoint and does not pretend that a commit can self-record its own final SHA or deployment.
+
+## Wave 10 — Draft PR / Human Gate
+
+Performed: `2026-09-13` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| PR | `#5`; `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/5` | PASS |
+| Title | `M4: build facade comparison workspace` | PASS |
+| State | `OPEN`; `Draft=true`; `Ready=false`; `merged=false`; `mergeable=true` | PASS |
+| Base | `main @ 46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215` | PASS |
+| Creation head | `feat/m4-comparison-ux @ f28f5f088292f6d23cb823c864264e1658dd32ba` | PASS |
+| Creation diff | 6 commits; 37 changed files; +5970 / -188 | PASS |
+| Body | required Summary through Human Gate sections rendered | PASS |
+
+The PR remains Draft and not mergeable by action while this Run Artifact checkpoint is committed. Resume must resolve the live PR head and must not recreate PR #5.
