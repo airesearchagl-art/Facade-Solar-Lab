@@ -2,7 +2,7 @@
 
 ## Start here
 
-1. Read `.agent-run/LR-20260912-FSL-M3-001/RUN_STATE.md`.
+1. Read `.agent-run/LR-20260913-FSL-M4-001/RUN_STATE.md`.
 2. Verify the Task Packet SHA-256 before resuming the recorded campaign.
 3. Check the current branch, HEAD, remote, and working tree before editing.
 4. Preserve unrelated or pre-existing changes.

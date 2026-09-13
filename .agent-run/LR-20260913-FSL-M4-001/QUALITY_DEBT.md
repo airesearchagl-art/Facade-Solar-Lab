@@ -5,3 +5,5 @@ Binding: `LRP-20260913-FSL-M4-001` rev `1` / `5A3288DF4A540EB7E40AF42E7D5D84505B
 No deferred implementation Quality Debt.
 
 The third-party physical validation, finite-width diffuse model, and uncertainty/tolerance formalization are explicit later-milestone boundaries rather than hidden debt. Browser file-selection and narrow-viewport evidence limitations remain explicit in `RUN_STATE.md` / `EVIDENCE.md` and are not represented as PASS.
+
+The Independent FULL Review classified browser acceptance as Required Verification. It is `BLOCKED_BROWSER_ACCEPTANCE`, not Quality Debt, and requires Human Manual Verification to close.

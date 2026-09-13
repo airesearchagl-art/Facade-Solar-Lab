@@ -16,7 +16,7 @@
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
 - Comparison: Case追加・複製・baseline・期間別/月別KPI・入力差分・geometry説明図を実装済み
 - Backend / Database: なし
-- Production deployment: 未実施
+- Formal Production release: 未実施。bootstrap ProductionはVercel初回deployment境界のため保持していますが、正式Releaseとして扱いません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainは既存`facade-v1-weather`を呼ぶadapterであり、別のsolar calculationを持ちません。weather-backedですが、最終modelや検証済み物理modelではありません。
 

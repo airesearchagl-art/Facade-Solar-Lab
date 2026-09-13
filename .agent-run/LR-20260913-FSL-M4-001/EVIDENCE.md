@@ -153,3 +153,24 @@ Performed: `2026-09-13` (Asia/Tokyo)
 | Body | required Summary through Human Gate sections rendered | PASS |
 
 The PR remains Draft and not mergeable by action while this Run Artifact checkpoint is committed. Resume must resolve the live PR head and must not recreate PR #5.
+
+## Independent FULL Review — Required Fix
+
+Reviewed head: `aa602bbe33374543fc96ddfad091d5a18af91c40`.
+
+- RF-01: OPEN / `BLOCKED_BROWSER_ACCEPTANCE`. The OS-backed file selection → provenance → duplicate/edit → Run → period KPI → monthly chart/table → baseline delta path has not been executed in a browser. Existing unit, local real-EPW, and partial Preview checks are supporting evidence only and do not close browser acceptance.
+- RF-02: PASS — `AGENTS.md` now starts at `.agent-run/LR-20260913-FSL-M4-001/RUN_STATE.md`. M3 remains unchanged as historical audit evidence.
+- RF-03: PENDING REMOTE EVIDENCE — after this Required Fix commit/push, resolve the Git-triggered Preview for live `HEAD` and synchronize only the existing PR #5 body Vercel Preview section. A repository commit cannot self-record the deployment created by its own push; deployment ID/URL/source classification are action-time remote evidence.
+- README: PASS — distinguishes the retained Vercel bootstrap Production boundary from an unperformed formal Production release.
+- Human Manual Verification is required before RF-01 can be `CLOSED`, before `Ready` can be considered, and before the run can leave `BLOCKED_BROWSER_ACCEPTANCE`.
+
+### Required Fix local convergence
+
+- Minimal diff: six files — `AGENTS.md`, `README.md`, and four mutable M4 Run Artifact files. No engine, UI, test expected value, M3 artifact, or immutable Task Packet change.
+- `npm test`: PASS — 15 files / 105 tests.
+- `npm run typecheck`: PASS.
+- `npm run build`: PASS — Vite 59 modules / `dist`.
+- `npm audit`: PASS — 0 vulnerabilities.
+- `npm run golden:check`: PASS.
+- `git diff --check`: PASS.
+- M1 source hashes and immutable M4 Task Packet digest remain exact.
