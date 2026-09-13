@@ -12,6 +12,10 @@ M1 Legacy engine、M2 weather-v1、M3 `facade-v1-weather`を保持し、M4は1�
 - baselineが0の場合、percentage deltaは`null`としてUIで`—`表示します。
 - EPWはbrowser-localでparseし、raw本文を表示・保存・送信しません。automatic download、geocoding、cloud saveはありません。
 - geometry SVGは説明図であり、CAD寸法取得や施工図用途ではありません。
+- 表示する`[kWh]`は窓を通して室内へ入る日射熱取得量です。外気温、熱貫流、換気、内部発熱、蓄熱、空調設備効率を含む冷房負荷・暖房負荷ではありません。
+- 夏期は4–9月、冬期は10–3月の固定集計です。気候区分や運転scheduleに応じた空調期間判定ではありません。
+- 夏至頃（6/21）と冬至頃（12/21）の線は、選択地点で5分刻みに求めた最大solar elevation時刻とfacade-relative profile angleによる幾何学的参考表示です。厳密な至点時刻、年間計算、空調負荷計算を表しません。
+- PDFはbrowser printです。CSVは編集用比較データであり、いずれも正式な性能証明書や検証済み計算書ではありません。
 
 ## Facade-v1 limitations
 

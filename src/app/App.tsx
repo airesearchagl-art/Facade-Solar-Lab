@@ -26,6 +26,10 @@ import {
   FACADE_V1_GROUND_REFLECTION_MODEL,
   type FacadeV1Parameters,
 } from "../engine";
+import {
+  COMPARISON_CSV_FILENAME,
+  createComparisonCsv,
+} from "../export";
 import { createDemoComparisonWorkspace } from "../demo/demo-scenario";
 import {
   DEMO_WEATHER_DATASET_ID,
@@ -47,9 +51,9 @@ const ORIENTATION_PRESETS = [
 ] as const;
 
 const PERIODS = [
-  { key: "annual", label: "年間", months: "1〜12月" },
-  { key: "cooling", label: "夏期", months: "4〜9月" },
-  { key: "heating", label: "冬期", months: "10〜3月" },
+  { key: "annual", label: "年間の日射熱取得", months: "1〜12月" },
+  { key: "cooling", label: "夏期の日射熱取得", months: "4〜9月" },
+  { key: "heating", label: "冬期の日射熱取得", months: "10〜3月" },
 ] as const;
 
 const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
@@ -194,7 +198,13 @@ function WeatherPanel({
   );
 }
 
-function ResultsPanel({ result }: { readonly result: ComparisonRunResult }) {
+function ResultsPanel({
+  result,
+  isDemo,
+}: {
+  readonly result: ComparisonRunResult;
+  readonly isDemo: boolean;
+}) {
   return (
     <section className="panel results-panel" aria-labelledby="results-title">
       <div className="section-heading">
@@ -204,6 +214,13 @@ function ResultsPanel({ result }: { readonly result: ComparisonRunResult }) {
         </div>
         <p>差分 = 各案 − 基準案</p>
       </div>
+      <aside className="result-reading" aria-labelledby="result-reading-title">
+        <h3 id="result-reading-title">結果の読み方</h3>
+        <p><strong>この画面の［kWh］は、窓を通して室内へ入る日射熱取得量の累計です。冷房負荷・暖房負荷そのものではありません。</strong></p>
+        <p>窓面へ到達する直達日射・天空日射・地面反射の合計に、開口面積とSHGCを掛けて算出します。外気温、壁・窓の熱貫流、換気、内部発熱、建物の蓄熱、空調設備効率などは含まれていません。</p>
+        <p>南向き窓では、冬は低い太陽が窓面へ入りやすく、夏は高い太陽を水平庇で遮りやすいため、冬期の日射熱取得が夏期より大きくなる場合があります。</p>
+        {isDemo ? <p className="demo-result-warning"><strong>現在のデモ気象は実測データではありません。</strong> 夏期と冬期の大小関係を実建物の空調負荷評価には使用できません。</p> : null}
+      </aside>
       <div className="period-grid">
         {PERIODS.map((period) => (
           <article className="period-card" key={period.key}>
@@ -236,6 +253,76 @@ function ResultsPanel({ result }: { readonly result: ComparisonRunResult }) {
         ))}
       </div>
       <p className="interpretation-note">差分が負の場合、基準案より日射熱取得量が小さいことを示します。ただし自動的に「良い案」とは判定しません。夏期の日射遮蔽と冬期の日射取得では設計上の意味が異なります。</p>
+    </section>
+  );
+}
+
+function PrintReportSummary({
+  result,
+  dataset,
+}: {
+  readonly result: ComparisonRunResult;
+  readonly dataset: WeatherDataset;
+}) {
+  const isDemo = dataset.provenance.sourceType === "synthetic";
+  return (
+    <section className="print-only print-report-summary" aria-label="印刷レポート概要">
+      <header>
+        <p>Facade Solar Lab</p>
+        <h1>ファサード日射熱取得 比較レポート</h1>
+      </header>
+      <dl className="print-weather-grid">
+        <div><dt>地点</dt><dd>{[dataset.location.city, dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</dd></div>
+        <div><dt>データセット</dt><dd>{dataset.id}</dd></div>
+        <div><dt>データ出典</dt><dd>{dataset.provenance.sourceName}</dd></div>
+        <div><dt>データ区分</dt><dd>{isDemo ? "Demo / デモ用合成気象データ" : "EPW"}</dd></div>
+      </dl>
+      {isDemo ? <p className="print-demo-warning">デモ用合成気象データです。実測気象ではありません。性能検証用データではありません。</p> : null}
+      <h2>比較案</h2>
+      <div className="table-scroll">
+        <table className="data-table print-case-table">
+          <thead><tr><th>案名</th><th>基準案</th><th>方位</th><th>開口</th><th>庇</th><th>SHGC</th><th>地表面反射率</th></tr></thead>
+          <tbody>{result.cases.map((item) => {
+            const opening = item.parameters.opening;
+            const overhang = item.parameters.overhang;
+            return (
+              <tr key={item.caseId}>
+                <th scope="row">{item.name}</th>
+                <td>{item.caseId === result.baselineCaseId ? "はい" : "いいえ"}</td>
+                <td>{item.parameters.facadeAzimuthDegFromNorth}°</td>
+                <td>幅 {opening.widthM} m / 下端 {opening.sillZM} m / 上端 {opening.headZM} m</td>
+                <td>{overhang === undefined ? "なし" : `出 ${overhang.depthM} m / 高さ ${overhang.elevationZM} m / 左右 ${overhang.leftExtensionM}, ${overhang.rightExtensionM} m`}</td>
+                <td>{item.parameters.solarHeatGainCoefficient}</td>
+                <td>{item.parameters.groundReflectance}</td>
+              </tr>
+            );
+          })}</tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function ExportPanel({
+  dirty,
+  onPrint,
+  onCsv,
+}: {
+  readonly dirty: boolean;
+  readonly onPrint: () => void;
+  readonly onCsv: () => void;
+}) {
+  return (
+    <section className="panel export-panel no-print" aria-labelledby="export-title">
+      <div>
+        <p className="section-kicker">比較結果の共有</p>
+        <h2 id="export-title">結果を書き出す</h2>
+        <p>{dirty ? "現在の表示結果は変更前の計算結果です。比較計算を再実行してから出力してください。" : "印刷レポートまたはExcel等で編集できるCSVとして書き出せます。"}</p>
+      </div>
+      <div className="export-actions">
+        <button type="button" className="secondary-button" disabled={dirty} title="ブラウザの印刷画面からPDF保存できます" onClick={onPrint}>PDFとして保存 / 印刷</button>
+        <button type="button" className="secondary-button" disabled={dirty} onClick={onCsv}>CSVを書き出す</button>
+      </div>
     </section>
   );
 }
@@ -332,6 +419,24 @@ export function App() {
     } catch {
       setRunError("比較計算の実行に失敗しました。");
     }
+  };
+
+  const printComparison = () => {
+    if (result === null || dirty) return;
+    window.print();
+  };
+
+  const downloadComparisonCsv = () => {
+    if (result === null || dataset === null || dirty) return;
+    const csv = createComparisonCsv(result, dataset);
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = COMPARISON_CSV_FILENAME;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const inputId = (path: string) => `${selectedCase.id}-${path.replaceAll(".", "-")}`;
@@ -491,7 +596,7 @@ export function App() {
 
           <section className="preview-workspace" aria-labelledby="geometry-title">
             <div className="subsection-heading"><div><p className="section-kicker">03 · 形状</p><h2 id="geometry-title">選択中の案</h2></div><span>{selectedCase.name}</span></div>
-            <GeometryPreview comparisonCase={selectedCase} />
+            <GeometryPreview comparisonCase={selectedCase} dataset={dataset} />
             <div className="difference-panel">
               <h3>{baselineCase.name}からの入力差</h3>
               {differences.length === 0 ? <p>基準案との入力差はありません。</p> : (
@@ -517,17 +622,24 @@ export function App() {
       </section>
       {runError === null ? null : <div className="message error-message" role="alert">{runError}</div>}
 
-      {result === null ? (
+      {result === null || dataset === null ? (
         <section className="panel results-empty" aria-label="比較結果の状態">
           <span>比較結果</span>
           <strong>{dataset === null ? "比較するにはEPWファイルを読み込んでください" : "入力を確認し、比較計算を実行してください"}</strong>
-          <p>年間・夏期・冬期の集計、月別値、基準案との差をここに表示します。</p>
+          <p>年間・夏期・冬期の日射熱取得、月別値、基準案との差をここに表示します。</p>
         </section>
       ) : (
         <>
           {dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回の比較計算によるものです。</div> : null}
-          <ResultsPanel result={result} />
+          <PrintReportSummary result={result} dataset={dataset} />
+          <ResultsPanel result={result} isDemo={isDemo} />
           <MonthlyChart result={result} />
+          <ExportPanel dirty={dirty} onPrint={printComparison} onCsv={downloadComparisonCsv} />
+          <section className="print-only print-geometry" aria-labelledby="print-geometry-title">
+            <h2 id="print-geometry-title">選択案の形状と参考日射線</h2>
+            <p>{selectedCase.name}</p>
+            <GeometryPreview comparisonCase={selectedCase} dataset={dataset} />
+          </section>
         </>
       )}
 

@@ -174,3 +174,38 @@ Reviewed head: `aa602bbe33374543fc96ddfad091d5a18af91c40`.
 - `npm run golden:check`: PASS.
 - `git diff --check`: PASS.
 - M1 source hashes and immutable M4 Task Packet digest remain exact.
+
+## Human UX Review follow-up — Design Insight & Export
+
+Human feedback recorded on `2026-09-13`:
+
+- seasonal result semantics needed clarification;
+- solstice section rays requested;
+- PDF / editable export requested.
+
+Bounded implementation evidence:
+
+- UI labels identify annual, Apr–Sep summer, and Oct–Mar winter values as solar heat gain and explicitly state that `[kWh]` is not HVAC cooling/heating load.
+- Demo-only copy remains explicit: synthetic, not measured weather, and not validation evidence.
+- Pure `src/solar-reference/**` reuses `calculateSolarPosition` and `facadeLocalSunVector`; 6/21 and 12/21 solar noon is the maximum elevation from a five-minute Local Standard Time scan. Profile angle is `atan2(z, y)`; `y <= 0` is back-facing; overhang-tip facade intersection follows the documented projection.
+- Section SVG uses solid/labeled summer and dashed/labeled winter rays. The demo south facade shows both; the north facade shows back-facing messages and no incident lines; a deeper overhang moves the facade intersection downward.
+- Pure `src/export/**` produces one Case per row with weather/input, annual/summer/winter values and deltas, and 12 monthly values. It uses UTF-8 BOM, CRLF, quoted cells, and leading `= + - @` formula protection.
+- Export controls exist only with a result and are disabled when inputs are dirty. Browser print exposes an A4 report with weather, all Cases, results, monthly chart/table, selected geometry, reference rays, assumptions, and warnings.
+- Chromium print-to-PDF produced a five-page A4 portrait report. Rendered PNG review found readable Japanese text, complete tables, distinct reference rays, no clipping/overlap, and coherent section breaks.
+- Local browser Demo verified result semantics, 6/21 and 12/21 labels/altitude/profile angle, overhang-depth response, north-facing suppression, enabled export after calculation, disabled export while dirty, zero app console errors, zero displayed `NaN`/`Infinity`, and zero horizontal overflow.
+
+Fresh convergence:
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Full tests | 19 files / 115 tests | PASS |
+| Focused new tests | solar reference, SVG render, CSV, app render, boundary | PASS |
+| TypeScript | `tsc --noEmit` | PASS |
+| Build | Vite; 66 modules; `dist` | PASS |
+| Audit | 0 vulnerabilities | PASS |
+| Golden | M1 fixture/hash guard | PASS |
+| Diff whitespace | no findings | PASS |
+| Preserved scope | no diff in M1 legacy, M2 weather/solar, M3 facade engine/geometry, or expected fixtures | PASS |
+| Remote evidence | exact-head Git Preview and PR body sync | PENDING PUSH |
+
+RF-01 remains OPEN / `BLOCKED_BROWSER_ACCEPTANCE`. This follow-up does not substitute for Human verification of the OS-backed real-EPW flow.

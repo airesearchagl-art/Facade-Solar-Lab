@@ -9,9 +9,9 @@
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
-- Current head: resolve live `HEAD`; last verified product checkpoint is `c8c3f7737d31079662120229ed37756533d373f3`
-- Current wave: `Focused Independent Re-Review — Required Fix`
-- Last successful checkpoint: PR #5 exact reviewed head `aa602bbe33374543fc96ddfad091d5a18af91c40`
+- Current head: resolve live `HEAD`; last verified pre-follow-up checkpoint is `30d1763cf519f101d2ba30745727f2b696c6d0c9`
+- Current wave: `Human UX Review follow-up — Design Insight & Export`
+- Last successful checkpoint: PR #5 Japanese-first exact head `30d1763cf519f101d2ba30745727f2b696c6d0c9`
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -84,16 +84,17 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Verified the final Preview initial state and interactive Case edit path in authenticated Chrome. App-origin fatal console errors and observed asset 404s are zero; Production remained unchanged.
 - Created Draft PR #5 at `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/5`; fresh GitHub metadata confirmed `OPEN`, `Draft=true`, `merged=false`, `Ready=false`, base `main @ 46f3aabe...`, and creation-checkpoint head `f28f5f088292f6d23cb823c864264e1658dd32ba`.
 - Independent FULL Review at `aa602bbe...` classified the unverified OS-backed EPW acceptance path as a Required Verification. It is not PASS and cannot be closed without Human browser evidence.
+- Added the bounded Human UX follow-up: explicit solar-heat-gain semantics, facade-relative 6/21 and 12/21 reference rays, browser print/PDF report layout, and Excel-editable safe CSV export. RF-01 remains open.
 
 ## Current implementation state
 
-Product implementation, documentation, Git Preview, bounded browser checks, and Draft PR creation are complete. The run is `BLOCKED_BROWSER_ACCEPTANCE`: the automation surface cannot attach a host file to a browser file input, so actual browser file selection and the resulting provenance/KPI/chart/delta views remain unverified. Unit and local-only real-EPW smoke evidence do not substitute for this browser acceptance.
+The Design Insight & Export follow-up is locally implemented and converged. A normal push, exact-head Git Preview classification, remote browser verification, and PR-body sync remain. The run is still `BLOCKED_BROWSER_ACCEPTANCE`; Demo, reference rays, PDF, and CSV do not close the Human real-EPW browser gate.
 
 ## Checks
 
-- `npm test`: PASS — 15 files / 105 tests.
+- `npm test`: PASS — 19 files / 115 tests.
 - `npm run typecheck`: PASS.
-- `npm run build`: PASS — Vite, 59 modules.
+- `npm run build`: PASS — Vite, 66 modules.
 - `npm audit`: PASS — 0 vulnerabilities.
 - `npm run golden:check`: PASS.
 - `git diff --check`: PASS.
@@ -128,13 +129,13 @@ See `DECISIONS.md`.
 
 ## Remaining tasks
 
-1. Publish and classify the Required Fix exact-head Git Preview.
-2. Synchronize the existing PR #5 body to that exact-head Preview evidence.
+1. Commit and normally push the bounded Design Insight & Export follow-up.
+2. Classify and verify the exact-head Git Preview, then synchronize the existing PR #5 body.
 3. Obtain Human Manual Verification of the complete browser EPW flow before closing RF-01.
 
 ## Next action
 
-After the Required Fix push and PR-body evidence sync, request Human Manual Verification of the exact final Preview and stop for Focused Independent Re-Review.
+After the bounded push and PR-body evidence sync, stop for Design Insight & Export Human UX Review. Do not close RF-01.
 
 ## Stop conditions status
 

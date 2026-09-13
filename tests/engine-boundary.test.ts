@@ -8,6 +8,8 @@ const engineSources = import.meta.glob(
     "../src/geometry/**/*.ts",
     "../src/weather/**/*.ts",
     "../src/comparison/**/*.ts",
+    "../src/solar-reference/**/*.ts",
+    "../src/export/**/*.ts",
   ],
   {
   eager: true,

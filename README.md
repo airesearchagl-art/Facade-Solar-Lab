@@ -14,7 +14,7 @@
 - Original-source reference / Golden test: 実装済み
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
-- Comparison: Case追加・複製・baseline・期間別/月別KPI・入力差分・geometry説明図を実装済み
+- Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・PDF/CSV出力を実装済み
 - Backend / Database: なし
 - Formal Production release: 未実施。bootstrap ProductionはVercel初回deployment境界のため保持していますが、正式Releaseとして扱いません。
 

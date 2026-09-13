@@ -32,6 +32,7 @@ body {
 button, input { font: inherit; }
 
 button { color: inherit; }
+.print-only { display: none; }
 
 button:focus-visible,
 input:focus-visible,
@@ -427,6 +428,15 @@ legend { padding: 0 8px; font-size: 0.74rem; font-weight: 800; letter-spacing: 0
 .opening-fill { fill: #bdd2d4; stroke: var(--teal); stroke-width: 1.5; }
 .front-opening { fill: #d3e3e4; }
 .dimension-line { stroke: #71776f; stroke-width: 1; }
+.solar-reference-ray { fill: none; stroke: #b6542e; stroke-linecap: round; stroke-width: 2.5; }
+.solar-reference-ray.winter { stroke: #176b73; stroke-dasharray: 7 5; }
+.solar-reference-empty,
+.solar-reference-disclaimer { margin: 9px 0 0; color: var(--muted); font-size: 0.65rem; line-height: 1.45; }
+.solar-reference-details { display: grid; margin-top: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.solar-reference-item { display: grid; padding: 8px 9px; border-top: 3px solid #b6542e; background: #fffaf3; gap: 2px; }
+.solar-reference-item.winter { border-top-color: #176b73; border-top-style: dashed; }
+.solar-reference-item strong { font-size: 0.68rem; }
+.solar-reference-item span { color: var(--muted); font-size: 0.61rem; line-height: 1.35; }
 .geometry-empty { padding: 28px; border: 1px dashed #c38d83; color: #8d3f30; background: #fff7f4; font-size: 0.8rem; }
 
 .difference-panel { margin-top: 14px; padding: 18px; color: #e9ede5; background: #29332f; }
@@ -465,6 +475,11 @@ legend { padding: 0 8px; font-size: 0.74rem; font-weight: 800; letter-spacing: 0
 .results-empty > strong { font-family: Georgia, serif; font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 500; }
 .results-empty p { max-width: 600px; }
 .stale-banner { margin-bottom: 18px; padding: 12px 16px; border: 1px solid #cfab63; color: #73571b; background: #fff4d7; font-size: 0.78rem; font-weight: 750; }
+.result-reading { margin-bottom: 22px; padding: 18px 20px; border-left: 4px solid var(--teal); background: #eef5f3; }
+.result-reading h3 { margin-bottom: 10px; font-family: Georgia, serif; font-size: 1.16rem; font-weight: 500; }
+.result-reading p { margin-bottom: 8px; color: #4b5650; font-size: 0.77rem; line-height: 1.58; }
+.result-reading p:last-child { margin-bottom: 0; }
+.demo-result-warning { padding-top: 9px; border-top: 1px solid #bdccc7; color: #76472e !important; }
 
 .period-grid { display: grid; gap: 20px; }
 .period-card { border: 1px solid var(--line); }
@@ -495,6 +510,11 @@ legend { padding: 0 8px; font-size: 0.74rem; font-weight: 800; letter-spacing: 0
 .monthly-table-wrap { margin-top: 16px; }
 .monthly-table-wrap summary { width: fit-content; cursor: pointer; color: var(--teal); font-size: 0.74rem; font-weight: 750; }
 .monthly-table { min-width: 620px; margin-top: 8px; }
+
+.export-panel { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.export-panel h2 { margin-bottom: 8px; font-family: Georgia, serif; font-size: clamp(1.4rem, 2.2vw, 2rem); font-weight: 500; }
+.export-panel p:last-child { max-width: 700px; margin-bottom: 0; color: var(--muted); font-size: 0.76rem; line-height: 1.5; }
+.export-actions { display: flex; flex: 0 0 auto; gap: 8px; }
 
 .assumption-grid { display: grid; grid-template-columns: 0.8fr 1.35fr 0.85fr; gap: 14px; }
 .assumption-grid article { min-width: 0; padding: 19px; border: 1px solid var(--line); background: var(--paper-soft); }
@@ -539,6 +559,9 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .run-button { justify-content: space-between; }
   .assumption-grid { grid-template-columns: 1fr; }
   .limitation-card { grid-column: auto; }
+  .export-panel { align-items: stretch; flex-direction: column; }
+  .export-actions { width: 100%; }
+  .export-actions button { flex: 1; }
 }
 
 @media (max-width: 460px) {
@@ -550,6 +573,66 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .weather-place { align-items: flex-start; flex-direction: column; gap: 3px; }
   .weather-actions { align-items: stretch; flex-direction: column; }
   .difference-panel dl div { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .solar-reference-details { grid-template-columns: 1fr; }
   .run-panel { padding: 22px 18px; }
+  .export-actions { flex-direction: column; }
   footer { flex-direction: column; }
+}
+
+@page { size: A4 portrait; margin: 12mm; }
+
+@media print {
+  :root { background: white; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  html { font-size: 10pt; }
+  body { min-width: 0; color: black; background: white; }
+  .app-shell { width: auto; margin: 0; padding: 0; }
+  .print-only { display: block; }
+  .app-header,
+  .critical-warning,
+  .weather-panel,
+  .case-panel,
+  .run-panel,
+  .results-empty,
+  .stale-banner,
+  .export-panel,
+  footer,
+  button,
+  input { display: none !important; }
+  .panel,
+  .geometry-figure,
+  .assumption-grid article { margin: 0 0 8mm; border-color: #777; background: white; box-shadow: none; }
+  .print-report-summary { margin-bottom: 8mm; }
+  .print-report-summary header { margin-bottom: 5mm; border-bottom: 2px solid #222; }
+  .print-report-summary header p { margin-bottom: 2mm; font-weight: 800; letter-spacing: 0.08em; }
+  .print-report-summary h1 { margin-bottom: 4mm; font-family: Georgia, serif; font-size: 22pt; letter-spacing: -0.02em; line-height: 1.1; }
+  .print-report-summary h2,
+  .print-geometry h2 { margin: 6mm 0 3mm; font-family: Georgia, serif; font-size: 14pt; }
+  .print-weather-grid { display: grid; margin: 0 0 4mm; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2mm 6mm; }
+  .print-weather-grid div { border-bottom: 1px solid #aaa; }
+  .print-demo-warning { padding: 3mm; border: 1px solid #555; font-weight: 700; }
+  .table-scroll,
+  .chart-scroll { overflow: visible; }
+  .data-table { table-layout: auto; }
+  .data-table th,
+  .data-table td { padding: 1.5mm 2mm; border-color: #999; font-size: 7pt; white-space: normal; }
+  .print-case-table { width: 100%; }
+  .result-reading { border: 1px solid #777; background: white; break-inside: avoid; }
+  .period-card,
+  .monthly-table-wrap,
+  .geometry-figure,
+  .assumption-grid article { break-inside: avoid; }
+  .monthly-chart { min-width: 0; max-height: 72mm; }
+  .chart-panel { break-before: page; }
+  .geometry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .print-geometry { break-before: page; }
+  .print-geometry > p { margin-bottom: 4mm; }
+  .solar-reference-item,
+  .limitation-card { color: black; background: white !important; }
+  .limitation-card h3,
+  .limitation-card strong,
+  .limitation-card p { color: black; }
+  .assumption-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .assumptions-panel,
+  .assumption-grid { break-inside: avoid; }
 }
