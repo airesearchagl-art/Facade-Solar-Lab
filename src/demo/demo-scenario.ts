@@ -36,14 +36,14 @@ export const DEMO_DEEPER_OVERHANG_PARAMETERS: FacadeV1Parameters = Object.freeze
 export function createDemoComparisonWorkspace(): ComparisonWorkspace {
   const baseline = createComparisonCase(
     "case-a",
-    "Case A",
+    "案A・基準案",
     DEMO_BASELINE_PARAMETERS,
   );
   return addComparisonCase(
     createComparisonWorkspace(baseline),
     createComparisonCase(
       "case-b",
-      "Case B",
+      "案B・庇を深くした案",
       DEMO_DEEPER_OVERHANG_PARAMETERS,
     ),
   );

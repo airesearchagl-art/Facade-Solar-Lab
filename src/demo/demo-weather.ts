@@ -51,10 +51,10 @@ export function createDemoWeatherDataset(): WeatherDataset {
     id: DEMO_WEATHER_DATASET_ID,
     format: "epw",
     location: {
-      city: "Demo Site",
-      region: "Synthetic",
-      country: "Demo",
-      source: "Generated synthetic profile",
+      city: "デモ地点",
+      region: "合成気象データ",
+      country: "デモ",
+      source: "ローカル生成の合成プロファイル",
       stationId: "SYNTHETIC-DEMO",
       latitudeDeg: 35,
       longitudeDeg: 139,
@@ -65,8 +65,8 @@ export function createDemoWeatherDataset(): WeatherDataset {
     intervalMinutes: 60,
     dataPeriods: [
       {
-        name: "Synthetic demonstration year",
-        startDayOfWeek: "Monday",
+        name: "デモ用合成気象年",
+        startDayOfWeek: "月曜日",
         startMonth: 1,
         startDay: 1,
         endMonth: 12,
@@ -77,11 +77,11 @@ export function createDemoWeatherDataset(): WeatherDataset {
     coverage: "full-year-8760",
     provenance: {
       sourceType: "synthetic",
-      sourceName: "Synthetic Demo Weather",
+      sourceName: "デモ用合成気象データ",
       sourceReference: "generated:facade-solar-lab/demo-weather-v1",
       notes: [
-        "Deterministic generated profile for UI demonstration only.",
-        "Not measured weather and not validation evidence.",
+        "UIデモ専用の決定論的な生成プロファイルです。",
+        "実測気象ではなく、性能検証用データではありません。",
       ],
     },
     issues: [],

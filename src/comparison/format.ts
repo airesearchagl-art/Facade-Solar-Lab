@@ -1,7 +1,7 @@
 import type { InputDifferenceValue } from "./types";
 
 export function formatKWh(value: number): string {
-  return value.toLocaleString("en-US", {
+  return value.toLocaleString("ja-JP", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 1,
   });
@@ -22,7 +22,7 @@ export function formatInputValue(
   value: InputDifferenceValue,
   unit?: "m" | "°",
 ): string {
-  if (typeof value === "boolean") return value ? "Enabled" : "Disabled";
+  if (typeof value === "boolean") return value ? "あり" : "なし";
   const formatted = Number.isInteger(value) ? String(value) : value.toFixed(2);
   return unit === undefined ? formatted : `${formatted} ${unit}`;
 }

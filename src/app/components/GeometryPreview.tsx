@@ -24,7 +24,7 @@ export function GeometryPreview({ comparisonCase }: GeometryPreviewProps) {
   if (!finiteGeometry(comparisonCase)) {
     return (
       <div className="geometry-empty" role="status">
-        Fix the geometry inputs to restore the explanatory drawings.
+        形状入力を修正すると、説明図を再表示します。
       </div>
     );
   }
@@ -52,11 +52,11 @@ export function GeometryPreview({ comparisonCase }: GeometryPreviewProps) {
     <div className="geometry-grid">
       <figure className="geometry-figure">
         <figcaption>
-          <strong>Section</strong>
-          <span>Explanatory, not a CAD dimension view</span>
+          <strong>断面</strong>
+          <span>形状確認用の模式図（CAD寸法図ではありません）</span>
         </figcaption>
-        <svg viewBox="0 0 300 210" role="img" aria-label={`Section for ${comparisonCase.name}`}>
-          <title>{comparisonCase.name} section geometry</title>
+        <svg viewBox="0 0 300 210" role="img" aria-label={`${comparisonCase.name}の断面`}>
+          <title>{`${comparisonCase.name}の断面形状`}</title>
           <line className="drawing-line datum" x1="28" x2="274" y1={floorY} y2={floorY} />
           <line className="drawing-line wall" x1="170" x2="170" y1="22" y2={floorY} />
           <rect
@@ -75,32 +75,32 @@ export function GeometryPreview({ comparisonCase }: GeometryPreviewProps) {
               y2={zToY(overhang.elevationZM)}
             />
           ) : null}
-          <text x="184" y={openingTop + 4}>Head {opening.headZM.toFixed(2)} m</text>
-          <text x="184" y={openingBottom + 4}>Sill {opening.sillZM.toFixed(2)} m</text>
-          <text x="28" y="194">Datum 0.00 m</text>
-          <text x="28" y="28">H {openingHeight.toFixed(2)} m</text>
+          <text x="184" y={openingTop + 4}>上端 {opening.headZM.toFixed(2)} m</text>
+          <text x="184" y={openingBottom + 4}>下端 {opening.sillZM.toFixed(2)} m</text>
+          <text x="28" y="194">基準高さ 0.00 m</text>
+          <text x="28" y="28">開口高 H {openingHeight.toFixed(2)} m</text>
           {overhang !== undefined ? (
             <>
               <text x="28" y={zToY(overhang.elevationZM) - 8}>
-                D {overhang.depthM.toFixed(2)} m
+                庇の出 D {overhang.depthM.toFixed(2)} m
               </text>
               <text x="184" y={zToY(overhang.elevationZM) - 8}>
-                z {overhang.elevationZM.toFixed(2)} m
+                庇高さ z {overhang.elevationZM.toFixed(2)} m
               </text>
             </>
           ) : (
-            <text x="28" y="52">Overhang disabled</text>
+            <text x="28" y="52">庇なし</text>
           )}
         </svg>
       </figure>
 
       <figure className="geometry-figure">
         <figcaption>
-          <strong>Front elevation</strong>
-          <span>Viewed from building exterior</span>
+          <strong>立面</strong>
+          <span>建物外部から正面視</span>
         </figcaption>
-        <svg viewBox="0 0 300 210" role="img" aria-label={`Front elevation for ${comparisonCase.name}`}>
-          <title>{comparisonCase.name} front elevation geometry</title>
+        <svg viewBox="0 0 300 210" role="img" aria-label={`${comparisonCase.name}の立面`}>
+          <title>{`${comparisonCase.name}の立面形状`}</title>
           <rect className="wall-fill" x="28" y="22" width="244" height="152" />
           <rect
             className="opening-fill front-opening"
@@ -120,12 +120,12 @@ export function GeometryPreview({ comparisonCase }: GeometryPreviewProps) {
           ) : null}
           <line className="dimension-line" x1={openingLeft} x2={openingLeft + openingWidthPx} y1="186" y2="186" />
           <text x="150" y="202" textAnchor="middle">
-            W {opening.widthM.toFixed(2)} m
+            開口幅 W {opening.widthM.toFixed(2)} m
           </text>
           {overhang !== undefined ? (
             <>
-              <text x="34" y="42">L ext. {overhang.leftExtensionM.toFixed(2)} m</text>
-              <text x="266" y="42" textAnchor="end">R ext. {overhang.rightExtensionM.toFixed(2)} m</text>
+              <text x="34" y="42">左張出 {overhang.leftExtensionM.toFixed(2)} m</text>
+              <text x="266" y="42" textAnchor="end">右張出 {overhang.rightExtensionM.toFixed(2)} m</text>
             </>
           ) : null}
         </svg>

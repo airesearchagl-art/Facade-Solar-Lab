@@ -23,7 +23,7 @@ describe("visible synthetic demo comparison", () => {
     expect(first.id).toBe(DEMO_WEATHER_DATASET_ID);
     expect(first.provenance).toMatchObject({
       sourceType: "synthetic",
-      sourceName: "Synthetic Demo Weather",
+      sourceName: "デモ用合成気象データ",
     });
     expect(first.intervals).toHaveLength(8760);
     expect([...new Set(first.intervals.map((item) => item.time.month))]).toEqual(
@@ -43,6 +43,10 @@ describe("visible synthetic demo comparison", () => {
 
     expect(workspace.cases).toHaveLength(2);
     expect(workspace.baselineCaseId).toBe("case-a");
+    expect(workspace.cases.map((item) => item.name)).toEqual([
+      "案A・基準案",
+      "案B・庇を深くした案",
+    ]);
     expect(workspace.cases[0]!.parameters).toEqual(DEMO_BASELINE_PARAMETERS);
     expect(workspace.cases[1]!.parameters).toEqual({
       ...DEMO_BASELINE_PARAMETERS,

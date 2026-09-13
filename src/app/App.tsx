@@ -21,7 +21,6 @@ import {
   type ComparisonWorkspace,
 } from "../comparison";
 import {
-  engineManifest,
   FACADE_V1_DIFFUSE_SHADING_MODEL,
   FACADE_V1_DIRECT_SHADING_MODEL,
   FACADE_V1_GROUND_REFLECTION_MODEL,
@@ -43,15 +42,32 @@ import { MonthlyChart } from "./components/MonthlyChart";
 import { parseBrowserEpwFile } from "./weather-file";
 
 const ORIENTATION_PRESETS = [
-  ["N", 0], ["NE", 45], ["E", 90], ["SE", 135],
-  ["S", 180], ["SW", 225], ["W", 270], ["NW", 315],
+  ["北", 0], ["北東", 45], ["東", 90], ["南東", 135],
+  ["南", 180], ["南西", 225], ["西", 270], ["北西", 315],
 ] as const;
 
 const PERIODS = [
-  { key: "annual", label: "Annual", months: "Jan–Dec" },
-  { key: "cooling", label: "Summer / Cooling", months: "Apr–Sep" },
-  { key: "heating", label: "Winter / Heating", months: "Oct–Mar" },
+  { key: "annual", label: "年間", months: "1〜12月" },
+  { key: "cooling", label: "夏期", months: "4〜9月" },
+  { key: "heating", label: "冬期", months: "10〜3月" },
 ] as const;
+
+const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
+  HEADER_MISSING: "必要なヘッダーがありません。",
+  HEADER_INVALID: "ヘッダーの内容が不正です。",
+  DATA_PERIOD_UNSUPPORTED: "対応していないデータ期間です。",
+  INTERVAL_METADATA_INVALID: "時間間隔の設定が不正です。",
+  ROW_MALFORMED: "気象データ行の形式が不正です。",
+  DATE_INVALID: "日付が不正です。",
+  TIME_INVALID: "時刻が不正です。",
+  RADIATION_MISSING: "必要な日射量が欠損しています。",
+  RADIATION_INVALID: "日射量が不正です。",
+};
+
+function formatWeatherIssue(issue: WeatherParseIssue): string {
+  const line = issue.line === undefined ? "" : `（${issue.line}行目）`;
+  return `${issue.code}${line}: ${WEATHER_ISSUE_MESSAGES[issue.code]}`;
+}
 
 interface NumberFieldProps {
   readonly id: string;
@@ -101,13 +117,13 @@ function WeatherPanel({
     <section className="panel weather-panel" aria-labelledby="weather-title">
       <div className="section-heading compact-heading">
         <div>
-          <p className="section-kicker">01 · Local weather</p>
-          <h2 id="weather-title">Weather dataset</h2>
+          <p className="section-kicker">01 · 気象データ</p>
+          <h2 id="weather-title">比較に使う気象データ</h2>
         </div>
         <div className="weather-actions">
-          <button type="button" className="demo-button" disabled={loading} onClick={onDemo}>Try Demo Comparison</button>
+          <button type="button" className="demo-button" disabled={loading} onClick={onDemo}>デモ比較を試す</button>
           <label className="file-button">
-            <span>{loading ? "Reading…" : "Load EPW"}</span>
+            <span>{loading ? "読込中…" : "EPWファイルを読み込む"}</span>
             <input
               type="file"
               accept=".epw"
@@ -123,52 +139,52 @@ function WeatherPanel({
       </div>
       <div className={isDemo ? "demo-disclosure active" : "demo-disclosure"} role={isDemo ? "status" : undefined}>
         <div>
-          <strong>{isDemo ? "DEMO · Synthetic weather active" : "Synthetic weather option"}</strong>
-          <span>Explore the complete comparison workflow using deterministic synthetic weather.</span>
+          <strong>{isDemo ? "デモ · 合成気象データを使用中" : "デモ · 合成気象データ"}</strong>
+          <span>サンプル気象データを使って、2つのファサード案の比較をすぐに確認できます。</span>
         </div>
-        <p><strong>Not measured weather.</strong> Not validation evidence.</p>
+        <p><strong>実測気象ではありません。</strong> 性能検証用データではありません。</p>
       </div>
       <p className="privacy-note">
         {isDemo
-          ? "Generated in this browser only. No measured weather or external request is used."
-          : "Parsed in this browser only. Raw file contents are not uploaded, stored, or displayed."}
+          ? "このブラウザ内で生成します。実測気象データや外部通信は使用しません。"
+          : "このブラウザ内だけで解析します。EPWファイルの内容をアップロード、保存、表示することはありません。"}
       </p>
       {failure === null ? null : (
         <div className="message error-message" role="alert">
-          <strong>EPW could not be used.</strong>
+          <strong>EPWファイルを使用できません。</strong>
           <span>{failure.message}</span>
           {failure.issues.length === 0 ? null : (
-            <ul>{failure.issues.slice(0, 6).map((item, index) => <li key={`${item.code}-${index}`}>{item.code}: {item.message}</li>)}</ul>
+            <ul>{failure.issues.slice(0, 6).map((item, index) => <li key={`${item.code}-${index}`}>{formatWeatherIssue(item)}</li>)}</ul>
           )}
         </div>
       )}
       {dataset === null ? (
         <div className="weather-empty">
-          <strong>No EPW loaded</strong>
-          <span>Geometry editing and explanatory previews remain available.</span>
+          <strong>EPWファイルは未読込です</strong>
+          <span>気象データがなくても、入力編集と形状プレビューは確認できます。</span>
         </div>
       ) : (
         <div className="weather-content">
           <div className="weather-place">
-            <strong>{dataset.location.city || "Unnamed EPW location"}</strong>
-            <span>{[dataset.location.region, dataset.location.country].filter(Boolean).join(", ")}</span>
+            <strong>{dataset.location.city || "地点名なし"}</strong>
+            <span>{[dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</span>
           </div>
           <dl className="metadata-grid">
-            <div><dt>Station / source</dt><dd>{dataset.location.stationId ?? (dataset.location.source || "—")}</dd></div>
-            <div><dt>Latitude</dt><dd>{dataset.location.latitudeDeg.toFixed(3)}°</dd></div>
-            <div><dt>Longitude</dt><dd>{dataset.location.longitudeDeg.toFixed(3)}°</dd></div>
-            <div><dt>Time zone</dt><dd>UTC{dataset.location.timeZoneOffsetHours >= 0 ? "+" : ""}{dataset.location.timeZoneOffsetHours}</dd></div>
-            <div><dt>Intervals</dt><dd>{dataset.intervals.length.toLocaleString("en-US")} · {dataset.coverage}</dd></div>
-            <div><dt>Dataset ID</dt><dd><code>{dataset.id}</code></dd></div>
-            <div><dt>Provenance</dt><dd>{dataset.provenance.sourceName}</dd></div>
-            <div><dt>Parse issues</dt><dd>{dataset.issues.length}</dd></div>
+            <div><dt>観測地点 / 出典</dt><dd>{dataset.location.stationId ?? (dataset.location.source || "—")}</dd></div>
+            <div><dt>緯度</dt><dd>{dataset.location.latitudeDeg.toFixed(3)}°</dd></div>
+            <div><dt>経度</dt><dd>{dataset.location.longitudeDeg.toFixed(3)}°</dd></div>
+            <div><dt>標準時</dt><dd>UTC{dataset.location.timeZoneOffsetHours >= 0 ? "+" : ""}{dataset.location.timeZoneOffsetHours}</dd></div>
+            <div><dt>時間区間数</dt><dd>{dataset.intervals.length.toLocaleString("ja-JP")} · {dataset.coverage}</dd></div>
+            <div><dt>データセットID</dt><dd><code>{dataset.id}</code></dd></div>
+            <div><dt>データ出典</dt><dd>{dataset.provenance.sourceName}</dd></div>
+            <div><dt>解析上の注意</dt><dd>{dataset.issues.length}件</dd></div>
           </dl>
           {dataset.issues.length === 0 ? (
-            <p className="success-line">Required radiation fields are present.</p>
+            <p className="success-line">計算に必要な日射量データがそろっています。</p>
           ) : (
             <ul className="issue-list">
               {dataset.issues.slice(0, 8).map((item, index) => (
-                <li key={`${item.code}-${index}`}><strong>{item.severity}</strong> · {item.code} · {item.message}</li>
+                <li key={`${item.code}-${index}`}><strong>{item.severity === "error" ? "エラー" : "注意"}</strong> · {formatWeatherIssue(item)}</li>
               ))}
             </ul>
           )}
@@ -183,28 +199,28 @@ function ResultsPanel({ result }: { readonly result: ComparisonRunResult }) {
     <section className="panel results-panel" aria-labelledby="results-title">
       <div className="section-heading">
         <div>
-          <p className="section-kicker">04 · Calculated comparison</p>
-          <h2 id="results-title">Period performance</h2>
+          <p className="section-kicker">04 · 比較結果</p>
+          <h2 id="results-title">期間別比較</h2>
         </div>
-        <p>Delta = case − baseline</p>
+        <p>差分 = 各案 − 基準案</p>
       </div>
       <div className="period-grid">
         {PERIODS.map((period) => (
           <article className="period-card" key={period.key}>
             <header>
               <div><h3>{period.label}</h3><span>{period.months}</span></div>
-              <small>with-overhang focus</small>
+              <small>庇ありの日射熱取得量</small>
             </header>
             <div className="table-scroll">
               <table className="data-table period-table">
-                <thead><tr><th scope="col">Case</th><th scope="col">With [kWh]</th><th scope="col">Without [kWh]</th><th scope="col">Reduction</th><th scope="col">Δ kWh</th><th scope="col">Δ %</th></tr></thead>
+                <thead><tr><th scope="col">案</th><th scope="col">庇あり [kWh]</th><th scope="col">庇なし [kWh]</th><th scope="col">削減率</th><th scope="col">基準案との差 [kWh]</th><th scope="col">基準案との差 [%]</th></tr></thead>
                 <tbody>
                   {result.cases.map((item, index) => {
                     const summary = item.simulation.summary[period.key];
                     const delta = item.deltaFromBaseline[period.key];
                     return (
                       <tr key={item.caseId}>
-                        <th scope="row"><span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>{item.name}{item.caseId === result.baselineCaseId ? <small>baseline</small> : null}</th>
+                        <th scope="row"><span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>{item.name}{item.caseId === result.baselineCaseId ? <small>基準案</small> : null}</th>
                         <td className="primary-value">{formatKWh(summary.withOverhangKWh)}</td>
                         <td>{formatKWh(summary.withoutOverhangKWh)}</td>
                         <td>{summary.reductionPercent.toFixed(1)}%</td>
@@ -219,7 +235,7 @@ function ResultsPanel({ result }: { readonly result: ComparisonRunResult }) {
           </article>
         ))}
       </div>
-      <p className="interpretation-note">A negative delta means lower solar heat gain than the baseline. It is not automatically “better”: summer reduction and winter reduction have different design consequences.</p>
+      <p className="interpretation-note">差分が負の場合、基準案より日射熱取得量が小さいことを示します。ただし自動的に「良い案」とは判定しません。夏期の日射遮蔽と冬期の日射取得では設計上の意味が異なります。</p>
     </section>
   );
 }
@@ -263,7 +279,7 @@ export function App() {
   const nextCaseIdentity = () => {
     const sequence = caseSequence.current;
     caseSequence.current += 1;
-    return { id: `case-${sequence}`, name: `Case ${String.fromCharCode(64 + sequence)}` };
+    return { id: `case-${sequence}`, name: `案${String.fromCharCode(64 + sequence)}` };
   };
 
   const loadWeather = async (file: File) => {
@@ -275,13 +291,13 @@ export function App() {
       setResult(null);
       setDirty(true);
       if (hasWeatherErrors(parsed.issues)) {
-        setWeatherFailure({ message: "Required EPW fields contain errors. Calculation is disabled.", issues: parsed.issues });
+        setWeatherFailure({ message: "EPWの必須項目にエラーがあるため、比較計算を実行できません。", issues: parsed.issues });
       }
     } catch (error) {
       setDataset(null);
       setResult(null);
       setWeatherFailure({
-        message: error instanceof Error ? error.message : "EPW parsing failed",
+        message: error instanceof RangeError ? error.message : "EPWファイルを解析できませんでした。",
         issues: error instanceof WeatherDataError ? error.issues : [],
       });
     } finally {
@@ -302,8 +318,8 @@ export function App() {
       setResult(demoResult);
       setDirty(false);
       setRunError(null);
-    } catch (error) {
-      setRunError(error instanceof Error ? error.message : "Demo comparison failed");
+    } catch {
+      setRunError("デモ比較の実行に失敗しました。");
     }
   };
 
@@ -313,8 +329,8 @@ export function App() {
       setResult(runComparison(dataset, workspace));
       setDirty(false);
       setRunError(null);
-    } catch (error) {
-      setRunError(error instanceof Error ? error.message : "Comparison failed");
+    } catch {
+      setRunError("比較計算の実行に失敗しました。");
     }
   };
 
@@ -326,16 +342,16 @@ export function App() {
     <main className="app-shell">
       <header className="app-header">
         <div>
-          <p className="eyebrow">M4 · COMPARISON UX</p>
+          <p className="eyebrow">複数案比較</p>
           <h1>Facade Solar Lab</h1>
-          <p className="lede">Compare facade directions, openings, overhangs, and glass choices under one local weather dataset.</p>
+          <p className="lede">同じ気象データを使い、ファサード方位・開口・庇・ガラス仕様の違いを比較します。</p>
         </div>
-        <div className="model-chip"><span aria-hidden="true" />{engineManifest.milestone} workspace</div>
+        <div className="model-chip"><span aria-hidden="true" />ブラウザ内で比較</div>
       </header>
 
-      <aside className="critical-warning" aria-label="Model validation warning">
-        <strong>Comparison model — not formal performance evidence</strong>
-        <p>Absolute weather-driven kWh values are not formally validated physical-performance results. Do not use them for BEI, official energy compliance, HVAC sizing, final certification, or guaranteed energy prediction.</p>
+      <aside className="critical-warning" aria-label="計算モデルの検証に関する注意">
+        <strong>比較検討用モデル — 正式な性能評価には使用できません</strong>
+        <p>同じ気象・入力条件で複数案を相対比較する設計検討には活用できます。ただし、表示する絶対値 [kWh] は正式に検証された物理性能値ではありません。BEI、法適合判定、空調容量設計、性能認証、エネルギー消費量の保証には使用しないでください。</p>
       </aside>
 
       <WeatherPanel
@@ -349,7 +365,7 @@ export function App() {
 
       <section className="panel case-panel" aria-labelledby="case-title">
         <div className="section-heading">
-          <div><p className="section-kicker">02 · Design cases</p><h2 id="case-title">Facade alternatives</h2></div>
+          <div><p className="section-kicker">02 · 比較案</p><h2 id="case-title">ファサード案</h2></div>
           <div className="case-actions">
             <button
               type="button"
@@ -359,7 +375,7 @@ export function App() {
                 const identity = nextCaseIdentity();
                 mutateWorkspace((current) => addComparisonCase(current, createComparisonCase(identity.id, identity.name)), identity.id);
               }}
-            >Add case</button>
+            >案を追加</button>
             <button
               type="button"
               className="secondary-button"
@@ -368,23 +384,23 @@ export function App() {
                 const identity = nextCaseIdentity();
                 mutateWorkspace((current) => duplicateComparisonCase(current, selectedCase.id, identity.id, identity.name), identity.id);
               }}
-            >Duplicate</button>
+            >複製</button>
           </div>
         </div>
 
-        <div className="case-tabs" role="group" aria-label="Comparison cases">
+        <div className="case-tabs" role="group" aria-label="比較するファサード案">
           {workspace.cases.map((item, index) => (
             <button key={item.id} type="button" aria-pressed={item.id === selectedCase.id} className={item.id === selectedCase.id ? "case-tab active" : "case-tab"} onClick={() => setSelectedCaseId(item.id)}>
               <span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>
               <span>{item.name}</span>
-              {item.id === workspace.baselineCaseId ? <small>Baseline</small> : null}
+              {item.id === workspace.baselineCaseId ? <small>基準案</small> : null}
             </button>
           ))}
         </div>
 
         <div className="case-toolbar">
           <label className="field name-field" htmlFor={`${selectedCase.id}-name`}>
-            <span>Case name</span>
+            <span>案の名称</span>
             <input
               id={`${selectedCase.id}-name`}
               value={selectedCase.name}
@@ -395,7 +411,7 @@ export function App() {
               }}
             />
           </label>
-          <button type="button" className="text-button" disabled={selectedCase.id === workspace.baselineCaseId} onClick={() => mutateWorkspace((current) => setBaselineCase(current, selectedCase.id))}>Set as baseline</button>
+          <button type="button" className="text-button" disabled={selectedCase.id === workspace.baselineCaseId} onClick={() => mutateWorkspace((current) => setBaselineCase(current, selectedCase.id))}>基準案に設定</button>
           <button
             type="button"
             className="text-button danger"
@@ -404,16 +420,16 @@ export function App() {
               const remaining = workspace.cases.filter((item) => item.id !== selectedCase.id);
               mutateWorkspace((current) => deleteComparisonCase(current, selectedCase.id), remaining[0]!.id);
             }}
-          >Delete case</button>
+          >案を削除</button>
           <span className="case-count">{workspace.cases.length} / {MAX_COMPARISON_CASES}</span>
         </div>
 
         <div className="workspace-grid">
           <div className="input-workspace">
             <fieldset>
-              <legend>Facade orientation</legend>
-              <NumberField id={inputId("facadeAzimuthDegFromNorth")} label="Facade azimuth" unit="° from North" step={1} value={selectedCase.parameters.facadeAzimuthDegFromNorth} issue={selectedIssues.get("facadeAzimuthDegFromNorth")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, facadeAzimuthDegFromNorth: value }))} />
-              <div className="preset-grid" aria-label="Orientation presets">
+              <legend>ファサード方位</legend>
+              <NumberField id={inputId("facadeAzimuthDegFromNorth")} label="ファサード方位角" unit="°（北=0、時計回り）" step={1} value={selectedCase.parameters.facadeAzimuthDegFromNorth} issue={selectedIssues.get("facadeAzimuthDegFromNorth")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, facadeAzimuthDegFromNorth: value }))} />
+              <div className="preset-grid" aria-label="方位のプリセット">
                 {ORIENTATION_PRESETS.map(([label, value]) => (
                   <button key={label} type="button" aria-pressed={selectedCase.parameters.facadeAzimuthDegFromNorth === value} onClick={() => updateSelectedParameters((parameters) => ({ ...parameters, facadeAzimuthDegFromNorth: value }))}>{label}<small>{value}°</small></button>
                 ))}
@@ -421,17 +437,17 @@ export function App() {
             </fieldset>
 
             <fieldset>
-              <legend>Opening</legend>
+              <legend>開口</legend>
               <div className="field-grid">
-                <NumberField id={inputId("opening.widthM")} label="Width" unit="m" value={opening.widthM} issue={selectedIssues.get("opening.widthM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, widthM: value } }))} />
-                <NumberField id={inputId("opening.sillZM")} label="Sill elevation" unit="m" value={opening.sillZM} issue={selectedIssues.get("opening.sillZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, sillZM: value } }))} />
-                <NumberField id={inputId("opening.headZM")} label="Head elevation" unit="m" value={opening.headZM} issue={selectedIssues.get("opening.headZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, headZM: value } }))} />
-                <div className="derived-value"><span>Derived height</span><strong>{Number.isFinite(opening.headZM - opening.sillZM) ? `${(opening.headZM - opening.sillZM).toFixed(2)} m` : "—"}</strong></div>
+                <NumberField id={inputId("opening.widthM")} label="開口幅" unit="m" value={opening.widthM} issue={selectedIssues.get("opening.widthM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, widthM: value } }))} />
+                <NumberField id={inputId("opening.sillZM")} label="開口下端高さ" unit="m" value={opening.sillZM} issue={selectedIssues.get("opening.sillZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, sillZM: value } }))} />
+                <NumberField id={inputId("opening.headZM")} label="開口上端高さ" unit="m" value={opening.headZM} issue={selectedIssues.get("opening.headZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, opening: { ...parameters.opening, headZM: value } }))} />
+                <div className="derived-value"><span>開口高さ</span><strong>{Number.isFinite(opening.headZM - opening.sillZM) ? `${(opening.headZM - opening.sillZM).toFixed(2)} m` : "—"}</strong></div>
               </div>
             </fieldset>
 
             <fieldset>
-              <legend>Horizontal overhang</legend>
+              <legend>水平庇</legend>
               <label className="switch-row">
                 <input
                   type="checkbox"
@@ -449,36 +465,36 @@ export function App() {
                     });
                   }}
                 />
-                <span>{overhang === undefined ? "Disabled" : "Enabled"}</span>
+                <span>{overhang === undefined ? "なし" : "あり"}</span>
               </label>
-              {overhang === undefined ? <p className="field-note">The engine receives no overhang geometry for this case.</p> : (
+              {overhang === undefined ? <p className="field-note">この案では庇形状を計算モデルへ渡しません。</p> : (
                 <div className="field-grid">
-                  <NumberField id={inputId("overhang.depthM")} label="Depth" unit="m" value={overhang.depthM} issue={selectedIssues.get("overhang.depthM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, depthM: value } }))} />
-                  <NumberField id={inputId("overhang.elevationZM")} label="Elevation" unit="m" value={overhang.elevationZM} issue={selectedIssues.get("overhang.elevationZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, elevationZM: value } }))} />
-                  <NumberField id={inputId("overhang.leftExtensionM")} label="Left extension" unit="m" value={overhang.leftExtensionM} issue={selectedIssues.get("overhang.leftExtensionM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, leftExtensionM: value } }))} />
-                  <NumberField id={inputId("overhang.rightExtensionM")} label="Right extension" unit="m" value={overhang.rightExtensionM} issue={selectedIssues.get("overhang.rightExtensionM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, rightExtensionM: value } }))} />
+                  <NumberField id={inputId("overhang.depthM")} label="庇の出" unit="m" value={overhang.depthM} issue={selectedIssues.get("overhang.depthM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, depthM: value } }))} />
+                  <NumberField id={inputId("overhang.elevationZM")} label="庇高さ" unit="m" value={overhang.elevationZM} issue={selectedIssues.get("overhang.elevationZM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, elevationZM: value } }))} />
+                  <NumberField id={inputId("overhang.leftExtensionM")} label="左側の張り出し" unit="m" value={overhang.leftExtensionM} issue={selectedIssues.get("overhang.leftExtensionM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, leftExtensionM: value } }))} />
+                  <NumberField id={inputId("overhang.rightExtensionM")} label="右側の張り出し" unit="m" value={overhang.rightExtensionM} issue={selectedIssues.get("overhang.rightExtensionM")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, overhang: { ...parameters.overhang!, rightExtensionM: value } }))} />
                 </div>
               )}
             </fieldset>
 
             <fieldset>
-              <legend>Glass and ground</legend>
+              <legend>ガラスと地面反射</legend>
               <div className="field-grid">
-                <NumberField id={inputId("solarHeatGainCoefficient")} label="SHGC" step={0.05} value={selectedCase.parameters.solarHeatGainCoefficient} issue={selectedIssues.get("solarHeatGainCoefficient")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, solarHeatGainCoefficient: value }))} />
-                <NumberField id={inputId("groundReflectance")} label="Ground reflectance" step={0.05} value={selectedCase.parameters.groundReflectance} issue={selectedIssues.get("groundReflectance")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, groundReflectance: value }))} />
+                <NumberField id={inputId("solarHeatGainCoefficient")} label="日射熱取得率（SHGC）" step={0.05} value={selectedCase.parameters.solarHeatGainCoefficient} issue={selectedIssues.get("solarHeatGainCoefficient")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, solarHeatGainCoefficient: value }))} />
+                <NumberField id={inputId("groundReflectance")} label="地面反射率" step={0.05} value={selectedCase.parameters.groundReflectance} issue={selectedIssues.get("groundReflectance")} onChange={(value) => updateSelectedParameters((parameters) => ({ ...parameters, groundReflectance: value }))} />
               </div>
             </fieldset>
             {selectedIssues.size === 0 ? null : (
-              <div className="message error-message" role="alert"><strong>Fix this case before running.</strong><ul>{[...selectedIssues.entries()].map(([path, message]) => <li key={path}>{message}</li>)}</ul></div>
+              <div className="message error-message" role="alert"><strong>比較計算の前に、この案の入力を修正してください。</strong><ul>{[...selectedIssues.entries()].map(([path, message]) => <li key={path}>{message}</li>)}</ul></div>
             )}
           </div>
 
           <section className="preview-workspace" aria-labelledby="geometry-title">
-            <div className="subsection-heading"><div><p className="section-kicker">03 · Geometry</p><h2 id="geometry-title">Selected case</h2></div><span>{selectedCase.name}</span></div>
+            <div className="subsection-heading"><div><p className="section-kicker">03 · 形状</p><h2 id="geometry-title">選択中の案</h2></div><span>{selectedCase.name}</span></div>
             <GeometryPreview comparisonCase={selectedCase} />
             <div className="difference-panel">
-              <h3>Input differences from {baselineCase.name}</h3>
-              {differences.length === 0 ? <p>No input differences from the baseline.</p> : (
+              <h3>{baselineCase.name}からの入力差</h3>
+              {differences.length === 0 ? <p>基準案との入力差はありません。</p> : (
                 <dl>{differences.map((difference) => (
                   <div key={difference.key}>
                     <dt>{difference.label}</dt>
@@ -493,23 +509,23 @@ export function App() {
 
       <section className="run-panel" aria-labelledby="run-title">
         <div>
-          <p className="section-kicker">Explicit simulation</p>
-          <h2 id="run-title">Run Comparison</h2>
-          <p>{dataset === null ? "Load an EPW file to run weather comparison." : validationIssues.length > 0 ? "Resolve invalid inputs before calculation." : dirty ? "Changes not calculated." : "Results match the current inputs and weather dataset."}</p>
+          <p className="section-kicker">明示的に計算を実行</p>
+          <h2 id="run-title">比較計算を実行</h2>
+          <p>{dataset === null ? "比較するにはEPWファイルを読み込んでください。" : validationIssues.length > 0 ? "計算前に不正な入力を修正してください。" : dirty ? "入力変更はまだ計算結果に反映されていません。" : "現在の入力と気象データが計算結果に反映されています。"}</p>
         </div>
-        <button type="button" className="run-button" disabled={!canRun} onClick={executeComparison}>Run Comparison <span>→</span></button>
+        <button type="button" className="run-button" disabled={!canRun} onClick={executeComparison}>比較計算を実行 <span>→</span></button>
       </section>
       {runError === null ? null : <div className="message error-message" role="alert">{runError}</div>}
 
       {result === null ? (
-        <section className="panel results-empty" aria-label="Comparison results status">
-          <span>RESULTS</span>
-          <strong>{dataset === null ? "Load an EPW file to run weather comparison" : "Run the current cases when you are ready"}</strong>
-          <p>Annual, Summer / Cooling, Winter / Heating, monthly values, and baseline deltas will appear here.</p>
+        <section className="panel results-empty" aria-label="比較結果の状態">
+          <span>比較結果</span>
+          <strong>{dataset === null ? "比較するにはEPWファイルを読み込んでください" : "入力を確認し、比較計算を実行してください"}</strong>
+          <p>年間・夏期・冬期の集計、月別値、基準案との差をここに表示します。</p>
         </section>
       ) : (
         <>
-          {dirty ? <div className="stale-banner" role="status">Changes not calculated — displayed results are from the last Run Comparison.</div> : null}
+          {dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回の比較計算によるものです。</div> : null}
           <ResultsPanel result={result} />
           <MonthlyChart result={result} />
         </>
@@ -517,38 +533,38 @@ export function App() {
 
       <section className="panel assumptions-panel" aria-labelledby="assumptions-title">
         <div className="section-heading">
-          <div><p className="section-kicker">Model disclosure</p><h2 id="assumptions-title">Assumptions & provenance</h2></div>
-          <p>Review before interpreting differences</p>
+          <div><p className="section-kicker">モデル情報</p><h2 id="assumptions-title">前提条件とデータ出典</h2></div>
+          <p>差分を判断する前に確認してください</p>
         </div>
         <div className="assumption-grid">
           <article>
-            <h3>Weather</h3>
+            <h3>気象データ</h3>
             <dl>
-              <div><dt>Dataset</dt><dd>{dataset?.id ?? "Not loaded"}</dd></div>
-              <div><dt>Source</dt><dd>{dataset?.provenance.sourceName ?? "Browser-local EPW required"}</dd></div>
-              <div><dt>Site</dt><dd>{dataset === null ? "—" : `${dataset.location.city}, ${dataset.location.country}`}</dd></div>
-              <div><dt>Intervals</dt><dd>{dataset?.intervals.length.toLocaleString("en-US") ?? "—"}</dd></div>
+              <div><dt>データセット</dt><dd>{dataset?.id ?? "未読込"}</dd></div>
+              <div><dt>出典</dt><dd>{dataset?.provenance.sourceName ?? "ブラウザ内でEPWを読み込んでください"}</dd></div>
+              <div><dt>地点</dt><dd>{dataset === null ? "—" : `${dataset.location.city} / ${dataset.location.country}`}</dd></div>
+              <div><dt>時間区間数</dt><dd>{dataset?.intervals.length.toLocaleString("ja-JP") ?? "—"}</dd></div>
             </dl>
           </article>
           <article>
-            <h3>Model identity</h3>
+            <h3>計算モデル</h3>
             <dl className="identity-list">
-              <div><dt>modelVersion</dt><dd><code>facade-v1-weather</code></dd></div>
-              <div><dt>geometryVersion</dt><dd><code>facade-v1</code></dd></div>
-              <div><dt>direct</dt><dd><code>{FACADE_V1_DIRECT_SHADING_MODEL}</code></dd></div>
-              <div><dt>diffuse</dt><dd><code>{FACADE_V1_DIFFUSE_SHADING_MODEL}</code></dd></div>
-              <div><dt>ground</dt><dd><code>{FACADE_V1_GROUND_REFLECTION_MODEL}</code></dd></div>
+              <div><dt>計算モデル（modelVersion）</dt><dd><code>facade-v1-weather</code></dd></div>
+              <div><dt>形状モデル（geometryVersion）</dt><dd><code>facade-v1</code></dd></div>
+              <div><dt>直達日射（direct）</dt><dd><code>{FACADE_V1_DIRECT_SHADING_MODEL}</code></dd></div>
+              <div><dt>天空日射（diffuse）</dt><dd><code>{FACADE_V1_DIFFUSE_SHADING_MODEL}</code></dd></div>
+              <div><dt>地面反射（ground）</dt><dd><code>{FACADE_V1_GROUND_REFLECTION_MODEL}</code></dd></div>
             </dl>
           </article>
           <article className="limitation-card">
-            <h3>Geometry boundary</h3>
-            <p><strong>Finite-width geometry applies only to direct shadow.</strong></p>
-            <p>Diffuse shading remains the isotropic 2D infinite-width approximation. Ground reflection is unshaded. One vertical opening and zero or one horizontal overhang are supported.</p>
+            <h3>形状モデルの適用範囲</h3>
+            <p><strong>有限幅の形状計算は直達日射の影だけに適用します。</strong></p>
+            <p>天空日射の遮蔽は等方性の2次元・無限幅近似です。地面反射は遮蔽しません。鉛直開口1つと、水平庇0または1つに対応します。</p>
           </article>
         </div>
       </section>
 
-      <footer><span>Facade Solar Lab · {engineManifest.milestone}</span><span>Comparative design aid · Human judgment required</span></footer>
+      <footer><span>Facade Solar Lab · 複数案比較</span><span>設計比較支援 · 最終判断は設計者が行ってください</span></footer>
     </main>
   );
 }

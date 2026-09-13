@@ -29,31 +29,31 @@ export function comparisonInputDifferences(
   appendNumber(
     differences,
     "facadeAzimuthDegFromNorth",
-    "Facade azimuth",
+    "ファサード方位角",
     normalizeAzimuthDeg(before.facadeAzimuthDegFromNorth),
     normalizeAzimuthDeg(after.facadeAzimuthDegFromNorth),
     "°",
   );
-  appendNumber(differences, "opening.widthM", "Opening width", before.opening.widthM, after.opening.widthM, "m");
-  appendNumber(differences, "opening.sillZM", "Sill elevation", before.opening.sillZM, after.opening.sillZM, "m");
-  appendNumber(differences, "opening.headZM", "Head elevation", before.opening.headZM, after.opening.headZM, "m");
+  appendNumber(differences, "opening.widthM", "開口幅", before.opening.widthM, after.opening.widthM, "m");
+  appendNumber(differences, "opening.sillZM", "開口下端高さ", before.opening.sillZM, after.opening.sillZM, "m");
+  appendNumber(differences, "opening.headZM", "開口上端高さ", before.opening.headZM, after.opening.headZM, "m");
 
   const beforeEnabled = before.overhang !== undefined;
   const afterEnabled = after.overhang !== undefined;
   if (beforeEnabled !== afterEnabled) {
     differences.push({
       key: "overhang.enabled",
-      label: "Overhang",
+      label: "水平庇",
       baselineValue: beforeEnabled,
       caseValue: afterEnabled,
     });
   } else if (before.overhang !== undefined && after.overhang !== undefined) {
-    appendNumber(differences, "overhang.depthM", "Overhang depth", before.overhang.depthM, after.overhang.depthM, "m");
-    appendNumber(differences, "overhang.elevationZM", "Overhang elevation", before.overhang.elevationZM, after.overhang.elevationZM, "m");
-    appendNumber(differences, "overhang.leftExtensionM", "Left extension", before.overhang.leftExtensionM, after.overhang.leftExtensionM, "m");
-    appendNumber(differences, "overhang.rightExtensionM", "Right extension", before.overhang.rightExtensionM, after.overhang.rightExtensionM, "m");
+    appendNumber(differences, "overhang.depthM", "庇の出", before.overhang.depthM, after.overhang.depthM, "m");
+    appendNumber(differences, "overhang.elevationZM", "庇高さ", before.overhang.elevationZM, after.overhang.elevationZM, "m");
+    appendNumber(differences, "overhang.leftExtensionM", "左側の張り出し", before.overhang.leftExtensionM, after.overhang.leftExtensionM, "m");
+    appendNumber(differences, "overhang.rightExtensionM", "右側の張り出し", before.overhang.rightExtensionM, after.overhang.rightExtensionM, "m");
   }
   appendNumber(differences, "solarHeatGainCoefficient", "SHGC", before.solarHeatGainCoefficient, after.solarHeatGainCoefficient);
-  appendNumber(differences, "groundReflectance", "Ground reflectance", before.groundReflectance, after.groundReflectance);
+  appendNumber(differences, "groundReflectance", "地面反射率", before.groundReflectance, after.groundReflectance);
   return differences;
 }

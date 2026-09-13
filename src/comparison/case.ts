@@ -55,7 +55,7 @@ export function createComparisonCase(
 }
 
 export function createComparisonWorkspace(
-  initialCase: ComparisonCase = createComparisonCase("case-a", "Case A"),
+  initialCase: ComparisonCase = createComparisonCase("case-a", "案A"),
 ): ComparisonWorkspace {
   return { cases: [initialCase], baselineCaseId: initialCase.id };
 }

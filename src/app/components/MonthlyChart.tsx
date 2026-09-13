@@ -4,7 +4,7 @@ interface MonthlyChartProps {
   readonly result: ComparisonRunResult;
 }
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
+const MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"] as const;
 const SERIES_STYLES = [
   { color: "#ca5a2e", dash: undefined },
   { color: "#176b73", dash: "10 5" },
@@ -34,12 +34,12 @@ export function MonthlyChart({ result }: MonthlyChartProps) {
     <section className="panel chart-panel" aria-labelledby="monthly-title">
       <div className="section-heading">
         <div>
-          <p className="section-kicker">Seasonal profile</p>
-          <h2 id="monthly-title">Monthly comparison</h2>
+          <p className="section-kicker">季節変動</p>
+          <h2 id="monthly-title">月別比較</h2>
         </div>
-        <p>with-overhang solar heat gain [kWh]</p>
+        <p>庇ありの日射熱取得量 [kWh]</p>
       </div>
-      <ul className="chart-legend" aria-label="Case legend">
+      <ul className="chart-legend" aria-label="比較案の凡例">
         {result.cases.map((item, index) => (
           <li key={item.caseId}>
             <span
@@ -47,7 +47,7 @@ export function MonthlyChart({ result }: MonthlyChartProps) {
               aria-hidden="true"
             />
             <strong>{String.fromCharCode(65 + index)}</strong> {item.name}
-            {item.caseId === result.baselineCaseId ? " · baseline" : ""}
+            {item.caseId === result.baselineCaseId ? " · 基準案" : ""}
           </li>
         ))}
       </ul>
@@ -58,9 +58,9 @@ export function MonthlyChart({ result }: MonthlyChartProps) {
           role="img"
           aria-labelledby="monthly-svg-title monthly-svg-desc"
         >
-          <title id="monthly-svg-title">Monthly facade solar heat gain by case</title>
+          <title id="monthly-svg-title">案ごとの月別ファサード日射熱取得量</title>
           <desc id="monthly-svg-desc">
-            Line chart of twelve monthly with-overhang values. The adjacent table contains the same exact values.
+            庇ありの月別値を12か月分示す折れ線グラフです。同じ正確な値を下の表でも確認できます。
           </desc>
           {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
             const lineY = top + plotHeight - ratio * plotHeight;
@@ -102,7 +102,7 @@ export function MonthlyChart({ result }: MonthlyChartProps) {
                       stroke={style.color}
                       strokeWidth="2"
                     />
-                    <title>{`${item.name}, ${MONTHS[index]}: ${formatKWh(month.withOverhangKWh)} kWh`}</title>
+                    <title>{`${item.name}・${MONTHS[index]}: ${formatKWh(month.withOverhangKWh)} kWh`}</title>
                   </g>
                 ))}
               </g>
@@ -111,13 +111,13 @@ export function MonthlyChart({ result }: MonthlyChartProps) {
         </svg>
       </div>
       <details className="monthly-table-wrap" open>
-        <summary>Monthly values table</summary>
+        <summary>月別値の表</summary>
         <div className="table-scroll">
           <table className="data-table monthly-table">
-            <caption>Exact monthly with-overhang values [kWh]</caption>
+            <caption>庇ありの日射熱取得量・月別値 [kWh]</caption>
             <thead>
               <tr>
-                <th scope="col">Month</th>
+                <th scope="col">月</th>
                 {result.cases.map((item, index) => (
                   <th scope="col" key={item.caseId}>{String.fromCharCode(65 + index)} · {item.name}</th>
                 ))}

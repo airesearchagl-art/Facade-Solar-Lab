@@ -4,6 +4,7 @@ import {
   comparisonInputDifferences,
   createComparisonCase,
   DEFAULT_COMPARISON_PARAMETERS,
+  formatInputValue,
 } from "../src/comparison";
 
 const baseline = createComparisonCase("a", "Case A");
@@ -42,11 +43,13 @@ describe("comparison input difference model", () => {
     expect(comparisonInputDifferences(baseline, selected)).toEqual([
       {
         key: "overhang.enabled",
-        label: "Overhang",
+        label: "水平庇",
         baselineValue: true,
         caseValue: false,
       },
     ]);
+    expect(formatInputValue(true)).toBe("あり");
+    expect(formatInputValue(false)).toBe("なし");
   });
 
   it("reports SHGC differences", () => {
