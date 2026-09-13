@@ -16,6 +16,7 @@ M1 Legacy engine、M2 weather-v1、M3 `facade-v1-weather`を保持し、M4は1�
 - 夏期は4–9月、冬期は10–3月の固定集計です。気候区分や運転scheduleに応じた空調期間判定ではありません。
 - 夏至頃（6/21）と冬至頃（12/21）の線は、選択地点で5分刻みに求めた最大solar elevation時刻とfacade-relative profile angleによる幾何学的参考表示です。厳密な至点時刻、年間計算、空調負荷計算を表しません。
 - PDFはbrowser printです。CSVは編集用比較データであり、いずれも正式な性能証明書や検証済み計算書ではありません。
+- JSON presetはCase/Workspaceの入力だけを保存します。計算結果とraw weatherを保存せず、読込後は必ず再計算が必要です。schemaVersion `1`以外は受け付けません。
 
 ## Facade-v1 limitations
 

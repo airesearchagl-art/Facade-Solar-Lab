@@ -9,9 +9,9 @@
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
-- Current head: resolve live `HEAD`; last verified pre-follow-up checkpoint is `30d1763cf519f101d2ba30745727f2b696c6d0c9`
-- Current wave: `Human UX Review follow-up — Design Insight & Export`
-- Last successful checkpoint: PR #5 Japanese-first exact head `30d1763cf519f101d2ba30745727f2b696c6d0c9`
+- Current head: resolve live `HEAD`; last verified pre-follow-up checkpoint is `018a5a5d0f86d6dee486407e56a42c6c85dc8755`
+- Current wave: `Human UX Review follow-up — Report Geometry & JSON Presets`
+- Last successful checkpoint: PR #5 Design Insight & Export exact head `018a5a5d0f86d6dee486407e56a42c6c85dc8755`
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -85,16 +85,17 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Created Draft PR #5 at `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/5`; fresh GitHub metadata confirmed `OPEN`, `Draft=true`, `merged=false`, `Ready=false`, base `main @ 46f3aabe...`, and creation-checkpoint head `f28f5f088292f6d23cb823c864264e1658dd32ba`.
 - Independent FULL Review at `aa602bbe...` classified the unverified OS-backed EPW acceptance path as a Required Verification. It is not PASS and cannot be closed without Human browser evidence.
 - Added the bounded Human UX follow-up: explicit solar-heat-gain semantics, facade-relative 6/21 and 12/21 reference rays, browser print/PDF report layout, and Excel-editable safe CSV export. RF-01 remains open.
+- Added the bounded Report Geometry & JSON Presets follow-up: A4 reports render every result Case in report order with section/elevation/reference rays; versioned Pure TypeScript Case/Workspace presets contain inputs only and require explicit rerun after import. RF-01 remains open.
 
 ## Current implementation state
 
-The Design Insight & Export follow-up is locally implemented and converged. A normal push, exact-head Git Preview classification, remote browser verification, and PR-body sync remain. The run is still `BLOCKED_BROWSER_ACCEPTANCE`; Demo, reference rays, PDF, and CSV do not close the Human real-EPW browser gate.
+The Report Geometry & JSON Presets follow-up is locally implemented and converged. Local browser round-trips and a rendered five-page A4 report pass. A normal push, exact-head Git Preview classification, remote browser verification, and PR-body sync remain. The run is still `BLOCKED_BROWSER_ACCEPTANCE`; Demo, PDF, CSV, and JSON presets do not close the Human real-EPW browser gate.
 
 ## Checks
 
-- `npm test`: PASS — 19 files / 115 tests.
+- `npm test`: PASS — 21 files / 128 tests.
 - `npm run typecheck`: PASS.
-- `npm run build`: PASS — Vite, 66 modules.
+- `npm run build`: PASS — Vite, 70 modules.
 - `npm audit`: PASS — 0 vulnerabilities.
 - `npm run golden:check`: PASS.
 - `git diff --check`: PASS.
@@ -125,17 +126,17 @@ See `DECISIONS.md`.
 
 - M4 Run Artifact and immutable Task Packet files.
 - Historical M3 Run Artifact closeout fields only.
-- Comparison domain, browser adapter/UI/components/styles, tests, and M4 documentation.
+- Comparison/preset domains, browser adapter/UI/components/styles, tests, and M4 documentation.
 
 ## Remaining tasks
 
-1. Commit and normally push the bounded Design Insight & Export follow-up.
+1. Commit and normally push the bounded Report Geometry & JSON Presets follow-up.
 2. Classify and verify the exact-head Git Preview, then synchronize the existing PR #5 body.
 3. Obtain Human Manual Verification of the complete browser EPW flow before closing RF-01.
 
 ## Next action
 
-After the bounded push and PR-body evidence sync, stop for Design Insight & Export Human UX Review. Do not close RF-01.
+After the bounded push and PR-body evidence sync, stop for Report Geometry & Preset Human UX Review. Do not close RF-01.
 
 ## Stop conditions status
 
@@ -152,3 +153,4 @@ After the bounded push and PR-body evidence sync, stop for Design Insight & Expo
 7. Await Focused Independent Re-Review; never merge, auto-merge, begin M5, delete the smoke ref/deployments/branch, or mutate Production.
 8. Never create a manual Preview while the Git-triggered route works.
 9. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve the downstream result views as explicit unverified evidence.
+10. Case/Workspace JSON presets are input-only. Never treat their round-trip as result or weather evidence, and always require an explicit comparison rerun after import.

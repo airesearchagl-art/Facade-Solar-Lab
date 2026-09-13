@@ -10,6 +10,9 @@ M4は、同一のbrowser-local EPW datasetに対して1–4件のファサード
 src/app
   File selection / React state / SVG / accessible tables
         ↓
+src/preset
+  Versioned input-only JSON serialization / validation
+        ↓
 src/comparison
   Case operations / validation / delta / input differences
         ↓
@@ -19,7 +22,7 @@ src/engine/facade-v1
 src/weather + src/geometry
 ```
 
-`src/comparison/**`はPure TypeScriptです。React、DOM、Canvas、File API、Node filesystemへ依存せず、solar position、irradiance、shadow geometryを複製しません。
+`src/comparison/**`と`src/preset/**`はPure TypeScriptです。React、DOM、Canvas、File API、Node filesystemへ依存せず、solar position、irradiance、shadow geometryを複製しません。
 
 ## Case contract
 
@@ -76,9 +79,17 @@ baseline input differenceはnormalized facade azimuth、opening、overhang enabl
 
 結果がcurrent inputと一致する場合だけ、browser printによる「PDFとして保存 / 印刷」とwide-format CSVを利用できます。入力変更後のdirty stateでは両方を無効化し、再計算を要求します。
 
-印刷CSSはA4 portraitを基本に、気象、全Case入力、期間/月別結果、baseline差、selected CaseのSection/Front、代表日参考線、model identity、前提、日射熱取得が空調負荷ではないこと、formal performance evidenceではないwarningをレポート化します。操作UIは印刷しません。
+印刷CSSはA4 portraitを基本に、気象、全Case入力、期間/月別結果、baseline差、すべてのCaseのSection/Frontと代表日参考線、model identity、前提、日射熱取得が空調負荷ではないこと、formal performance evidenceではないwarningをレポート化します。画面上のinteractive geometryは選択中の1 Caseだけを維持し、操作UIは印刷しません。印刷時のCase順は結果tableと同じです。
 
 CSVは1 Case = 1行で、気象、入力、Annual/Summer/Winter、baseline差、1–12月を含みます。UTF-8 BOM、CRLF、RFC 4180形式の二重引用符escapeを使い、文字列の先頭（空白を除く）が`= + - @`の場合はapostropheを付けてspreadsheet formula injectionを防ぎます。Demo出力には合成・非実測・非検証の注意を残します。
+
+## JSON presets
+
+「比較条件を保存・再利用」は結果出力とは別の入力管理です。schemaVersion `1`の`facade-solar-lab-case-preset`は選択中の1案、`facade-solar-lab-workspace-preset`は1–4案の順序、baseline、selected Caseを保存します。計算結果、raw weather、weather provenance、Git/Vercel情報、実行時刻は含めません。
+
+Case presetの読込は名称とparametersを保持した新しい非衝突IDの案を追加します。Workspace presetは明示警告と確認後に現在の比較セットを置換します。どちらもlast-run結果を破棄し、明示的な再計算を要求します。
+
+Parserは最大256 KB、kind/version、必須field、1–4案、ID一意性、baseline/selected参照、名称長、finite数、opening/overhang、SHGC、ground reflectanceを検証します。未信頼objectをspreadせず、許可fieldを個別に読み取ります。保存はUTF-8 pretty JSONです。単一案filenameはWindows禁止文字とpath separatorを除去し、長さを制限しますが、JSON内部のCase名は変更しません。
 
 ## Model identity
 
@@ -94,7 +105,7 @@ ground: ghi-ground-reflection-0.5-v1
 
 ## Validation route
 
-- Pure domain: Case operations、validation、period/month delta、input difference、boundary tests。
+- Pure domain: Case operations、validation、period/month delta、input difference、versioned JSON preset round-trip/rejection、boundary tests。
 - Adapter: synthetic EPWをfile-like browser contractから既存parserへ渡すtest。
 - Local real data: hash一致Tokyo Hyakuri EPWで8760 intervals、2 Case、12 months、finite KPI、direct engine一致。
 - Browser: Vercel PreviewでEPW選択、Case duplicate、input edit、Run、KPI、chart、delta、geometry、assumptions、warning、console/assetを確認します。

@@ -19,4 +19,4 @@
 
 ## M4 non-goals
 
-自動最適化、export、side fin、reveal、複数開口・複数遮蔽物、任意3D mesh、finite-width diffuse遮蔽、Perez/anisotropic sky、glass product database、glass IAC、account、cloud save、正式Production releaseはM4で実装しません。
+自動最適化、side fin、reveal、複数開口・複数遮蔽物、任意3D mesh、finite-width diffuse遮蔽、Perez/anisotropic sky、glass product database、glass IAC、account、cloud save、正式Production releaseはM4で実装しません。Human承認済みbounded follow-upとしてbrowser print/CSVと入力専用JSON presetだけを追加し、cloud persistenceには拡張しません。

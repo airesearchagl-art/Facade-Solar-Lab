@@ -210,3 +210,41 @@ Fresh convergence:
 | Remote evidence | exact-head Git Preview and PR body sync | PENDING PUSH |
 
 RF-01 remains OPEN / `BLOCKED_BROWSER_ACCEPTANCE`. This follow-up does not substitute for Human verification of the OS-backed real-EPW flow.
+
+## Human UX Review follow-up — Report Geometry & JSON Presets
+
+Human feedback recorded on `2026-09-13`:
+
+- PDF selected-case-only geometry was insufficient for practical comparison;
+- all-case section/elevation comparison was requested;
+- reusable named JSON condition presets were requested.
+
+Starting checkpoint: `018a5a5d0f86d6dee486407e56a42c6c85dc8755`.
+
+Bounded implementation evidence:
+
+- Print/PDF uses the Comparison result order and includes every Case name, letter, baseline badge, facade azimuth, opening/overhang summary, section, elevation, and 6/21 + 12/21 reference details. The interactive screen preview remains the selected Case only.
+- Chromium print-to-PDF produced five A4 portrait pages. Poppler-rendered page review found the three Case cards together on page 4 with readable labels/rays and no observed clipping, overlap, or split Case card.
+- Pure `src/preset/**` defines schemaVersion `1` with kinds `facade-solar-lab-case-preset` and `facade-solar-lab-workspace-preset`. Serializers explicitly copy input fields only; results, raw weather, provenance, Git/Vercel state, and timestamps have no serialization path.
+- Parser enforces a 256 KB UTF-8 limit, recognized kind/version, required values, names, finite numerics, existing facade validation, 1–4 cases, unique IDs, and valid baseline/selected references. Untrusted objects are read field-by-field without `eval`, `Function`, or blind spread.
+- Case import adds a new deterministic non-colliding ID and preserves the internal Case name/parameters. Workspace import displays the exact replacement warning and restores order/baseline/selected after explicit confirmation.
+- Both import paths set `result=null` and require the user to run the comparison again. Browser evidence showed the result panel returning to the explicit-run waiting state.
+- Single Case download action, deletion, local generated `.facade.json` file chooser import, Workspace save action, changed depth/baseline, replacement warning, and full Workspace restoration passed in the local browser.
+- 390 px viewport audit reported zero positive page overflow; preset controls remained inside the viewport. App-origin console errors, observed asset failures, and visible `NaN`/`Infinity` were zero.
+
+Fresh local convergence:
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| Full tests | 21 files / 128 tests | PASS |
+| Focused new tests | preset + app state + 3-Case print geometry + boundary | PASS |
+| TypeScript | `tsc --noEmit` | PASS |
+| Build | Vite; 70 modules; `dist` | PASS |
+| Audit | 0 vulnerabilities | PASS |
+| Golden | exact M1 source fixture guard | PASS |
+| Diff whitespace | no findings | PASS |
+| M1 originals | HTML `EF896E0D...D4CB5`; handover `B3C2C8E...CD6C4` | PASS |
+| Task Packet | immutable snapshot `5A3288DF...003E8` | PASS |
+| Remote evidence | exact-head Git Preview and PR body sync | PENDING PUSH |
+
+RF-01 remains OPEN / `BLOCKED_BROWSER_ACCEPTANCE`. JSON import and synthetic Demo evidence do not substitute for Human verification of the OS-backed real-EPW path.

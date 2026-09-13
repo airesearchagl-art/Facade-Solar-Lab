@@ -41,10 +41,12 @@ M4ではM1–M3 regressionに加え、Comparison domain、browser-local EPW adap
 
 - 1–4 Case、duplicate deep copy、baseline切替・削除時再割当、zero-baseline percentage、annual/cooling/heating/monthly deltaをPure TS testで検証する。
 - azimuth、opening、overhang enable/disable、SHGCの入力差分とunchanged omissionを検証する。
-- `src/comparison/**`をrecursive boundary scanへ含め、React、DOM、File API、Node filesystem dependencyを拒否する。
+- `src/comparison/**`と`src/preset/**`をrecursive boundary scanへ含め、React、DOM、File API、Node filesystem dependencyを拒否する。
+- JSON presetはCase/Workspace round-trip、順序、baseline/selected、optional overhang、finite/geometry/SHGC/ground、重複ID、4案上限、未知kind/version、256 KB上限、結果/raw weather非包含をPure TS testで確認する。
 - synthetic EPWでbrowser adapterの`.epw` boundaryとprovenanceを検証する。
 - hash一致したTokyo Hyakuri EPWがlocal-onlyで存在する場合、8760 intervals、2 Case、12 months、finite KPI、direct `simulateFacadeV1`一致を検証する。
 - final Vercel Previewでfile selection、Case duplicate、input edit、explicit Run、KPI、chart、delta、geometry、assumptions、warning、console、assetを操作確認する。
+- bounded UX acceptanceではDemoにCase Cを追加し、A4 PDFのA/B/C全案形状と参考線、単一Case JSONの追加読込、Workspace JSONの置換復元、読込後の結果破棄と再Run待ち、390 px overflowを確認する。
 
 ## Evidence policy
 

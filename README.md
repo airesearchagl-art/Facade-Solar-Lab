@@ -14,7 +14,7 @@
 - Original-source reference / Golden test: 実装済み
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
-- Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・PDF/CSV出力を実装済み
+- Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
 - Formal Production release: 未実施。bootstrap ProductionはVercel初回deployment境界のため保持していますが、正式Releaseとして扱いません。
 
@@ -55,6 +55,7 @@ npm audit
 │  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1 engine
 │  ├─ geometry/  # Facade-local geometry / clipping / direct shadow
 │  ├─ models/    # Domain model領域
+│  ├─ preset/    # Pure TS versioned Case / Workspace JSON preset
 │  ├─ weather/   # Canonical weather contract / Pure TS EPW parser
 │  └─ main.tsx
 ├─ tests/        # Golden / EPW / solar / energy / boundary

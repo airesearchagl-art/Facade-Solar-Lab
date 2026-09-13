@@ -30,6 +30,18 @@ import {
   COMPARISON_CSV_FILENAME,
   createComparisonCsv,
 } from "../export";
+import {
+  CASE_PRESET_KIND,
+  MAX_PRESET_BYTES,
+  WORKSPACE_PRESET_KIND,
+  createCasePresetFilename,
+  nextAvailableCaseId,
+  parseFacadePreset,
+  serializeCasePreset,
+  serializeWorkspacePreset,
+  type FacadePresetV1,
+  type FacadeWorkspacePresetV1,
+} from "../preset";
 import { createDemoComparisonWorkspace } from "../demo/demo-scenario";
 import {
   DEMO_WEATHER_DATASET_ID,
@@ -43,6 +55,7 @@ import {
 } from "../weather";
 import { GeometryPreview } from "./components/GeometryPreview";
 import { MonthlyChart } from "./components/MonthlyChart";
+import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
 
 const ORIENTATION_PRESETS = [
@@ -303,6 +316,48 @@ function PrintReportSummary({
   );
 }
 
+export function PrintGeometryComparison({
+  result,
+  dataset,
+}: {
+  readonly result: ComparisonRunResult;
+  readonly dataset: WeatherDataset;
+}) {
+  return (
+    <section className="print-only print-geometry" aria-labelledby="print-geometry-title">
+      <h2 id="print-geometry-title">比較案の形状と参考日射線</h2>
+      <div className={`print-geometry-cases count-${result.cases.length}`}>
+        {result.cases.map((item, index) => {
+          const opening = item.parameters.opening;
+          const overhang = item.parameters.overhang;
+          const comparisonCase = {
+            id: item.caseId,
+            name: item.name,
+            parameters: item.parameters,
+          };
+          return (
+            <article className="print-geometry-case" key={item.caseId}>
+              <header>
+                <span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>
+                <div>
+                  <h3>{item.name}</h3>
+                  <p>方位角 {item.parameters.facadeAzimuthDegFromNorth}°</p>
+                </div>
+                {item.caseId === result.baselineCaseId ? <strong>基準案</strong> : null}
+              </header>
+              <dl className="print-geometry-facts">
+                <div><dt>開口</dt><dd>幅 {opening.widthM} m / 高さ {(opening.headZM - opening.sillZM).toFixed(2)} m</dd></div>
+                <div><dt>庇</dt><dd>{overhang === undefined ? "なし" : `出 ${overhang.depthM} m / 高さ ${overhang.elevationZM} m`}</dd></div>
+              </dl>
+              <GeometryPreview comparisonCase={comparisonCase} dataset={dataset} />
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function ExportPanel({
   dirty,
   onPrint,
@@ -327,6 +382,62 @@ function ExportPanel({
   );
 }
 
+function PresetPanel({
+  selectedCaseName,
+  message,
+  error,
+  onSaveCase,
+  onSaveWorkspace,
+  onFile,
+}: {
+  readonly selectedCaseName: string;
+  readonly message: string | null;
+  readonly error: string | null;
+  readonly onSaveCase: () => void;
+  readonly onSaveWorkspace: () => void;
+  readonly onFile: (file: File) => void;
+}) {
+  return (
+    <section className="panel preset-panel no-print" aria-labelledby="preset-title">
+      <div>
+        <p className="section-kicker">比較入力の保存</p>
+        <h2 id="preset-title">比較条件を保存・再利用</h2>
+        <p>JSONには案名と入力条件だけを保存します。計算結果と気象ファイルの内容は含みません。</p>
+      </div>
+      <div className="preset-actions">
+        <button type="button" className="secondary-button" onClick={onSaveCase}>この案をプリセット保存</button>
+        <button type="button" className="secondary-button" onClick={onSaveWorkspace}>比較セットを保存</button>
+        <label className="file-button preset-file-button">
+          <span>JSONプリセットを読み込む</span>
+          <input
+            type="file"
+            accept=".json,.facade.json"
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              if (file !== undefined) onFile(file);
+              event.currentTarget.value = "";
+            }}
+          />
+        </label>
+      </div>
+      <p className="preset-selection">選択中: {selectedCaseName} · 1ファイル / 最大256 KB</p>
+      {message === null ? null : <div className="message success-message" role="status">{message}</div>}
+      {error === null ? null : <div className="message error-message" role="alert">{error}</div>}
+    </section>
+  );
+}
+
+function downloadTextFile(filename: string, contents: string, mediaType: string): void {
+  const url = URL.createObjectURL(new Blob([contents], { type: mediaType }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export function App() {
   const [workspace, setWorkspace] = useState<ComparisonWorkspace>(() => createComparisonWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("case-a");
@@ -336,6 +447,9 @@ export function App() {
   const [result, setResult] = useState<ComparisonRunResult | null>(null);
   const [dirty, setDirty] = useState(true);
   const [runError, setRunError] = useState<string | null>(null);
+  const [presetMessage, setPresetMessage] = useState<string | null>(null);
+  const [presetError, setPresetError] = useState<string | null>(null);
+  const [pendingWorkspacePreset, setPendingWorkspacePreset] = useState<FacadeWorkspacePresetV1 | null>(null);
   const caseSequence = useRef(2);
 
   const selectedCase = workspace.cases.find((item) => item.id === selectedCaseId) ?? workspace.cases[0]!;
@@ -364,9 +478,9 @@ export function App() {
   };
 
   const nextCaseIdentity = () => {
-    const sequence = caseSequence.current;
-    caseSequence.current += 1;
-    return { id: `case-${sequence}`, name: `案${String.fromCharCode(64 + sequence)}` };
+    const next = nextAvailableCaseId(workspace, caseSequence.current);
+    caseSequence.current = next.sequence + 1;
+    return { id: next.id, name: `案${String.fromCharCode(64 + next.sequence)}` };
   };
 
   const loadWeather = async (file: File) => {
@@ -429,14 +543,70 @@ export function App() {
   const downloadComparisonCsv = () => {
     if (result === null || dataset === null || dirty) return;
     const csv = createComparisonCsv(result, dataset);
-    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = COMPARISON_CSV_FILENAME;
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadTextFile(COMPARISON_CSV_FILENAME, csv, "text/csv;charset=utf-8");
+  };
+
+  const saveCasePreset = () => {
+    try {
+      const json = serializeCasePreset(selectedCase);
+      downloadTextFile(createCasePresetFilename(selectedCase.name), json, "application/json;charset=utf-8");
+      setPresetMessage(`${selectedCase.name}の入力条件を保存しました。`);
+      setPresetError(null);
+    } catch (error) {
+      setPresetMessage(null);
+      setPresetError(error instanceof Error ? error.message : "案のプリセットを保存できませんでした。");
+    }
+  };
+
+  const saveWorkspacePreset = () => {
+    try {
+      const json = serializeWorkspacePreset(workspace, selectedCase.id);
+      downloadTextFile("facade-comparison-preset.json", json, "application/json;charset=utf-8");
+      setPresetMessage("比較セットの入力条件を保存しました。");
+      setPresetError(null);
+    } catch (error) {
+      setPresetMessage(null);
+      setPresetError(error instanceof Error ? error.message : "比較セットを保存できませんでした。");
+    }
+  };
+
+  const applyImportedPreset = (preset: FacadePresetV1, nextCaseId?: string) => {
+    const next = applyPresetToAppState(workspace, preset, nextCaseId);
+    setWorkspace(next.workspace);
+    setSelectedCaseId(next.selectedCaseId);
+    setResult(next.result);
+    setDirty(next.dirty);
+    setRunError(null);
+    setPresetError(null);
+    setPresetMessage(
+      preset.kind === CASE_PRESET_KIND
+        ? `${preset.name}を新しい比較案として読み込みました。比較計算を実行してください。`
+        : "比較セットを置き換えました。比較計算を実行してください。",
+    );
+  };
+
+  const loadPreset = async (file: File) => {
+    setPresetMessage(null);
+    setPresetError(null);
+    setPendingWorkspacePreset(null);
+    try {
+      if (!file.name.toLowerCase().endsWith(".json")) {
+        throw new RangeError(".jsonまたは.facade.jsonファイルを選択してください。");
+      }
+      if (file.size > MAX_PRESET_BYTES) {
+        throw new RangeError("プリセットファイルが大きすぎます（最大256 KB）。");
+      }
+      const preset = parseFacadePreset(await file.text());
+      if (preset.kind === WORKSPACE_PRESET_KIND) {
+        setPendingWorkspacePreset(preset);
+        return;
+      }
+      const next = nextAvailableCaseId(workspace, caseSequence.current);
+      caseSequence.current = next.sequence + 1;
+      applyImportedPreset(preset, next.id);
+    } catch (error) {
+      setPresetError(error instanceof Error ? error.message : "JSONプリセットを読み込めませんでした。");
+    }
   };
 
   const inputId = (path: string) => `${selectedCase.id}-${path.replaceAll(".", "-")}`;
@@ -612,6 +782,37 @@ export function App() {
         </div>
       </section>
 
+      <PresetPanel
+        selectedCaseName={selectedCase.name}
+        message={presetMessage}
+        error={presetError}
+        onSaveCase={saveCasePreset}
+        onSaveWorkspace={saveWorkspacePreset}
+        onFile={(file) => void loadPreset(file)}
+      />
+
+      {pendingWorkspacePreset === null ? null : (
+        <div className="preset-dialog-backdrop no-print">
+          <section className="preset-dialog" role="dialog" aria-modal="true" aria-labelledby="preset-dialog-title">
+            <p className="section-kicker">比較セットの読み込み</p>
+            <h2 id="preset-dialog-title">現在の比較案を、このJSONの比較セットで置き換えます</h2>
+            <p>{pendingWorkspacePreset.cases.length}案を読み込みます。現在の計算結果は破棄され、再計算が必要です。</p>
+            <div className="preset-dialog-actions">
+              <button type="button" className="text-button" autoFocus onClick={() => setPendingWorkspacePreset(null)}>キャンセル</button>
+              <button
+                type="button"
+                className="run-button"
+                onClick={() => {
+                  applyImportedPreset(pendingWorkspacePreset);
+                  setPendingWorkspacePreset(null);
+                  caseSequence.current = 2;
+                }}
+              >比較セットを置き換える</button>
+            </div>
+          </section>
+        </div>
+      )}
+
       <section className="run-panel" aria-labelledby="run-title">
         <div>
           <p className="section-kicker">明示的に計算を実行</p>
@@ -635,11 +836,7 @@ export function App() {
           <ResultsPanel result={result} isDemo={isDemo} />
           <MonthlyChart result={result} />
           <ExportPanel dirty={dirty} onPrint={printComparison} onCsv={downloadComparisonCsv} />
-          <section className="print-only print-geometry" aria-labelledby="print-geometry-title">
-            <h2 id="print-geometry-title">選択案の形状と参考日射線</h2>
-            <p>{selectedCase.name}</p>
-            <GeometryPreview comparisonCase={selectedCase} dataset={dataset} />
-          </section>
+          <PrintGeometryComparison result={result} dataset={dataset} />
         </>
       )}
 

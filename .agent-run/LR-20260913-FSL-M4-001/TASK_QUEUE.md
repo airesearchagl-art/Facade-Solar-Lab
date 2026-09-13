@@ -15,4 +15,5 @@ Binding: `LRP-20260913-FSL-M4-001` rev `1` / `5A3288DF4A540EB7E40AF42E7D5D84505B
 | 9 | Wave 8 | Regression, real EPW, browser validation | BLOCKED_BROWSER_ACCEPTANCE | 105 tests/local real EPW PASS; OS-backed browser flow unverified |
 | 10 | Wave 9 | Final Preview, docs, artifact convergence | REQUIRED_FIX | Publish exact-head Git Preview and synchronize PR evidence |
 | 11 | Wave 10 | Draft PR and Human Gate | FOCUSED_RE_REVIEW | PR #5 remains OPEN / Draft; Ready prohibited |
-| 12 | Bounded follow-up | Design Insight & Export Visible MVP | PREVIEW_PENDING | Local 19 files / 115 tests and A4 print rendering PASS; push, exact-head Git Preview, browser check, and PR body sync remain |
+| 12 | Bounded follow-up | Design Insight & Export Visible MVP | COMPLETE | Exact head `018a5a5...`; Git Preview `dpl_Nbsze...`; PR body synced; RF-01 unchanged |
+| 13 | Bounded follow-up | Report Geometry & JSON Presets | PREVIEW_PENDING | Local 21 files / 128 tests; 3-case A4 render and Case/Workspace browser round-trips PASS; exact-head Git Preview and PR body sync remain |

@@ -10,6 +10,7 @@ const engineSources = import.meta.glob(
     "../src/comparison/**/*.ts",
     "../src/solar-reference/**/*.ts",
     "../src/export/**/*.ts",
+    "../src/preset/**/*.ts",
   ],
   {
   eager: true,
