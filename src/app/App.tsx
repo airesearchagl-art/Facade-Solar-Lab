@@ -27,6 +27,11 @@ import {
   FACADE_V1_GROUND_REFLECTION_MODEL,
   type FacadeV1Parameters,
 } from "../engine";
+import { createDemoComparisonWorkspace } from "../demo/demo-scenario";
+import {
+  DEMO_WEATHER_DATASET_ID,
+  createDemoWeatherDataset,
+} from "../demo/demo-weather";
 import {
   hasWeatherErrors,
   WeatherDataError,
@@ -81,11 +86,15 @@ function WeatherPanel({
   dataset,
   loading,
   failure,
+  isDemo,
+  onDemo,
   onFile,
 }: {
   readonly dataset: WeatherDataset | null;
   readonly loading: boolean;
   readonly failure: { readonly message: string; readonly issues: readonly WeatherParseIssue[] } | null;
+  readonly isDemo: boolean;
+  readonly onDemo: () => void;
   readonly onFile: (file: File) => void;
 }) {
   return (
@@ -95,21 +104,35 @@ function WeatherPanel({
           <p className="section-kicker">01 · Local weather</p>
           <h2 id="weather-title">Weather dataset</h2>
         </div>
-        <label className="file-button">
-          <span>{loading ? "Reading…" : "Load EPW"}</span>
-          <input
-            type="file"
-            accept=".epw"
-            disabled={loading}
-            onChange={(event) => {
-              const file = event.currentTarget.files?.[0];
-              if (file !== undefined) onFile(file);
-              event.currentTarget.value = "";
-            }}
-          />
-        </label>
+        <div className="weather-actions">
+          <button type="button" className="demo-button" disabled={loading} onClick={onDemo}>Try Demo Comparison</button>
+          <label className="file-button">
+            <span>{loading ? "Reading…" : "Load EPW"}</span>
+            <input
+              type="file"
+              accept=".epw"
+              disabled={loading}
+              onChange={(event) => {
+                const file = event.currentTarget.files?.[0];
+                if (file !== undefined) onFile(file);
+                event.currentTarget.value = "";
+              }}
+            />
+          </label>
+        </div>
       </div>
-      <p className="privacy-note">Parsed in this browser only. Raw file contents are not uploaded, stored, or displayed.</p>
+      <div className={isDemo ? "demo-disclosure active" : "demo-disclosure"} role={isDemo ? "status" : undefined}>
+        <div>
+          <strong>{isDemo ? "DEMO · Synthetic weather active" : "Synthetic weather option"}</strong>
+          <span>Explore the complete comparison workflow using deterministic synthetic weather.</span>
+        </div>
+        <p><strong>Not measured weather.</strong> Not validation evidence.</p>
+      </div>
+      <p className="privacy-note">
+        {isDemo
+          ? "Generated in this browser only. No measured weather or external request is used."
+          : "Parsed in this browser only. Raw file contents are not uploaded, stored, or displayed."}
+      </p>
       {failure === null ? null : (
         <div className="message error-message" role="alert">
           <strong>EPW could not be used.</strong>
@@ -220,6 +243,7 @@ export function App() {
   );
   const differences = useMemo(() => comparisonInputDifferences(baselineCase, selectedCase), [baselineCase, selectedCase]);
   const weatherUsable = dataset !== null && !hasWeatherErrors(dataset.issues) && dataset.intervals.length > 0;
+  const isDemo = dataset?.id === DEMO_WEATHER_DATASET_ID;
   const canRun = weatherUsable && validationIssues.length === 0;
 
   const mutateWorkspace = (updater: (current: ComparisonWorkspace) => ComparisonWorkspace, nextSelectedCaseId?: string) => {
@@ -265,6 +289,24 @@ export function App() {
     }
   };
 
+  const loadDemoComparison = () => {
+    try {
+      const demoDataset = createDemoWeatherDataset();
+      const demoWorkspace = createDemoComparisonWorkspace();
+      const demoResult = runComparison(demoDataset, demoWorkspace);
+      caseSequence.current = 3;
+      setWorkspace(demoWorkspace);
+      setSelectedCaseId("case-b");
+      setDataset(demoDataset);
+      setWeatherFailure(null);
+      setResult(demoResult);
+      setDirty(false);
+      setRunError(null);
+    } catch (error) {
+      setRunError(error instanceof Error ? error.message : "Demo comparison failed");
+    }
+  };
+
   const executeComparison = () => {
     if (!canRun || dataset === null) return;
     try {
@@ -296,7 +338,14 @@ export function App() {
         <p>Absolute weather-driven kWh values are not formally validated physical-performance results. Do not use them for BEI, official energy compliance, HVAC sizing, final certification, or guaranteed energy prediction.</p>
       </aside>
 
-      <WeatherPanel dataset={dataset} loading={loadingWeather} failure={weatherFailure} onFile={(file) => void loadWeather(file)} />
+      <WeatherPanel
+        dataset={dataset}
+        loading={loadingWeather}
+        failure={weatherFailure}
+        isDemo={isDemo}
+        onDemo={loadDemoComparison}
+        onFile={(file) => void loadWeather(file)}
+      />
 
       <section className="panel case-panel" aria-labelledby="case-title">
         <div className="section-heading">

@@ -160,6 +160,7 @@ h1 {
 .compact-heading { margin-bottom: 14px; }
 
 .file-button,
+.demo-button,
 .secondary-button,
 .run-button,
 .text-button,
@@ -183,6 +184,38 @@ h1 {
 }
 
 .file-button input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+
+.weather-actions { display: flex; align-items: center; gap: 8px; }
+
+.demo-button {
+  padding: 11px 17px;
+  border-radius: 3px;
+  color: #2b2c28;
+  background: #f0b544;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.demo-disclosure {
+  display: flex;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d7b56b;
+  background: #fff8e5;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.demo-disclosure.active {
+  border-color: #c96c3e;
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+.demo-disclosure > div { display: grid; gap: 4px; }
+.demo-disclosure > div strong { color: var(--accent-dark); font-size: 0.78rem; }
+.demo-disclosure span, .demo-disclosure p { color: #6c583e; font-size: 0.73rem; line-height: 1.45; }
+.demo-disclosure p { max-width: 260px; margin: 0; text-align: right; }
 
 .privacy-note,
 .field-note,
@@ -490,6 +523,10 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .critical-warning { grid-template-columns: 1fr; gap: 8px; }
   .section-heading, .subsection-heading { align-items: flex-start; flex-direction: column; }
   .section-heading > p, .subsection-heading > span { text-align: left; }
+  .weather-actions { width: 100%; }
+  .weather-actions > * { flex: 1; justify-content: center; }
+  .demo-disclosure { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .demo-disclosure p { max-width: none; text-align: left; }
   .case-actions { width: 100%; }
   .secondary-button { flex: 1; }
   .case-tabs { overflow-x: auto; display: flex; }
@@ -511,6 +548,7 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .metadata-grid, .field-grid { grid-template-columns: 1fr; }
   .preset-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .weather-place { align-items: flex-start; flex-direction: column; gap: 3px; }
+  .weather-actions { align-items: stretch; flex-direction: column; }
   .difference-panel dl div { align-items: flex-start; flex-direction: column; gap: 6px; }
   .run-panel { padding: 22px 18px; }
   footer { flex-direction: column; }

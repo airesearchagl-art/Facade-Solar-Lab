@@ -7,6 +7,11 @@ describe("M4 application shell", () => {
   it("server-renders the complete pre-weather workspace contract", () => {
     const html = renderToString(<App />);
     expect(html).toContain("M4 · COMPARISON UX");
+    expect(html).toContain("Try Demo Comparison");
+    expect(html).toContain("Explore the complete comparison workflow using deterministic synthetic weather.");
+    expect(html).toContain("Synthetic weather");
+    expect(html).toContain("Not measured weather");
+    expect(html).toContain("Not validation evidence");
     expect(html).toContain("Load EPW");
     expect(html).toContain("Case A");
     expect(html).toContain("Run Comparison");
