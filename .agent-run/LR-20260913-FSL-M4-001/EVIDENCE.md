@@ -192,7 +192,8 @@ Bounded implementation evidence:
 - Pure `src/export/**` produces one Case per row with weather/input, annual/summer/winter values and deltas, and 12 monthly values. It uses UTF-8 BOM, CRLF, quoted cells, and leading `= + - @` formula protection.
 - Export controls exist only with a result and are disabled when inputs are dirty. Browser print exposes an A4 report with weather, all Cases, results, monthly chart/table, selected geometry, reference rays, assumptions, and warnings.
 - Chromium print-to-PDF produced a five-page A4 portrait report. Rendered PNG review found readable Japanese text, complete tables, distinct reference rays, no clipping/overlap, and coherent section breaks.
-- Local browser Demo verified result semantics, 6/21 and 12/21 labels/altitude/profile angle, overhang-depth response, north-facing suppression, enabled export after calculation, disabled export while dirty, zero app console errors, zero displayed `NaN`/`Infinity`, and zero horizontal overflow.
+- Local browser Demo verified result semantics, 6/21 and 12/21 labels/altitude/profile angle, overhang-depth response, north-facing suppression, enabled export after calculation, disabled export while dirty, zero app console errors, and zero displayed `NaN`/`Infinity`.
+- A required 390 px browser check exposed intrinsic-width expansion from the result tables; `min-width: 0` now keeps page overflow at zero while the tables and monthly chart retain their own horizontal scroll regions.
 
 Fresh convergence:
 

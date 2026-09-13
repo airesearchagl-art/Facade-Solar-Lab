@@ -482,7 +482,7 @@ legend { padding: 0 8px; font-size: 0.74rem; font-weight: 800; letter-spacing: 0
 .demo-result-warning { padding-top: 9px; border-top: 1px solid #bdccc7; color: #76472e !important; }
 
 .period-grid { display: grid; gap: 20px; }
-.period-card { border: 1px solid var(--line); }
+.period-card { min-width: 0; border: 1px solid var(--line); }
 .period-card header { display: flex; padding: 15px 18px; border-bottom: 1px solid var(--line); background: var(--paper-soft); align-items: center; justify-content: space-between; gap: 12px; }
 .period-card h3 { margin: 0 0 3px; font-family: Georgia, serif; font-size: 1.2rem; font-weight: 500; }
 .period-card header span, .period-card header small { color: var(--muted); font-size: 0.67rem; }
