@@ -2,8 +2,8 @@
 
 ## Start here
 
-1. Read `.agent-run/LR-20260914-FSL-M45-001/RUN_STATE.md`.
-2. Verify the Task Packet SHA-256 before resuming the recorded campaign.
+1. Read `docs/VALIDATION_PLAN.md` for the current M5 inventory and prioritized validation backlog.
+2. M4.5 is terminal: `.agent-run/LR-20260914-FSL-M45-001/RUN_STATE.md` is historical audit context, not an active campaign. Verify its Task Packet SHA-256 when auditing it; do not create another M4.5 closeout cycle.
 3. Check the current branch, HEAD, remote, and working tree before editing.
 4. Preserve unrelated or pre-existing changes.
 
@@ -49,8 +49,8 @@ Add focused tests for changed engine behavior. Do not fabricate validation resul
 
 ## Scope and gates
 
-- Current milestone: M4.5.
-- Do not begin M5 automatically.
+- Current milestone: M5 — Validation / Stability; initial scope is docs-only inventory and validation design.
+- Do not treat the M5 kickoff as physical validation PASS, change engine formulas/expected values, or begin M6 automatically.
 - Do not mutate `main`, mark a PR Ready, merge, deploy Production, release, force-push, delete branches, or change repository permissions/visibility without a new Human instruction.
 - Never commit secrets, credentials, private URLs, personal data, client/project identities, unpublished design data, or user-specific absolute local paths.
 - Legacy MVP sources must remain byte-for-byte unchanged and retain the SHA-256 values recorded in `docs/LEGACY_BASELINE.md`.
