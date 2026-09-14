@@ -80,7 +80,7 @@ describe("M4.5 UX follow-up: stacked references", () => {
       const local = createFacadeSolsticeReferences({ dataset, facadeAzimuthDegFromNorth: first.facadeAzimuthDegFromNorth, overhang: { ...overhang, elevationZM: overhang.elevationM } });
       const actual = rays.filter((ray) => ray.floorId === floor.id);
       expect(actual[0]!.startZM).toBe(baseZM + 3.6);
-      expect(actual.map((ray) => ray.intersectionZM)).toEqual(local.map((ref) => baseZM + ref.overhangTipFacadeIntersectionZM!));
+      expect(actual.map((ray) => ray.rawIntersectionZM)).toEqual(local.map((ref) => baseZM + ref.overhangTipFacadeIntersectionZM!));
     }
     const html = renderToStaticMarkup(<MultiFloorGeometryPreview buildingCase={noFirstOverhang} selectedFloorId="floor-1" dataset={dataset} report />);
     expect(html.match(/data-floor-id=/gu)).toHaveLength(4);

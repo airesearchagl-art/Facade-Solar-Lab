@@ -18,7 +18,7 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 | 12 | Follow-up | Arbitrary PDF Case color selection | NOT STARTED / OUT OF SCOPE | Separate bounded Human authorization required |
 | 13 | Next milestone | M5 | NOT STARTED | Separate Human Task Packet / authorization required |
 
-## Human UX Follow-up 01 — current follow-up
+## Human UX Follow-up 01 — historical implementation checkpoint
 
 The implementation-wave evidence above is historical. PR #7 exists and remains Draft.
 
@@ -31,3 +31,19 @@ The implementation-wave evidence above is historical. PR #7 exists and remains D
 | Local full convergence | 26 files / 150 tests, typecheck/build/Golden/audit/diff, existing real EPW smoke | COMPLETE |
 | Native final-Preview PDF | Print components rendered locally as an A4 layout check; native print/save dialog is not exposed by the browser control surface | HUMAN VERIFICATION REQUIRED |
 | Git / PR | Normal push to existing branch; resolve exact-source Git Preview and synchronize PR #7 body after this checkpoint | RESOLVE LIVE / DRAFT ONLY |
+
+## Human UX Follow-up 02 — current follow-up
+
+The Human re-check below supersedes the historical pending statuses above.
+
+| Finding / task | Current status |
+| --- | --- |
+| UX-01: Floor label / numeric overlap | CLOSED / PASS — Human confirmed |
+| UX-02: All-floor display | CLOSED / PASS — Human confirmed; ray penetration is separate UX-05 |
+| UX-03: Same-story Case comparison | CLOSED / PASS — Human confirmed |
+| UX-04: Floor monthly chart | CLOSED / PASS — Human confirmed |
+| UX-05: Floor-local reference ray clipping | FIXED / HUMAN_RECHECK_PENDING — raw reference retained; display segment clipped without changing slope |
+| Local convergence | COMPLETE — 27 files / 158 tests, typecheck/build/Golden/audit/diff PASS; simulation/Building/Floor/monthly/CSV/preset digests unchanged |
+| Print layout | COMPLETE — five local static A4 pages inspected, including 10/15/20 m deep-overhang stress fixture; not native exact-Preview PDF acceptance |
+| Git / PR | Resolve live exact-source Git Preview after normal push; synchronize existing PR #7 only; DRAFT ONLY |
+| Human gate | STOP — UX-05 Human Re-Check; independent review pending; no Ready/merge/Production/M5 |

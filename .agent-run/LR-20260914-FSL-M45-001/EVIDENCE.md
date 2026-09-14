@@ -80,3 +80,49 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 - The available browser surface does not expose the native Chrome print/save dialog; tab content export also reports unsupported. Native final-Preview PDF save/inspection remains HUMAN VERIFICATION REQUIRED. Do not claim that gate PASS from local rendering alone.
 - UX-01 through UX-04 are implemented and AWAITING HUMAN RE-CHECK. They are not CLOSED / PASS without Human evidence.
 - Final exact-source Git Preview identity and fresh PR #7 state are recorded externally in the PR/completion report after this checkpoint. Resume must resolve them live; do not add a self-referential head SHA to this file.
+
+## Human UX Follow-up 02 — 2026-09-14
+
+### Fresh gate and Human findings
+
+- Starting local/remote/PR head: `ec18c15e7255177c24d5be3b3c789bc3198c6e7f`.
+- After fetch, base `35f543e618b8ad70ecc746b3139a5fb09adbeca9`, clean working tree, PR #7 OPEN / Draft / merged=false all matched.
+- Human explicitly confirmed UX-01, UX-03, UX-04 CLOSED / PASS and UX-02 all-floor display PASS. These supersede their historical pending states above.
+- Human reported UX-05 in both UI and PDF: deep-overhang reference rays continued below their own floor into the next floor. This is a visualization defect, not evidence of inter-floor shading physics.
+
+### Display-only correction
+
+- Pure TypeScript `clipFloorReferenceRay()` retains `rawIntersectionZM` and separately computes `displayEndZM`, `displayEndDepthM`, and `wasFloorClipped`.
+- For a below-base endpoint, `t = (baseZM - startZM) / (rawIntersectionZM - startZM)` and display depth is `depthM * (1 - t)`. The SVG uses that depth as well as the boundary Z; it does not replace the endpoint with wall depth zero.
+- The tip must be within its floor band. Non-finite input, invalid band/depth, overflowing/zero interpolation denominator, and out-of-segment interpolation are rejected with `null`; in-band horizontal/zero-depth segments need no division.
+- Both screen and report use the same calculated endpoint and state that floor-band clipping is not mutual shading by upper/lower-floor overhangs.
+- Canonical engine, solar reference equations, Building/Floor aggregation, monthly/delta values, CSV and preset implementation are unchanged. No new physical calculation or cross-floor occlusion.
+
+### Verification
+
+- `npm test`: PASS — 27 files / 158 tests. The eight new Pure TS tests cover in-band/no clipping, exact floor-base clipping, independently hand-derived collinearity, top/base boundaries, non-finite and overflow safety, all three floor bands for both 6/21 and 12/21, and no-overhang exclusion.
+- Existing raw-reference expected values are unchanged; the old absolute-intersection assertion now explicitly reads `rawIntersectionZM`.
+- Typecheck PASS; build PASS (88 modules / dist); Golden PASS; npm audit 0 vulnerabilities; diff check PASS.
+- Deterministic synthetic 2-Case / 3-Floor output SHA-256 digests were measured before and after the product edit and match exactly:
+
+| Output | Before = after SHA-256 |
+| --- | --- |
+| Complete simulation result (including deltas) | `77766a9d8a4b6cdaa074521090c5936af1267563b46133bf553fd70ce7454081` |
+| Building Total | `ba65f1c54889365881cd06b9e6e4e02813332713ffa1d94fc4a80d13cd92a64d` |
+| Floor results | `d252fc9203d358c2b146f77337ea4f9cc009e031af5fe9a44f780b60d2defdc6` |
+| Floor monthly values | `86c28dc25c9b2fd878b326c8ee45fca26bceb087cfcdcea7d1779ccd2e35fd65` |
+| CSV bytes | `52c34074c32b27293bcf61508065abbcffe9154da2d3512b385c42b3a1a9062f` |
+| Workspace preset bytes | `3150771c6c068c98fc9b27fca6fde5d4b677e57e0b6797af9aa5f7bcc5791cb3` |
+
+- Existing single-floor, one-floor exact equivalence, M1/M2/M3, Building Total/Floor/monthly, CSV and preset regression tests PASS. No expected simulation values were rewritten.
+- Local browser: Case B with three floors; all six references visible. Summer endpoints stop at Z 0 / 3.8 / 7.6 m, with nonzero display depth; normal winter intersections stay unchanged. With 3F depth increased to 20 m, both its seasonal rays stop at its 7.6 m base. Desktop and 390px viewport layout checked; no horizontal document overflow; app-origin fatal errors 0. An unrelated extension-origin Sentry error is excluded.
+- Local print-layout fixture uses actual result/geometry components and print CSS. All five A4 pages were rendered and visually inspected; Case B depths 10/15/20 m exercise both seasonal rays clipped at every floor. Labels, monthly charts, tables, clipped rays and model disclaimer are present without overlap/cut-off.
+- This PDF is a local static print-layout check, not a PDF saved from the exact product Preview. Post-fix Human UI/PDF re-check remains pending.
+- Tokyo Hyakuri smoke was not rerun: this change only affects display endpoints, with complete output digest equality and existing regressions PASS. No EPW download or external weather redistribution.
+
+### Current gate
+
+- UX-01 / UX-03 / UX-04: CLOSED / PASS; UX-02: CLOSED / PASS for all-floor display.
+- UX-05: FIXED / HUMAN_RECHECK_PENDING, not CLOSED / PASS.
+- Final exact-source Git Preview and PR metadata are verified after the repository checkpoint and recorded in the PR/completion report. Resolve them live; do not repeat push/deploy merely to record this document's own commit SHA.
+- Existing PR #7 stays OPEN / Draft; Ready=false; no merge, main write, Production mutation, branch deletion or M5.

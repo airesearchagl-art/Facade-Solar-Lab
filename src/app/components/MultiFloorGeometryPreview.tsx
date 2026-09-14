@@ -29,8 +29,7 @@ export function MultiFloorGeometryPreview({ buildingCase, selectedFloorId, datas
   const zScale = Math.max(28, 62 / minHeight);
   const drawingTop = 32;
   const drawingBottom = drawingTop + totalHeight * zScale;
-  const lowerZ = Math.max(-minHeight, Math.min(0, ...references.map((item) => item.intersectionZM)));
-  const viewHeight = drawingBottom - lowerZ * zScale + 26;
+  const viewHeight = drawingBottom + 26;
   const zToY = (z: number) => drawingBottom - z * zScale;
   const extent = Math.max(1, ...positioned.map(({ floor }) => floor.opening.widthM + (floor.overhang?.leftExtensionM ?? 0) + (floor.overhang?.rightExtensionM ?? 0)));
   const xScale = 190 / extent;
@@ -80,11 +79,11 @@ export function MultiFloorGeometryPreview({ buildingCase, selectedFloorId, datas
             {gutter(floor, baseZM, topZM)}
           </g>)}
           <g clipPath={`url(#${clipId})`}>
-            {references.map(({ floorId, reference, startZM, intersectionZM, depthM }) => <line key={`${floorId}-${reference.season}`} data-floor-id={floorId} data-start-z={startZM} data-intersection-z={intersectionZM} className={`solar-reference-ray ${reference.season}${!report && floorId === selected ? " selected-ray" : ""}`} x1={wallX - depthM * depthScale} x2={wallX} y1={zToY(startZM)} y2={zToY(intersectionZM)}><title>{`${buildingCase.floors.find((floor) => floor.id === floorId)?.name} · ${reference.dateLabel}`}</title></line>)}
+            {references.map(({ floorId, reference, startZM, rawIntersectionZM, depthM, displayEndZM, displayEndDepthM, wasFloorClipped }) => <line key={`${floorId}-${reference.season}`} data-floor-id={floorId} data-start-z={startZM} data-raw-intersection-z={rawIntersectionZM} data-display-end-z={displayEndZM} data-display-end-depth={displayEndDepthM} data-floor-clipped={wasFloorClipped} className={`solar-reference-ray ${reference.season}${!report && floorId === selected ? " selected-ray" : ""}`} x1={wallX - depthM * depthScale} x2={wallX - displayEndDepthM * depthScale} y1={zToY(startZM)} y2={zToY(displayEndZM)}><title>{`${buildingCase.floors.find((floor) => floor.id === floorId)?.name} · ${reference.dateLabel}`}</title></line>)}
           </g>
         </svg>
         <ul className="solar-ray-legend" aria-label="日射参考線の凡例"><li><span className="summer" />6/21</li><li><span className="winter" />12/21</li></ul>
-        <p className="solar-reference-disclaimer">各階の6/21・12/21参考日射線を表示します。庇なし・背面入射の階は対象外です。年間計算は各階でcanonical engineを実行します。図外へ続く線は表示範囲で省略します。</p>
+        <p className="solar-reference-disclaimer">各階の6/21・12/21参考日射線を表示します。庇なし・背面入射の階は対象外です。参考日射線は各階の表示範囲内で区切っています。上下階の庇による相互遮蔽を計算した線ではありません。</p>
       </figure>
     </div>
   );
