@@ -2,6 +2,10 @@
 
 Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496DACC4425C36547B9829B22EDF3CF22B`
 
+## Implementation waves — historical checkpoint
+
+The wave and follow-up checkpoints below retain their original evidence. Their pending gates are superseded by the terminal state at the end; they are not resume instructions.
+
 | Order | Wave | Task | State | Exit evidence |
 | ---: | --- | --- | --- | --- |
 | 1 | Wave 0 | Fresh Gate, immutable packet, baseline convergence | COMPLETE | Exact main `35f543e...`; PR #5/#6 merged; clean tree; baseline checks PASS |
@@ -20,7 +24,7 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 
 ## Human UX Follow-up 01 — historical implementation checkpoint
 
-The implementation-wave evidence above is historical. PR #7 exists and remains Draft.
+At this historical checkpoint, PR #7 existed and was Draft.
 
 | Finding | Implementation / verification | Human status |
 | --- | --- | --- |
@@ -48,7 +52,7 @@ The Human re-check below supersedes the historical pending statuses above.
 | Git / PR | Resolve live exact-source Git Preview after normal push; synchronize existing PR #7 only; DRAFT ONLY |
 | Human gate | STOP — UX-05 Human Re-Check; independent review pending; no Ready/merge/Production/M5 |
 
-## Human UX Acceptance — current state
+## Human UX Acceptance / post-merge terminal state
 
 Human accepted exact product head `0888b66646db328f5d8292bc53aa480a64c61239` after exact-Preview re-check. These current statuses supersede the historical pending findings above.
 
@@ -61,9 +65,14 @@ Human accepted exact product head `0888b66646db328f5d8292bc53aa480a64c61239` aft
 | UX-05: Floor-local solar reference ray clipping | CLOSED / PASS — Human confirmed floor-band containment and no unnatural angle change |
 | M4.5 Human UX Review | PASS |
 | Acceptance evidence synchronization | Docs-only; product source diff 0; no calculation, CSV or preset changes |
-| Independent FULL Review | INDEPENDENT_REVIEW_PENDING — separate reviewer; not this implementation session |
-| Ready / merge / auto-merge | UNAUTHORIZED |
+| Independent FULL Review | COMPLETE / PASS — A. PASS — Ready candidate |
+| PR #7 Ready transition | COMPLETE |
+| PR #7 squash merge | COMPLETE — resulting main `4ea3821f36f65afb36a43de5b6953958d0c3b536` |
+| Automatic Production verification | COMPLETE / PASS — `dpl_DfWK1B9yYRUgXPNgxQkCo2SwJGGo`, READY, Git/main/exact merge SHA; canonical URL HTTP 200 |
+| M4.5 | COMPLETE — remaining tasks NONE |
 | M5 | NOT STARTED |
-| Human gate | STOP — Independent FULL Review |
+| Next action | Await separate Human instruction for the next milestone; do not begin M5 automatically |
 
-Reference ray clipping remains visualization only. Cross-floor physical shading is not implemented. The final docs-sync HEAD is resolved from Git/PR after this checkpoint; it is not the accepted product head above. No manual Preview or Production operation is authorized.
+Reference ray clipping remains visualization only. Cross-floor physical shading is not implemented. Reviewed handoff head: `c3d3238491200be16788200383f343ba6bb26cc5`; this is distinct from the accepted product head and squash merge SHA. Manual Production mutation: none. Branch deletion: none.
+
+This synchronization creates no further M4.5 closeout cycle. After it reaches main, do not create another closeout PR solely to record its own merge. Historical unverified evidence remains historical, not a new M4.5 task or a physical-validation PASS.

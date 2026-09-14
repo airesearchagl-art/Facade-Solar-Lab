@@ -7,20 +7,22 @@
 | M2 — Weather Foundation | EPW ingestion・provenance・LST normalization・weather-v1 energy | Complete |
 | M3 — Facade Geometry | 全方位、窓・腰壁・全面窓、有限幅庇、直接影polygon | Complete |
 | M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Complete |
-| M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Current |
+| M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | Planned |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Planned |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5は専用Task PacketとHuman authorizationに基づいて進行します。
+- M4.5はHuman UX Review PASS / Independent FULL Review A. PASSを経てPR #7をsquash merge済みです。M5はNOT STARTEDで、別のHuman Task Packet / authorizationを待ちます。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Production deployment、Ready for Review、mergeはHuman Gateです。
 
 ## M4.5 model boundary
 
 各Floorを既存`FacadeV1Parameters`へ変換してcanonical `simulateFacadeV1()`を1回ずつ実行します。Building Totalは階別の年間・夏期・冬期・月別日射熱取得量の単純合算です。solar / weather / shadow formulaを複製せず、1 Floor時は単一階結果とexact一致させます。
+
+Cross-floor physical shadingは未実装です。全階のreference rayとfloor-local clippingは可視化のみで、上下階の相互遮蔽計算ではありません。
 
 ## M4.5 non-goals
 

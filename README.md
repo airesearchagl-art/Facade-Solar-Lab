@@ -6,7 +6,7 @@
 
 ## Current state
 
-現在は **M4.5 — Multi-floor Mode** です。M4の単一階Workspaceを維持したまま、同一EPW条件で1–4棟のBuilding Caseと各棟の複数階を比較するbrowser-local Workspaceを実装しています。
+**M4 — Comparison UX / M4.5 — Multi-floor Mode はComplete** です。[PR #7](https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/7)はsquash merge済みです。M4の単一階Workspaceを維持したまま、同一EPW条件で1–4棟のBuilding Caseと各棟の複数階を比較するbrowser-local Workspaceを実装済みです。
 
 - Minimal UI: 実装済み
 - Pure TypeScript engine境界: 実装済み
@@ -15,11 +15,13 @@
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
-- Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計と階別結果、積層立面・断面、PDF・CSV・入力専用JSONプリセットを実装済み
+- Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Formal Production release: 未実施。bootstrap ProductionはVercel初回deployment境界のため保持していますが、正式Releaseとして扱いません。
+- Production: PR #7のmain mergeによる自動deploymentがREADY。[canonical URL](https://facade-solar-lab.vercel.app/)はHTTP 200確認済み。closeoutでの手動Production操作はありません。これは物理性能validationの完了を意味しません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainとM4.5 Multi-floor domainはいずれも既存`facade-v1-weather`を呼ぶadapterです。複数階では各Floorを`FacadeV1Parameters`へ変換し、`simulateFacadeV1()`を1回ずつ実行してBuilding Totalへ単純合算します。別のsolar / weather / shadow calculationは持ちません。
+
+Cross-floor physical shading（上下階間の物理的な相互遮蔽）は未実装です。全階のreference rayとfloor-local clippingは可視化のみで、計算結果を変更しません。
 
 > [!WARNING]
 > M4/M4.5の比較値を含め、第三者solverとの物理validationが完了するまで絶対値 `[kWh]` をBEI、法適合、HVAC sizing、最終認証、保証値に使用できません。表示値は開口からの日射熱取得量であり、HVAC冷房・暖房負荷ではありません。
@@ -82,4 +84,4 @@ npm audit
 
 ## Development status
 
-M4.5完了後はDraft PRでHuman Gate停止します。M5への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。
+M4.5はHuman UX Review PASS / Independent FULL Review A. PASSを経て完了しています。M5 — Validation / StabilityとM6 — Vercel OperationはPlannedであり、M5はNOT STARTEDです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。
