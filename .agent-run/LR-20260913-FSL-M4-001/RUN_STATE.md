@@ -137,12 +137,12 @@ See `DECISIONS.md`.
 
 ## Remaining tasks
 
-1. Review the docs-only M4 closeout PR.
-2. Keep M5 `NOT STARTED` until a separate Human Task Packet/authorization is provided.
+1. No remaining M4 implementation, review, merge, or Production tasks.
+2. M5 remains `NOT STARTED` and requires a separate Human Task Packet/authorization.
 
 ## Next action
 
-Await review of the docs-only M4 closeout PR. Do not begin M5 automatically.
+M4 is closed. Await a separate Human instruction for the next milestone. Do not begin M5 automatically.
 
 ## Stop conditions status
 
@@ -150,13 +150,14 @@ M4 is `COMPLETE`; RF-01 and Independent review are PASS; PR #5 is merged; automa
 
 ## Resume instructions
 
-1. Verify repository, closeout branch, `origin/main @ 714ac5b56ff1f739bf133fd9d1c0f7740651a996`, live `HEAD`, and clean/known working tree without rebasing.
+1. Treat M4 as `COMPLETE`; PR #5 is the completed product merge at `714ac5b56ff1f739bf133fd9d1c0f7740651a996`.
 2. Re-hash `TASK_PACKET_SNAPSHOT.md`; require exact digest `5A3288DF...003E8` and matching Manifest/State binding.
 3. Read `TASK_QUEUE.md`, `QUALITY_DEBT.md`, `DECISIONS.md`, and `EVIDENCE.md`.
-4. Treat PR #5 as merged at squash commit `714ac5b...`; do not recreate it or repeat its Ready/merge transitions.
-5. Treat automatic Production `dpl_2gfMznAVLZaDWhGTBeqjVfixaBFq` as `READY` at exact `main @ 714ac5b...`; do not perform a manual Production mutation.
+4. Resolve the repository's current branch, `origin/main`, live `HEAD`, and clean/known working tree without rebasing; retain `714ac5b...` as the M4 product-merge checkpoint rather than assuming it is the perpetual current `main` head.
+5. Treat automatic Production `dpl_2gfMznAVLZaDWhGTBeqjVfixaBFq` as `READY` at exact product source `714ac5b...`; do not perform a manual Production mutation.
 6. Do not repeat the completed RF-01 real-EPW browser acceptance; preserve its historical evidence and `CLOSED / PASS` conclusion.
-7. Resolve the docs-only closeout PR state without recreating, readying, or merging it unless separately authorized. Never begin M5 or delete `feat/m4-comparison-ux` automatically.
-8. Never create a manual Preview while the Git-triggered route works.
-9. Preserve the historical blocked evidence for audit, but treat the later `RF-01 Human Browser Acceptance Closure` evidence as superseding it.
-10. Case/Workspace JSON presets are input-only. Never treat their round-trip as result or weather evidence, and always require an explicit comparison rerun after import.
+7. This closeout synchronization does not create another M4 closeout cycle. After it reaches `main`, do not create another M4 closeout PR solely to record the closeout PR's own merge.
+8. Keep M5 `NOT STARTED` until a separate Human Task Packet/authorization is provided. Never begin M5 or delete `feat/m4-comparison-ux` automatically.
+9. Never create a manual Preview while the Git-triggered route works.
+10. Preserve the historical blocked evidence for audit, but treat the later `RF-01 Human Browser Acceptance Closure` evidence as superseding it.
+11. Case/Workspace JSON presets are input-only. Never treat their round-trip as result or weather evidence, and always require an explicit comparison rerun after import.
