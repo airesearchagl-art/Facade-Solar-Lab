@@ -306,3 +306,26 @@ Accepted observed values:
 This closure supersedes the earlier explicit-unverified browser records without deleting their historical audit evidence. No local absolute EPW path, EPW bytes/content, ZIP/license content, browser secret, or authentication token is recorded.
 
 Conclusion: `RF-01 = CLOSED / PASS`.
+
+## Post-Merge Closeout
+
+Performed: `2026-09-14` (Asia/Tokyo)
+
+| Check | Evidence | Result |
+| --- | --- | --- |
+| PR #5 | `MERGED`; reviewed head `5d317461744215ef60c4e4b3a18db4b232148d5d` | PASS |
+| Focused Independent Re-Review | `A. PASS — Ready candidate` | PASS |
+| Ready transition | PR #5 moved from Draft to Ready for review before merge | PASS |
+| Merge method | squash | PASS |
+| Squash merge commit | `714ac5b56ff1f739bf133fd9d1c0f7740651a996` | PASS |
+| Resulting `main` | `714ac5b56ff1f739bf133fd9d1c0f7740651a996` | PASS |
+| Merge parent | `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215` | PASS |
+| RF-01 | `CLOSED / PASS` | PASS |
+| Automatic Production deployment | `dpl_2gfMznAVLZaDWhGTBeqjVfixaBFq`; `READY` | PASS |
+| Production source | `git / main / 714ac5b56ff1f739bf133fd9d1c0f7740651a996` | PASS |
+| Canonical Production URL | `https://facade-solar-lab.vercel.app/`; HTTP 200 | PASS |
+| Manual Production mutation | none | PASS |
+| Branch deletion | none; `feat/m4-comparison-ux` retained | PASS |
+| M5 | not started | PASS |
+
+M4 is complete. This closeout changes only the three mutable M4 Run Artifact files on `docs/m4-post-merge-closeout`; product code, tests, legacy sources, and immutable Task Packet files are unchanged.
