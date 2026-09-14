@@ -248,3 +248,61 @@ Fresh local convergence:
 | Remote evidence | exact-head Git Preview and PR body sync | PENDING PUSH |
 
 RF-01 remains OPEN / `BLOCKED_BROWSER_ACCEPTANCE`. JSON import and synthetic Demo evidence do not substitute for Human verification of the OS-backed real-EPW path.
+
+## RF-01 Human Browser Acceptance Closure
+
+Performed: `2026-09-14` (Asia/Tokyo)
+
+- Exact accepted product head: `9be5567f178c0aea0d82923989029d089bb2101d`
+- Exact Preview: `dpl_G9kUsc6jTvh3CySMoPLGESyMzLN1`
+- Preview URL: `https://facade-solar-4cvgkovel-airesearchagls-projects.vercel.app/`
+- Native OS-backed EPW selection: PASS
+- Dataset: Tokyo Hyakuri IWEC
+- Browser-displayed location: `TOKYO HYAKURI / JPN`
+- WMO: `477150`
+- Intervals: `8760`
+- Parse issues: `0`
+- Demo mode: `false`
+
+### Comparison
+
+- 2 cases: PASS
+- Run Comparison: PASS
+- Annual: PASS
+- Summer: PASS
+- Winter: PASS
+- Monthly chart: PASS
+- Monthly table, 12 months: PASS
+- Baseline delta: PASS
+
+Accepted observed values:
+
+- Annual: `5535.8 / 4047.0 kWh`
+- Summer: `2251.4 / 1673.9 kWh`
+- Winter: `3284.4 / 2373.2 kWh`
+- Annual baseline delta: `-1488.8 kWh / -26.9%`
+
+### Edit / rerun
+
+- Dirty state: PASS
+- Rerun: PASS
+- Case B overhang depth `1.8 m` reflected: PASS
+
+### Exports
+
+- CSV: PASS
+- PDF: PASS
+- Real EPW provenance present: PASS
+- All KPI and 12 monthly values present: PASS
+- `NaN` / `Infinity` absent: PASS
+
+### Browser
+
+- App-origin fatal errors: `0`
+- Asset 404: `0`
+- Blank page: `0`
+- JavaScript runtime failure: `0`
+
+This closure supersedes the earlier explicit-unverified browser records without deleting their historical audit evidence. No local absolute EPW path, EPW bytes/content, ZIP/license content, browser secret, or authentication token is recorded.
+
+Conclusion: `RF-01 = CLOSED / PASS`.

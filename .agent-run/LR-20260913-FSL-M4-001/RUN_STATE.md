@@ -5,13 +5,13 @@
 - Run ID: `LR-20260913-FSL-M4-001`
 - Mode: `LONG_RUN_ENDURANCE`
 - Horizon: `EXTENDED`
-- Current state: `BLOCKED_BROWSER_ACCEPTANCE`
+- Current state: `FOCUSED_REVIEW_PENDING`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m4-comparison-ux`
 - Base SHA: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
-- Current head: resolve live `HEAD`; last verified pre-follow-up checkpoint is `018a5a5d0f86d6dee486407e56a42c6c85dc8755`
-- Current wave: `Human UX Review follow-up — Report Geometry & JSON Presets`
-- Last successful checkpoint: PR #5 Design Insight & Export exact head `018a5a5d0f86d6dee486407e56a42c6c85dc8755`
+- Current head: resolve live `HEAD`; last Human-accepted product checkpoint is `9be5567f178c0aea0d82923989029d089bb2101d`
+- Current wave: `RF-01 closure evidence / Focused Independent Re-Review`
+- Last successful checkpoint: Human Browser Acceptance passed at product head `9be5567f178c0aea0d82923989029d089bb2101d`
 - Task Packet ID: `LRP-20260913-FSL-M4-001`
 - Task Packet revision: `1`
 - Task Packet snapshot path: `.agent-run/LR-20260913-FSL-M4-001/TASK_PACKET_SNAPSHOT.md`
@@ -62,7 +62,7 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 37. [x] Golden passed at final product checkpoint.
 38. [x] Diff check passed at final product checkpoint.
 39. [x] Privacy/raw-EPW/secret scan passes.
-40. [ ] Final browser acceptance is blocked pending Human Manual Verification of the OS-backed EPW flow.
+40. [x] Final OS-backed real-EPW browser acceptance passed with Human participation.
 41. [x] Draft PR #5 created.
 42. [x] Human Gate reached after Draft PR.
 
@@ -86,10 +86,11 @@ Build a browser-local Facade Comparison Workspace for one to four facade cases u
 - Independent FULL Review at `aa602bbe...` classified the unverified OS-backed EPW acceptance path as a Required Verification. It is not PASS and cannot be closed without Human browser evidence.
 - Added the bounded Human UX follow-up: explicit solar-heat-gain semantics, facade-relative 6/21 and 12/21 reference rays, browser print/PDF report layout, and Excel-editable safe CSV export. RF-01 remains open.
 - Added the bounded Report Geometry & JSON Presets follow-up: A4 reports render every result Case in report order with section/elevation/reference rays; versioned Pure TypeScript Case/Workspace presets contain inputs only and require explicit rerun after import. RF-01 remains open.
+- Completed the Human Browser Acceptance causal path at exact product head `9be5567f...`: native OS-backed Tokyo Hyakuri IWEC selection, provenance, two-Case comparison, Annual/Summer/Winter KPI, monthly chart/table, baseline delta, dirty-state rerun, CSV/PDF export, and browser health all passed. RF-01 is closed.
 
 ## Current implementation state
 
-The Report Geometry & JSON Presets follow-up is locally implemented and converged. Local browser round-trips and a rendered five-page A4 report pass. A normal push, exact-head Git Preview classification, remote browser verification, and PR-body sync remain. The run is still `BLOCKED_BROWSER_ACCEPTANCE`; Demo, PDF, CSV, and JSON presets do not close the Human real-EPW browser gate.
+The M4 implementation and Human Browser Acceptance are complete. RF-01 is `CLOSED / PASS` at accepted product head `9be5567f...`. This artifact-only closure record introduces no product-source change. Independent Focused Re-Review remains pending, and no Ready transition is authorized.
 
 ## Checks
 
@@ -109,10 +110,7 @@ No deferred implementation debt. See `QUALITY_DEBT.md`.
 
 ## Explicit unverified items
 
-- Actual OS-backed browser file selection is unverified because the available browser automation exposes no file-upload or native file-dialog operation.
-- Narrow-viewport behavior is covered by responsive CSS inspection but not a separate physical mobile browser viewport.
-- Remote weather provenance, explicit Run, Annual/Summer/Winter KPI, monthly chart, and baseline delta after actual browser file selection are unverified for the same file-attachment limitation.
-- Human Manual Verification at the exact final Preview is required before RF-01 can close or the PR can become a Ready candidate.
+- A separate physical mobile device was not used. The existing approximately 390 px browser viewport audit passed and is not an RF-01 blocker.
 
 ## Known failures
 
@@ -130,17 +128,17 @@ See `DECISIONS.md`.
 
 ## Remaining tasks
 
-1. Commit and normally push the bounded Report Geometry & JSON Presets follow-up.
-2. Classify and verify the exact-head Git Preview, then synchronize the existing PR #5 body.
-3. Obtain Human Manual Verification of the complete browser EPW flow before closing RF-01.
+1. Resolve live `HEAD` and verify that the RF-01 closure commit changes only mutable M4 Run Artifact files; do not recreate or repeat it.
+2. Read-only refresh the Git-triggered Preview for the artifact commit head and prepare the existing PR #5 body evidence sync.
+3. Await separate Human authorization before saving the PR body, then await Focused Independent Re-Review. Ready remains unauthorized.
 
 ## Next action
 
-After the bounded push and PR-body evidence sync, stop for Report Geometry & Preset Human UX Review. Do not close RF-01.
+After the artifact-only push and exact-head Preview verification, prepare but do not send the PR #5 body evidence sync. Stop for PR Evidence Sync Authorization.
 
 ## Stop conditions status
 
-`BLOCKED_BROWSER_ACCEPTANCE` is active. Do not treat it as Quality Debt or PASS; do not mark Ready until Human evidence closes RF-01.
+RF-01 is `CLOSED / PASS`. `FOCUSED_REVIEW_PENDING` is active; do not mark Ready, merge, or begin M5 without a new Human instruction.
 
 ## Resume instructions
 
@@ -148,9 +146,9 @@ After the bounded push and PR-body evidence sync, stop for Report Geometry & Pre
 2. Re-hash `TASK_PACKET_SNAPSHOT.md`; require exact digest `5A3288DF...003E8` and matching Manifest/State binding.
 3. Read `TASK_QUEUE.md`, `QUALITY_DEBT.md`, `DECISIONS.md`, and `EVIDENCE.md`.
 4. Confirm the current Vercel inventory and Production aliases before any push that may trigger a deployment.
-5. PR #5 already exists. Do not recreate it or mark it Ready. Its body may be updated only to synchronize the authorized exact-head Preview evidence.
-6. Keep RF-01 open until Human Manual Verification covers file selection → provenance → Run → KPI/chart/table/delta plus console/assets/mobile checks.
+5. PR #5 already exists. Do not recreate it or mark it Ready. The next PR-body evidence sync is prepared only and requires separate action-time Human authorization before saving.
+6. Do not repeat the completed RF-01 real-EPW browser acceptance solely because an artifact-only commit changes `HEAD`; verify that product source diff remains zero.
 7. Await Focused Independent Re-Review; never merge, auto-merge, begin M5, delete the smoke ref/deployments/branch, or mutate Production.
 8. Never create a manual Preview while the Git-triggered route works.
-9. Do not claim an OS-backed EPW file selection until it is actually exercised; preserve the downstream result views as explicit unverified evidence.
+9. Preserve the historical blocked evidence for audit, but treat the later `RF-01 Human Browser Acceptance Closure` evidence as superseding it.
 10. Case/Workspace JSON presets are input-only. Never treat their round-trip as result or weather evidence, and always require an explicit comparison rerun after import.
