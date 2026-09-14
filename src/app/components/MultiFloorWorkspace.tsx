@@ -44,6 +44,7 @@ import { parseBrowserEpwFile } from "../weather-file";
 import { MultiFloorCaseEditor } from "./MultiFloorCaseEditor";
 import { MultiFloorGeometryPreview } from "./MultiFloorGeometryPreview";
 import { MultiFloorResults } from "./MultiFloorResults";
+import { CaseColorPicker, CaseMarker, getCaseStyle, useCaseColors } from "../case-colors";
 
 const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
   HEADER_MISSING: "必要なヘッダーがありません。",
@@ -120,6 +121,7 @@ function MultiFloorPrintSummary({ result, dataset }: { readonly result: MultiFlo
 }
 
 export function MultiFloorWorkspace() {
+  const { colors, setColor, resetColors } = useCaseColors();
   const [workspace, setWorkspace] = useState<MultiFloorWorkspaceState>(() => initialWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("building-a");
   const [selectedFloorId, setSelectedFloorId] = useState("floor-1");
@@ -191,6 +193,7 @@ export function MultiFloorWorkspace() {
       const nextWorkspace = createMultiFloorDemoWorkspace();
       const nextResult = runMultiFloorComparison(nextDataset, nextWorkspace);
       setWorkspace(nextWorkspace);
+      resetColors();
       setSelectedCaseId("building-b");
       setSelectedFloorId("floor-3");
       setDataset(nextDataset);
@@ -245,6 +248,7 @@ export function MultiFloorWorkspace() {
     );
     if (preset.kind === MULTI_FLOOR_CASE_PRESET_KIND) caseSequence.current = nextIdentity.sequence + 1;
     setWorkspace(applied.workspace);
+    if (preset.kind !== MULTI_FLOOR_CASE_PRESET_KIND) resetColors();
     setSelectedCaseId(applied.selectedCaseId);
     setSelectedFloorId(applied.selectedFloorId);
     setResult(applied.result);
@@ -273,7 +277,8 @@ export function MultiFloorWorkspace() {
 
       <section className="panel multifloor-case-panel" aria-labelledby="multifloor-cases-title">
         <div className="section-heading"><div><p className="section-kicker">02 · Building Case</p><h2 id="multifloor-cases-title">複数階の建物案</h2></div><div className="case-actions"><button type="button" className="secondary-button" disabled={workspace.cases.length >= MAX_MULTI_FLOOR_CASES} onClick={() => { const next = nextAvailableMultiFloorCaseId(workspace, caseSequence.current); caseSequence.current = next.sequence + 1; const item = createMultiFloorCase(next.id, `建物案${String.fromCharCode(64 + next.sequence)}`); mutateWorkspace((current) => addMultiFloorCase(current, item), { caseId: item.id, floorId: item.floors[0]!.id }); }}>建物案を追加</button><button type="button" className="secondary-button" disabled={workspace.cases.length >= MAX_MULTI_FLOOR_CASES} onClick={() => { const next = nextAvailableMultiFloorCaseId(workspace, caseSequence.current); caseSequence.current = next.sequence + 1; mutateWorkspace((current) => duplicateMultiFloorCase(current, selectedCase.id, next.id, `建物案${String.fromCharCode(64 + next.sequence)}`), { caseId: next.id, floorId: selectedCase.floors[0]!.id }); }}>建物案を複製</button></div></div>
-        <div className="case-tabs" role="group" aria-label="比較する複数階建物案">{workspace.cases.map((item, index) => <button key={item.id} type="button" aria-pressed={item.id === selectedCase.id} className={item.id === selectedCase.id ? "case-tab active" : "case-tab"} onClick={() => selectCase(item.id)}><span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span><span>{item.name}</span>{item.id === workspace.baselineCaseId ? <small>基準案</small> : null}</button>)}</div>
+        <div className="case-tabs" role="group" aria-label="比較する複数階建物案">{workspace.cases.map((item, index) => <button key={item.id} type="button" aria-pressed={item.id === selectedCase.id} className={item.id === selectedCase.id ? "case-tab active" : "case-tab"} onClick={() => selectCase(item.id)}><CaseMarker colors={colors} caseId={item.id} index={index} /><span>{item.name}</span>{item.id === workspace.baselineCaseId ? <small>基準案</small> : null}</button>)}</div>
+        <CaseColorPicker caseName={selectedCase.name} value={getCaseStyle(colors, selectedCase.id, workspace.cases.indexOf(selectedCase)).color} onChange={(color) => setColor(selectedCase.id, color)} />
         <div className="case-toolbar"><label className="field name-field" htmlFor={`${selectedCase.id}-building-name`}><span>建物案の名称</span><input id={`${selectedCase.id}-building-name`} value={selectedCase.name} onChange={(event) => replaceSelectedCase({ ...selectedCase, name: event.currentTarget.value })} /></label><button type="button" className="text-button" disabled={selectedCase.id === workspace.baselineCaseId} onClick={() => mutateWorkspace((current) => setMultiFloorBaseline(current, selectedCase.id))}>基準案に設定</button><button type="button" className="text-button danger" disabled={workspace.cases.length === 1} onClick={() => { const remaining = workspace.cases.filter((item) => item.id !== selectedCase.id); const next = remaining[0]!; mutateWorkspace((current) => deleteMultiFloorCase(current, selectedCase.id), { caseId: next.id, floorId: next.floors[0]!.id }); }}>建物案を削除</button><span className="case-count">{workspace.cases.length} / {MAX_MULTI_FLOOR_CASES}</span></div>
         <div className="multifloor-workspace-grid">
           <MultiFloorCaseEditor buildingCase={selectedCase} selectedFloorId={selectedFloor.id} issues={selectedIssues} onCaseChange={replaceSelectedCase} onSelectFloor={setSelectedFloorId} onAddFloor={() => { const next = nextAvailableFloorId(selectedCase); const added = createMultiFloorDefinition(next.id, `${next.sequence}F`); replaceSelectedCase(addFloor(selectedCase, added)); setSelectedFloorId(added.id); }} onDuplicateFloor={() => { const next = nextAvailableFloorId(selectedCase); replaceSelectedCase(duplicateFloor(selectedCase, selectedFloor.id, next.id, `${next.sequence}F`)); setSelectedFloorId(next.id); }} onDeleteFloor={() => { const remaining = selectedCase.floors.filter((floor) => floor.id !== selectedFloor.id); replaceSelectedCase(deleteFloor(selectedCase, selectedFloor.id)); setSelectedFloorId(remaining[0]!.id); }} />
@@ -285,7 +290,7 @@ export function MultiFloorWorkspace() {
 
       <section className="run-panel" aria-labelledby="multifloor-run-title"><div><p className="section-kicker">明示的に計算を実行</p><h2 id="multifloor-run-title">複数階比較を実行</h2><p>{dataset === null ? "EPWまたは複数階デモ気象を読み込んでください。" : validationIssues.length > 0 ? "不正な入力を修正してください。" : dirty ? "入力変更は未計算です。" : "現在の入力と気象データが反映されています。"}</p></div><button type="button" className="run-button" disabled={!canRun} onClick={run}>複数階比較を実行 <span>→</span></button></section>
       {runError === null ? null : <div className="message error-message" role="alert">{runError}</div>}
-      {result === null || dataset === null ? <section className="panel results-empty"><span>複数階比較結果</span><strong>気象データと入力を確認し、比較計算を実行してください</strong><p>Building Total、Floor Breakdown、月別値、基準案との差を表示します。</p></section> : <>{dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回実行時のsnapshotです。出力は再実行まで無効です。</div> : null}<MultiFloorPrintSummary result={result} dataset={dataset} /><MultiFloorResults result={result} dataset={dataset} selectedCaseId={selectedCaseId} selectedFloorId={selectedFloorId} onSelectCase={selectCase} onSelectFloor={setSelectedFloorId} /><section className="panel export-panel no-print"><div><p className="section-kicker">複数階結果の共有</p><h2>PDF / CSV</h2><p>{dirty ? "再計算後に出力できます。" : "全建物案・全階の結果と積層形状を出力します。"}</p></div><div className="export-actions"><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) window.print(); }}>PDFとして保存 / 印刷</button><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) downloadTextFile(MULTI_FLOOR_CSV_FILENAME, createMultiFloorCsv(result, dataset), "text/csv;charset=utf-8"); }}>複数階CSVを書き出す</button></div></section></>}
+      {result === null || dataset === null ? <section className="panel results-empty"><span>複数階比較結果</span><strong>気象データと入力を確認し、比較計算を実行してください</strong><p>Building Total、Floor Breakdown、月別値、基準案との差を表示します。</p></section> : <>{dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回実行時のsnapshotです。出力は再実行まで無効です。</div> : null}<MultiFloorPrintSummary result={result} dataset={dataset} /><MultiFloorResults result={result} dataset={dataset} colors={colors} selectedCaseId={selectedCaseId} selectedFloorId={selectedFloorId} onSelectCase={selectCase} onSelectFloor={setSelectedFloorId} /><section className="panel export-panel no-print"><div><p className="section-kicker">複数階結果の共有</p><h2>PDF / CSV</h2><p>{dirty ? "再計算後に出力できます。" : "全建物案・全階の結果と積層形状を出力します。"}</p></div><div className="export-actions"><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) window.print(); }}>PDFとして保存 / 印刷</button><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) downloadTextFile(MULTI_FLOOR_CSV_FILENAME, createMultiFloorCsv(result, dataset), "text/csv;charset=utf-8"); }}>複数階CSVを書き出す</button></div></section></>}
 
       <section className="panel assumptions-panel"><div className="section-heading"><div><p className="section-kicker">モデル情報</p><h2>複数階計算の前提</h2></div></div><div className="assumption-grid"><article><h3>canonical engine reuse</h3><p>各Floorを既存<code>FacadeV1Parameters</code>へ変換し、<code>simulateFacadeV1()</code>を1回ずつ実行します。solar / weather / shadow式は複製しません。</p></article><article><h3>Building Total</h3><p>各Floorの年間・夏期・冬期・月別の日射熱取得量を単純合算します。階数や開口面積の差も建物全体差に含まれます。</p></article><article className="limitation-card"><h3>適用範囲</h3><p>単一階と同じ有限幅・直達影、2D無限幅天空日射近似、地面反射モデルを各階へ適用します。第三者solverによる絶対値validationはM5です。</p></article></div></section>
       <footer><span>Facade Solar Lab · M4.5 Multi-floor Mode</span><span>{result === null ? "未計算" : `建物案 ${result.cases.length} · ${formatKWh(result.cases[0]!.total.annualKWh)} kWh（基準案年間）`}</span></footer>
