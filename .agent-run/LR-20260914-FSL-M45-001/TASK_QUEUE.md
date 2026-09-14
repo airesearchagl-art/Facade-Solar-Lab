@@ -32,7 +32,7 @@ The implementation-wave evidence above is historical. PR #7 exists and remains D
 | Native final-Preview PDF | Print components rendered locally as an A4 layout check; native print/save dialog is not exposed by the browser control surface | HUMAN VERIFICATION REQUIRED |
 | Git / PR | Normal push to existing branch; resolve exact-source Git Preview and synchronize PR #7 body after this checkpoint | RESOLVE LIVE / DRAFT ONLY |
 
-## Human UX Follow-up 02 — current follow-up
+## Human UX Follow-up 02 — historical implementation checkpoint
 
 The Human re-check below supersedes the historical pending statuses above.
 
@@ -47,3 +47,23 @@ The Human re-check below supersedes the historical pending statuses above.
 | Print layout | COMPLETE — five local static A4 pages inspected, including 10/15/20 m deep-overhang stress fixture; not native exact-Preview PDF acceptance |
 | Git / PR | Resolve live exact-source Git Preview after normal push; synchronize existing PR #7 only; DRAFT ONLY |
 | Human gate | STOP — UX-05 Human Re-Check; independent review pending; no Ready/merge/Production/M5 |
+
+## Human UX Acceptance — current state
+
+Human accepted exact product head `0888b66646db328f5d8292bc53aa480a64c61239` after exact-Preview re-check. These current statuses supersede the historical pending findings above.
+
+| Finding / task | Current status |
+| --- | --- |
+| UX-01: Floor label overlap | CLOSED / PASS |
+| UX-02: All-floor solar ray display | CLOSED / PASS |
+| UX-03: Floor-by-Floor Case Comparison | CLOSED / PASS |
+| UX-04: Floor monthly charts | CLOSED / PASS |
+| UX-05: Floor-local solar reference ray clipping | CLOSED / PASS — Human confirmed floor-band containment and no unnatural angle change |
+| M4.5 Human UX Review | PASS |
+| Acceptance evidence synchronization | Docs-only; product source diff 0; no calculation, CSV or preset changes |
+| Independent FULL Review | INDEPENDENT_REVIEW_PENDING — separate reviewer; not this implementation session |
+| Ready / merge / auto-merge | UNAUTHORIZED |
+| M5 | NOT STARTED |
+| Human gate | STOP — Independent FULL Review |
+
+Reference ray clipping remains visualization only. Cross-floor physical shading is not implemented. The final docs-sync HEAD is resolved from Git/PR after this checkpoint; it is not the accepted product head above. No manual Preview or Production operation is authorized.

@@ -6,7 +6,11 @@ No deferred blocking M4.5 implementation debt is accepted.
 
 Historical Human UX Follow-up 01 checkpoint: UX-01/02/03/04 fixes were implemented but AWAITING HUMAN RE-CHECK. Local 5-page static print-layout validation passed; the final product Preview native PDF save/inspection was unverified by automation because the browser surface did not expose its native print/save dialog. Local rendering alone did not close that gate.
 
-Current Human UX Follow-up 02: Human confirmed UX-01/03/04 and UX-02 all-floor display CLOSED / PASS, and reported ray penetration across Floor bands in the UI/PDF as UX-05. The visualization-only clipping fix passed local tests/layout checks but remains HUMAN_RECHECK_PENDING. No inter-floor shading calculation was added. Post-fix exact-Preview/PDF Human acceptance remains pending.
+Historical Human UX Follow-up 02 checkpoint: Human confirmed UX-01/03/04 and UX-02 all-floor display CLOSED / PASS, and reported ray penetration across Floor bands in the UI/PDF as UX-05. The visualization-only clipping fix passed local tests/layout checks but was HUMAN_RECHECK_PENDING. No inter-floor shading calculation was added.
+
+Current Human acceptance: accepted exact product head `0888b66646db328f5d8292bc53aa480a64c61239`; UX-01 through UX-05 CLOSED / PASS; M4.5 Human UX Review PASS. Human confirmed no 3F-to-2F, 2F-to-1F or 1F-below-building penetration, no unnatural angle change, and appropriate per-floor clipping. This supersedes the historical UX re-check gates, without inventing additional native real-EPW/PDF/CSV evidence beyond the stated Preview checks.
+
+Current gate: INDEPENDENT_REVIEW_PENDING. Calculation engine changes in this sync: none. Cross-floor physical shading: not implemented; reference ray clipping: visualization only. Ready/merge/auto-merge remain unauthorized; M5 NOT STARTED.
 
 Explicit later boundaries are third-party physical validation, finite-width diffuse modeling, uncertainty/tolerance formalization, and arbitrary PDF Case color selection. They are not silently represented as M4.5 PASS.
 

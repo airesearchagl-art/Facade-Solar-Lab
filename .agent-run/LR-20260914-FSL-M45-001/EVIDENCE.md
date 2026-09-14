@@ -120,9 +120,30 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 - This PDF is a local static print-layout check, not a PDF saved from the exact product Preview. Post-fix Human UI/PDF re-check remains pending.
 - Tokyo Hyakuri smoke was not rerun: this change only affects display endpoints, with complete output digest equality and existing regressions PASS. No EPW download or external weather redistribution.
 
-### Current gate
+### Historical Follow-up 02 gate — superseded by Human acceptance below
 
 - UX-01 / UX-03 / UX-04: CLOSED / PASS; UX-02: CLOSED / PASS for all-floor display.
 - UX-05: FIXED / HUMAN_RECHECK_PENDING, not CLOSED / PASS.
 - Final exact-source Git Preview and PR metadata are verified after the repository checkpoint and recorded in the PR/completion report. Resolve them live; do not repeat push/deploy merely to record this document's own commit SHA.
 - Existing PR #7 stays OPEN / Draft; Ready=false; no merge, main write, Production mutation, branch deletion or M5.
+
+## Human UX Acceptance Sync — 2026-09-14
+
+- Evidence source: Human's explicit M4.5 Human UX Acceptance Sync instruction, following exact-head Preview re-check.
+- Accepted exact product head: `0888b66646db328f5d8292bc53aa480a64c61239`.
+- Fresh Gate: after fetch, local HEAD, origin feature branch and PR #7 head matched that product SHA; `origin/main` and PR base matched `35f543e618b8ad70ecc746b3139a5fb09adbeca9`; working tree clean; PR OPEN / Draft=true / merged=false.
+- Human UX Review: PASS.
+- UX-01 Floor label overlap: CLOSED / PASS.
+- UX-02 All-floor solar ray display: CLOSED / PASS.
+- UX-03 Floor-by-Floor Case Comparison: CLOSED / PASS.
+- UX-04 Floor monthly charts: CLOSED / PASS.
+- UX-05 Floor-local solar reference ray clipping: CLOSED / PASS.
+- Human confirmed: 3F rays do not enter 2F; 2F rays do not enter 1F; 1F rays do not extend below the building base; no unnatural ray-angle change; reference rays are appropriately bounded per floor.
+- These Human results supersede the historical UX re-check-pending statuses without deleting their audit history. This acceptance records the stated Preview checks, not additional native real-EPW/PDF/CSV tests that were not reported.
+- Calculation engine changes: none. Cross-floor physical shading: not implemented. Reference ray clipping: visualization only.
+- This synchronization changes mutable Run Artifacts only; product source diff 0 against the accepted product head. Full npm test/build were not rerun, as authorized for this docs-only sync; the 158-test product checkpoint above remains historical evidence at the accepted product SHA.
+- Validation: `git diff --check` PASS; only mutable Run Artifact changes; immutable Task Packet SHA-256 remains `2138381AA95AC9B9F74AB4890D182A496DACC4425C36547B9829B22EDF3CF22B`.
+- The later docs-only live HEAD is the Independent FULL Review handoff head, not a replacement for the fixed Human-accepted product checkpoint. After normal push, resolve local/origin/PR head equality externally; no self-referential commit SHA is embedded here.
+- Current state: INDEPENDENT_REVIEW_PENDING. Independent FULL Review is not performed by this implementation session. Existing PR #7 remains Draft; Ready, merge and auto-merge unauthorized.
+- Manual Preview/Production mutation: none. Main mutation: none. Branch deletion: none. M5: NOT STARTED.
+- Human Gate: STOP — Independent FULL Review.
