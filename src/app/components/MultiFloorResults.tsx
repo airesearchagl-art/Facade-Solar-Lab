@@ -1,0 +1,130 @@
+import { formatKWh, formatPercent, formatSignedKWh } from "../../comparison";
+import type { MultiFloorCaseResult, MultiFloorRunResult } from "../../multifloor";
+
+const MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"] as const;
+const SERIES_COLORS = ["#ca5a2e", "#176b73", "#7f5aa2", "#647438"] as const;
+
+function PeriodTable({ result }: { readonly result: MultiFloorRunResult }) {
+  const periods = [
+    { label: "年間", value: "annualKWh", delta: "annual" },
+    { label: "夏期（4〜9月）", value: "summerKWh", delta: "summer" },
+    { label: "冬期（10〜3月）", value: "winterKWh", delta: "winter" },
+  ] as const;
+  return (
+    <div className="table-scroll">
+      <table className="data-table multifloor-total-table">
+        <thead><tr><th scope="col">期間</th>{result.cases.map((item, index) => <th scope="col" key={item.caseId}>{String.fromCharCode(65 + index)} · {item.name}</th>)}</tr></thead>
+        <tbody>{periods.map((period) => (
+          <tr key={period.label}>
+            <th scope="row">{period.label}</th>
+            {result.cases.map((item) => {
+              const delta = item.deltaFromBaseline[period.delta];
+              return <td key={item.caseId}><strong>{formatKWh(item.total[period.value])} kWh</strong><small>{item.caseId === result.baselineCaseId ? "基準案" : `${formatSignedKWh(delta.kWh)} kWh / ${formatPercent(delta.percent)}`}</small></td>;
+            })}
+          </tr>
+        ))}</tbody>
+      </table>
+    </div>
+  );
+}
+
+function MultiFloorMonthlyChart({ result }: { readonly result: MultiFloorRunResult }) {
+  const width = 720;
+  const height = 270;
+  const left = 52;
+  const right = 18;
+  const top = 18;
+  const bottom = 40;
+  const plotWidth = width - left - right;
+  const plotHeight = height - top - bottom;
+  const maximum = Math.max(1, ...result.cases.flatMap((item) => item.total.monthlyKWh));
+  const x = (index: number) => left + (index * plotWidth) / 11;
+  const y = (value: number) => top + plotHeight - (value / maximum) * plotHeight;
+  return (
+    <section className="multifloor-monthly" aria-labelledby="multifloor-monthly-title">
+      <div className="subsection-heading"><div><p className="section-kicker">Building Total</p><h3 id="multifloor-monthly-title">建物全体の月別比較</h3></div><span>日射熱取得量 [kWh]</span></div>
+      <ul className="chart-legend" aria-label="建物案の凡例">{result.cases.map((item, index) => <li key={item.caseId}><span className={`legend-line series-${index + 1}`} aria-hidden="true" /><strong>{String.fromCharCode(65 + index)}</strong> {item.name}{item.caseId === result.baselineCaseId ? " · 基準案" : ""}</li>)}</ul>
+      <div className="chart-scroll">
+        <svg className="monthly-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="multifloor-chart-title multifloor-chart-desc">
+          <title id="multifloor-chart-title">建物案ごとの月別日射熱取得量</title>
+          <desc id="multifloor-chart-desc">各階の月別値を合計した建物全体値です。正確な値は下の表でも確認できます。</desc>
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+            const lineY = top + plotHeight - ratio * plotHeight;
+            return <g key={ratio}><line className="chart-grid" x1={left} x2={width - right} y1={lineY} y2={lineY} /><text className="axis-label" x={left - 10} y={lineY + 4} textAnchor="end">{formatKWh(maximum * ratio)}</text></g>;
+          })}
+          {MONTHS.map((month, index) => <text className="axis-label" key={month} x={x(index)} y={height - 14} textAnchor="middle">{month}</text>)}
+          {result.cases.map((item, caseIndex) => {
+            const points = item.total.monthlyKWh.map((value, index) => `${x(index)},${y(value)}`).join(" ");
+            return <g key={item.caseId}><polyline points={points} fill="none" stroke={SERIES_COLORS[caseIndex]} strokeWidth="3" />{item.total.monthlyKWh.map((value, index) => <circle key={MONTHS[index]} cx={x(index)} cy={y(value)} r="4" fill="#fffdf7" stroke={SERIES_COLORS[caseIndex]} strokeWidth="2"><title>{`${item.name}・${MONTHS[index]}: ${formatKWh(value)} kWh`}</title></circle>)}</g>;
+          })}
+        </svg>
+      </div>
+      <details className="monthly-table-wrap" open>
+        <summary>建物全体の月別値</summary>
+        <div className="table-scroll"><table className="data-table monthly-table"><caption>各階合計の日射熱取得量 [kWh] と基準案差</caption><thead><tr><th scope="col">月</th>{result.cases.map((item) => <th scope="col" key={item.caseId}>{item.name}</th>)}</tr></thead><tbody>{MONTHS.map((month, index) => <tr key={month}><th scope="row">{month}</th>{result.cases.map((item) => {
+          const delta = item.deltaFromBaseline.monthly[index]!;
+          return <td key={item.caseId}><strong>{formatKWh(item.total.monthlyKWh[index]!)} kWh</strong><small>{item.caseId === result.baselineCaseId ? "基準案" : `${formatSignedKWh(delta.kWh)} kWh / ${formatPercent(delta.percent)}`}</small></td>;
+        })}</tr>)}</tbody></table></div>
+      </details>
+    </section>
+  );
+}
+
+function FloorTable({ item }: { readonly item: MultiFloorCaseResult }) {
+  return (
+    <div className="table-scroll">
+      <table className="data-table floor-result-table">
+        <thead><tr><th scope="col">Floor</th><th scope="col">年間</th><th scope="col">夏期</th><th scope="col">冬期</th></tr></thead>
+        <tbody>{item.floors.map((floor) => <tr key={floor.floorId}><th scope="row">{floor.name}</th><td>{formatKWh(floor.simulation.summary.annual.withOverhangKWh)} kWh</td><td>{formatKWh(floor.simulation.summary.cooling.withOverhangKWh)} kWh</td><td>{formatKWh(floor.simulation.summary.heating.withOverhangKWh)} kWh</td></tr>)}</tbody>
+      </table>
+    </div>
+  );
+}
+
+export function MultiFloorResults({
+  result,
+  selectedCaseId,
+  selectedFloorId,
+  onSelectCase,
+  onSelectFloor,
+}: {
+  readonly result: MultiFloorRunResult;
+  readonly selectedCaseId: string;
+  readonly selectedFloorId: string;
+  readonly onSelectCase: (caseId: string) => void;
+  readonly onSelectFloor: (floorId: string) => void;
+}) {
+  const selectedCase = result.cases.find((item) => item.caseId === selectedCaseId) ?? result.cases[0]!;
+  const selectedFloor = selectedCase.floors.find((floor) => floor.floorId === selectedFloorId) ?? selectedCase.floors[0]!;
+  return (
+    <section className="panel multifloor-results" aria-labelledby="multifloor-results-title">
+      <div className="section-heading"><div><p className="section-kicker">04 · 複数階比較結果</p><h2 id="multifloor-results-title">Building Total</h2></div><p>差分 = 各建物案 − 基準案</p></div>
+      <div className="result-reading">
+        <p><strong>表示値は各階の開口を通る日射熱取得量の単純合算です。冷房・暖房負荷ではありません。</strong></p>
+        <p>建物全体差には階数、開口面積、SHGC、庇条件の差が含まれます。自動的な優劣判定は行いません。</p>
+      </div>
+      <PeriodTable result={result} />
+      <MultiFloorMonthlyChart result={result} />
+
+      <section className="floor-breakdown" aria-labelledby="floor-breakdown-title">
+        <div className="subsection-heading"><div><p className="section-kicker">Case内訳</p><h3 id="floor-breakdown-title">Floor Breakdown</h3></div></div>
+        <div className="result-selectors no-print">
+          <label>建物案<select value={selectedCase.caseId} onChange={(event) => onSelectCase(event.currentTarget.value)}>{result.cases.map((item) => <option key={item.caseId} value={item.caseId}>{item.name}</option>)}</select></label>
+          <label>月別詳細の階<select value={selectedFloor.floorId} onChange={(event) => onSelectFloor(event.currentTarget.value)}>{selectedCase.floors.map((floor) => <option key={floor.floorId} value={floor.floorId}>{floor.name}</option>)}</select></label>
+        </div>
+        <div className="no-print">
+          <FloorTable item={selectedCase} />
+          <details className="monthly-table-wrap" open>
+            <summary>{selectedCase.name} · {selectedFloor.name} の月別詳細</summary>
+            <div className="table-scroll"><table className="data-table compact-month-table"><thead><tr>{MONTHS.map((month) => <th scope="col" key={month}>{month}</th>)}</tr></thead><tbody><tr>{selectedFloor.simulation.monthly.map((month) => <td key={month.month}>{formatKWh(month.withOverhangKWh)}</td>)}</tr></tbody></table></div>
+          </details>
+        </div>
+      </section>
+
+      <section className="print-only multifloor-all-floor-report" aria-label="全建物案の階別結果">
+        <h2>全建物案のFloor Breakdown</h2>
+        {result.cases.map((item) => <article key={item.caseId}><h3>{item.name}{item.caseId === result.baselineCaseId ? " · 基準案" : ""}</h3><FloorTable item={item} /></article>)}
+      </section>
+    </section>
+  );
+}

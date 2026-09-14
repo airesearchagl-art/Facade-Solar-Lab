@@ -6,17 +6,22 @@
 | M1 — Engine Baseline | 単位・入力contract、independent legacy reference、Pure TypeScript core、Golden固定 | Complete |
 | M2 — Weather Foundation | EPW ingestion・provenance・LST normalization・weather-v1 energy | Complete |
 | M3 — Facade Geometry | 全方位、窓・腰壁・全面窓、有限幅庇、直接影polygon | Complete |
-| M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Current |
+| M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Complete |
+| M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Current |
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | Planned |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Planned |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4は専用Task PacketとHuman authorizationに基づいて進行します。
+- M4.5は専用Task PacketとHuman authorizationに基づいて進行します。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Production deployment、Ready for Review、mergeはHuman Gateです。
 
-## M4 non-goals
+## M4.5 model boundary
 
-自動最適化、side fin、reveal、複数開口・複数遮蔽物、任意3D mesh、finite-width diffuse遮蔽、Perez/anisotropic sky、glass product database、glass IAC、account、cloud save、正式Production releaseはM4で実装しません。Human承認済みbounded follow-upとしてbrowser print/CSVと入力専用JSON presetだけを追加し、cloud persistenceには拡張しません。
+各Floorを既存`FacadeV1Parameters`へ変換してcanonical `simulateFacadeV1()`を1回ずつ実行します。Building Totalは階別の年間・夏期・冬期・月別日射熱取得量の単純合算です。solar / weather / shadow formulaを複製せず、1 Floor時は単一階結果とexact一致させます。
+
+## M4.5 non-goals
+
+自動最適化、side fin、reveal、複数開口・複数遮蔽物、任意3D mesh、finite-width diffuse遮蔽、Perez/anisotropic sky、glass product database、glass IAC、account、cloud save、任意Case色指定、正式な第三者solver validationはM4.5で実装しません。

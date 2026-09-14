@@ -6,7 +6,7 @@
 
 ## Current state
 
-現在は **M4 — Comparison UX** です。M1–M3の計算baselineを維持したまま、同一EPW条件で1–4案を比較するbrowser-local Facade Comparison Workspaceを実装しています。
+現在は **M4.5 — Multi-floor Mode** です。M4の単一階Workspaceを維持したまま、同一EPW条件で1–4棟のBuilding Caseと各棟の複数階を比較するbrowser-local Workspaceを実装しています。
 
 - Minimal UI: 実装済み
 - Pure TypeScript engine境界: 実装済み
@@ -14,14 +14,15 @@
 - Original-source reference / Golden test: 実装済み
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
 - Facade geometry: 有限幅庇のdirect-shadow polygon clipping実装済み
-- Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
+- Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
+- Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計と階別結果、積層立面・断面、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
 - Formal Production release: 未実施。bootstrap ProductionはVercel初回deployment境界のため保持していますが、正式Releaseとして扱いません。
 
-旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainは既存`facade-v1-weather`を呼ぶadapterであり、別のsolar calculationを持ちません。weather-backedですが、最終modelや検証済み物理modelではありません。
+旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainとM4.5 Multi-floor domainはいずれも既存`facade-v1-weather`を呼ぶadapterです。複数階では各Floorを`FacadeV1Parameters`へ変換し、`simulateFacadeV1()`を1回ずつ実行してBuilding Totalへ単純合算します。別のsolar / weather / shadow calculationは持ちません。
 
 > [!WARNING]
-> M4の比較値を含め、第三者solverとの物理validationが完了するまで絶対値 `[kWh]` をBEI、法適合、HVAC sizing、最終認証、保証値に使用できません。同一前提での設計比較を支援し、最終判断はHumanが行います。
+> M4/M4.5の比較値を含め、第三者solverとの物理validationが完了するまで絶対値 `[kWh]` をBEI、法適合、HVAC sizing、最終認証、保証値に使用できません。表示値は開口からの日射熱取得量であり、HVAC冷房・暖房負荷ではありません。
 
 ## Development
 
@@ -55,6 +56,7 @@ npm audit
 │  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1 engine
 │  ├─ geometry/  # Facade-local geometry / clipping / direct shadow
 │  ├─ models/    # Domain model領域
+│  ├─ multifloor/ # Pure TS Building Case / Floor / aggregate / preset / CSV
 │  ├─ preset/    # Pure TS versioned Case / Workspace JSON preset
 │  ├─ weather/   # Canonical weather contract / Pure TS EPW parser
 │  └─ main.tsx
@@ -80,4 +82,4 @@ npm audit
 
 ## Development status
 
-M4完了後はDraft PRでHuman Gate停止します。M5への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。
+M4.5完了後はDraft PRでHuman Gate停止します。M5への自動移行、`main`への直接commit/push、Ready for Review、merge、Production deployは行いません。

@@ -55,6 +55,7 @@ import {
 } from "../weather";
 import { GeometryPreview } from "./components/GeometryPreview";
 import { MonthlyChart } from "./components/MonthlyChart";
+import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
 import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
 
@@ -438,7 +439,7 @@ function downloadTextFile(filename: string, contents: string, mediaType: string)
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function App() {
+function SingleFloorWorkspace() {
   const [workspace, setWorkspace] = useState<ComparisonWorkspace>(() => createComparisonWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("case-a");
   const [dataset, setDataset] = useState<WeatherDataset | null>(null);
@@ -875,5 +876,20 @@ export function App() {
 
       <footer><span>Facade Solar Lab · 複数案比較</span><span>設計比較支援 · 最終判断は設計者が行ってください</span></footer>
     </main>
+  );
+}
+
+export function App() {
+  const [mode, setMode] = useState<"single" | "multi">("single");
+  return (
+    <>
+      <nav className="mode-switch no-print" aria-label="Workspaceモード">
+        <span>Workspace</span>
+        <button type="button" aria-pressed={mode === "single"} className={mode === "single" ? "active" : undefined} onClick={() => setMode("single")}>単一階モード</button>
+        <button type="button" aria-pressed={mode === "multi"} className={mode === "multi" ? "active" : undefined} onClick={() => setMode("multi")}>複数階モード</button>
+      </nav>
+      <section hidden={mode !== "single"}><SingleFloorWorkspace /></section>
+      <section hidden={mode !== "multi"}><MultiFloorWorkspace /></section>
+    </>
   );
 }
