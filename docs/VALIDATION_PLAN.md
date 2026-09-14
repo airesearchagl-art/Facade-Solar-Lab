@@ -1,6 +1,6 @@
 # Validation Plan
 
-M4ではM1–M3 regressionに加え、Comparison domain、browser-local EPW adapter、case state、baseline delta、monthly alignment、UI contract、Tokyo Hyakuri IWEC local smokeを検証します。第三者solverとの物理validationはM5以降です。
+M4.5ではM1–M4 regressionに加え、Multi-floor composition、Building Total、Floor Breakdown、1 Floor equivalence、入力専用preset、CSV/print、mode分離を検証します。第三者solverとの物理validationはM5以降です。
 
 ## 1. Golden tests
 
@@ -47,6 +47,18 @@ M4ではM1–M3 regressionに加え、Comparison domain、browser-local EPW adap
 - hash一致したTokyo Hyakuri EPWがlocal-onlyで存在する場合、8760 intervals、2 Case、12 months、finite KPI、direct `simulateFacadeV1`一致を検証する。
 - final Vercel Previewでfile selection、Case duplicate、input edit、explicit Run、KPI、chart、delta、geometry、assumptions、warning、console、assetを操作確認する。
 - bounded UX acceptanceではDemoにCase Cを追加し、A4 PDFのA/B/C全案形状と参考線、単一Case JSONの追加読込、Workspace JSONの置換復元、読込後の結果破棄と再Run待ち、390 px overflowを確認する。
+
+## 7. M4.5 multi-floor checks
+
+- 1 Floor / 3 Floors、Floor追加・複製・削除・順序、Case deep copy、1–4 Building Case、baseline変更をPure TS testで検証する。
+- 階高、開口寸法、腰壁、庇local elevation・出幅・左右延長、SHGC、ground reflectance、non-finiteをsilent clampせず検証する。
+- 各Floorがcanonical `simulateFacadeV1()`を1回呼ぶcompositionであることを保持し、1 FloorのAnnual / Summer / Winter / monthly 12値を単一階結果とexact比較する。
+- 3 FloorのBuilding Totalを各FloorのAnnual / Summer / Winter / monthly 12値の単純和と比較し、Building-level baseline deltaとpercent deltaを検証する。
+- Multi-floor JSONは専用kind/schemaを使用し、Case/Workspace round-trip、Floor順序、baseline/selected、重複ID、unknown kind/version、結果・raw weather非包含を検証する。
+- Multi-floor CSVはBuilding/Floor rows、入力、期間値、12か月値、UTF-8 BOM、CRLF、escaping、formula injection protectionを検証する。
+- `src/multifloor/**`をrecursive boundary scanへ含め、React、DOM、Canvas、File API、Node filesystem dependencyを拒否する。
+- final exact-head Git PreviewでSingle/Multi切替、複数階demo、Floor編集、stale→explicit rerun、Building Total、Floor Breakdown、積層形状、preset、CSV、print、responsive、console、assetをsmoke確認する。
+- 実EPWの複数階browser acceptance、PDF/CSV保存内容の目視、任意Case色指定はHuman UX / follow-up gateとして明示し、未実施項目を物理validation PASSとして扱わない。
 
 ## Evidence policy
 

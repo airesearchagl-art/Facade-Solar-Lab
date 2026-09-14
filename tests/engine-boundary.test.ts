@@ -11,6 +11,7 @@ const engineSources = import.meta.glob(
     "../src/solar-reference/**/*.ts",
     "../src/export/**/*.ts",
     "../src/preset/**/*.ts",
+    "../src/multifloor/**/*.ts",
   ],
   {
   eager: true,
@@ -40,12 +41,12 @@ const forbiddenDependencies = [
   { name: "File API", pattern: /\bFileReader\b|\bFile\b/u },
 ] as const;
 
-describe("M4 engine, geometry, weather, and comparison boundary", () => {
+describe("M4.5 engine, geometry, weather, comparison, and multi-floor boundary", () => {
   it("identifies all model paths without claiming physical validation", () => {
-    expect(engineManifest.milestone).toBe("M4");
+    expect(engineManifest.milestone).toBe("M4.5");
     expect(engineManifest.frameworkDependencies).toEqual([]);
     expect(engineManifest.calculationStatus).toBe(
-      "facade-comparison-workspace",
+      "multifloor-composition-over-facade-v1-weather",
     );
     expect(engineManifest.modelStatus).toBe("weather-backed-not-validated");
     expect(engineManifest.runtimeTargets).toContain("node");

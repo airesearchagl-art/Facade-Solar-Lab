@@ -3,9 +3,11 @@ import { describe, expect, it } from "vitest";
 
 import { App } from "../src/app/App";
 
-describe("M4 application shell", () => {
-  it("server-renders the Japanese-first pre-weather workspace contract", () => {
+describe("M4.5 application shell", () => {
+  it("server-renders separate Japanese-first single-floor and multi-floor modes", () => {
     const html = renderToString(<App />);
+    expect(html).toContain("単一階モード");
+    expect(html).toContain("複数階モード");
     expect(html).toContain("複数案比較");
     expect(html).toContain("デモ比較を試す");
     expect(html).toContain("サンプル気象データを使って、2つのファサード案の比較をすぐに確認できます。");
@@ -29,6 +31,15 @@ describe("M4 application shell", () => {
     expect(html).toContain("計算結果と気象ファイルの内容は含みません");
     expect(html).toContain("正式に検証された物理性能値ではありません");
     expect(html).toContain("有限幅の形状計算は直達日射の影だけに適用します");
+    expect(html).toContain("複数階比較に使う気象データ");
+    expect(html).toContain("複数階デモを試す");
+    expect(html).toContain("建物案を追加");
+    expect(html).toContain("Floor追加");
+    expect(html).toContain("複数階比較を実行");
+    expect(html).toContain("積層立面");
+    expect(html).toContain("積層断面");
+    expect(html).toContain("各Floorを既存");
+    expect(html).toContain("facade-v1-weather");
     expect(html).not.toContain("M4 · COMPARISON UX");
     expect(html).not.toContain("Try Demo Comparison");
     expect(html).not.toContain("Run Comparison");
