@@ -26,11 +26,15 @@ describe("M4.5 multi-floor presentation", () => {
     expect(html).toContain("建物全体の月別値");
     expect(html).toContain("と基準案差");
     expect(html).toContain("-14.4%");
-    expect(html).toContain("全建物案のFloor Breakdown");
+    expect(html).toContain("全建物案の階別結果");
+    expect(html).toContain("階別の案比較");
+    expect(html).toContain("Case内で階比較");
+    expect(html).toContain("同じ階を案比較");
+    expect(html).toContain("階別月別日射熱取得");
     expect(html).not.toMatch(/NaN|Infinity/u);
   });
 
-  it("renders every stacked floor and selected-floor reference-ray disclosure", () => {
+  it("renders every stacked floor with separate label gutters and all-floor reference rays", () => {
     const workspace = createMultiFloorDemoWorkspace();
     const buildingCase = workspace.cases[0]!;
     const html = renderToString(
@@ -47,6 +51,10 @@ describe("M4.5 multi-floor presentation", () => {
     expect(html).toContain("1F");
     expect(html).toContain("2F");
     expect(html).toContain("3F");
-    expect(html).toContain("選択階の6/21・12/21参考日射線");
+    expect(html).toContain("各階の6/21・12/21参考日射線");
+    expect(html.match(/data-floor-id=/gu)).toHaveLength(6);
+    expect(html.match(/class="floor-name"/gu)).toHaveLength(6);
+    expect(html.match(/class="floor-height"/gu)).toHaveLength(6);
+    expect(html).not.toContain("選択階の6/21");
   });
 });

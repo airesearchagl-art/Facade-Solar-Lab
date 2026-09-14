@@ -46,3 +46,37 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 - Production: none.
 - M5: not started.
 - Branch deletion: none.
+
+## Human UX Follow-up 01 — 2026-09-14
+
+### Fresh gate and findings
+
+- Starting local/remote/PR head: `6cae598818aa6208600d132fe5854a37e8da157c`.
+- Base after fetch: `35f543e618b8ad70ecc746b3139a5fb09adbeca9`; clean working tree; PR #7 OPEN / Draft / merged=false.
+- UX-01 reproduced at 390 × 844: the ordinal span immediately preceded the bare Floor name, producing visible `11F`, `22F`, `33F`. Three 118px-minimum buttons also overflowed their narrow strip. This is a markup/layout defect; reducing font size does not solve it.
+- Table-cell overlap was not reproduced at 390px; the table boundaries were distinct. SVG names and floor heights previously shared a very small text run. These now use explicit independent gutters.
+- UX-02: prior stacked section drew only selected-floor seasonal references.
+- UX-03: prior Floor Breakdown exposed only one Case's floor results.
+- UX-04: prior Floor monthly output was table-only.
+- Previous browser-smoke PASS did not establish the Human UX acceptance of these four issues and is superseded for those findings.
+
+### Implementation and local verification
+
+- Floor selector: separate block rows for name and story position; wrapping grid. At 390px all three names were independently readable, without a horizontal label collision.
+- SVG: name gutter, drawing region, and dimension gutter; 16px name labels. References use the existing `createFacadeSolsticeReferences()` for every overhang floor and translate start/intersection by the cumulative base Z. No new solar formula.
+- Three-floor demo: six seasonal rays, including nonselected floors. Fixture with no first-floor overhang: only Floor 2/3 rays. Start/intersection absolute Z tests PASS.
+- Story comparison: ordered position from bottom, never ID/name matching. Annual/summer/winter deltas are unavailable when either corresponding floor is missing.
+- Monthly charts: three Floors × twelve saved monthly values; selected Floor highlighted. Optional same-story multi-Case monthly chart uses a switch. Legends wrap; exact tables remain accessible.
+- Browser local checks at 1440 × 1000 and 390 × 844: names, gutters, all-floor rays, story comparison, 36 monthly points, mode switch, Floor add/delete and stale/rerun PASS. A new fourth floor displayed the baseline as absent with unavailable delta; after deletion the comparison selector remained valid.
+- Full convergence: 26 test files / 150 tests PASS; typecheck PASS; build PASS (88 modules); Golden PASS; npm audit 0 vulnerabilities.
+- Existing Tokyo Hyakuri IWEC smoke: SHA-256 `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`, 8,760 intervals, zero parse issues, 2 Cases × 3 Floors, all period/month values finite. No EPW download, redistribution, or source modification.
+- Existing Building Total, Floor values, single-floor regression, one-floor equivalence, CSV and presets retain their existing tests/expectations.
+
+### Print evidence boundary
+
+- Local print-layout fixture uses the actual results/geometry React components, deterministic 3-floor / 2-Case results, and the repository print stylesheet. An isolated static HTML-to-PDF render produced five A4 pages.
+- All five pages were rendered to images and inspected: Building Total, Building monthly chart/table, all story comparison tables, both Floor Breakdowns/monthly charts, all-floor rays and model warning present. No text overlap, chart/legend clipping, orphan heading, or geometry cut-off observed in this fixture.
+- This is local print-layout evidence, not a PDF saved from the exact Vercel Preview.
+- The available browser surface does not expose the native Chrome print/save dialog; tab content export also reports unsupported. Native final-Preview PDF save/inspection remains HUMAN VERIFICATION REQUIRED. Do not claim that gate PASS from local rendering alone.
+- UX-01 through UX-04 are implemented and AWAITING HUMAN RE-CHECK. They are not CLOSED / PASS without Human evidence.
+- Final exact-source Git Preview identity and fresh PR #7 state are recorded externally in the PR/completion report after this checkpoint. Resume must resolve them live; do not add a self-referential head SHA to this file.

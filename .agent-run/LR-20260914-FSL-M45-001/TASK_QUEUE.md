@@ -17,3 +17,17 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 | 11 | Wave 10 | Single/Multi browser smoke and Draft PR | HUMAN_GATE / RESOLVE LIVE | Local browser smoke PASS; authorized Draft PR is created once externally and must not be duplicated on resume |
 | 12 | Follow-up | Arbitrary PDF Case color selection | NOT STARTED / OUT OF SCOPE | Separate bounded Human authorization required |
 | 13 | Next milestone | M5 | NOT STARTED | Separate Human Task Packet / authorization required |
+
+## Human UX Follow-up 01 — current follow-up
+
+The implementation-wave evidence above is historical. PR #7 exists and remains Draft.
+
+| Finding | Implementation / verification | Human status |
+| --- | --- | --- |
+| UX-01: Floor label / numeric overlap | Separate name/ordinal rows, SVG label/dimension gutters, non-overlapping table columns; 390px and desktop verified | AWAITING HUMAN RE-CHECK |
+| UX-02: Selected-floor-only rays | Existing solstice references for every overhang floor, absolute Z translation; absent-overhang test | AWAITING HUMAN RE-CHECK |
+| UX-03: Insufficient cross-Case Floor comparison | Bottom-to-top story alignment, annual/summer/winter deltas; missing stories unavailable | AWAITING HUMAN RE-CHECK |
+| UX-04: No Floor monthly chart | Case-internal Floor series and same-story Case series; 12 months from saved results | AWAITING HUMAN RE-CHECK |
+| Local full convergence | 26 files / 150 tests, typecheck/build/Golden/audit/diff, existing real EPW smoke | COMPLETE |
+| Native final-Preview PDF | Print components rendered locally as an A4 layout check; native print/save dialog is not exposed by the browser control surface | HUMAN VERIFICATION REQUIRED |
+| Git / PR | Normal push to existing branch; resolve exact-source Git Preview and synchronize PR #7 body after this checkpoint | RESOLVE LIVE / DRAFT ONLY |

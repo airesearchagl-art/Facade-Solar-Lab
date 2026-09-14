@@ -5,5 +5,7 @@ export * from "./parameters";
 export * from "./preset";
 export * from "./simulation";
 export * from "./state";
+export * from "./story-comparison";
 export * from "./types";
 export * from "./validation";
+export * from "./visual-references";

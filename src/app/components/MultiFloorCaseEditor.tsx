@@ -56,8 +56,9 @@ export function MultiFloorCaseEditor({
       </div>
       <div className="floor-tabs" role="group" aria-label="編集する階">
         {buildingCase.floors.map((floor, index) => (
-          <button type="button" key={floor.id} aria-label={`${index + 1} · ${floor.name}`} aria-pressed={floor.id === selectedFloor.id} className={floor.id === selectedFloor.id ? "floor-tab active" : "floor-tab"} onClick={() => onSelectFloor(floor.id)}>
-            <span>{index + 1}</span>{floor.name}
+          <button type="button" key={floor.id} aria-label={`${floor.name}（下から${index + 1}番目）`} aria-pressed={floor.id === selectedFloor.id} className={floor.id === selectedFloor.id ? "floor-tab active" : "floor-tab"} onClick={() => onSelectFloor(floor.id)}>
+            <strong className="floor-tab-name">{floor.name}</strong>
+            <small className="floor-tab-position">下から{index + 1}番目</small>
           </button>
         ))}
       </div>

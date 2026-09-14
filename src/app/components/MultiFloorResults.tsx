@@ -1,5 +1,10 @@
+import { useState } from "react";
+
 import { formatKWh, formatPercent, formatSignedKWh } from "../../comparison";
-import type { MultiFloorCaseResult, MultiFloorRunResult } from "../../multifloor";
+import { compareStory, type MultiFloorCaseResult, type MultiFloorRunResult } from "../../multifloor";
+import type { WeatherDataset } from "../../weather";
+import { caseFloorSeries, FloorMonthlyChart, type FloorMonthlySeries } from "./FloorMonthlyChart";
+import { MultiFloorGeometryPreview } from "./MultiFloorGeometryPreview";
 
 const MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"] as const;
 const SERIES_COLORS = ["#ca5a2e", "#176b73", "#7f5aa2", "#647438"] as const;
@@ -70,6 +75,31 @@ function MultiFloorMonthlyChart({ result }: { readonly result: MultiFloorRunResu
   );
 }
 
+export function StoryComparisonTable({ result, storyIndex }: { readonly result: MultiFloorRunResult; readonly storyIndex: number }) {
+  const rows = compareStory(result, storyIndex);
+  return <div className="table-scroll">
+    <table className="data-table story-comparison-table">
+      <caption>下から{storyIndex + 1}番目の階を比較 · 日射熱取得量 [kWh]</caption>
+      <thead><tr><th scope="col">建物案 / 階名称</th><th scope="col">年間</th><th scope="col">夏期</th><th scope="col">冬期</th><th scope="col">基準案の同じ階との差</th></tr></thead>
+      <tbody>{rows.map((row) => <tr key={row.caseId}>
+        <th scope="row"><span className="story-case-name">{row.caseName}</span><span className="story-floor-name">{row.floor?.name ?? "該当階なし"}</span></th>
+        <td>{row.floor === null ? "—" : formatKWh(row.floor.simulation.summary.annual.withOverhangKWh)}</td>
+        <td>{row.floor === null ? "—" : formatKWh(row.floor.simulation.summary.cooling.withOverhangKWh)}</td>
+        <td>{row.floor === null ? "—" : formatKWh(row.floor.simulation.summary.heating.withOverhangKWh)}</td>
+        <td>{row.delta === null ? <span title="基準案または比較案に該当階がありません">—</span> : row.caseId === result.baselineCaseId ? "基準案" : <div className="story-deltas">{(["annual", "summer", "winter"] as const).map((period, index) => <span key={period}>{["年間", "夏期", "冬期"][index]} {formatSignedKWh(row.delta![period].kWh)}<small>{formatPercent(row.delta![period].percent)}</small></span>)}</div>}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>;
+}
+
+export function storyMonthlySeries(result: MultiFloorRunResult, storyIndex: number): readonly FloorMonthlySeries[] {
+  return compareStory(result, storyIndex).flatMap((row) => row.floor === null ? [] : [{
+    id: row.caseId,
+    label: row.caseName + " · " + row.floor.name + (row.caseId === result.baselineCaseId ? " · 基準案" : ""),
+    monthlyKWh: row.floor.simulation.monthly.map((month) => month.withOverhangKWh),
+  }]);
+}
+
 function FloorTable({ item }: { readonly item: MultiFloorCaseResult }) {
   return (
     <div className="table-scroll">
@@ -87,13 +117,19 @@ export function MultiFloorResults({
   selectedFloorId,
   onSelectCase,
   onSelectFloor,
+  dataset = null,
 }: {
   readonly result: MultiFloorRunResult;
   readonly selectedCaseId: string;
   readonly selectedFloorId: string;
   readonly onSelectCase: (caseId: string) => void;
   readonly onSelectFloor: (floorId: string) => void;
+  readonly dataset?: WeatherDataset | null;
 }) {
+  const [requestedStoryIndex, setStoryIndex] = useState(0);
+  const [monthlyMode, setMonthlyMode] = useState<"floors" | "cases">("floors");
+  const storyCount = Math.max(...result.cases.map((item) => item.floors.length));
+  const storyIndex = Math.min(requestedStoryIndex, storyCount - 1);
   const selectedCase = result.cases.find((item) => item.caseId === selectedCaseId) ?? result.cases[0]!;
   const selectedFloor = selectedCase.floors.find((floor) => floor.floorId === selectedFloorId) ?? selectedCase.floors[0]!;
   return (
@@ -106,8 +142,15 @@ export function MultiFloorResults({
       <PeriodTable result={result} />
       <MultiFloorMonthlyChart result={result} />
 
-      <section className="floor-breakdown" aria-labelledby="floor-breakdown-title">
-        <div className="subsection-heading"><div><p className="section-kicker">Case内訳</p><h3 id="floor-breakdown-title">Floor Breakdown</h3></div></div>
+      <section className="story-comparison no-print" aria-labelledby="story-comparison-title">
+        <div className="subsection-heading"><div><p className="section-kicker">02 · 同じ階順を比較</p><h3 id="story-comparison-title">階別の案比較</h3></div></div>
+        <p className="comparison-note">同じ階順（下からn番目）を比較します。名称・IDが違っても階順で対応し、該当階がない案の値・差分は「—」です。</p>
+        <div className="result-selectors"><label>比較対象階<select value={storyIndex} onChange={(event) => setStoryIndex(Number(event.currentTarget.value))}>{Array.from({ length: storyCount }, (_, index) => <option key={index} value={index}>下から{index + 1}番目</option>)}</select></label></div>
+        <StoryComparisonTable result={result} storyIndex={storyIndex} />
+      </section>
+
+      <section className="floor-breakdown no-print" aria-labelledby="floor-breakdown-title">
+        <div className="subsection-heading"><div><p className="section-kicker">03 · Case内訳</p><h3 id="floor-breakdown-title">Floor Breakdown</h3></div></div>
         <div className="result-selectors no-print">
           <label>建物案<select value={selectedCase.caseId} onChange={(event) => onSelectCase(event.currentTarget.value)}>{result.cases.map((item) => <option key={item.caseId} value={item.caseId}>{item.name}</option>)}</select></label>
           <label>月別詳細の階<select value={selectedFloor.floorId} onChange={(event) => onSelectFloor(event.currentTarget.value)}>{selectedCase.floors.map((floor) => <option key={floor.floorId} value={floor.floorId}>{floor.name}</option>)}</select></label>
@@ -121,9 +164,30 @@ export function MultiFloorResults({
         </div>
       </section>
 
+      <section className="floor-monthly-comparison no-print" aria-label="階別月別比較">
+        <p className="section-kicker">04 · 月ごとの推移</p>
+        <div className="monthly-view-switch" role="group" aria-label="月別グラフの比較方法">
+          <button type="button" aria-pressed={monthlyMode === "floors"} onClick={() => setMonthlyMode("floors")}>Case内で階比較</button>
+          <button type="button" aria-pressed={monthlyMode === "cases"} onClick={() => setMonthlyMode("cases")}>同じ階を案比較</button>
+        </div>
+        {monthlyMode === "floors" ? <FloorMonthlyChart title={selectedCase.name + " — 階別月別日射熱取得"} series={caseFloorSeries(selectedCase, selectedFloor.floorId)} /> : <>
+          <p className="comparison-note">上の「比較対象階」: 下から{storyIndex + 1}番目。該当階がない案は描画しません。</p>
+          <FloorMonthlyChart title={"下から" + (storyIndex + 1) + "番目 — 案別月別日射熱取得"} series={storyMonthlySeries(result, storyIndex)} />
+        </>}
+      </section>
+
+      <section className="print-only multifloor-story-report" aria-label="全階順の案比較">
+        <h2>階別の案比較</h2><p>同じ階順（下からn番目）を比較。該当階がない場合は「—」。差分は各案 − 基準案です。</p>
+        {Array.from({ length: storyCount }, (_, index) => <article key={index}><StoryComparisonTable result={result} storyIndex={index} /></article>)}
+      </section>
       <section className="print-only multifloor-all-floor-report" aria-label="全建物案の階別結果">
-        <h2>全建物案のFloor Breakdown</h2>
-        {result.cases.map((item) => <article key={item.caseId}><h3>{item.name}{item.caseId === result.baselineCaseId ? " · 基準案" : ""}</h3><FloorTable item={item} /></article>)}
+        {result.cases.map((item) => <article key={item.caseId} className="multifloor-case-report">
+          <h2>{item.name}{item.caseId === result.baselineCaseId ? " · 基準案" : ""}</h2>
+          <h3>Floor Breakdown</h3><FloorTable item={item} />
+          <FloorMonthlyChart title={item.name + " — 階別月別日射熱取得"} series={caseFloorSeries(item)} />
+          <h3>積層形状 · 全階の参考日射線</h3>
+          <MultiFloorGeometryPreview buildingCase={item.definition} dataset={dataset} report />
+        </article>)}
       </section>
     </section>
   );

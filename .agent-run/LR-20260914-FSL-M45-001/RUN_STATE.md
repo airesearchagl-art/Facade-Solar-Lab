@@ -5,11 +5,14 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 ## Current state
 
 - State: `HUMAN_GATE`
-- Current wave: M4.5 Human UX / Independent Review
+- Current wave: Human UX Follow-up 01 / Human re-check
 - Canonical base: `origin/main @ 35f543e618b8ad70ecc746b3139a5fb09adbeca9`
 - Working branch: `feat/m45-multifloor-mode`
 - Current head: resolve live `HEAD`; do not treat this mutable document's containing commit as a self-referential exact head
-- Last verified checkpoint: M4.5 implementation, local full convergence, local real-EPW smoke, and Single/Multi browser smoke passed; external branch/PR/Preview identity must be resolved fresh
+- Last verified checkpoint: UX-01 through UX-04 implementation and local convergence passed (150 tests); local static print-layout PDF checked. Exact-source Preview and PR head are resolved after the repository checkpoint.
+- Previous reviewed head: `6cae598818aa6208600d132fe5854a37e8da157c`
+- PR #7 already exists: https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/7 — OPEN / Draft; do not recreate.
+- UX-01 / UX-02 / UX-03 / UX-04: implemented, AWAITING HUMAN RE-CHECK; not CLOSED / PASS.
 - M4: `COMPLETE`
 - M5: `NOT STARTED`
 
@@ -23,13 +26,14 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 
 ## Remaining tasks
 
-1. No remaining M4.5 implementation or local convergence task.
-2. Human UX and Independent Review remain open gates. Real-EPW native Multi-floor UX and saved PDF/CSV inspection remain Human verification items.
-3. Keep Ready, merge, Production, branch deletion, arbitrary Case color selection, and M5 out of scope.
+1. Human re-check of floor labels, all-floor references, same-story Case comparison, and Floor monthly charts.
+2. Exact product Preview native PDF save/inspection remains unverified. Local static print-layout rendering is supporting evidence, not native Preview acceptance.
+3. Independent Review remains open. Real-EPW native Multi-floor UX remains a Human verification item.
+4. Keep Ready, merge, Production, branch deletion, arbitrary Case color selection, and M5 out of scope.
 
 ## Next action
 
-Await M4.5 Human UX / Independent Review. Do not begin M5 automatically.
+Await M4.5 Human UX Re-Check. Resolve the latest Git Preview from the live branch head; never close UX findings without Human evidence. Do not begin M5 automatically.
 
 ## Resume instructions
 
