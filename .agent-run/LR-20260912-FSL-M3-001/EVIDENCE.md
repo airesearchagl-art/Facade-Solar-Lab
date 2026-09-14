@@ -207,3 +207,12 @@ Performed: `2026-09-13` (Asia/Tokyo)
 - M1 HTML: 16,835 bytes / `EF896E0D6F4AA5667CFC235B2B5B37733D5875C8AF646D60A42369CA750D4CB5`.
 - M1 handover: 22,635 bytes / `B3C2C8E715662F064978B1F6D2D326B4AA3584FF804292D3A735F68626CCD6C4`.
 - M3 Task Packet remains immutable at `AFF8B77962787C01B61FE059353FE33B7B3FC9971A1BD126313A1547660DDACB`.
+
+## Wave 12 — Post-merge closeout
+
+Recorded: `2026-09-13` (Asia/Tokyo)
+
+- PR #4 completed the Human-controlled review and merge flow.
+- M3 is `MERGED / COMPLETE` at canonical main `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`.
+- The immutable M3 Task Packet was not changed.
+- Closeout edits were made only on the authorized M4 branch; no direct `main` mutation occurred.

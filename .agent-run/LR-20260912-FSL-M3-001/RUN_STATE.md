@@ -4,16 +4,17 @@
 
 - Run ID: `LR-20260912-FSL-M3-001`
 - Mode: `LONG_RUN_ENDURANCE`
-- Current state: `HUMAN_GATE`
+- Current state: `COMPLETE_VERIFIED`
 - Repository: `airesearchagl-art/Facade-Solar-Lab`
 - Working branch: `feat/m3-facade-geometry`
 - Base SHA: `c3f314134137da9b35b4cde53320a610bba15f72`
 - Current head rule: resolve symbolic `HEAD` with `git rev-parse HEAD`; never embed the SHA of the commit containing this file
-- Current wave: `Wave 11 — Focused Independent Re-Review gate`
+- Current wave: `Wave 12 — Post-merge closeout`
 - Previous reviewed head: `e63f73a97d6488aa1df6a6ff870e8cff5a5cde88`
 - Last verified implementation checkpoint: `2bf672493632e217afe05f0f0078ca4f150579d7`
 - Pull request: `#4` — `https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/4`
-- Pull request state: `OPEN / Draft / Ready=false / merged=false`
+- Pull request state: `MERGED / merged=true`
+- Merged main: `46f3aabe7ed360b5ede80a2d244fc8ae4ba8d215`
 
 ## Task Packet binding
 
@@ -51,7 +52,7 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Current work
 
-- Required Fix implementation and convergence are complete. PR #4 remains Draft and awaits Focused Independent Re-Review.
+- M3 is merged and complete. Historical artifacts are closed on the authorized M4 branch without modifying the immutable M3 Task Packet.
 
 ## Required checks
 
@@ -75,11 +76,11 @@ All 33 criteria in Task Packet section 38 must pass with evidence against the fi
 
 ## Remaining tasks
 
-- Focused Independent Re-Review and a new Human instruction after that review.
+- None for M3.
 
 ## Next action
 
-Wait for Focused Independent Re-Review. PR #4 already exists: do not recreate it, mark it Ready, merge it, operate Vercel, or begin M4.
+Use the separate `LR-20260913-FSL-M4-001` Run Artifact for authorized M4 work. Do not resume or mutate the completed M3 campaign.
 
 ## Stop conditions
 
@@ -87,8 +88,7 @@ Wait for Focused Independent Re-Review. PR #4 already exists: do not recreate it
 
 ## Resume instructions
 
-1. Fresh-fetch and verify `origin/main`, branch, live `HEAD`, worktree, Task Packet digest, and both M1 hashes without rebasing.
-2. Verify PR #4 still exists and remains `OPEN / Draft / Ready=false / merged=false`; do not recreate it.
-3. Read all seven M3 artifacts and treat the Required Fix as complete pending Focused Independent Re-Review.
-4. Preserve `src/weather/**`, `src/engine/weather-v1/**`, M1 originals, coordinate signs, projection formula, and all existing expected values.
-5. Do not mark Ready, merge, operate Vercel, or begin M4. Wait for Focused Independent Re-Review.
+1. Treat this campaign as historical `MERGED / COMPLETE` at main `46f3aabe...`.
+2. Re-hash the immutable M3 Task Packet if auditing this record; never edit it.
+3. Preserve M1/M2 baselines, coordinate signs, projection formula, and expected values.
+4. For M4, resume only from `.agent-run/LR-20260913-FSL-M4-001/`.

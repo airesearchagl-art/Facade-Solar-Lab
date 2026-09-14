@@ -1,8 +1,22 @@
 # Model Limitations
 
-## Current M3 state
+## Current M4 state
 
-M1 Legacy engineとM2 weather-v1 foundationに加え、有限幅水平庇のdirect shadowを扱う`facade-v1-weather`があります。実EPW smokeは完了しましたが、絶対性能の外部validationではありません。
+M1 Legacy engine、M2 weather-v1、M3 `facade-v1-weather`を保持し、M4は1–4 Caseを同一EPW条件で比較するUIとPure TypeScript adapterを追加します。比較値の外部validationではありません。
+
+## Comparison UX limitations
+
+- 同時比較は最大4 Caseです。自動最適化、score、推奨案判定を行いません。
+- full-year計算は明示的な`Run Comparison`だけで実行し、入力変更後はlast-run結果をdirty表示します。
+- baseline差は`case - baseline`です。負値を一律に良いと解釈しません。
+- baselineが0の場合、percentage deltaは`null`としてUIで`—`表示します。
+- EPWはbrowser-localでparseし、raw本文を表示・保存・送信しません。automatic download、geocoding、cloud saveはありません。
+- geometry SVGは説明図であり、CAD寸法取得や施工図用途ではありません。
+- 表示する`[kWh]`は窓を通して室内へ入る日射熱取得量です。外気温、熱貫流、換気、内部発熱、蓄熱、空調設備効率を含む冷房負荷・暖房負荷ではありません。
+- 夏期は4–9月、冬期は10–3月の固定集計です。気候区分や運転scheduleに応じた空調期間判定ではありません。
+- 夏至頃（6/21）と冬至頃（12/21）の線は、選択地点で5分刻みに求めた最大solar elevation時刻とfacade-relative profile angleによる幾何学的参考表示です。厳密な至点時刻、年間計算、空調負荷計算を表しません。
+- PDFはbrowser printです。CSVは編集用比較データであり、いずれも正式な性能証明書や検証済み計算書ではありません。
+- JSON presetはCase/Workspaceの入力だけを保存します。計算結果とraw weatherを保存せず、読込後は必ず再計算が必要です。schemaVersion `1`以外は受け付けません。
 
 ## Facade-v1 limitations
 
@@ -53,6 +67,7 @@ M1 Legacy engineとM2 weather-v1 foundationに加え、有限幅水平庇のdire
 
 - 第三者比較を含むM5 validation完了前の `[kWh]` は正式な実務判断根拠に使用できません。
 - 相対比較であっても、同一のgeometry・weather・glass・period前提を明示する必要があります。
+- M4結果はBEI、法適合、HVAC sizing、最終認証、保証energy predictionへ使用できません。
 
 ## Units and numerical precision
 
