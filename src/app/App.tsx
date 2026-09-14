@@ -58,6 +58,7 @@ import { MonthlyChart } from "./components/MonthlyChart";
 import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
 import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
+import { CaseColorPicker, CaseMarker, DEFAULT_CASE_COLORS, getCaseStyle, useCaseColors, type CaseColors } from "./case-colors";
 
 const ORIENTATION_PRESETS = [
   ["北", 0], ["北東", 45], ["東", 90], ["南東", 135],
@@ -215,9 +216,11 @@ function WeatherPanel({
 function ResultsPanel({
   result,
   isDemo,
+  colors,
 }: {
   readonly result: ComparisonRunResult;
   readonly isDemo: boolean;
+  readonly colors: CaseColors;
 }) {
   return (
     <section className="panel results-panel" aria-labelledby="results-title">
@@ -251,7 +254,7 @@ function ResultsPanel({
                     const delta = item.deltaFromBaseline[period.key];
                     return (
                       <tr key={item.caseId}>
-                        <th scope="row"><span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>{item.name}{item.caseId === result.baselineCaseId ? <small>基準案</small> : null}</th>
+                        <th scope="row"><CaseMarker colors={colors} caseId={item.caseId} index={index} />{item.name}{item.caseId === result.baselineCaseId ? <small>基準案</small> : null}</th>
                         <td className="primary-value">{formatKWh(summary.withOverhangKWh)}</td>
                         <td>{formatKWh(summary.withoutOverhangKWh)}</td>
                         <td>{summary.reductionPercent.toFixed(1)}%</td>
@@ -274,9 +277,11 @@ function ResultsPanel({
 function PrintReportSummary({
   result,
   dataset,
+  colors,
 }: {
   readonly result: ComparisonRunResult;
   readonly dataset: WeatherDataset;
+  readonly colors: CaseColors;
 }) {
   const isDemo = dataset.provenance.sourceType === "synthetic";
   return (
@@ -296,12 +301,12 @@ function PrintReportSummary({
       <div className="table-scroll">
         <table className="data-table print-case-table">
           <thead><tr><th>案名</th><th>基準案</th><th>方位</th><th>開口</th><th>庇</th><th>SHGC</th><th>地表面反射率</th></tr></thead>
-          <tbody>{result.cases.map((item) => {
+          <tbody>{result.cases.map((item, index) => {
             const opening = item.parameters.opening;
             const overhang = item.parameters.overhang;
             return (
               <tr key={item.caseId}>
-                <th scope="row">{item.name}</th>
+                <th scope="row"><CaseMarker colors={colors} caseId={item.caseId} index={index} /> {item.name}</th>
                 <td>{item.caseId === result.baselineCaseId ? "はい" : "いいえ"}</td>
                 <td>{item.parameters.facadeAzimuthDegFromNorth}°</td>
                 <td>幅 {opening.widthM} m / 下端 {opening.sillZM} m / 上端 {opening.headZM} m</td>
@@ -320,9 +325,11 @@ function PrintReportSummary({
 export function PrintGeometryComparison({
   result,
   dataset,
+  colors = DEFAULT_CASE_COLORS,
 }: {
   readonly result: ComparisonRunResult;
   readonly dataset: WeatherDataset;
+  readonly colors?: CaseColors;
 }) {
   return (
     <section className="print-only print-geometry" aria-labelledby="print-geometry-title">
@@ -339,7 +346,7 @@ export function PrintGeometryComparison({
           return (
             <article className="print-geometry-case" key={item.caseId}>
               <header>
-                <span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>
+                <CaseMarker colors={colors} caseId={item.caseId} index={index} />
                 <div>
                   <h3>{item.name}</h3>
                   <p>方位角 {item.parameters.facadeAzimuthDegFromNorth}°</p>
@@ -440,6 +447,7 @@ function downloadTextFile(filename: string, contents: string, mediaType: string)
 }
 
 function SingleFloorWorkspace() {
+  const { colors, setColor, resetColors } = useCaseColors();
   const [workspace, setWorkspace] = useState<ComparisonWorkspace>(() => createComparisonWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("case-a");
   const [dataset, setDataset] = useState<WeatherDataset | null>(null);
@@ -514,6 +522,7 @@ function SingleFloorWorkspace() {
       const demoResult = runComparison(demoDataset, demoWorkspace);
       caseSequence.current = 3;
       setWorkspace(demoWorkspace);
+      resetColors();
       setSelectedCaseId("case-b");
       setDataset(demoDataset);
       setWeatherFailure(null);
@@ -574,6 +583,7 @@ function SingleFloorWorkspace() {
   const applyImportedPreset = (preset: FacadePresetV1, nextCaseId?: string) => {
     const next = applyPresetToAppState(workspace, preset, nextCaseId);
     setWorkspace(next.workspace);
+    if (preset.kind === WORKSPACE_PRESET_KIND) resetColors();
     setSelectedCaseId(next.selectedCaseId);
     setResult(next.result);
     setDirty(next.dirty);
@@ -667,7 +677,7 @@ function SingleFloorWorkspace() {
         <div className="case-tabs" role="group" aria-label="比較するファサード案">
           {workspace.cases.map((item, index) => (
             <button key={item.id} type="button" aria-pressed={item.id === selectedCase.id} className={item.id === selectedCase.id ? "case-tab active" : "case-tab"} onClick={() => setSelectedCaseId(item.id)}>
-              <span className={`case-marker series-${index + 1}`}>{String.fromCharCode(65 + index)}</span>
+              <CaseMarker colors={colors} caseId={item.id} index={index} />
               <span>{item.name}</span>
               {item.id === workspace.baselineCaseId ? <small>基準案</small> : null}
             </button>
@@ -675,6 +685,7 @@ function SingleFloorWorkspace() {
         </div>
 
         <div className="case-toolbar">
+          <CaseColorPicker caseName={selectedCase.name} value={getCaseStyle(colors, selectedCase.id, workspace.cases.indexOf(selectedCase)).color} onChange={(color) => setColor(selectedCase.id, color)} />
           <label className="field name-field" htmlFor={`${selectedCase.id}-name`}>
             <span>案の名称</span>
             <input
@@ -833,11 +844,11 @@ function SingleFloorWorkspace() {
       ) : (
         <>
           {dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回の比較計算によるものです。</div> : null}
-          <PrintReportSummary result={result} dataset={dataset} />
-          <ResultsPanel result={result} isDemo={isDemo} />
-          <MonthlyChart result={result} />
+          <PrintReportSummary result={result} dataset={dataset} colors={colors} />
+          <ResultsPanel result={result} isDemo={isDemo} colors={colors} />
+          <MonthlyChart result={result} colors={colors} />
           <ExportPanel dirty={dirty} onPrint={printComparison} onCsv={downloadComparisonCsv} />
-          <PrintGeometryComparison result={result} dataset={dataset} />
+          <PrintGeometryComparison result={result} dataset={dataset} colors={colors} />
         </>
       )}
 

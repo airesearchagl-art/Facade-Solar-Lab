@@ -12,6 +12,8 @@ export interface FloorMonthlySeries {
   readonly label: string;
   readonly monthlyKWh: readonly number[];
   readonly highlighted?: boolean;
+  readonly color?: string;
+  readonly dash?: string;
 }
 
 export function caseFloorSeries(item: MultiFloorCaseResult, selectedFloorId?: string): readonly FloorMonthlySeries[] {
@@ -24,9 +26,10 @@ export function caseFloorSeries(item: MultiFloorCaseResult, selectedFloorId?: st
 }
 
 /** Presentation only: every plotted value comes from the saved simulation result. */
-export function FloorMonthlyChart({ title, series }: {
+export function FloorMonthlyChart({ title, series, colorOverride }: {
   readonly title: string;
   readonly series: readonly FloorMonthlySeries[];
+  readonly colorOverride?: string;
 }) {
   const titleId = useId();
   const maximum = Math.max(1, ...series.flatMap((item) => item.monthlyKWh));
@@ -36,7 +39,7 @@ export function FloorMonthlyChart({ title, series }: {
   const height = 265;
   const x = (index: number) => left + index * (width - left - 24) / 11;
   const y = (value: number) => 220 - (value / maximum) * 200;
-  const styled = series.map((item, index) => ({ ...item, color: COLORS[index % COLORS.length]!, dash: DASHES[index % DASHES.length] }));
+  const styled = series.map((item, index) => ({ ...item, color: colorOverride ?? item.color ?? COLORS[index % COLORS.length]!, dash: item.dash ?? DASHES[index % DASHES.length] }));
   return (
     <section className="floor-monthly-chart" aria-labelledby={titleId}>
       <div className="subsection-heading"><h3 id={titleId}>{title}</h3><span>日射熱取得量 [kWh]</span></div>
