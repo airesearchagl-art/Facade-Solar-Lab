@@ -1,8 +1,8 @@
 # Validation Plan
 
-## M5 — Current: inventory / validation design
+## M5 — Current: P0-A hourly EPW temporal integrity
 
-Human authorizationによりM5を開始しました。この最初のステップは既存validationの棚卸しと追加検証計画の確定だけです。新しい検証実装、第三者solver実行、engine式・既存expected値の変更は行いません。
+Human authorizationにより、棚卸し後のP0-Aとしてhourly EPWの時系列完全性検証を追加しました。重複・欠落・逆順・通年完全性を既存parser/issue contractで検査します。solar / geometry / energy式・既存expected値は変更しません。詳細sub-hour、極域、第三者solver比較は今回は実施しません。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
@@ -13,12 +13,12 @@ Human authorizationによりM5を開始しました。この最初のステッ�
 
 ## 1. 既存coverage — 重複実装しない範囲
 
-「十分」は表記したregression contractについての判断であり、全入力域・物理精度の保証ではありません。今回のfresh実行は **28 test files / 165 tests PASS**。次節の不足と区別します。
+「十分」は表記したregression contractについての判断であり、全入力域・物理精度の保証ではありません。kickoff checkpointは **28 test files / 165 tests PASS**。P0-Aの追加結果は§6、残る不足は§3に分離します。
 
 | 対象 | 既存の根拠 | 維持する検証 / 限界 |
 | --- | --- | --- |
 | M1 Golden | tests/legacy-v01-golden.test.ts、scripts/generate-legacy-v01-golden.mjs | 原本HTMLの独立VM実行から8 fixture cases、全12か月・年間/夏期/冬期をabsolute 1e-9で比較。幅/SHGC scaling、D/HとO/H相似性を保持。Legacyを物理正解にしない。 |
-| EPW / LST | tests/epw-parser.test.ts、tests/weather-time.test.ts、tests/weather-file-adapter.test.ts | LOCATION / DATA PERIODS、正常な8760/8784、15分区間、年末end/midpoint、Gregorian leap、欠測/負放射・不正行・拡張子拒否。正常行の分類PASSは時系列全体の完全性を証明しない。 |
+| EPW / LST | tests/epw-parser.test.ts、tests/weather-time.test.ts、tests/weather-file-adapter.test.ts | LOCATION / DATA PERIODS、正常な8760/8784、15分区間、年末end/midpoint、Gregorian leap、欠測/負放射・不正行・拡張子拒否を維持。kickoff時の行数分類だけの不足をP0-A hourly検証（§6）で補う。sub-hour通年の完全性は未検証。 |
 | 太陽位置 | tests/solar-position.test.ts | 独立NOAA/GML値: 2025年5点、2024年Feb 29・Jun 21・Dec 21の3点。0.01°表示値に対する既存0.5° tolerance、365/366分母を維持。東京以外・極域・高精度SPAとの一致は未検証。 |
 | 放射・energy | tests/weather-irradiance.test.ts、tests/facade-weather.test.ts | DNI/DHI/GHI成分別手計算、D=0、背面direct=0、sub-hour Wh二重積分防止、M2/M3 D=0のexact一致。8784→canonical 2000→366分母のhelper経路も既存。ただしleap/sub-hour通年simulationの独立oracleではない。 |
 | direct / polygon | tests/facade-direct-shadow.test.ts、tests/facade-polygon.test.ts | 正面45°の半/全遮蔽・窓頭gap、平行移動、3倍scale、shoelace面積、空/全/部分intersection、接触面積0、重複頂点。別実装で同じ手計算testを増やさない。 |
@@ -31,7 +31,7 @@ Human authorizationによりM5を開始しました。この最初のステッ�
 
 - 正本: [Weather Foundation](WEATHER_FOUNDATION.md#real-file-smoke-validation)、[M4 Evidence](../.agent-run/LR-20260913-FSL-M4-001/EVIDENCE.md#rf-01-human-browser-acceptance-closure)、[M4.5 Evidence](../.agent-run/LR-20260914-FSL-M45-001/EVIDENCE.md)。過去の未確認記録を削除せず、後続のHuman closureを優先します。
 - Tokyo Hyakuri / IWEC / WMO 477150、36.18° N・140.42° E・UTC+9。NOAA単体testの東京35.7° N・139°46′ Eとは別地点です。
-- 既存localファイルは今回も存在し、**1,558,629 bytes** / SHA-256 **3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E** とfresh一致。今回はmetadata/hashのみ再確認し、実EPW simulation/browser smokeを再実行していません。
+- 既存localファイルは **1,558,629 bytes** / SHA-256 **3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E** とfresh一致。kickoffではmetadata/hashのみ確認。P0-Aでは変更後parserで再読込し、8760 intervals / full-year-8760 / 0 issues / usable PASS / 7種類のsource yearを確認しました。実EPW simulation/browser smokeは再実行していません。
 - 記録済み: M2/M3のparse/方位smoke。M4 Singleは8760 intervals・0 parse issues・2 Case・編集/rerun・実EPW CSV/PDFのHuman acceptance（product head 9be5567f178c0aea0d82923989029d089bb2101d、RF-01 CLOSED / PASS）。M4.5では2 Building Cases × 3 Floorsのlocal実EPW完走/finite値を記録済み。
 - M4.5 UX-01〜05のHuman PASSは保持。ただしnative実EPW Multi操作と保存CSV/PDFの内容一致について、記録を超えるPASSを推定しません。M4 Singleのclosureを再オープンしません。
 - IWEC smokeは外部solver比較でも実測性能検証でもありません。同じファイルで同じfinite値を得るだけの検証を追加しません。
@@ -39,11 +39,12 @@ Human authorizationによりM5を開始しました。この最初のステッ�
 
 ## 3. M5で追加する最小backlog
 
-以下は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
+P0-Aのhourly部分は実装・検証済みでreview待ち、その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
 
 | 優先度 / ID | 追加する検証と不足の根拠 | 完了条件 / 再利用 |
 | --- | --- | --- |
-| P0 / W-01 時系列完全性 | src/weather/epw/parser.tsのcoverageは行数で分類し、usable判定はissues/空配列を検査する。重複＋欠落で総数維持、逆順、header期間不一致、空白放射、partial入力の年間表示、複数DATA PERIODS拒否をcharacterizeする。 | 既存fixture生成器を拡張し、欠落/重複を正常通年PASSと区別する期待contractを先にreview。現在の挙動との差をissue化。ゼロ補完・暗黙並べ替え・parser修正は本kickoff外。 |
+| P0-A / W-01 hourly時系列完全性 | 実装・検証済み / review待ち。月日・hourの時間枠、header期間、重複・欠落・逆順、8760/8784・年境界を検査。 | §6のcontract/tests。元の順序・値を保持し、temporal errorがあるdatasetを既存usable guardで拒否。行数一致だけではfull-yearにしない。 |
+| P0 / W-01 残る入口境界 | 空白放射、partial入力の年間表示、複数DATA PERIODS拒否の明示characterizationは後続。 | P0-Aの時間枠testを重複実装しない。部分期間の表示/通年評価方針を別途確定し、現在のpartial互換性を完全な年間証拠と扱わない。 |
 | P0 / P-01 独立direct benchmark | 手計算と自前polygon以外のsolver比較がない。§4の固定行列を別solverで評価する。 | 入力/solver version/scene/hash/全case出力/誤差を保存し、遮蔽率と入射directを別評価。自前projection/clippingやGoldenを外部expectedへ流用しない。 |
 | P1 / S-01 solar / interval感度 | NOAAは東京8点のみ。full-year-subhour calendarと通算、極域、地平線近傍、時間分解能による影誤差が未評価。 | synthetic 8760/8784と15分通年（35,040/35,136区間）、Feb 29/年境界、混合source yearを追加。UTC/Asia-Tokyo/America-New_Yorkの別processで同一結果を確認。独立SPA比較と60/15/5分感度を分離。 |
 | P1 / G-01 数値境界 | 共有1e-9は座標・面積・方向判定に使われるが、極端scaleの誤差保証なし。 | sy/sz閾値前後、接触±epsilon、微小/大寸法・大datum、有限値同士のoverflowを固定caseで確認。bounded shade/非負energy/finiteまたは明示errorを要求。通常scaleの解析解を再利用し、対応範囲外を無理にPASSにしない。 |
@@ -96,9 +97,9 @@ Human authorizationによりM5を開始しました。この最初のステッ�
 - 既存手計算/Goldenのtoleranceは変更しない。差に合わせて事後に閾値を広げず、data、日時、座標変換、solver設定、sampling/time convergence、model差を順に切り分けて失敗を残す。
 - 各evidenceはFSL exact head、solver version/hash、scene/input digest、weather hash/provenance、command、全case成分別出力、許容差版、結果（PASS / FAIL / UNRESOLVED / NOT RUN）、reviewer判断を持つ。raw licensed dataやlocal absolute pathはcommitしない。
 
-## 5. Kickoff validation / 次のGate
+## 5. Kickoff validation（historical）
 
-今回のdocs-only作業でfresh確認したもの:
+kickoffのdocs-only作業で確認したもの（checkpoint 25157e4c7b3bcad44fb318a16f6e6ca46a8dda06）:
 
 - npm test: 28 files / 165 tests PASS。
 - npm run typecheck: PASS。
@@ -108,4 +109,33 @@ Human authorizationによりM5を開始しました。この最初のステッ�
 - M4.5 Task Packet / snapshot: SHA-256 2138381AA95AC9B9F74AB4890D182A496DACC4425C36547B9829B22EDF3CF22B 不変。
 - git diff --checkとdocs-only scopeはcommit前・後に確認し、exact final head / Draft PR stateはPR・完了報告に記録する。自己参照commitを文書へ固定しない。
 
-このステップの完了は **inventory / plan complete** であり、M5 validation COMPLETEではありません。次はW-01の期待contractとP-01の比較protocolをreviewしてから、未実施項目を小単位で進めます。本PRはDraftで停止し、Ready / merge / main直接変更 / 手動Production / branch削除はしません。M6を開始しません。
+kickoffの完了は **inventory / plan complete** であり、M5 validation COMPLETEではありません。その後Human authorizationでP0-Aへ進みました。現在のGateは次節を参照してください。
+
+## 6. P0-A — hourly EPW temporal integrity
+
+対象は既存parserが扱う単一DATA PERIOD / recordsPerHour=1。Pure TS helper `src/weather/epw/temporal.ts` をparserから呼び、日時・放射・sourceLine・provenanceは変更しません。
+
+### 追加contract
+
+- raw month/day/hourをcanonical calendar上のhour slotへ対応付け、宣言開始日から順に検証します。TMYのsource yearはprovenanceとして保持し、月間の年変更や年の逆行だけを時系列異常とはしません。
+- calendarはFeb 29実レコードがある、または `HOLIDAYS/DAYLIGHT SAVINGS` のLeapYear ObservedがYesの場合に366日、それ以外は365日です。行数からcalendarを決めません。YesならFeb 29が24区間まるごと欠けてもエラーです。
+- 既存FSL互換性として、Noでも存在するFeb 29を削除せず8784として検証します。NoかつFeb 29なしの場合、raw source yearが閏年でも8760の典型年として扱います。この場合、提供されていないFeb 29の意図までは推定できません。
+- 期間の開始/終了日はinclusive。宣言期間がcanonical 1年全体を覆う場合（通常1/1–12/31）、先頭/末尾を含む全8760/8784 slotが各1回、順序どおり必要です。重複＋欠落で総行数が一致しても不合格です。
+- 一意slotの集合で欠落を検出し、元順序で逆順を検出します。swapを欠落と誤判定せず、重複を削除せず、silent sort / fillは行いません。期間外も明示errorです。
+- 既存のpartialファイル（1日宣言内の1時間fixtureを含む）は維持します。宣言期間内かつ観測された最初〜最後の時間枠が連続していることを要求し、`coverage=partial`を返します。宣言されたpartial期間の両端まで揃っていることや通年性能は保証しません。
+- Dec 31→Jan 1は宣言期間が年境界を跨ぐ場合に許可します。1/1–12/31の後に次年1/1を追加して新cycleとして通過させません。複数年連続データの新規対応はしません。
+- `INTERVAL_DUPLICATE` / `INTERVAL_MISSING` / `INTERVAL_OUT_OF_ORDER` / `INTERVAL_OUT_OF_PERIOD` はseverity=error。期間日付不正は既存 `HEADER_INVALID`。temporal error時はfull-year coverageを付けず、既存 `assertWeatherDatasetUsable()` が計算利用を拒否します。放射等の既存error検査も維持します。
+- detailed sub-hour検証は今回対象外。既存のsub-hour parser / count-based coverage / Wh interval accountingはそのままで、P0-A PASSをsub-hour完全性へ拡張しません。UIはSingle/Multiの既存日本語エラー辞書への4項目ずつの追加のみです。
+
+外部仕様の確認: EPWは部分年も許容し、LeapYear ObservedはYes/Noです。EnergyPlusのNoによるFeb 29除外と、FSLの原レコードを捨てない互換方針は区別します。[EnergyPlus公式 EPW format / data dictionary](https://energyplus.readthedocs.io/en/latest/auxiliary-programs/auxiliary-programs.html)（参照: 2026-09-15）。これは第三者solver比較の実行結果ではありません。
+
+### 検証結果 / 現在のGate
+
+- `tests/epw-parser.test.ts`: 既存8760/8784正常testを保持しissuesなし/usableを追加確認。18 tests追加: 年初/年末/中間/Feb 29の1区間欠落、重複、件数を維持した重複＋欠落、通常/閏年swap、Feb 29全欠落、混合source year、年跨ぎ/再cycle、partial gap/期間外/不正header。異常時の明示error・利用拒否と、元データの保持を検査します。
+- npm test: **28 files / 183 tests PASS**。既存165 tests、M1 Golden、M2 normal/leap NOAA / interval accounting、M3 geometry、Single/Multi regressionを維持。
+- npm run typecheck / npm run build: PASS（Vite、90 modules、dist）。npm run golden:check: PASS。npm audit: 0 vulnerabilities。git diff --check: PASS。
+- M1原本2点のSHA-256一致、M4.5 immutable Task Packet digest不変。engine / geometry / calculation / preset / CSV / Golden expectedの差分は0。
+- Tokyo Hyakuri既存local EPW: §2のhashを確認し、変更後parserで8760 / 0 issues / usable PASS。rawデータの変更・追加commit・外部送信なし。新しいbrowser/第三者物理validationを実施したとは扱いません。
+- exact final headとPR stateはGit/PRから解決し、PR本文と完了報告へ記録します。この文書の自己参照SHAは固定しません。
+
+**P0-A implementation/checks PASS — independent review pending**。M5全体は未完了、残backlogは自動実行しません。PR #10はDraft維持でSTOP。Ready / merge / main直接変更 / 手動Production / branch削除 / M6開始は行いません。

@@ -12,6 +12,7 @@ import {
 import type { WeatherParseOptions, WeatherSourceProvenance } from "../provenance";
 import { createWeatherIntervalTime } from "../time";
 import { parseEpwHeaders, splitEpwCsvLine } from "./headers";
+import { validateHourlyTemporalIntegrity } from "./temporal";
 
 const MINIMUM_DATA_FIELDS = 16;
 
@@ -136,12 +137,11 @@ function parseRecord(
   }
 }
 
-function classifyCoverage(
+// Detailed sub-hour temporal validation is deferred; preserve its existing classification.
+function classifySubhourCoverage(
   intervalCount: number,
   recordsPerHour: number,
 ): WeatherCoverage {
-  if (recordsPerHour === 1 && intervalCount === 8760) return "full-year-8760";
-  if (recordsPerHour === 1 && intervalCount === 8784) return "full-leap-year-8784";
   if (
     recordsPerHour > 1 &&
     (intervalCount === 8760 * recordsPerHour ||
@@ -180,6 +180,19 @@ export function parseEpw(text: string, options: WeatherParseOptions): WeatherDat
     if (interval !== null) intervals.push(interval);
   }
 
+  let coverage: WeatherCoverage;
+  if (headers.recordsPerHour === 1) {
+    const temporal = validateHourlyTemporalIntegrity(
+      intervals,
+      headers.dataPeriods[0]!,
+      splitEpwCsvLine(headers.raw[4] ?? "")[1]?.toLowerCase() === "yes",
+    );
+    coverage = temporal.coverage;
+    for (const issue of temporal.issues) issues.push(issue);
+  } else {
+    coverage = classifySubhourCoverage(intervals.length, headers.recordsPerHour);
+  }
+
   const provenance: WeatherSourceProvenance = {
     sourceType: options.sourceType ?? "epw",
     sourceName: options.sourceName,
@@ -199,7 +212,7 @@ export function parseEpw(text: string, options: WeatherParseOptions): WeatherDat
     intervalMinutes: headers.intervalMinutes,
     dataPeriods: headers.dataPeriods,
     intervals,
-    coverage: classifyCoverage(intervals.length, headers.recordsPerHour),
+    coverage,
     provenance,
     issues,
   };

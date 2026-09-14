@@ -8,13 +8,13 @@
 | M3 — Facade Geometry | 全方位、窓・腰壁・全面窓、有限幅庇、直接影polygon | Complete |
 | M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Complete |
 | M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
-| M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | Current — inventory / validation design |
+| M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | Current — P0-A hourly EPW temporal integrity |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Planned |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5はHuman UX Review PASS / Independent FULL Review A. PASSを経てPR #7をsquash merge済みです。M5はHuman authorizationにより開始し、最初のステップは[validation棚卸し・追加検証計画](VALIDATION_PLAN.md)です。第三者物理validationは未実施であり、M6はPlanned / NOT STARTEDのままです。
+- M4.5はHuman UX Review PASS / Independent FULL Review A. PASSを経てPR #7をsquash merge済みです。M5は[validation棚卸し・追加検証計画](VALIDATION_PLAN.md)を経て、P0-A hourly EPW時系列完全性の実装・検証まで進めています。第三者物理validationは未実施であり、M6はPlanned / NOT STARTEDのままです。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Production deployment、Ready for Review、mergeはHuman Gateです。
 
