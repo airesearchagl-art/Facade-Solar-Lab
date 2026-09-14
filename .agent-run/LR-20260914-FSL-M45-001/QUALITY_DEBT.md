@@ -10,8 +10,8 @@ Historical Human UX Follow-up 02 checkpoint: Human confirmed UX-01/03/04 and UX-
 
 Current Human acceptance: accepted exact product head `0888b66646db328f5d8292bc53aa480a64c61239`; UX-01 through UX-05 CLOSED / PASS; M4.5 Human UX Review PASS. Human confirmed no 3F-to-2F, 2F-to-1F or 1F-below-building penetration, no unnatural angle change, and appropriate per-floor clipping. This supersedes the historical UX re-check gates, without inventing additional native real-EPW/PDF/CSV evidence beyond the stated Preview checks.
 
-Current gate: INDEPENDENT_REVIEW_PENDING. Calculation engine changes in this sync: none. Cross-floor physical shading: not implemented; reference ray clipping: visualization only. Ready/merge/auto-merge remain unauthorized; M5 NOT STARTED.
+Current terminal state: M4.5 COMPLETE. Independent FULL Review: A. PASS — Ready candidate; PR #7 Ready transition and squash merge COMPLETE. Automatic Production READY at product merge `4ea3821f36f65afb36a43de5b6953958d0c3b536`. No remaining M4.5 tasks or further closeout cycle. Calculation engine changes in this sync: none. Cross-floor physical shading: not implemented; reference ray clipping: visualization only. M5 NOT STARTED.
 
 Explicit later boundaries are third-party physical validation, finite-width diffuse modeling, uncertainty/tolerance formalization, and arbitrary PDF Case color selection. They are not silently represented as M4.5 PASS.
 
-Real-EPW Multi-floor browser UX and saved PDF/CSV visual/content inspection require Human verification if the automation surface cannot complete native file selection or host download inspection.
+Historical automation limits for native real-EPW selection and saved PDF/CSV inspection remain unverified beyond the explicitly reported Human evidence. Do not infer additional PASS results or reopen M4.5 solely from these historical records. Third-party physical validation and further stability/boundary verification remain M5 Planned and require a separate Human Task Packet.

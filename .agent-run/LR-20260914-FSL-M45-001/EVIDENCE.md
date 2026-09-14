@@ -2,6 +2,8 @@
 
 Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496DACC4425C36547B9829B22EDF3CF22B`
 
+Entries below are historical checkpoints. The final Post-Merge Terminal Closeout section supersedes earlier pending/current-action states without deleting their evidence; those earlier states are not resume instructions.
+
 ## Fresh Gate
 
 - `origin/main`: `35f543e618b8ad70ecc746b3139a5fb09adbeca9`
@@ -147,3 +149,39 @@ Binding: `LRP-20260914-FSL-M45-001` rev `1` / `2138381AA95AC9B9F74AB4890D182A496
 - Current state: INDEPENDENT_REVIEW_PENDING. Independent FULL Review is not performed by this implementation session. Existing PR #7 remains Draft; Ready, merge and auto-merge unauthorized.
 - Manual Preview/Production mutation: none. Main mutation: none. Branch deletion: none. M5: NOT STARTED.
 - Human Gate: STOP — Independent FULL Review.
+
+## Post-Merge Terminal Closeout — 2026-09-14
+
+### Product completion checkpoint
+
+- Fresh Gate: after `git fetch origin`, `origin/main` matched `4ea3821f36f65afb36a43de5b6953958d0c3b536`; PR #7 was MERGED; working tree was clean. Created `docs/m45-post-merge-closeout` directly from that exact main, without writing to main.
+- Product PR: https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/7 — MERGED.
+- Human-accepted product head: `0888b66646db328f5d8292bc53aa480a64c61239`.
+- Reviewed handoff head: `c3d3238491200be16788200383f343ba6bb26cc5`.
+- Squash merge commit / resulting main: `4ea3821f36f65afb36a43de5b6953958d0c3b536`.
+- Merge parent: `35f543e618b8ad70ecc746b3139a5fb09adbeca9`.
+- Human UX Review: PASS; UX-01 through UX-05: CLOSED / PASS.
+- Independent FULL Review: `A. PASS — Ready candidate`, reported by Human; not re-performed by this closeout session.
+- PR #7 Ready transition: COMPLETE. PR #7 squash merge: COMPLETE.
+
+### Automatic Production evidence
+
+- Deployment: `dpl_DfWK1B9yYRUgXPNgxQkCo2SwJGGo`.
+- Fresh read-only Vercel metadata: target `production`; state / readyState `READY`; source `git`; branch `main`; exact source `4ea3821f36f65afb36a43de5b6953958d0c3b536`; framework `vite`.
+- Canonical alias: https://facade-solar-lab.vercel.app/ — present on that deployment.
+- Canonical URL smoke: fresh HTTP GET returned `200`, `text/html`, final canonical URL unchanged, and the `Facade Solar Lab` title present. No new browser acceptance or physical validation is claimed by this HTTP smoke.
+- Manual Production mutation: none. Deployment was triggered automatically by the product merge; no deploy, promote, rollback, alias, domain, or secret operation was performed for closeout.
+
+### Documentation-only validation and terminal boundary
+
+- Scope: M4.5 mutable `RUN_STATE.md`, `TASK_QUEUE.md`, `EVIDENCE.md`, `QUALITY_DEBT.md`; `README.md`, `docs/ROADMAP.md`, `docs/VALIDATION_PLAN.md` only.
+- Product source diff: 0. No `src/**`, `tests/**`, `legacy/**`, package, calculation, preset, CSV, or immutable Task Packet changes.
+- `git status --short`, `git diff --check`, and changed-file scope checks: PASS. The committed comparison against `origin/main` is verified externally after this checkpoint; do not embed this document's own commit SHA.
+- Task Packet and snapshot SHA-256 both remain `2138381AA95AC9B9F74AB4890D182A496DACC4425C36547B9829B22EDF3CF22B`.
+- Full npm test/build: not rerun, as authorized for documentation-only closeout. Historical product test evidence above is retained, not represented as a new test run.
+- Roadmap: M4 Complete; M4.5 Complete; M5 Validation / Stability Planned; M6 Vercel Operation Planned.
+- M4.5: COMPLETE. Remaining M4.5 implementation, review, merge, and Production tasks: NONE.
+- M5: NOT STARTED. Third-party physical validation / absolute kWh formal validation and further stability/boundary verification remain Planned; cross-floor physical shading remains unimplemented and ray clipping remains visualization only.
+- Main direct mutation: none. Branch deletion: none; `feat/m45-multifloor-mode` retained.
+- Next action: M4.5 is closed. Await separate Human instruction for the next milestone. Do not begin M5 automatically.
+- Further M4.5 closeout cycle: NOT REQUIRED. After this synchronization reaches main, do not create another M4.5 closeout PR solely to record this closeout PR's own merge.
