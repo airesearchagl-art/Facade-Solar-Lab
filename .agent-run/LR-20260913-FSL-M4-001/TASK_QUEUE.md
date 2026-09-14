@@ -13,8 +13,13 @@ Binding: `LRP-20260913-FSL-M4-001` rev `1` / `5A3288DF4A540EB7E40AF42E7D5D84505B
 | 7 | Wave 6 | Geometry views, input differences, assumptions | COMPLETE | Section/front SVGs; difference list; model boundary copy |
 | 8 | Wave 7 | Responsive/accessibility/UX convergence | COMPLETE | Desktop semantics and approximately 390 px browser viewport audit PASS |
 | 9 | Wave 8 | Regression, real EPW, browser validation | COMPLETE | Human-assisted OS-backed Tokyo Hyakuri EPW flow and full comparison acceptance PASS |
-| 10 | Wave 9 | Final Preview, docs, artifact convergence | PR_EVIDENCE_SYNC_PENDING | Artifact-only closure is pushed without product changes; exact-head Preview is remote evidence; PR body requires separate Human authorization |
-| 11 | Wave 10 | Draft PR and Human Gate | FOCUSED_RE_REVIEW | PR #5 remains OPEN / Draft; Ready prohibited |
+| 10 | Wave 9 | Final Preview, docs, artifact convergence | COMPLETE | Exact-head Preview and PR body evidence synchronized; product source unchanged by closure evidence |
+| 11 | Wave 10 | Draft PR and Human Gate | COMPLETE | PR #5 completed Draft review gate, Ready transition, and authorized squash merge |
 | 12 | Bounded follow-up | Design Insight & Export Visible MVP | COMPLETE | Exact head `018a5a5...`; Git Preview `dpl_Nbsze...`; PR body synced; RF-01 unchanged |
 | 13 | Bounded follow-up | Report Geometry & JSON Presets | COMPLETE | Exact product head `9be5567f...`; Git Preview `dpl_G9kUsc...`; Human real-EPW acceptance followed |
-| 14 | Required verification | RF-01 Human Browser Acceptance | CLOSED / PASS | Native EPW selection through provenance, comparison, edit/rerun, CSV/PDF, console, and asset checks PASS |
+| 14 | Required verification | RF-01 Human Browser Acceptance | COMPLETE / PASS | Native EPW selection through provenance, comparison, edit/rerun, CSV/PDF, console, and asset checks PASS |
+| 15 | Review gate | Focused Independent Re-Review | COMPLETE / PASS | `A. PASS — Ready candidate` at reviewed head `5d317461744215ef60c4e4b3a18db4b232148d5d` |
+| 16 | PR state | Ready transition | COMPLETE | PR #5 moved from Draft to Ready for review under Human authorization |
+| 17 | Merge gate | PR #5 squash merge | COMPLETE | Canonical `main @ 714ac5b56ff1f739bf133fd9d1c0f7740651a996`; parent `46f3aabe...` |
+| 18 | Production gate | Automatic Production deployment verification | COMPLETE / PASS | `dpl_2gfMznAVLZaDWhGTBeqjVfixaBFq`; `READY`; `git/main/714ac5b...`; canonical URL HTTP 200 |
+| 19 | Next milestone | M5 | NOT STARTED | Separate Human authorization and Task Packet required; no M5 implementation begun |
