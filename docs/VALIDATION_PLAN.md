@@ -1,8 +1,8 @@
 # Validation Plan
 
-## M5 — Current: P0-B independent direct-shadow protocol
+## M5 — Current: P0-C weather entry boundary
 
-P0-AはHuman報告のIndependent Focused Review PASS / Required Fixなし（head 61b8313d1c141f1f5b1afa472160976bc9f10011）。続くP0-Bは有限幅庇のdirect-shadowだけを対象に、独立3D ray-intersection protocolを準備しました。Radiance executable未検出のため外部比較はNOT RUN、許可されたfallbackとしてfixture / runner / protocolを提出します。solar / geometry / energy式・既存expected値は変更しません。annual kWh、diffuse / ground / SHGC / HVAC、詳細sub-hour、極域は今回対象外です。
+P0-A focused review PASS、P0-B protocol review PASS / Required Fixなし（Human報告、P0-B head 9d25a83e6a3fe05699ed4396d9c77ea6d5dd9b62）。Radiance外部比較は引き続きNOT RUNです。P0-CではW-01の残る入口境界をcharacterizeし、partial weatherの年間/季節表示のみ最小修正しました（§8）。solar / geometry / energy式・EPW temporal logic・既存expected値は変更しません。annual kWhの物理validation、詳細sub-hour、極域は今回対象外です。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
@@ -39,12 +39,12 @@ P0-AはHuman報告のIndependent Focused Review PASS / Required Fixなし（head
 
 ## 3. M5で追加する最小backlog
 
-P0-Aはfocused review PASS、P0-Bはprotocol準備済み / 外部比較NOT RUN。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
+P0-Aはfocused review PASS、P0-Bはprotocol review PASS / 外部比較NOT RUN。P0-Cは入口境界のtests/UI修正済みでindependent review待ち。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
 
 | 優先度 / ID | 追加する検証と不足の根拠 | 完了条件 / 再利用 |
 | --- | --- | --- |
 | P0-A / W-01 hourly時系列完全性 | 実装・検証済み / focused review PASS。月日・hourの時間枠、header期間、重複・欠落・逆順、8760/8784・年境界を検査。 | §6のcontract/tests。元の順序・値を保持し、temporal errorがあるdatasetを既存usable guardで拒否。行数一致だけではfull-yearにしない。 |
-| P0 / W-01 残る入口境界 | 空白放射、partial入力の年間表示、複数DATA PERIODS拒否の明示characterizationは後続。 | P0-Aの時間枠testを重複実装しない。部分期間の表示/通年評価方針を別途確定し、現在のpartial互換性を完全な年間証拠と扱わない。 |
+| P0-C / W-01 残る入口境界 | §8で空白/欠測放射・複数DATA PERIODSの既存拒否を確認。partialの無警告年間KPI表示を修正。 | canonical coverageを再利用し、Single/Multiの気象欄・結果・印刷で読込期間のみと明示。計算値/temporal検査は変更しない。independent review待ち。 |
 | P0-B / P-01 独立direct benchmark | §7で10ケース・strict tolerance・独立scene/ray sampler・比較fixtureを準備済み。Radiance未検出のため10件NOT RUN、第三者PASSなし。 | 既存Radiance利用時のversion/binary hash、全case出力/誤差を記録。geometry fractionのみ。自前projection/clippingやGoldenをreferenceへ流用しない。 |
 | P1 / S-01 solar / interval感度 | NOAAは東京8点のみ。full-year-subhour calendarと通算、極域、地平線近傍、時間分解能による影誤差が未評価。 | synthetic 8760/8784と15分通年（35,040/35,136区間）、Feb 29/年境界、混合source yearを追加。UTC/Asia-Tokyo/America-New_Yorkの別processで同一結果を確認。独立SPA比較と60/15/5分感度を分離。 |
 | P1 / G-01 数値境界 | 共有1e-9は座標・面積・方向判定に使われるが、極端scaleの誤差保証なし。 | sy/sz閾値前後、接触±epsilon、微小/大寸法・大datum、有限値同士のoverflowを固定caseで確認。bounded shade/非負energy/finiteまたは明示errorを要求。通常scaleの解析解を再利用し、対応範囲外を無理にPASSにしない。 |
@@ -156,4 +156,32 @@ kickoffの完了は **inventory / plan complete** であり、M5 validation COMP
 - typecheck / build / golden:check / git diff --check: PASS。buildは90 modules / dist、audit 0 vulnerabilities。M1原本2点hash、immutable Task Packet digest不変。
 - P0-B差分: validation scripts・新test・文書のみ。src/**、既存expected、package/lockfile、legacy、immutable Run Artifactの変更なし。大型binary / raw weather追加なし。
 
-現在は **P0-B PROTOCOL_PREPARED / EXTERNAL_REFERENCE_NOT_RUN**。これは許可されたfallback成果物であり、geometry physical validation PASSでもP0-B外部比較完了でもありません。次はprotocol review / 利用可能なRadiance環境での全case実行。PR #10はDraft維持でSTOP、Ready / merge / M6開始はしません。
+P0-Bは **PROTOCOL_REVIEW_PASS / EXTERNAL_REFERENCE_NOT_RUN**（Human報告）。これは許可されたfallback成果物であり、geometry physical validation PASSでもP0-B外部比較完了でもありません。利用可能なRadiance環境での全case実行は未実施のままです。後続Human authorizationによるP0-Cは次節。
+
+## 8. P0-C — weather entry boundary
+
+### 修正前characterization
+
+- starting head: 9d25a83e6a3fe05699ed4396d9c77ea6d5dd9b62。branch/local/remote/PR head一致、working tree clean、PR #10 OPEN / Draft / merged=falseをfresh確認。
+- 製品挙動を変更する前に新testを実行: **18 PASS**（14 rejection/zero-control + 4 partial presentation）。Single結果componentのtest用exportだけ追加し、1月/7月の各1時間synthetic EPWを既存browser adapter / parserへ通しました。
+- partialは `coverage=partial` / issues=[] / 計算可能。Single気象欄のraw `partial` 以外に通年ではない旨の警告はなく、Single結果は「年間の日射熱取得」、Multi結果は「年間」「夏期」「冬期」を通常どおり表示。通年/季節全体との誤認リスクがあり、UI修正が必要と判断しました。
+- GHI/DNI/DHIそれぞれの空欄・空白/タブ・9999は既に `RADIATION_MISSING` / severity=error、値はnull。列自体が欠けた行は `ROW_MALFORMED`。既存usable guardとSingle/Multi計算入口が拒否します。明示的な数値0は正常値のままです。
+- 2組のDATA PERIODSは既に `DATA_PERIOD_UNSUPPORTED` / severity=errorでbrowser adapterがreject。parserの追加修正は不要でした。
+
+### 最小表示contract
+
+- `src/app/weather-coverage.tsx` は既存 `WeatherDataset.coverage` を表示へ写すだけです。interval再走査・年判定・新state/effectは追加せず、EPW temporal logicを複製しません。
+- partialでは「部分期間の気象データ」「通年結果ではありません」を気象欄、結果、印刷概要へ明示。Single/Multi共通でannual表示を「読込期間合計」、season表示を「夏期の読込分」「冬期の読込分」とします。MultiのBuilding Total、Floor Breakdown、階別差分、印刷用全階表、footerも同じ区分です。
+- 月別/差分も読込区間のみ。未読込期間の集計0は放射ゼロの確認ではなく、夏期/冬期全体の充足を保証しません。年間換算・silent fillは行いません。partialを拒否する新仕様にはせず、従来の部分期間計算を維持します。
+- full-year-8760 / full-leap-year-8784 / full-year-subhourの従来ラベルは維持。これはcanonical分類の表示contractであり、未実施のsub-hour完全性を新たにPASSとはしません。
+- solar / geometry / energy / weather parser、計算結果shape、既存expected、CSV / preset / package filesは差分0。CSVの既存年間/季節列名やschemaは今回対象外で変更していません。partial CSVを通年証拠として使用しないでください。
+
+### 検証結果 / 現在のGate
+
+- 新規 `tests/weather-entry-boundary.test.tsx`: **23 PASS**。修正前4表示testを修正後regressionに変更し、既存数値expectedは変更なし。1月/7月partialのSingle/Multi警告・期間名・印刷用markup、未読込season=0と読込分合計、render前後result不変、partial sub-hour表示、full-year表示維持を確認。
+- npm test: **30 files / 242 PASS / 10 skipped**。既存219件（P0-A・M1 Golden・M2 NOAA/interval・M3 geometry・Single/Multi・P0-B harness）を保持。10 skippedは未取得Radiance reference比較でありPASSではありません。
+- npm run typecheck / npm run build / npm run golden:check / git diff --check: PASS。buildは91 modules / dist。npm audit: 0 vulnerabilities。
+- 表示確認はSSRと既存print CSSの適用経路確認です。今回はnative OS EPW選択・実ブラウザ操作・PDF保存・390px目視の再実行はしておらず、そのPASSは主張しません。W-01の今回の入口境界と、P1/U-01製品操作acceptanceを分離します。
+- exact final headはGit/PRから解決し、PR本文と完了報告へ同期します。M1原本・immutable Task Packet・P0-B protocol / reference fixtureは変更しません。
+
+**P0-C implementation/checks PASS / independent review pending**。PR #10はOPEN / Draft維持。M5全体は未完了、Radiance NOT_RUN、M6 NOT STARTED。Ready / mergeせずHuman GateでSTOP。
