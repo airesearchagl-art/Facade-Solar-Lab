@@ -23,7 +23,7 @@ export function formatInputValue(
   unit?: "m" | "°",
 ): string {
   if (typeof value === "boolean") return value ? "あり" : "なし";
-  if (value === "—") return value;
+  if (typeof value === "string") return value;
   const formatted = Number.isInteger(value) ? String(value) : value.toFixed(2);
   return unit === undefined ? formatted : `${formatted} ${unit}`;
 }

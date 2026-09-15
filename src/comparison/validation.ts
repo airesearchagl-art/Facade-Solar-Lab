@@ -43,7 +43,7 @@ export function validateComparisonCase(
 ): readonly ComparisonValidationIssue[] {
   const { id, name, parameters } = comparisonCase;
   const issues: ComparisonValidationIssue[] = [];
-  issues.push(...finInputIssues(parameters).map((finding) => ({ ...finding, caseId: id })));
+  issues.push(...finInputIssues(parameters, parameters.opening.widthM).map((finding) => ({ ...finding, caseId: id })));
   if (id.trim() === "") issues.push(issue(id, "id", "案のIDが必要です。"));
   if (name.trim() === "") issues.push(issue(id, "name", "案の名称を入力してください。"));
 

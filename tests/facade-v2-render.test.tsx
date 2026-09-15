@@ -10,10 +10,11 @@ import { createDemoWeatherDataset } from "../src/demo/demo-weather";
 
 const fins = { leftFin: { depthM: 1.2, bottomZM: 0.9, topZM: 3.3 }, rightFin: { depthM: 0.8, bottomZM: 0.9, topZM: 3.3 } };
 describe("M7 fin display / print boundary", () => {
-  it("editor associates six numeric labels, two toggles, and field errors", () => {
+  it("editor retains six jamb numeric labels and adds the required array toggle", () => {
     const html = renderToStaticMarkup(<FinEditor fins={fins} sillZM={0.9} headZM={3.3} inputPrefix="case-a" issues={new Map([["leftFin.depthM", "出が不正です"]])} onChange={() => {}} />);
     expect(html.match(/type="number"/g)).toHaveLength(6);
-    expect(html.match(/type="checkbox"/g)).toHaveLength(2);
+    expect(html.match(/type="checkbox"/g)).toHaveLength(3);
+    expect(html).toContain("中間フィンを使用");
     expect(html).toContain('aria-describedby="case-a-leftFin-depthM-issue"');
     expect(html).toContain("天空日射へのフィン効果・上下階相互遮蔽は計算しません");
   });

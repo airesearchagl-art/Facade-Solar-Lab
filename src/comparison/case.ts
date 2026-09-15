@@ -1,4 +1,5 @@
 import type { FacadeV2Parameters } from "../engine/facade-v2";
+import { cloneIntermediateFins } from "../geometry/facade-v2";
 import type { ComparisonCase, ComparisonWorkspace } from "./types";
 
 export const MIN_COMPARISON_CASES = 1;
@@ -28,6 +29,7 @@ export function cloneFacadeV1Parameters(
   return {
     facadeAzimuthDegFromNorth: parameters.facadeAzimuthDegFromNorth,
     opening: { ...parameters.opening },
+    ...(parameters.intermediateFins === undefined ? {} : { intermediateFins: cloneIntermediateFins(parameters.intermediateFins) }),
     ...(parameters.leftFin === undefined ? {} : { leftFin: { depthM: parameters.leftFin.depthM, bottomZM: parameters.leftFin.bottomZM, topZM: parameters.leftFin.topZM } }),
     ...(parameters.rightFin === undefined ? {} : { rightFin: { depthM: parameters.rightFin.depthM, bottomZM: parameters.rightFin.bottomZM, topZM: parameters.rightFin.topZM } }),
     ...(parameters.overhang === undefined

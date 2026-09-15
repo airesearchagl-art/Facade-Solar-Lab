@@ -48,7 +48,7 @@ export function validateMultiFloorDefinition(
   floor: MultiFloorDefinition,
 ): readonly MultiFloorValidationIssue[] {
   const issues: MultiFloorValidationIssue[] = [];
-  issues.push(...finInputIssues(floor).map((finding) => ({ ...finding, caseId, floorId: floor.id })));
+  issues.push(...finInputIssues(floor, floor.opening.widthM).map((finding) => ({ ...finding, caseId, floorId: floor.id })));
   if (floor.id.trim() === "") issues.push(issue(caseId, "id", "階IDが必要です。", floor.id));
   if (floor.name.trim() === "") issues.push(issue(caseId, "name", "階名称を入力してください。", floor.id));
   const numericFields: Array<readonly [string, number]> = [

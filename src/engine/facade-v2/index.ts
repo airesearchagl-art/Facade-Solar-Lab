@@ -8,7 +8,7 @@ import { calculateDirectShadowV2, hasActiveFins, validateVerticalFins, type Vert
 import { assertWeatherDatasetUsable, type WeatherDataset, type WeatherRadiation } from "../../weather";
 
 export interface FacadeV2Parameters extends FacadeV1Parameters, VerticalFins {}
-export const FACADE_V2_DIRECT_SHADING_MODEL = "overhang-two-fins-convex-shadow-union-v2" as const;
+export const FACADE_V2_DIRECT_SHADING_MODEL = "overhang-vertical-fin-array-shadow-union-v2" as const;
 export interface FacadeV2SimulationResult extends Omit<FacadeV1SimulationResult, "modelVersion" | "geometryVersion" | "directShadingModel" | "geometry"> {
   readonly modelVersion: "facade-v2-weather";
   readonly geometryVersion: "facade-v2";
@@ -19,7 +19,7 @@ export type FacadeSimulationResult = FacadeV1SimulationResult | FacadeV2Simulati
 
 export function validateFacadeV2Parameters(parameters: FacadeV2Parameters): void {
   validateFacadeV1Parameters(parameters);
-  validateVerticalFins(parameters);
+  validateVerticalFins(parameters, parameters.opening.widthM);
 }
 
 export function calculateFacadeV2IntervalIrradiance(parameters: FacadeV2Parameters, radiation: WeatherRadiation, solar: FacadeV1SolarPosition) {
@@ -40,6 +40,7 @@ export function simulateFacadeV2(dataset: WeatherDataset, parameters: FacadeV2Pa
     geometry: { ...result.geometry,
       ...(parameters.leftFin === undefined ? {} : { leftFin: parameters.leftFin }),
       ...(parameters.rightFin === undefined ? {} : { rightFin: parameters.rightFin }),
+      ...(parameters.intermediateFins === undefined ? {} : { intermediateFins: parameters.intermediateFins }),
     },
   };
 }

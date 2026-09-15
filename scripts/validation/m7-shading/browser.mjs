@@ -30,7 +30,7 @@ try {
   for (const mode of ["single", "multi"]) {
     if (mode === "multi") await page.getByRole("button", { name: "複数階モード", exact: true }).click();
     const scope = page.locator(mode === "single" ? "main.app-shell:not(.multifloor-shell)" : "main.multifloor-shell");
-    await scope.locator(".demo-button").click();
+    await scope.getByRole("button", {name:mode === "single" ? "デモ比較を試す" : "複数階デモを試す",exact:true}).click();
     const results = scope.locator(mode === "single" ? ".results-panel" : ".multifloor-results");
     await results.waitFor();
     await scope.locator(".case-tabs .case-tab").nth(1).click();

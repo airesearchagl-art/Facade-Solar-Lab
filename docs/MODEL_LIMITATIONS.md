@@ -4,7 +4,7 @@
 
 M1 Legacy engine、M2 weather-v1、M3 `facade-v1-weather`を保持し、M4は1–4 Caseを同一EPW条件で比較するUIとPure TypeScript adapterを追加します。比較値の外部validationではありません。
 
-M7は`facade-v2-weather`で水平庇＋左右フィンの有限直達影を合成します。フィンなし・出0はv1計算とexact等価。diffuseは庇のみ2D無限幅近似で、フィン効果は含みません。groundは従来どおり。任意3D面、壁厚/reveal、cross-floor physical shadingは未実装です。各Floorのlocal fin寸法が階境界を超えても、他階への物理遮蔽は発生せず、積層図だけ階境界で区切ります。
+M7は`facade-v2-weather`で水平庇＋左右端部フィン＋中間フィン配列の有限直達影を合成します。フィンなし・出0・配列0枚（P>W）はv1計算とexact等価（有効な端部フィンもない場合）。中間フィンは厚さなし・中央割付・中心ピッチ指定または枚数指定、最大128枚。上限超過や解像度不足を黙って切り捨てません。diffuseは庇のみ2D無限幅近似で、フィン効果は含みません。groundは従来どおり。任意3D面、壁厚/reveal、cross-floor physical shadingは未実装です。各Floorのlocal fin寸法が階境界を超えても、他階への物理遮蔽は発生せず、積層図だけ階境界で区切ります。
 
 M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPlus / SPA / annual physical validation: NOT_RUN。M7は旧P0-B checkpointで外部validation済みとは扱いません。
 
@@ -20,7 +20,7 @@ M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPl
 - 夏期は4–9月、冬期は10–3月の固定集計です。気候区分や運転scheduleに応じた空調期間判定ではありません。
 - 夏至頃（6/21）と冬至頃（12/21）の線は、選択地点で5分刻みに求めた最大solar elevation時刻とfacade-relative profile angleによる幾何学的参考表示です。厳密な至点時刻、年間計算、空調負荷計算を表しません。
 - PDFはbrowser printです。CSVは編集用比較データであり、いずれも正式な性能証明書や検証済み計算書ではありません。
-- JSON presetはCase/Workspaceの入力だけを保存します。計算結果とraw weatherを保存せず、読込後は必ず再計算が必要です。schemaVersion `1`（庇のみ）と`2`＋`geometryVersion: facade-v2`（任意フィン）を受け付けます。フィン付きはv2で保存し、旧アプリに黙ってフィンを無視させません。
+- JSON presetはCase/Workspaceの入力だけを保存します。計算結果とraw weatherを保存せず、読込後は必ず再計算が必要です。schemaVersion `1`（庇のみ）と`2`＋`geometryVersion: facade-v2`（端部フィンとoptional中間フィン配列）を受け付けます。derived positionsは保存しません。フィン付きはv2で保存し、旧アプリに黙ってフィンを無視させません。
 
 ## Facade-v1 limitations
 

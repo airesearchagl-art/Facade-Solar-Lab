@@ -7,7 +7,7 @@ P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fix�
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
 - 作業branch: feat/m5-validation-stability。この文書を含むlive HEADはGit/PRから取得し、product baselineと混同しません。
-- M4 / M4.5 / M6: COMPLETE。M5: local検証完了 / external reference待ち。M7: IMPLEMENTATION_COMPLETE / INDEPENDENT_REVIEW_PENDING（別Task Packet）。§10のPR/Ready/M6状態は当時の履歴として保持し、最新運用状態はROADMAPに従います。
+- M4 / M4.5 / M6: COMPLETE。M5: local検証完了 / external reference待ち。M7: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING（別Task Packet）。§10のPR/Ready/M6状態は当時の履歴として保持し、最新運用状態はROADMAPに従います。
 - M4.5のterminal Run Artifactとimmutable Task Packetはhistorical auditとして保持し、再closeoutしません。
 - 数値の一致、Human UX PASS、Production READYは、絶対 [kWh] の物理的正しさや正式性能評価を意味しません。
 

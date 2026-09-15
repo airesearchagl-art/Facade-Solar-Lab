@@ -1,5 +1,5 @@
 import { normalizeAzimuthDeg } from "../geometry";
-import type { ComparisonCase, InputDifference } from "./types";
+import type { ComparisonCase, InputDifference, InputDifferenceValue } from "./types";
 
 function appendNumber(
   differences: InputDifference[],
@@ -67,5 +67,14 @@ export function comparisonInputDifferences(
     }
   }
   appendNumber(differences, "groundReflectance", "地面反射率", before.groundReflectance, after.groundReflectance);
+  const a = before.intermediateFins, b = after.intermediateFins;
+  const add = (key: string, label: string, baselineValue: InputDifferenceValue, caseValue: InputDifferenceValue, unit?: "m") => {
+    if (!Object.is(baselineValue, caseValue)) differences.push({ key: `intermediateFins.${key}`, label: `中間フィン ${label}`, baselineValue, caseValue, ...(unit ? { unit } : {}) });
+  };
+  add("enabled", "あり/なし", a !== undefined, b !== undefined);
+  add("layout.mode", "配置方式", a ? a.layout.mode === "pitch" ? "ピッチ指定" : "枚数指定" : "—", b ? b.layout.mode === "pitch" ? "ピッチ指定" : "枚数指定" : "—");
+  add("layout.pitchM", "指定中心ピッチ", a?.layout.mode === "pitch" ? a.layout.pitchM : "—", b?.layout.mode === "pitch" ? b.layout.pitchM : "—", "m");
+  add("layout.count", "指定枚数", a?.layout.mode === "count" ? a.layout.count : "—", b?.layout.mode === "count" ? b.layout.count : "—");
+  for (const [field, label] of [["depthM", "出"], ["bottomZM", "下端"], ["topZM", "上端"]] as const) add(field, label, a?.[field] ?? "—", b?.[field] ?? "—", "m");
   return differences;
 }

@@ -1,7 +1,9 @@
 import type { VerticalFins } from "../../geometry/facade-v2";
+import { IntermediateFinEditor, IntermediateFinSummary } from "./IntermediateFinEditor";
 
-export function FinEditor({ fins, sillZM, headZM, inputPrefix, issues, onChange }: {
+export function FinEditor({ fins, widthM = NaN, sillZM, headZM, inputPrefix, issues, onChange }: {
   readonly fins: VerticalFins;
+  readonly widthM?: number;
   readonly sillZM: number;
   readonly headZM: number;
   readonly inputPrefix: string;
@@ -9,6 +11,7 @@ export function FinEditor({ fins, sillZM, headZM, inputPrefix, issues, onChange 
   readonly onChange: (next: VerticalFins) => void;
 }) {
   return <div className="fin-editors">
+    <h3>端部フィン（左端・右端）</h3>
     {(["leftFin", "rightFin"] as const).map((key) => {
       const fin = fins[key];
       const label = key === "leftFin" ? "左フィン" : "右フィン";
@@ -24,13 +27,14 @@ export function FinEditor({ fins, sillZM, headZM, inputPrefix, issues, onChange 
         </div>}
       </fieldset>;
     })}
-    <p className="field-note">フィンは開口の左右端に固定。上端・下端はこの階の床基準です。直達影のみ計算し、天空日射へのフィン効果・上下階相互遮蔽は計算しません。</p>
+    <IntermediateFinEditor fin={fins.intermediateFins} widthM={widthM} sillZM={sillZM} headZM={headZM} prefix={inputPrefix} issues={issues} onChange={(intermediateFins) => onChange({ ...fins, intermediateFins })} />
+    <p className="field-note">端部フィンは開口の左右端、中間フィンは中央割付。上端・下端はこの階の床基準です。直達影のみ計算し、天空日射へのフィン効果・上下階相互遮蔽は計算しません。</p>
   </div>;
 }
 
-export function FinSummary({ fins }: { readonly fins: VerticalFins }) {
-  return <dl className="fin-summary">{(["leftFin", "rightFin"] as const).map((key) => {
+export function FinSummary({ fins, widthM = NaN }: { readonly fins: VerticalFins; readonly widthM?: number }) {
+  return <div><dl className="fin-summary">{(["leftFin", "rightFin"] as const).map((key) => {
     const fin = fins[key];
     return <div key={key}><dt>{key === "leftFin" ? "左フィン" : "右フィン"}</dt><dd>{fin === undefined ? "なし" : `出 ${fin.depthM} m / 下端 ${fin.bottomZM} m / 上端 ${fin.topZM} m`}</dd></div>;
-  })}</dl>;
+  })}</dl><IntermediateFinSummary fin={fins.intermediateFins} widthM={widthM} /></div>;
 }

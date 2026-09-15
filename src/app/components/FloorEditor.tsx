@@ -78,7 +78,7 @@ export function FloorEditor({ floor, inputPrefix, issues, onChange }: FloorEdito
           </div>
         )}
       </fieldset>
-      <FinEditor fins={floor} sillZM={floor.opening.sillHeightM} headZM={floor.opening.sillHeightM + floor.opening.heightM} inputPrefix={inputPrefix} issues={issues} onChange={(fins) => onChange({ ...floor, leftFin: fins.leftFin, rightFin: fins.rightFin })} />
+      <FinEditor fins={floor} widthM={floor.opening.widthM} sillZM={floor.opening.sillHeightM} headZM={floor.opening.sillHeightM + floor.opening.heightM} inputPrefix={inputPrefix} issues={issues} onChange={(fins) => onChange({ ...floor, leftFin: fins.leftFin, rightFin: fins.rightFin, intermediateFins: fins.intermediateFins })} />
     </div>
   );
 }

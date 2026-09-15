@@ -3,6 +3,10 @@ import {
   GEOMETRY_EPSILON, openingGeometryMetrics, overhangGeometryMetrics, polygonAreaM2,
   type DirectShadowInput, type DirectShadowResult, type Point2,
 } from "../facade-v1";
+import { deriveFinLayout, validateFinLayout, type FinLayout } from "./fin-layout";
+import { sweepShadowUnionArea } from "./shadow-sweep";
+export * from "./fin-layout";
+export { sweepShadowUnionArea } from "./shadow-sweep";
 
 /** Fin at the opening's left/right jamb. All dimensions in facade-local metres. */
 export interface VerticalFinGeometry {
@@ -13,10 +17,15 @@ export interface VerticalFinGeometry {
 export interface VerticalFins {
   readonly leftFin?: VerticalFinGeometry;
   readonly rightFin?: VerticalFinGeometry;
+  readonly intermediateFins?: VerticalFinGeometry & { readonly layout: FinLayout };
 }
 export interface DirectShadowV2Input extends DirectShadowInput, VerticalFins {}
+/** Input-only whitelist; never copy derived positions or foreign metadata. */
+export function cloneIntermediateFins(fin: NonNullable<VerticalFins["intermediateFins"]>): NonNullable<VerticalFins["intermediateFins"]> {
+  return { depthM: fin.depthM, bottomZM: fin.bottomZM, topZM: fin.topZM, layout: fin.layout.mode === "pitch" ? { mode: "pitch", pitchM: fin.layout.pitchM } : { mode: "count", count: fin.layout.count } };
+}
 export interface SurfaceShadow {
-  readonly surface: "overhang" | "leftFin" | "rightFin";
+  readonly surface: "overhang" | "leftFin" | "rightFin" | `intermediateFin-${number}`;
   /** Clipped coordinates relative to opening center x / sill z, not world datum. */
   readonly polygon: readonly Point2[];
   readonly areaM2: number;
@@ -32,12 +41,20 @@ export function validateVerticalFin(fin: VerticalFinGeometry): void {
     throw new RangeError("fin requires finite depth >= 0 and top > bottom [m]");
   }
 }
-export function validateVerticalFins(fins: VerticalFins): void {
+export function validateVerticalFins(fins: VerticalFins, widthM?: number): void {
   if (fins.leftFin !== undefined) validateVerticalFin(fins.leftFin);
   if (fins.rightFin !== undefined) validateVerticalFin(fins.rightFin);
+  if (fins.intermediateFins !== undefined) {
+    validateVerticalFin(fins.intermediateFins);
+    validateFinLayout(fins.intermediateFins.layout);
+    if (widthM !== undefined) deriveFinLayout(widthM, fins.intermediateFins.layout);
+  }
 }
-export function hasActiveFins(fins: VerticalFins): boolean {
-  return (fins.leftFin?.depthM ?? 0) > 0 || (fins.rightFin?.depthM ?? 0) > 0;
+export function hasActiveFins(fins: VerticalFins & { readonly opening?: { readonly widthM: number } }): boolean {
+  const array = fins.intermediateFins;
+  const arrayActive = array !== undefined && array.depthM > 0 &&
+    (array.layout.mode === "count" || fins.opening === undefined || array.layout.pitchM <= fins.opening.widthM);
+  return (fins.leftFin?.depthM ?? 0) > 0 || (fins.rightFin?.depthM ?? 0) > 0 || arrayActive;
 }
 
 /** Convex intersection in opening-local coordinates. Either polygon winding works. */
@@ -102,7 +119,7 @@ export function convexShadowUnionArea(polygons: readonly (readonly Point2[])[]):
 }
 
 export function calculateDirectShadowV2(input: DirectShadowV2Input): DirectShadowV2Result {
-  validateVerticalFins(input);
+  validateVerticalFins(input, input.opening.widthM);
   // Preserve v1 exactly, including its geometry validation and epsilon contract.
   if (!hasActiveFins(input)) return { ...calculateDirectShadow(input), surfaceShadows: [] };
   const metrics = openingGeometryMetrics(input.opening);
@@ -124,10 +141,15 @@ export function calculateDirectShadowV2(input: DirectShadowV2Input): DirectShado
   const shadows: SurfaceShadow[] = [];
   if (local.clippedShadowPolygon.length >= 3) shadows.push({ surface: "overhang", polygon: local.clippedShadowPolygon, areaM2: polygonAreaM2(local.clippedShadowPolygon) });
   const sun = original.facadeLocalSunVector;
-  for (const surface of ["leftFin", "rightFin"] as const) {
-    const fin = input[surface];
+  const surfaces: { surface: SurfaceShadow["surface"]; fin: VerticalFinGeometry | undefined; x: number }[] = [
+    { surface: "leftFin", fin: input.leftFin, x: bounds.leftM }, { surface: "rightFin", fin: input.rightFin, x: bounds.rightM },
+  ];
+  const array = input.intermediateFins;
+  if (array !== undefined && array.depthM > 0) {
+    deriveFinLayout(input.opening.widthM, array.layout).positionsFromLeftM.forEach((x, i) => surfaces.push({ surface: `intermediateFin-${i}`, fin: array, x: bounds.leftM + x }));
+  }
+  for (const { surface, fin, x } of surfaces) {
     if (fin === undefined || fin.depthM === 0) continue;
-    const x = surface === "leftFin" ? bounds.leftM : bounds.rightM;
     const bottom = fin.bottomZM - input.opening.sillZM;
     const top = fin.topZM - input.opening.sillZM;
     const offsetX = fin.depthM * sun.x / sun.y;
@@ -141,7 +163,10 @@ export function calculateDirectShadowV2(input: DirectShadowV2Input): DirectShado
     const areaM2 = polygonAreaM2(polygon);
     if (areaM2 > 0) shadows.push({ surface, polygon, areaM2 });
   }
-  const unionArea = convexShadowUnionArea(shadows.map((shadow) => shadow.polygon));
+  // Keep the bounded pre-array arithmetic bit-exact for the authorized checkpoint.
+  // Arrays use the general polynomial sweep, never 2^N inclusion/exclusion.
+  const polygons = shadows.map((shadow) => shadow.polygon);
+  const unionArea = surfaces.length > 2 ? sweepShadowUnionArea(polygons) : convexShadowUnionArea(polygons);
   const fraction = unionArea / metrics.areaM2;
   if (!Number.isFinite(fraction) || fraction < -GEOMETRY_EPSILON || fraction > 1 + GEOMETRY_EPSILON) {
     throw new RangeError("direct shadow union outside opening area");

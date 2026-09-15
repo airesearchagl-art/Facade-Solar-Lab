@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 
 import { formatKWh } from "../../comparison";
 import { createDemoWeatherDataset, DEMO_WEATHER_DATASET_ID } from "../../demo/demo-weather";
+import { createMultiFloorFinArrayDemoWorkspace } from "../../multifloor/demo";
 import {
   MAX_MULTI_FLOOR_CASES,
   MAX_MULTI_FLOOR_PRESET_BYTES,
@@ -85,12 +86,14 @@ export function WeatherPanel({
   loading,
   failure,
   onDemo,
+  onFinDemo,
   onFile,
 }: {
   readonly dataset: WeatherDataset | null;
   readonly loading: boolean;
   readonly failure: { readonly message: string; readonly issues: readonly WeatherParseIssue[] } | null;
   readonly onDemo: () => void;
+  readonly onFinDemo?: () => void;
   readonly onFile: (file: File) => void;
 }) {
   const isDemo = dataset?.id === DEMO_WEATHER_DATASET_ID;
@@ -100,11 +103,12 @@ export function WeatherPanel({
         <div><p className="section-kicker">01 · 気象データ</p><h2 id="multifloor-weather-title">複数階比較に使う気象データ</h2></div>
         <div className="weather-actions">
           <button type="button" className="demo-button" disabled={loading} onClick={onDemo}>複数階デモを試す</button>
+          {onFinDemo ? <button type="button" className="demo-button" disabled={loading} onClick={onFinDemo}>複数階フィンのピッチ比較</button> : null}
           <label className="file-button"><span>{loading ? "読込中…" : "EPWファイルを読み込む"}</span><input type="file" accept=".epw" disabled={loading} onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file !== undefined) onFile(file); event.currentTarget.value = ""; }} /></label>
         </div>
       </div>
       <div className={isDemo ? "demo-disclosure active" : "demo-disclosure"} role={isDemo ? "status" : undefined}>
-        <div><strong>{isDemo ? "複数階デモ · 合成気象データを使用中" : "複数階デモ · 合成気象データ"}</strong><span>3階建てのCase A/Bをcanonical engineで比較します。</span></div>
+        <div><strong>{isDemo ? "複数階デモ · 合成気象データを使用中" : "複数階デモ · 合成気象データ"}</strong><span>通常デモは3階建て2案。フィンのピッチ比較は、各階の幅6 mの開口で「なし・出0.6 m／中心ピッチ2 m・出0.6 m／中心ピッチ1 m」の3案を比較します。</span></div>
         <p><strong>synthetic / 実測気象ではありません。</strong> 性能検証用データではありません。</p>
       </div>
       {failure === null ? null : <div className="message error-message" role="alert"><strong>EPWファイルを使用できません。</strong><span>{failure.message}</span><ul>{failure.issues.slice(0, 6).map((item, index) => <li key={`${item.code}-${index}`}>{item.code}: {WEATHER_ISSUE_MESSAGES[item.code]}</li>)}</ul></div>}
@@ -119,7 +123,7 @@ export function WeatherPanel({
 export function MultiFloorPrintSummary({ result, dataset }: { readonly result: MultiFloorRunResult; readonly dataset: WeatherDataset }) {
   return (
     <section className="print-only multifloor-print-summary">
-      <p>Facade Solar Lab · M4.5 Multi-floor Mode</p>
+      <p>Facade Solar Lab · M7 Multi-floor Mode</p>
       <h1>複数階ファサード 日射熱取得比較レポート</h1>
       <dl className="print-weather-grid"><div><dt>地点</dt><dd>{[dataset.location.city, dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</dd></div><div><dt>出典</dt><dd>{dataset.provenance.sourceName}</dd></div><div><dt>データセット</dt><dd>{dataset.id}</dd></div><div><dt>基準案</dt><dd>{result.cases.find((item) => item.caseId === result.baselineCaseId)?.name}</dd></div></dl>
       <p className="print-critical-warning"><strong>表示値は開口からの日射熱取得量であり、HVAC冷房・暖房負荷ではありません。絶対値は正式な物理性能検証前です。</strong></p>
@@ -195,10 +199,10 @@ export function MultiFloorWorkspace() {
     }
   };
 
-  const loadDemo = () => {
+  const loadDemo = (array = false) => {
     try {
       const nextDataset = createDemoWeatherDataset();
-      const nextWorkspace = createMultiFloorDemoWorkspace();
+      const nextWorkspace = array ? createMultiFloorFinArrayDemoWorkspace() : createMultiFloorDemoWorkspace();
       const nextResult = runMultiFloorComparison(nextDataset, nextWorkspace);
       setWorkspace(nextWorkspace);
       resetColors();
@@ -210,7 +214,7 @@ export function MultiFloorWorkspace() {
       setWeatherFailure(null);
       setRunError(null);
       setPresetMessage("決定論的な複数階デモを読み込み、比較計算を実行しました。");
-      caseSequence.current = 3;
+      caseSequence.current = array ? 4 : 3;
     } catch {
       setRunError("複数階デモの実行に失敗しました。");
     }
@@ -279,9 +283,9 @@ export function MultiFloorWorkspace() {
 
   return (
     <main className="app-shell multifloor-shell">
-      <header className="app-header"><div><p className="eyebrow">M7 · 複数階モード</p><h1>Facade Solar Lab</h1><p className="lede">単一階計算を各Floorへ再利用し、庇・左右フィンによる建物全体と階別の日射熱取得を比較します。</p></div><div className="model-chip"><span aria-hidden="true" />各階で facade-v1 / v2-weather</div></header>
+      <header className="app-header"><div><p className="eyebrow">M7 · 複数階モード</p><h1>Facade Solar Lab</h1><p className="lede">単一階計算を各Floorへ再利用し、庇・左右端部フィン・中間フィン配列による建物全体と階別の日射熱取得を比較します。</p></div><div className="model-chip"><span aria-hidden="true" />各階で facade-v1 / v2-weather</div></header>
       <aside className="critical-warning" aria-label="計算モデルの検証に関する注意"><strong>設計比較用 — 正式な物理性能評価には使用できません</strong><p>表示値は開口を通して室内へ入る日射熱取得量です。HVAC冷房・暖房負荷、BEI、空調容量、保証値ではありません。</p></aside>
-      <WeatherPanel dataset={dataset} loading={loadingWeather} failure={weatherFailure} onDemo={loadDemo} onFile={(file) => void loadWeather(file)} />
+      <WeatherPanel dataset={dataset} loading={loadingWeather} failure={weatherFailure} onDemo={() => loadDemo()} onFinDemo={() => loadDemo(true)} onFile={(file) => void loadWeather(file)} />
 
       <section className="panel multifloor-case-panel" aria-labelledby="multifloor-cases-title">
         <div className="section-heading"><div><p className="section-kicker">02 · Building Case</p><h2 id="multifloor-cases-title">複数階の建物案</h2></div><div className="case-actions"><button type="button" className="secondary-button" disabled={workspace.cases.length >= MAX_MULTI_FLOOR_CASES} onClick={() => { const next = nextAvailableMultiFloorCaseId(workspace, caseSequence.current); caseSequence.current = next.sequence + 1; const item = createMultiFloorCase(next.id, `建物案${String.fromCharCode(64 + next.sequence)}`); mutateWorkspace((current) => addMultiFloorCase(current, item), { caseId: item.id, floorId: item.floors[0]!.id }); }}>建物案を追加</button><button type="button" className="secondary-button" disabled={workspace.cases.length >= MAX_MULTI_FLOOR_CASES} onClick={() => { const next = nextAvailableMultiFloorCaseId(workspace, caseSequence.current); caseSequence.current = next.sequence + 1; mutateWorkspace((current) => duplicateMultiFloorCase(current, selectedCase.id, next.id, `建物案${String.fromCharCode(64 + next.sequence)}`), { caseId: next.id, floorId: selectedCase.floors[0]!.id }); }}>建物案を複製</button></div></div>
@@ -300,8 +304,8 @@ export function MultiFloorWorkspace() {
       {runError === null ? null : <div className="message error-message" role="alert">{runError}</div>}
       {result === null || dataset === null ? <section className="panel results-empty"><span>複数階比較結果</span><strong>気象データと入力を確認し、比較計算を実行してください</strong><p>Building Total、Floor Breakdown、月別値、基準案との差を表示します。</p></section> : <>{dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回実行時のsnapshotです。出力は再実行まで無効です。</div> : null}<MultiFloorPrintSummary result={result} dataset={dataset} /><MultiFloorResults result={result} dataset={dataset} colors={colors} selectedCaseId={selectedCaseId} selectedFloorId={selectedFloorId} onSelectCase={selectCase} onSelectFloor={setSelectedFloorId} /><section className="panel export-panel no-print"><div><p className="section-kicker">複数階結果の共有</p><h2>PDF / CSV</h2><p>{dirty ? "再計算後に出力できます。" : "全建物案・全階の結果と積層形状を出力します。"}</p></div><div className="export-actions"><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) window.print(); }}>PDFとして保存 / 印刷</button><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) downloadTextFile(MULTI_FLOOR_CSV_FILENAME, createMultiFloorCsv(result, dataset), "text/csv;charset=utf-8"); }}>複数階CSVを書き出す</button></div></section></>}
 
-      <section className="panel assumptions-panel"><div className="section-heading"><div><p className="section-kicker">モデル情報</p><h2>複数階計算の前提</h2></div></div><div className="assumption-grid"><article><h3>canonical engine reuse</h3><p>各Floorを既存の入力contract＋任意フィンへ変換し、<code>simulateFacade()</code>を1回だけ実行。フィンなし・出0は<code>facade-v1-weather</code>、有効なフィンありは<code>facade-v2-weather</code>。solar / weather / SHGC / 集計は共有します。</p></article><article><h3>Building Total</h3><p>各Floorの年間・夏期・冬期・月別の日射熱取得量を単純合算します。階数や開口面積の差も建物全体差に含まれます。</p></article><article className="limitation-card"><h3>適用範囲</h3><p>庇＋左右フィンは直達影のみ。天空日射は庇のみ2D無限幅近似、地面反射は従来どおり。cross-floor physical shading未実装。M5外部参照はNOT_RUN、絶対kWhの正式な物理validationは未完了です。</p></article></div></section>
-      <footer><span>Facade Solar Lab · M4.5 Multi-floor Mode</span><span>{result === null ? "未計算" : `建物案 ${result.cases.length} · ${formatKWh(result.cases[0]!.total.annualKWh)} kWh（基準案${weatherPeriodLabels(dataset?.coverage).annual}）`}</span></footer>
+      <section className="panel assumptions-panel"><div className="section-heading"><div><p className="section-kicker">モデル情報</p><h2>複数階計算の前提</h2></div></div><div className="assumption-grid"><article><h3>canonical engine reuse</h3><p>各Floorを既存の入力contract＋任意フィンへ変換し、<code>simulateFacade()</code>を1回だけ実行。フィンなし・出0は<code>facade-v1-weather</code>、有効なフィンありは<code>facade-v2-weather</code>。solar / weather / SHGC / 集計は共有します。</p></article><article><h3>Building Total</h3><p>各Floorの年間・夏期・冬期・月別の日射熱取得量を単純合算します。階数や開口面積の差も建物全体差に含まれます。</p></article><article className="limitation-card"><h3>適用範囲</h3><p>庇＋左右端部・中間フィン配列は直達影のみ。天空日射は庇のみ2D無限幅近似、地面反射は従来どおり。cross-floor physical shading未実装。M5外部参照はNOT_RUN、絶対kWhの正式な物理validationは未完了です。</p></article></div></section>
+      <footer><span>Facade Solar Lab · M7 Multi-floor Mode</span><span>{result === null ? "未計算" : `建物案 ${result.cases.length} · ${formatKWh(result.cases[0]!.total.annualKWh)} kWh（基準案${weatherPeriodLabels(dataset?.coverage).annual}）`}</span></footer>
     </main>
   );
 }

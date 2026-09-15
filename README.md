@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M7 — Advanced Facade Shading: IMPLEMENTATION_COMPLETE / INDEPENDENT_REVIEW_PENDING**。水平庇＋左右縦フィンのdirect shadow、Single/Multi比較・保存・出力を[拡張contract](docs/ADVANCED_FACADE_SHADING.md)に従って実装しました。Draft handoffのみ。exact Git Preview証拠はPR本文で確認し、Ready / mergeは別Human Gateです。
+**M7 — Advanced Facade Shading: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を[拡張contract](docs/ADVANCED_FACADE_SHADING.md)に従って実装しました。Draft handoffのみ。exact Git Preview証拠はPR本文で確認し、Ready / mergeは別Human Gateです。
 
 **M6 — COMPLETE**。PR #11はsquash merge済み。[運用contract・post-merge証拠](docs/VERCEL_OPERATION.md)にGit自動Productionのprovenance・HTTP・Single/Multi browser PASSを記録しました。手動Production操作なし、M6の再closeoutは不要です。
 
@@ -19,7 +19,7 @@
 - Legacy日射計算engine: 実装済み（M1 regression baseline）
 - Original-source reference / Golden test: 実装済み
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
-- Facade geometry: 有限幅庇＋左右フィンのdirect-shadow polygon union実装済み（M7 review前）
+- Facade geometry: 有限幅庇＋端部・中間フィンのdirect-shadow polygon union実装済み（M7再review前）
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
@@ -27,7 +27,7 @@
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。Single/Multiはcanonical `simulateFacade()`へ渡し、有効フィンなしなら既存`facade-v1-weather`、ありなら`facade-v2-weather`を使います。各Floorで1回だけ実行し、Building Totalは単純合算です。solar / weather / SHGC / energy aggregationは共有し、M7でdirect shadowだけを拡張しています。
 
-左右フィンの出・上端・下端をCase/Floorごとに編集でき、入力差分、立面、CSV、全案印刷/PDFへ反映します。JSONは入力のみ。庇のみの旧schema v1は維持し、フィン情報がある場合はschema v2＋`geometryVersion: facade-v2`で保存します。[契約・制限・検証](docs/ADVANCED_FACADE_SHADING.md)。
+左右端部フィンに加え、中間フィンの出・上端・下端・中心ピッチ／枚数をCase/Floorごとに編集できます。中央割付・最大128枚、実配置枚数／中心ピッチ／左右余白を表示し、入力差分、立面、CSV、全案印刷/PDFへ反映します。Single/Multiの専用「フィンのピッチ比較」デモは、同じ幅6 mの開口で配列なし／出0.6 m・P2 m／出0.6 m・P1 mの3案を比較します。合成気象であり性能検証ではありません。JSONは入力のみ。庇のみの旧schema v1は維持し、フィン情報（任意の中間配列を含む）がある場合はschema v2＋`geometryVersion: facade-v2`で保存します。[契約・制限・検証](docs/ADVANCED_FACADE_SHADING.md)。
 
 Cross-floor physical shading（上下階間の物理的な相互遮蔽）は未実装です。全階のreference rayとfloor-local clippingは可視化のみで、計算結果を変更しません。
 
@@ -96,4 +96,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M7 Advanced Facade ShadingはIMPLEMENTATION_COMPLETE / INDEPENDENT_REVIEW_PENDING、Draft PRで引き継ぎます。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。
+M4.5 / M6はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M7 Advanced Facade ShadingはIMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING、Draft PRで引き継ぎます。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。

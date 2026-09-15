@@ -52,7 +52,7 @@ export interface ComparisonRunResult {
   readonly cases: readonly ComparisonCaseResult[];
 }
 
-export type InputDifferenceValue = number | boolean | "—";
+export type InputDifferenceValue = number | boolean | "—" | "ピッチ指定" | "枚数指定";
 
 export interface InputDifference {
   readonly key: string;

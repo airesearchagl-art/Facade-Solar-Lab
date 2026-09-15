@@ -835,6 +835,11 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .print-geometry-facts dt { font-weight: 800; }
   .print-geometry-facts dd { margin: 0; }
   .print-geometry-case .geometry-grid { grid-template-columns: 1fr; gap: 2mm; }
+  /* Array metadata must not force three narrow, page-tall columns to fragment. */
+  .print-geometry-cases.has-fin-array { display: block; }
+  .print-geometry-cases.has-fin-array .print-geometry-case { margin-bottom: 4mm; }
+  .print-geometry-cases.has-fin-array .geometry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .print-geometry h2 { break-after: avoid; }
   .print-geometry-cases.count-1 .geometry-grid,
   .print-geometry-cases.count-4 .geometry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .print-geometry-case .geometry-figure { margin: 0; padding: 2mm; }
@@ -899,6 +904,11 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
 .fin-line.rightFin { stroke: #614877; stroke-dasharray: 8 3; }
 .fin-projection { fill: #b9916450; stroke: #895124; stroke-width: 1; stroke-dasharray: 3 2; }
 .fin-projection.rightFin { fill: #80679120; stroke: #614877; stroke-dasharray: 6 3; }
+.fin-editors > h3, .intermediate-fin-editor, .fin-editors > .field-note { grid-column: 1 / -1; }
+.fin-line.intermediateFin { stroke: #23765e; stroke-width: 2; stroke-dasharray: 3 2; }
+.fin-projection.intermediateFin { fill: #23765e18; stroke: #23765e; stroke-dasharray: 3 2; }
+.array-summary { font-size: .78rem; line-height: 1.6; overflow-wrap: anywhere; }
+.array-summary p { margin: .25rem 0; }
 .floor-shading-inputs { table-layout: fixed; width: 100%; }
 .floor-shading-inputs td { white-space: normal; overflow-wrap: anywhere; }
 @media print {
