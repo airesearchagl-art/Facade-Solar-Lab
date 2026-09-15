@@ -4,6 +4,10 @@
 
 `COMPLETE`。PR #11 squash merge後、M7開始前のread-only Phase 0でpost-merge gate PASS。main `f3cd83962e462f3e28ed20373d3ad58ede5e835e` / Production `dpl_6rcmsQz5VaLjBi1XTBi3vtWavyir` READY。provenance・canonical alias・index/JS/CSS/favicon.svg各200・Single/Multi/rerun/390px PASS、fatal/asset errors 0。手動Production操作なし。[Phase 0証拠](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)。
 
+## M7 Current State
+
+`COMPLETE`。PR #12 squash merge後、M8開始前のread-only Phase 0でpost-merge gate PASS。main `642136058d538e89d29971b0a586f86ea3aaa926` / Production `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v` READY。Git/main/exact source、canonical alias、index/JS/CSS/favicon.svg各200、Single/Multi fin edit・stale・rerun・finite result・Floor selection・Building Total・390px PASS、app-origin fatal/asset errors 0。手動Production操作なし。[証拠](VERCEL_OPERATION.md#m7-post-merge-closure--m8-phase-0)。
+
 以下はmerge前のhistorical evidence（pending記述は上記完了状態でsuperseded）:
 
 - Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。
@@ -11,6 +15,16 @@
 - Human Network evidence: `/`、`/assets/index-B6As79Y7.js`、`/assets/index-CmVKWan7.css`、`/favicon.svg`すべてHTTP200。`PREVIEW_HTTP_EVIDENCE=PASS`、`PRE-MERGE GATE=PASS`。[証拠の帰属とscope](VERCEL_OPERATION.md#accepted-review--http-evidence)を参照。
 - このdocs-only同期後のlive HEADはaccepted checkpointと分けてPR本文に記録する。製品・ops runner・tests/expected/Golden差分0を確認し、旧証拠を新deploymentの再測定に置き換えない。
 - PR #11はDraft。Ready transitionは別Human authorization待ち。merge / post-merge Production gateはpending / NOT_RUNであり、Production PASSではない。
+
+## M8 Current State
+
+`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。accepted exact-head Preview evidenceはproduct head `25ad78ca18519c0c8e6f211545f83d883000025a`に紐づきます。
+
+- Independent FULL Review: A. PASS / Required Fix: NONE（Human報告）。
+- Human UX Review: PASS。上部Guide導線、3分ガイド、Parameter Reference、中間フィンpitch / count、Beginner / Technical Manual階層、390px responsive、manual print / PDF usabilityを含む。
+- Human manual print / PDF visual acceptance: PASS。Agent-side local PDF generationが歴史的にUNVERIFIEDだった記録は保持し、Agent verificationへ書き換えない。
+- PR #13はOPEN / Draft。Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpending / NOT_RUN。manual Production mutationなし。
+- M5は`LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`。Radiance / EnergyPlus / SPAはNOT_RUNで、formal absolute-kWh validationは主張しない。
 
 ## 判定
 

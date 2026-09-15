@@ -18,6 +18,19 @@ Current state: `COMPLETE`。M6 Completion Wave Independent ReviewはA. PASS / Re
 - browser fatal/pageerror=0、console error=0、app asset error=0。
 - manual Production mutation: none。M6 COMPLETE。M7 branchからのdocumentation同期のみで、別M6 closeout PRは作らない。
 
+### M7 post-merge closure — M8 Phase 0
+
+2026-09-16T03:35+09:00、M8実装前にread-only確認:
+
+- PR #12 MERGED、squash merge / fresh origin/main: `642136058d538e89d29971b0a586f86ea3aaa926`。
+- Deployment: `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v`、Vercel管理画面でProduction / Ready / Current、source Git / ref main / exact commitを確認。
+- canonical alias `facade-solar-lab.vercel.app`は当該Productionに割当。
+- canonical `/`、`/assets/index-D49WKT7i.js`、`/assets/index-B6EFbBDS.css`、`/favicon.svg`各HTTP200 / expected MIME / non-empty。
+- Chrome canonical smoke: Single/Multi fin pitch demo、Floor選択、pitch edit、stale、rerun、finite result、repeated fin geometry、Building Total、workspace state保持、390px PASS。
+- app-origin fatal/console error=0、asset 404=0。Chrome拡張origin自身のSentry messageはproduct errorに含めない。
+- cached authenticated Vercel CLI packageが利用できず`ops:verify`統合reportはBLOCKEDだったため、管理画面のauthoritative deployment detailと既存bounded HTTP probeへ分離して確認。再install、login、bypass、`vercel curl`、manual deployment/config mutationは行っていない。
+- manual Production mutation: none。M7 COMPLETE。CSV/PDF再Human acceptanceは今回のpost-merge gate対象外。
+
 ### Accepted review / HTTP evidence
 
 以下はmerge前のhistorical checkpointです。pending表現は上記Phase 0でsupersededされ、Current Stateではありません。

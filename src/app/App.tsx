@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   addComparisonCase,
@@ -59,10 +59,12 @@ import {
 import { GeometryPreview } from "./components/GeometryPreview";
 import { MonthlyChart } from "./components/MonthlyChart";
 import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
+import { UserGuide } from "./components/UserGuide";
 import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
 import { WeatherCoverageNotice, weatherPeriodLabels } from "./weather-coverage";
 import { CaseColorPicker, CaseMarker, DEFAULT_CASE_COLORS, getCaseStyle, useCaseColors, type CaseColors } from "./case-colors";
+import { workspaceHash, workspaceModeFromHash, type WorkspaceMode } from "./workspace-navigation";
 
 const ORIENTATION_PRESETS = [
   ["北", 0], ["北東", 45], ["東", 90], ["南東", 135],
@@ -914,16 +916,32 @@ function SingleFloorWorkspace() {
 }
 
 export function App() {
-  const [mode, setMode] = useState<"single" | "multi">("single");
+  const [mode, setMode] = useState<WorkspaceMode>(() => workspaceModeFromHash(typeof window === "undefined" ? "" : window.location.hash));
+
+  useEffect(() => {
+    const synchronizeMode = () => setMode(workspaceModeFromHash(window.location.hash));
+    window.addEventListener("hashchange", synchronizeMode);
+    synchronizeMode();
+    return () => window.removeEventListener("hashchange", synchronizeMode);
+  }, []);
+
+  const navigate = (next: WorkspaceMode) => {
+    setMode(next);
+    const hash = workspaceHash(next);
+    if (window.location.hash !== hash) window.location.hash = hash;
+  };
+
   return (
     <>
       <nav className="mode-switch no-print" aria-label="Workspaceモード">
         <span>Workspace</span>
-        <button type="button" aria-pressed={mode === "single"} className={mode === "single" ? "active" : undefined} onClick={() => setMode("single")}>単一階モード</button>
-        <button type="button" aria-pressed={mode === "multi"} className={mode === "multi" ? "active" : undefined} onClick={() => setMode("multi")}>複数階モード</button>
+        <button type="button" aria-pressed={mode === "single"} className={mode === "single" ? "active" : undefined} onClick={() => navigate("single")}>単一階モード</button>
+        <button type="button" aria-pressed={mode === "multi"} className={mode === "multi" ? "active" : undefined} onClick={() => navigate("multi")}>複数階モード</button>
+        <button type="button" aria-pressed={mode === "guide"} className={mode === "guide" ? "active" : undefined} onClick={() => navigate("guide")}>使い方・技術情報</button>
       </nav>
-      <section hidden={mode !== "single"}><SingleFloorWorkspace /></section>
-      <section hidden={mode !== "multi"}><MultiFloorWorkspace /></section>
+      <section data-workspace="single" hidden={mode !== "single"}><SingleFloorWorkspace /></section>
+      <section data-workspace="multi" hidden={mode !== "multi"}><MultiFloorWorkspace /></section>
+      <section data-workspace="guide" hidden={mode !== "guide"}><UserGuide onNavigate={navigate} /></section>
     </>
   );
 }
