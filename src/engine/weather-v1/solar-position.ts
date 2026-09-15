@@ -56,8 +56,8 @@ export function calculateSolarPosition(input: SolarPositionInput): SolarPosition
   if (!Number.isFinite(longitudeDeg) || longitudeDeg < -180 || longitudeDeg > 180) {
     throw new RangeError("longitudeDeg must be finite and in -180..180");
   }
-  if (!Number.isFinite(timeZoneOffsetHours)) {
-    throw new RangeError("timeZoneOffsetHours must be finite");
+  if (!Number.isFinite(timeZoneOffsetHours) || !Number.isFinite(60 * timeZoneOffsetHours)) {
+    throw new RangeError("timeZoneOffsetHours and its minute conversion must be finite");
   }
   if (
     !Number.isFinite(input.localStandardTime.minuteOfDay) ||

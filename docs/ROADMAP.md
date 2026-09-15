@@ -8,13 +8,13 @@
 | M3 — Facade Geometry | 全方位、窓・腰壁・全面窓、有限幅庇、直接影polygon | Complete |
 | M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Complete |
 | M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
-| M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | Planned |
+| M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Planned |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5はHuman UX Review PASS / Independent FULL Review A. PASSを経てPR #7をsquash merge済みです。M5はNOT STARTEDで、別のHuman Task Packet / authorizationを待ちます。
+- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5はP0-A/P0-C/P1-A focused reviewとP0-B protocol review PASS後、[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)のlocal検証A〜Eを完了しました。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPlanned / NOT STARTED。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Production deployment、Ready for Review、mergeはHuman Gateです。
 

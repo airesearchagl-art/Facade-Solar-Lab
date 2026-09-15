@@ -41,6 +41,7 @@ import {
   type WeatherParseIssue,
 } from "../../weather";
 import { parseBrowserEpwFile } from "../weather-file";
+import { WeatherCoverageNotice, weatherPeriodLabels } from "../weather-coverage";
 import { MultiFloorCaseEditor } from "./MultiFloorCaseEditor";
 import { MultiFloorGeometryPreview } from "./MultiFloorGeometryPreview";
 import { MultiFloorResults } from "./MultiFloorResults";
@@ -51,6 +52,10 @@ const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
   HEADER_INVALID: "ヘッダーの内容が不正です。",
   DATA_PERIOD_UNSUPPORTED: "対応していないデータ期間です。",
   INTERVAL_METADATA_INVALID: "時間間隔の設定が不正です。",
+  INTERVAL_DUPLICATE: "気象データの時間区間が重複しています。",
+  INTERVAL_MISSING: "気象データの時間区間が欠けています。",
+  INTERVAL_OUT_OF_ORDER: "気象データが時系列順に並んでいません。",
+  INTERVAL_OUT_OF_PERIOD: "気象データが宣言された期間外です。",
   ROW_MALFORMED: "気象データ行の形式が不正です。",
   DATE_INVALID: "日付が不正です。",
   TIME_INVALID: "時刻が不正です。",
@@ -74,7 +79,7 @@ function initialWorkspace(): MultiFloorWorkspaceState {
   return createMultiFloorWorkspace({ ...demo.cases[0]!, name: "建物案A" });
 }
 
-function WeatherPanel({
+export function WeatherPanel({
   dataset,
   loading,
   failure,
@@ -102,6 +107,7 @@ function WeatherPanel({
         <p><strong>synthetic / 実測気象ではありません。</strong> 性能検証用データではありません。</p>
       </div>
       {failure === null ? null : <div className="message error-message" role="alert"><strong>EPWファイルを使用できません。</strong><span>{failure.message}</span><ul>{failure.issues.slice(0, 6).map((item, index) => <li key={`${item.code}-${index}`}>{item.code}: {WEATHER_ISSUE_MESSAGES[item.code]}</li>)}</ul></div>}
+      <WeatherCoverageNotice coverage={dataset?.coverage} />
       {dataset === null ? <div className="weather-empty"><strong>気象データは未読込です</strong><span>入力と積層形状を編集できます。計算にはEPWまたはデモ気象が必要です。</span></div> : (
         <div className="weather-content"><div className="weather-place"><strong>{dataset.location.city || "地点名なし"}</strong><span>{[dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</span></div><dl className="metadata-grid"><div><dt>データ出典</dt><dd>{dataset.provenance.sourceName}</dd></div><div><dt>データ区分</dt><dd>{isDemo ? "Synthetic Demo Weather" : "EPW"}</dd></div><div><dt>時間区間数</dt><dd>{dataset.intervals.length.toLocaleString("ja-JP")}</dd></div><div><dt>データセットID</dt><dd><code>{dataset.id}</code></dd></div></dl></div>
       )}
@@ -109,13 +115,14 @@ function WeatherPanel({
   );
 }
 
-function MultiFloorPrintSummary({ result, dataset }: { readonly result: MultiFloorRunResult; readonly dataset: WeatherDataset }) {
+export function MultiFloorPrintSummary({ result, dataset }: { readonly result: MultiFloorRunResult; readonly dataset: WeatherDataset }) {
   return (
     <section className="print-only multifloor-print-summary">
       <p>Facade Solar Lab · M4.5 Multi-floor Mode</p>
       <h1>複数階ファサード 日射熱取得比較レポート</h1>
       <dl className="print-weather-grid"><div><dt>地点</dt><dd>{[dataset.location.city, dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</dd></div><div><dt>出典</dt><dd>{dataset.provenance.sourceName}</dd></div><div><dt>データセット</dt><dd>{dataset.id}</dd></div><div><dt>基準案</dt><dd>{result.cases.find((item) => item.caseId === result.baselineCaseId)?.name}</dd></div></dl>
       <p className="print-critical-warning"><strong>表示値は開口からの日射熱取得量であり、HVAC冷房・暖房負荷ではありません。絶対値は正式な物理性能検証前です。</strong></p>
+      <WeatherCoverageNotice coverage={dataset.coverage} />
     </section>
   );
 }
@@ -293,7 +300,7 @@ export function MultiFloorWorkspace() {
       {result === null || dataset === null ? <section className="panel results-empty"><span>複数階比較結果</span><strong>気象データと入力を確認し、比較計算を実行してください</strong><p>Building Total、Floor Breakdown、月別値、基準案との差を表示します。</p></section> : <>{dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回実行時のsnapshotです。出力は再実行まで無効です。</div> : null}<MultiFloorPrintSummary result={result} dataset={dataset} /><MultiFloorResults result={result} dataset={dataset} colors={colors} selectedCaseId={selectedCaseId} selectedFloorId={selectedFloorId} onSelectCase={selectCase} onSelectFloor={setSelectedFloorId} /><section className="panel export-panel no-print"><div><p className="section-kicker">複数階結果の共有</p><h2>PDF / CSV</h2><p>{dirty ? "再計算後に出力できます。" : "全建物案・全階の結果と積層形状を出力します。"}</p></div><div className="export-actions"><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) window.print(); }}>PDFとして保存 / 印刷</button><button type="button" className="secondary-button" disabled={dirty} onClick={() => { if (!dirty) downloadTextFile(MULTI_FLOOR_CSV_FILENAME, createMultiFloorCsv(result, dataset), "text/csv;charset=utf-8"); }}>複数階CSVを書き出す</button></div></section></>}
 
       <section className="panel assumptions-panel"><div className="section-heading"><div><p className="section-kicker">モデル情報</p><h2>複数階計算の前提</h2></div></div><div className="assumption-grid"><article><h3>canonical engine reuse</h3><p>各Floorを既存<code>FacadeV1Parameters</code>へ変換し、<code>simulateFacadeV1()</code>を1回ずつ実行します。solar / weather / shadow式は複製しません。</p></article><article><h3>Building Total</h3><p>各Floorの年間・夏期・冬期・月別の日射熱取得量を単純合算します。階数や開口面積の差も建物全体差に含まれます。</p></article><article className="limitation-card"><h3>適用範囲</h3><p>単一階と同じ有限幅・直達影、2D無限幅天空日射近似、地面反射モデルを各階へ適用します。第三者solverによる絶対値validationはM5です。</p></article></div></section>
-      <footer><span>Facade Solar Lab · M4.5 Multi-floor Mode</span><span>{result === null ? "未計算" : `建物案 ${result.cases.length} · ${formatKWh(result.cases[0]!.total.annualKWh)} kWh（基準案年間）`}</span></footer>
+      <footer><span>Facade Solar Lab · M4.5 Multi-floor Mode</span><span>{result === null ? "未計算" : `建物案 ${result.cases.length} · ${formatKWh(result.cases[0]!.total.annualKWh)} kWh（基準案${weatherPeriodLabels(dataset?.coverage).annual}）`}</span></footer>
     </main>
   );
 }

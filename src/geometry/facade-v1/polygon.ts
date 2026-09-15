@@ -41,12 +41,29 @@ export function polygonAreaM2(polygon: readonly Point2[]): number {
   const points = deduplicatePolygonVertices(polygon);
   if (points.length < 3) return 0;
   let twiceSignedArea = 0;
+  let absoluteProducts = 0;
   for (let index = 0; index < points.length; index += 1) {
     const current = points[index]!;
     const next = points[(index + 1) % points.length]!;
     twiceSignedArea += current.xM * next.zM - next.xM * current.zM;
+    absoluteProducts += Math.abs(current.xM * next.zM) + Math.abs(next.xM * current.zM);
+  }
+  // Preserve existing normal-scale arithmetic exactly. If its conservative
+  // roundoff estimate exceeds the unchanged area resolution, evaluate the
+  // same translation-invariant shoelace formula about a local origin instead.
+  const roundoffBoundM2 = Number.EPSILON * (points.length + 2) * absoluteProducts / 2;
+  if (roundoffBoundM2 > GEOMETRY_EPSILON || !Number.isFinite(twiceSignedArea)) {
+    const origin = points[0]!;
+    twiceSignedArea = 0;
+    for (let index = 0; index < points.length; index += 1) {
+      const current = points[index]!;
+      const next = points[(index + 1) % points.length]!;
+      twiceSignedArea += (current.xM - origin.xM) * (next.zM - origin.zM) -
+        (next.xM - origin.xM) * (current.zM - origin.zM);
+    }
   }
   const area = Math.abs(twiceSignedArea) / 2;
+  if (!Number.isFinite(area)) throw new RangeError("polygon area must remain finite");
   return area <= GEOMETRY_EPSILON ? 0 : area;
 }
 

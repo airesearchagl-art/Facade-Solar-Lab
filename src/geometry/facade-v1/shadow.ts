@@ -36,6 +36,7 @@ function emptyShadowResult(
 function boundedShadedFraction(shadedAreaM2: number, openingAreaM2: number): number {
   const fraction = shadedAreaM2 / openingAreaM2;
   if (
+    !Number.isFinite(fraction) ||
     fraction < -GEOMETRY_EPSILON ||
     fraction > 1 + GEOMETRY_EPSILON
   ) {

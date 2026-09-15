@@ -50,6 +50,7 @@ import {
 import {
   hasWeatherErrors,
   WeatherDataError,
+  type WeatherCoverage,
   type WeatherDataset,
   type WeatherParseIssue,
 } from "../weather";
@@ -58,6 +59,7 @@ import { MonthlyChart } from "./components/MonthlyChart";
 import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
 import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
+import { WeatherCoverageNotice, weatherPeriodLabels } from "./weather-coverage";
 import { CaseColorPicker, CaseMarker, DEFAULT_CASE_COLORS, getCaseStyle, useCaseColors, type CaseColors } from "./case-colors";
 
 const ORIENTATION_PRESETS = [
@@ -66,9 +68,9 @@ const ORIENTATION_PRESETS = [
 ] as const;
 
 const PERIODS = [
-  { key: "annual", label: "年間の日射熱取得", months: "1〜12月" },
-  { key: "cooling", label: "夏期の日射熱取得", months: "4〜9月" },
-  { key: "heating", label: "冬期の日射熱取得", months: "10〜3月" },
+  { key: "annual", labelKey: "annual", months: "1〜12月" },
+  { key: "cooling", labelKey: "summer", months: "4〜9月" },
+  { key: "heating", labelKey: "winter", months: "10〜3月" },
 ] as const;
 
 const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
@@ -76,6 +78,10 @@ const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
   HEADER_INVALID: "ヘッダーの内容が不正です。",
   DATA_PERIOD_UNSUPPORTED: "対応していないデータ期間です。",
   INTERVAL_METADATA_INVALID: "時間間隔の設定が不正です。",
+  INTERVAL_DUPLICATE: "気象データの時間区間が重複しています。",
+  INTERVAL_MISSING: "気象データの時間区間が欠けています。",
+  INTERVAL_OUT_OF_ORDER: "気象データが時系列順に並んでいません。",
+  INTERVAL_OUT_OF_PERIOD: "気象データが宣言された期間外です。",
   ROW_MALFORMED: "気象データ行の形式が不正です。",
   DATE_INVALID: "日付が不正です。",
   TIME_INVALID: "時刻が不正です。",
@@ -117,7 +123,7 @@ function NumberField({ id, label, value, unit, step = 0.1, issue, onChange }: Nu
   );
 }
 
-function WeatherPanel({
+export function WeatherPanel({
   dataset,
   loading,
   failure,
@@ -184,6 +190,7 @@ function WeatherPanel({
         </div>
       ) : (
         <div className="weather-content">
+          <WeatherCoverageNotice coverage={dataset.coverage} />
           <div className="weather-place">
             <strong>{dataset.location.city || "地点名なし"}</strong>
             <span>{[dataset.location.region, dataset.location.country].filter(Boolean).join(" / ")}</span>
@@ -213,15 +220,18 @@ function WeatherPanel({
   );
 }
 
-function ResultsPanel({
+export function ResultsPanel({
   result,
   isDemo,
   colors,
+  coverage,
 }: {
   readonly result: ComparisonRunResult;
   readonly isDemo: boolean;
   readonly colors: CaseColors;
+  readonly coverage: WeatherCoverage;
 }) {
+  const labels = weatherPeriodLabels(coverage);
   return (
     <section className="panel results-panel" aria-labelledby="results-title">
       <div className="section-heading">
@@ -231,6 +241,7 @@ function ResultsPanel({
         </div>
         <p>差分 = 各案 − 基準案</p>
       </div>
+      <WeatherCoverageNotice coverage={coverage} />
       <aside className="result-reading" aria-labelledby="result-reading-title">
         <h3 id="result-reading-title">結果の読み方</h3>
         <p><strong>この画面の［kWh］は、窓を通して室内へ入る日射熱取得量の累計です。冷房負荷・暖房負荷そのものではありません。</strong></p>
@@ -242,7 +253,7 @@ function ResultsPanel({
         {PERIODS.map((period) => (
           <article className="period-card" key={period.key}>
             <header>
-              <div><h3>{period.label}</h3><span>{period.months}</span></div>
+              <div><h3>{labels[period.labelKey]}の日射熱取得</h3><span>{coverage === "partial" ? period.key === "annual" ? "読込区間のみ（通年ではありません）" : `${period.months}の読込区間のみ` : period.months}</span></div>
               <small>庇ありの日射熱取得量</small>
             </header>
             <div className="table-scroll">
@@ -274,7 +285,7 @@ function ResultsPanel({
   );
 }
 
-function PrintReportSummary({
+export function PrintReportSummary({
   result,
   dataset,
   colors,
@@ -297,6 +308,7 @@ function PrintReportSummary({
         <div><dt>データ区分</dt><dd>{isDemo ? "Demo / デモ用合成気象データ" : "EPW"}</dd></div>
       </dl>
       {isDemo ? <p className="print-demo-warning">デモ用合成気象データです。実測気象ではありません。性能検証用データではありません。</p> : null}
+      <WeatherCoverageNotice coverage={dataset.coverage} />
       <h2>比較案</h2>
       <div className="table-scroll">
         <table className="data-table print-case-table">
@@ -839,13 +851,13 @@ function SingleFloorWorkspace() {
         <section className="panel results-empty" aria-label="比較結果の状態">
           <span>比較結果</span>
           <strong>{dataset === null ? "比較するにはEPWファイルを読み込んでください" : "入力を確認し、比較計算を実行してください"}</strong>
-          <p>年間・夏期・冬期の日射熱取得、月別値、基準案との差をここに表示します。</p>
+          <p>{dataset?.coverage === "partial" ? "読込期間合計・夏期の読込分・冬期の読込分の日射熱取得、月別値、基準案との差を表示します（通年結果ではありません）。" : "年間・夏期・冬期の日射熱取得、月別値、基準案との差をここに表示します。"}</p>
         </section>
       ) : (
         <>
           {dirty ? <div className="stale-banner" role="status">入力変更は未計算です。表示中の結果は前回の比較計算によるものです。</div> : null}
           <PrintReportSummary result={result} dataset={dataset} colors={colors} />
-          <ResultsPanel result={result} isDemo={isDemo} colors={colors} />
+          <ResultsPanel result={result} isDemo={isDemo} colors={colors} coverage={dataset.coverage} />
           <MonthlyChart result={result} colors={colors} />
           <ExportPanel dirty={dirty} onPrint={printComparison} onCsv={downloadComparisonCsv} />
           <PrintGeometryComparison result={result} dataset={dataset} colors={colors} />

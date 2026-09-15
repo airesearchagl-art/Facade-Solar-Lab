@@ -1,0 +1,132 @@
+{
+  "protocolId": "FSL-M5-P0B-DIRECT-1",
+  "protocolSha256": "8b2ef0e48d63c00f58227feab8a012862c43af04c6e13617fff1cdb65c2a62cf",
+  "harnessSha256": "85be50ae206a80ad94cbcb8f2073612f8cf9ec8d267f88259160d879b385cc01",
+  "fslSourceCheckpoint": "61b8313d1c141f1f5b1afa472160976bc9f10011",
+  "fslGeometryTree": "08b15bc0d2ea6671347bca7eba2d82f87aeca971",
+  "toolchain": {
+    "status": "UNAVAILABLE",
+    "version": null,
+    "rtraceSha256": null,
+    "oconvSha256": null
+  },
+  "cases": [
+    {
+      "id": "B01_NO_OVERHANG",
+      "tolerance": 0.000001,
+      "sceneSha256": "df9c1cc32759b23c3d63b712b322e5e93347553688bf631a6fe69068bada993e",
+      "fslFraction": 0,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B02_UNSHADED",
+      "tolerance": 0.000001,
+      "sceneSha256": "42c606a96bf1c5cc91b4d0aaa9084b4a1be807e07b4e799cb5cfa3a130edc6a8",
+      "fslFraction": 0,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B03_PARTIAL",
+      "tolerance": 0.000001,
+      "sceneSha256": "7637feea7effb246bdeef0a256711b30d8533a54cffc29f5e9007a45771abff9",
+      "fslFraction": 0.25,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B04_NEAR_FULL",
+      "tolerance": 0.000001,
+      "sceneSha256": "e381aad3dc6f3259bb9af58bd393f300517e9b83c7517b1204ed1b0444d0e358",
+      "fslFraction": 0.9994999999999998,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B05_FULL_CONTROL",
+      "tolerance": 0.00001,
+      "sceneSha256": "00c2c24daafdc692a463a1a3f4a9b6f52f1ad01aefe18b9c5c18bca3c8de31ff",
+      "fslFraction": 1,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B06_ASYMMETRIC",
+      "tolerance": 0.000001,
+      "sceneSha256": "4f2c9034dae1ebdc1b7d5abfe8b850abcbd4c527cc73fab3bf8d41568346a2cf",
+      "fslFraction": 0.7000357133746818,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B07_ASYMMETRIC_MIRROR",
+      "tolerance": 0.000001,
+      "sceneSha256": "8128a5273f35e10f020c7f0dfe1e63aec35a0473ccb1f7e1821bfa062b340aef",
+      "fslFraction": 0.700035713374682,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B08_INTERMEDIATE_BEARING",
+      "tolerance": 0.000001,
+      "sceneSha256": "060a59b43308584a913ec5811e96a6fa26387ac28a06e74d4726951e96362206",
+      "fslFraction": 0.3164526921380929,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B09_AZIMUTH_GRAZING",
+      "tolerance": 0.00001,
+      "sceneSha256": "332498d5a38e18caa48a3704a14180518dd09d09dfa538bf67adbaeacb09948a",
+      "fslFraction": 0.2881301455313721,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    },
+    {
+      "id": "B10_LOW_ALTITUDE",
+      "tolerance": 0.00001,
+      "sceneSha256": "7f4550bc530806154476944a54b3580b9e16e0b1766d2e87847faffbf609e4e6",
+      "fslFraction": 0.000008726646260809323,
+      "referenceFraction": null,
+      "absoluteError": null,
+      "status": "NOT_RUN",
+      "reason": "RADIANCE_UNAVAILABLE",
+      "samples": []
+    }
+  ],
+  "counts": {
+    "PASS": 0,
+    "FAIL": 0,
+    "UNRESOLVED": 0,
+    "NOT_RUN": 10
+  },
+  "maxAbsoluteError": null
+}

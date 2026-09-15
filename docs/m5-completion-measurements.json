@@ -1,0 +1,316 @@
+{
+  "measuredAtUtc": "2026-09-15T03:52:47.766Z",
+  "startingCheckpoint": "e2e9fad5f8797d943507f616e8ea28f839c7ffa7",
+  "dirtyAtMeasurement": false,
+  "environment": {
+    "node": "v24.15.0",
+    "platform": "win32",
+    "arch": "x64",
+    "release": "10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 9 285K"
+  },
+  "methodology": "Isolated Node/Vite SSR worker per workload; setup excluded, 1 warmup + 3 measured runs. RSS is whole-worker lifetime high-water, not incremental engine memory. Sequential measurements; no performance acceptance threshold. Synthetic constant Wh profiles, including nighttime DNI for sensitivity only; 5-minute is NOT an oracle.",
+  "timezones": [
+    {
+      "TZ": "UTC",
+      "hash": "e3a2d5e8ace69ba9e57c4ea0e18ab2f2d2dcd392797d8280ee5fe33c49056e21",
+      "hostOffsetMinutes": 0
+    },
+    {
+      "TZ": "Asia/Tokyo",
+      "hash": "e3a2d5e8ace69ba9e57c4ea0e18ab2f2d2dcd392797d8280ee5fe33c49056e21",
+      "hostOffsetMinutes": -540
+    },
+    {
+      "TZ": "America/Los_Angeles",
+      "hash": "e3a2d5e8ace69ba9e57c4ea0e18ab2f2d2dcd392797d8280ee5fe33c49056e21",
+      "hostOffsetMinutes": 420
+    }
+  ],
+  "timeSteps": [
+    {
+      "stepMinutes": 60,
+      "intervalCount": 8760,
+      "direct": {
+        "withOverhangKWh": 919.6456237496157,
+        "withoutOverhangKWh": 1498.235989724933,
+        "reductionPercent": 38.61810622247454
+      },
+      "diffuse": {
+        "withOverhangKWh": 649.8769436829203,
+        "withoutOverhangKWh": 1051.2000000000032,
+        "reductionPercent": 38.17761190230989
+      },
+      "ground": {
+        "withOverhangKWh": 525.6000000000016,
+        "withoutOverhangKWh": 525.6000000000016,
+        "reductionPercent": 0
+      },
+      "directDifferenceFrom60MinKWh": 0
+    },
+    {
+      "stepMinutes": 15,
+      "intervalCount": 35040,
+      "direct": {
+        "withOverhangKWh": 920.3416079784585,
+        "withoutOverhangKWh": 1498.9747274122194,
+        "reductionPercent": 38.60192629349356
+      },
+      "diffuse": {
+        "withOverhangKWh": 649.8769436828901,
+        "withoutOverhangKWh": 1051.2000000000305,
+        "reductionPercent": 38.17761190231438
+      },
+      "ground": {
+        "withOverhangKWh": 525.6000000000153,
+        "withoutOverhangKWh": 525.6000000000153,
+        "reductionPercent": 0
+      },
+      "directDifferenceFrom60MinKWh": 0.6959842288428035
+    },
+    {
+      "stepMinutes": 5,
+      "intervalCount": 105120,
+      "direct": {
+        "withOverhangKWh": 921.52425755227,
+        "withoutOverhangKWh": 1500.165092710503,
+        "reductionPercent": 38.57181039406422
+      },
+      "diffuse": {
+        "withOverhangKWh": 649.8769436829571,
+        "withoutOverhangKWh": 1051.2000000000946,
+        "reductionPercent": 38.17761190231178
+      },
+      "ground": {
+        "withOverhangKWh": 525.6000000000473,
+        "withoutOverhangKWh": 525.6000000000473,
+        "reductionPercent": 0
+      },
+      "directDifferenceFrom60MinKWh": 1.878633802654349
+    }
+  ],
+  "workloads": [
+    {
+      "floors": 1,
+      "cases": 1,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        15.607500000000073,
+        13.543600000000197,
+        12.811300000000074
+      ],
+      "medianMs": 13.543600000000197,
+      "maxMs": 15.607500000000073,
+      "processHighWaterRssKiB": 179468
+    },
+    {
+      "floors": 1,
+      "cases": 1,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        14.614700000000084,
+        13.657400000000052,
+        13.04690000000005
+      ],
+      "medianMs": 13.657400000000052,
+      "maxMs": 14.614700000000084,
+      "processHighWaterRssKiB": 179460
+    },
+    {
+      "floors": 1,
+      "cases": 4,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        52.48559999999998,
+        52.65219999999999,
+        51.14570000000003
+      ],
+      "medianMs": 52.48559999999998,
+      "maxMs": 52.65219999999999,
+      "processHighWaterRssKiB": 184536
+    },
+    {
+      "floors": 1,
+      "cases": 4,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        51.23310000000015,
+        51.6407999999999,
+        51.04299999999989
+      ],
+      "medianMs": 51.23310000000015,
+      "maxMs": 51.6407999999999,
+      "processHighWaterRssKiB": 180224
+    },
+    {
+      "floors": 3,
+      "cases": 1,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        34.32899999999995,
+        32.82690000000002,
+        31.903999999999996
+      ],
+      "medianMs": 32.82690000000002,
+      "maxMs": 34.32899999999995,
+      "processHighWaterRssKiB": 180736
+    },
+    {
+      "floors": 3,
+      "cases": 1,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        32.507899999999836,
+        30.660300000000007,
+        30.802200000000084
+      ],
+      "medianMs": 30.802200000000084,
+      "maxMs": 32.507899999999836,
+      "processHighWaterRssKiB": 180728
+    },
+    {
+      "floors": 3,
+      "cases": 4,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        129.59190000000012,
+        126.57400000000007,
+        129.83680000000004
+      ],
+      "medianMs": 129.59190000000012,
+      "maxMs": 129.83680000000004,
+      "processHighWaterRssKiB": 180968
+    },
+    {
+      "floors": 3,
+      "cases": 4,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        129.44460000000004,
+        128.25990000000002,
+        126.89499999999998
+      ],
+      "medianMs": 128.25990000000002,
+      "maxMs": 129.44460000000004,
+      "processHighWaterRssKiB": 181692
+    },
+    {
+      "floors": 10,
+      "cases": 1,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        110.50340000000006,
+        109.44249999999988,
+        112.46280000000002
+      ],
+      "medianMs": 110.50340000000006,
+      "maxMs": 112.46280000000002,
+      "processHighWaterRssKiB": 181852
+    },
+    {
+      "floors": 10,
+      "cases": 1,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        109.81369999999993,
+        109.07979999999998,
+        111.18869999999993
+      ],
+      "medianMs": 109.81369999999993,
+      "maxMs": 111.18869999999993,
+      "processHighWaterRssKiB": 180276
+    },
+    {
+      "floors": 10,
+      "cases": 4,
+      "year": 2025,
+      "step": 60,
+      "intervals": 8760,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        427.7065,
+        429.65430000000015,
+        430.41150000000016
+      ],
+      "medianMs": 429.65430000000015,
+      "maxMs": 430.41150000000016,
+      "processHighWaterRssKiB": 181032
+    },
+    {
+      "floors": 10,
+      "cases": 4,
+      "year": 2024,
+      "step": 60,
+      "intervals": 8784,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        426.73720000000026,
+        431.7356999999997,
+        433.65800000000036
+      ],
+      "medianMs": 431.7356999999997,
+      "maxMs": 433.65800000000036,
+      "processHighWaterRssKiB": 181936
+    },
+    {
+      "floors": 3,
+      "cases": 4,
+      "year": 2025,
+      "step": 15,
+      "intervals": 35040,
+      "warmups": 1,
+      "iterations": 3,
+      "elapsedMs": [
+        502.1304,
+        511.558,
+        529.0149999999999
+      ],
+      "medianMs": 511.558,
+      "maxMs": 529.0149999999999,
+      "processHighWaterRssKiB": 191076
+    }
+  ],
+  "status": "PASS"
+}

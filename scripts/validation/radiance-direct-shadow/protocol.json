@@ -1,0 +1,72 @@
+{
+  "id": "FSL-M5-P0B-DIRECT-1",
+  "fixedOn": "2026-09-15",
+  "fslSourceCheckpoint": "61b8313d1c141f1f5b1afa472160976bc9f10011",
+  "units": "metres; degrees; shaded fraction 0..1",
+  "worldCoordinates": "East / North / Up; azimuth north-zero clockwise",
+  "tolerances": { "regular": 0.000001, "boundary": 0.00001 },
+  "sampling": { "bisectionSteps": [24, 32, 40], "edgeInsetFraction": 0.00000001, "referenceBudgetShare": 0.25 },
+  "oconvArgs": ["-f", "-b", "-20", "-20", "-20", "40", "-"],
+  "rtraceArgs": ["-h-", "-faa", "-os", "-x", "1", "-y", "0", "-ab", "0", "-bv+", "-ld-"],
+  "cases": [
+    {
+      "id": "B01_NO_OVERHANG", "category": "no overhang", "toleranceClass": "regular", "controlFraction": 0,
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 180, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 }, "overhang": null
+    },
+    {
+      "id": "B02_UNSHADED", "category": "overhang present, fully unshaded", "toleranceClass": "regular", "controlFraction": 0,
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 180, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 0.5, "elevationM": 3, "leftExtensionM": 0, "rightExtensionM": 0 }
+    },
+    {
+      "id": "B03_PARTIAL", "category": "partial shade with head gap", "toleranceClass": "regular", "controlFraction": 0.25,
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 180, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1, "elevationM": 2.5, "leftExtensionM": 0, "rightExtensionM": 0 }
+    },
+    {
+      "id": "B04_NEAR_FULL", "category": "near full shade", "toleranceClass": "regular", "controlFraction": 0.9995,
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 180, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1.999, "elevationM": 2, "leftExtensionM": 0, "rightExtensionM": 0 }
+    },
+    {
+      "id": "B05_FULL_CONTROL", "category": "full shade control", "toleranceClass": "boundary", "controlFraction": 1,
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 180, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 2.2, "elevationM": 2, "leftExtensionM": 0, "rightExtensionM": 0 }
+    },
+    {
+      "id": "B06_ASYMMETRIC", "category": "asymmetric extensions", "toleranceClass": "regular",
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 135, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1, "elevationM": 2, "leftExtensionM": 0.1, "rightExtensionM": 0.8 }
+    },
+    {
+      "id": "B07_ASYMMETRIC_MIRROR", "category": "mirrored asymmetric extensions", "toleranceClass": "regular",
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 225, "sunAltitudeDeg": 45,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1, "elevationM": 2, "leftExtensionM": 0.8, "rightExtensionM": 0.1 }
+    },
+    {
+      "id": "B08_INTERMEDIATE_BEARING", "category": "non-cardinal facade and raised sill", "toleranceClass": "regular",
+      "facadeAzimuthDeg": 137, "sunAzimuthDeg": 172, "sunAltitudeDeg": 38,
+      "opening": { "centerXM": 0.3, "widthM": 2.4, "sillM": 0.9, "headM": 3.1 },
+      "overhang": { "depthM": 1.25, "elevationM": 3.45, "leftExtensionM": 0.15, "rightExtensionM": 0.85 }
+    },
+    {
+      "id": "B09_AZIMUTH_GRAZING", "category": "89.999 degree relative azimuth", "toleranceClass": "boundary",
+      "facadeAzimuthDeg": 180, "sunAzimuthDeg": 269.999, "sunAltitudeDeg": 35,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1, "elevationM": 2.2, "leftExtensionM": 0.1, "rightExtensionM": 0.8 }
+    },
+    {
+      "id": "B10_LOW_ALTITUDE", "category": "near-horizon altitude", "toleranceClass": "boundary",
+      "facadeAzimuthDeg": 90, "sunAzimuthDeg": 90, "sunAltitudeDeg": 0.001,
+      "opening": { "centerXM": 0, "widthM": 2, "sillM": 0, "headM": 2 },
+      "overhang": { "depthM": 1, "elevationM": 2, "leftExtensionM": 0.2, "rightExtensionM": 0.2 }
+    }
+  ]
+}

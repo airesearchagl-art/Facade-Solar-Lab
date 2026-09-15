@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  assertWeatherDatasetUsable,
   daysInMonth,
   parseEpw,
   WeatherDataError,
@@ -126,8 +127,12 @@ describe("EPW parser", () => {
 
     expect(ordinary.intervals).toHaveLength(8760);
     expect(ordinary.coverage).toBe("full-year-8760");
+    expect(ordinary.issues).toEqual([]);
+    expect(() => assertWeatherDatasetUsable(ordinary)).not.toThrow();
     expect(leap.intervals).toHaveLength(8784);
     expect(leap.coverage).toBe("full-leap-year-8784");
+    expect(leap.issues).toEqual([]);
+    expect(() => assertWeatherDatasetUsable(leap)).not.toThrow();
     expect(leap.intervals.some((item) => item.time.month === 2 && item.time.day === 29)).toBe(
       true,
     );
@@ -171,5 +176,127 @@ describe("EPW parser", () => {
     );
     expect(dataset.intervals).toEqual([]);
     expect(dataset.issues[0]).toMatchObject({ code: "TIME_INVALID", line: 9 });
+  });
+});
+
+describe("hourly EPW temporal integrity", () => {
+  const options = { sourceName: "synthetic-temporal-integrity" };
+
+  function expectRejected(source: string, code: string) {
+    const dataset = parseEpw(source, options);
+    expect(dataset.coverage).toBe("partial");
+    expect(dataset.issues).toContainEqual(expect.objectContaining({ severity: "error", code }));
+    expect(() => assertWeatherDatasetUsable(dataset)).toThrow(WeatherDataError);
+    return dataset;
+  }
+
+  it.each([
+    [2025, 0], [2025, 4000], [2025, 8759],
+    [2024, 0], [2024, 1427], [2024, 8783],
+  ])("rejects year %i with missing slot %i, including annual endpoints and Feb 29", (year, slot) => {
+    const lines = fullYear(year).split("\n");
+    lines.splice(8 + slot, 1);
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_MISSING");
+    expect(dataset.intervals).toHaveLength(year === 2024 ? 8783 : 8759);
+    expect(dataset.issues).toHaveLength(1);
+    expect(dataset.issues[0]?.message).toMatch(/^1 hourly interval/u);
+  });
+
+  it("rejects a repeated interval without dropping the duplicate or its radiation", () => {
+    const lines = fullYear(2025).split("\n");
+    lines.splice(9, 0, row(2025, 1, 1, 1, 60, 101, 201, 31));
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_DUPLICATE");
+    expect(dataset.intervals).toHaveLength(8761);
+    expect(dataset.intervals[1]?.radiation.directNormalWhPerM2).toBe(201);
+    expect(dataset.issues).toEqual([
+      expect.objectContaining({ code: "INTERVAL_DUPLICATE", line: 10 }),
+    ]);
+  });
+
+  it("does not certify 8760 rows when a duplicate replaces a missing slot", () => {
+    const lines = fullYear(2025).split("\n");
+    lines[9] = lines[8]!;
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_DUPLICATE");
+    expect(dataset.intervals).toHaveLength(8760);
+    expect(dataset.issues).toContainEqual(expect.objectContaining({ code: "INTERVAL_MISSING" }));
+  });
+
+  it.each([2025, 2024])("rejects swapped intervals in %i without silently sorting", (year) => {
+    const lines = fullYear(year).split("\n");
+    [lines[8], lines[9]] = [lines[9]!, lines[8]!];
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_OUT_OF_ORDER");
+    expect(dataset.intervals.slice(0, 2).map(({ time }) => time.rawHour)).toEqual([2, 1]);
+    expect(dataset.issues).toEqual([
+      expect.objectContaining({ code: "INTERVAL_OUT_OF_ORDER", line: 10 }),
+    ]);
+  });
+
+  it("requires all 24 Feb 29 slots when the header declares a leap calendar", () => {
+    const lines = fullYear(2024).split("\n").filter((line) => !line.startsWith("2024,2,29,"));
+    lines[4] = "HOLIDAYS/DAYLIGHT SAVINGS,Yes,0,0,0";
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_MISSING");
+    expect(dataset.intervals).toHaveLength(8760);
+    expect(dataset.issues[0]?.message).toMatch(/^24 hourly interval/u);
+  });
+
+  it("preserves mixed TMY source years without treating raw leap years as extra days", () => {
+    const lines = fullYear(2025).split("\n").map((line, index) => {
+      if (index < 8) return line;
+      const month = Number(line.split(",")[1]);
+      return line.replace(/^2025,/u, month % 2 === 1 ? "2024," : "1999,");
+    });
+    const dataset = parseEpw(lines.join("\n"), options);
+    expect(dataset.coverage).toBe("full-year-8760");
+    expect(dataset.issues).toEqual([]);
+    expect(dataset.intervals[0]?.time.year).toBe(2024);
+    expect(dataset.intervals[31 * 24]?.time.year).toBe(1999);
+  });
+
+  it("identifies duplicate calendar slots even when raw source years differ", () => {
+    const lines = fullYear(2025).split("\n");
+    lines[9] = row(1999, 1, 1, 1, 60);
+    const dataset = expectRejected(lines.join("\n"), "INTERVAL_DUPLICATE");
+    expect(dataset.issues).toContainEqual(expect.objectContaining({ code: "INTERVAL_MISSING" }));
+  });
+
+  it("retains valid partial files but rejects gaps inside their observed span", () => {
+    const valid = parseEpw(hourlyFixture, options);
+    expect(valid.coverage).toBe("partial");
+    expect(() => assertWeatherDatasetUsable(valid)).not.toThrow();
+    const dataset = expectRejected([
+      ...headers(1, "1/1"), row(2025, 1, 1, 1, 60), row(2025, 1, 1, 3, 60),
+    ].join("\n"), "INTERVAL_MISSING");
+    expect(dataset.intervals.map(({ time }) => time.rawHour)).toEqual([1, 3]);
+  });
+
+  it("accepts the declared Dec 31 -> Jan 1 boundary but not a reverse or repeated cycle", () => {
+    const periodHeaders = headers(1, "1/1");
+    periodHeaders[7] = "DATA PERIODS,1,1,Data,Wednesday,12/31,1/1";
+    const last = row(2025, 12, 31, 24, 60);
+    const first = row(2026, 1, 1, 1, 60);
+    const dataset = parseEpw([...periodHeaders, last, first].join("\n"), options);
+    expect(dataset.issues).toEqual([]);
+    expect(dataset.coverage).toBe("partial");
+    expect(dataset.intervals[0]?.time.intervalEndLocalStandardTime).toEqual({
+      year: 2026, month: 1, day: 1, minuteOfDay: 0,
+    });
+    expect(dataset.intervals[1]?.time.midpointLocalStandardTime).toEqual({
+      year: 2026, month: 1, day: 1, minuteOfDay: 30,
+    });
+    expectRejected([...periodHeaders, first, last].join("\n"), "INTERVAL_OUT_OF_ORDER");
+    expectRejected([...periodHeaders, last, first, last].join("\n"), "INTERVAL_DUPLICATE");
+  });
+
+  it("does not accept Jan 1 after Dec 31 as a new cycle in a Jan-Dec annual period", () => {
+    const dataset = expectRejected(`${fullYear(2025)}\n${row(2026, 1, 1, 1, 60)}`, "INTERVAL_OUT_OF_ORDER");
+    expect(dataset.issues).toContainEqual(expect.objectContaining({ code: "INTERVAL_DUPLICATE" }));
+  });
+
+  it("rejects dates outside the declared partial period", () => {
+    expectRejected([...headers(1, "1/1"), row(2025, 1, 2, 1, 60)].join("\n"), "INTERVAL_OUT_OF_PERIOD");
+  });
+
+  it("reports an invalid period endpoint explicitly", () => {
+    expectRejected([...headers(1, "13/1"), row(2025, 1, 1, 1, 60)].join("\n"), "HEADER_INVALID");
   });
 });
