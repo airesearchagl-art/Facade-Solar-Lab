@@ -2,7 +2,7 @@
 
 ## Status
 
-`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`
+`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 
@@ -81,7 +81,19 @@ git diff --check
 git diff --check origin/main...HEAD
 ```
 
-Local browser evidence (`2026-09-16`): direct `#guide`、root/invalid fallback、UI mode transition、Guide anchor、reload、back/forward、Single/Multi input・result・stale・selected Floor保持、desktop / 390px overflow、native details、loaded print media contract、app-origin console error 0を確認。390pxはviewport 390 / document scrollWidth 375、上部3 nav・目次・parameter cards・SVG・formulaを表示しました。専用PDF生成は既存Chrome headlessのWindows GPU/blank-page failureで作成できず`UNVERIFIED`、一時profileは削除済みです。これはHuman print visual reviewのpending項目で、専用library/installや代替uploadは追加していません。
+Local browser evidence (`2026-09-16`): direct `#guide`、root/invalid fallback、UI mode transition、Guide anchor、reload、back/forward、Single/Multi input・result・stale・selected Floor保持、desktop / 390px overflow、native details、loaded print media contract、app-origin console error 0を確認。390pxはviewport 390 / document scrollWidth 375、上部3 nav・目次・parameter cards・SVG・formulaを表示しました。専用PDF生成は既存Chrome headlessのWindows GPU/blank-page failureで作成できず`UNVERIFIED`、一時profileは削除済みです。これは当時のHuman print visual review pending項目で、専用library/installや代替uploadは追加していません。
+
+## Independent review / Human acceptance
+
+Accepted exact-head Preview evidence remains tied to product head `25ad78ca18519c0c8e6f211545f83d883000025a`。
+
+- Independent FULL Review: **A. PASS**。
+- Required Fix: **NONE**。
+- Human UX Review: **PASS**。上部「使い方・技術情報」の視認性、3分ガイドの操作理解、Parameter Reference、中間フィンpitch / count説明、Beginner / Technical Manualの情報階層、390px responsiveを確認。
+- Human manual print / PDF visual acceptance: **PASS**。
+- 上記Human print / PDF acceptanceは、Agent-side local PDF generationが歴史的に`UNVERIFIED`だった事実をAgent verificationへ書き換えません。Human由来のvisual acceptanceとして記録します。
+- PRE-MERGE GATE: **PASS**。M8 implementationはcomplete。PR #13は`OPEN / Draft`を維持し、Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpendingです。
+- このterminal syncはdocumentation/current-state recordsのみ。accepted M8 headからproduct source / engine / tests / runner / expected・Golden behavioral diffは0です。
 
 ## M7 post-merge closure used by M8
 

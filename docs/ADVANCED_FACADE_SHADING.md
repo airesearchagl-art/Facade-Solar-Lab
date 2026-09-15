@@ -110,4 +110,4 @@ Current state: **MERGED / PRODUCTION_PROVENANCE_PASS / PRODUCTION_BROWSER_SMOKE_
 
 M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPlus / SPA / annual physical validation: NOT_RUN。M7 geometryは旧P0-B checkpointで外部検証済みと扱わない。
 
-PR #12はsquash merge済みでM7はCOMPLETE。M8 — User Guide & Technical Manualは別Human Task Packetにより開始され、[M8 contract](USER_GUIDE.md)のIMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDINGへ進んだ。M5 external referencesはNOT_RUNのまま。
+PR #12はsquash merge済みでM7はCOMPLETE。M8 — User Guide & Technical Manualは別Human Task Packetにより開始され、[M8 contract](USER_GUIDE.md)のIMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASSへ進んだ。PR #13はOPEN / Draftで、Ready / merge / post-merge Production confirmationはpending。M5 external referencesはNOT_RUNのまま。

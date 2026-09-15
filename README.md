@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M8 — User Guide & Technical Manual: IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING**。上部の「使い方・技術情報」から、3分ガイド、Single/Multiの使い分け、入力パラメータ辞典、結果・保存・出力、技術詳細、適用範囲を閲覧できます。`#single` / `#multi` / `#guide`のhash navigationで、Guide往復時もSingle/Multiの入力・結果・stale stateを保持します。[Guide contract](docs/USER_GUIDE.md)。
+**M8 — User Guide & Technical Manual: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS**。Independent FULL Review A. PASS / Required Fix NONE、Human UX Review（manual print / PDF visual acceptanceを含む）PASSです。上部の「使い方・技術情報」から、3分ガイド、Single/Multiの使い分け、入力パラメータ辞典、結果・保存・出力、技術詳細、適用範囲を閲覧できます。`#single` / `#multi` / `#guide`のhash navigationで、Guide往復時もSingle/Multiの入力・結果・stale stateを保持します。PR #13はOPEN / Draftを維持し、Ready / merge / post-merge Production confirmationはpendingです。[Guide contract](docs/USER_GUIDE.md)。
 
 **M7 — Advanced Facade Shading: COMPLETE**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を実装済みです。Independent FULL Re-Review A. PASS / Required Fix CLOSED、accepted product head `41302270ca4a84501f824ddef9f62194cad95b8e`のHuman HTTP・Single/Multi CSV/PDF acceptance PASSを[証拠](docs/ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)へ記録しました。PR #12はsquash merge済み。main `642136058d538e89d29971b0a586f86ea3aaa926`のGit自動Production provenance・HTTP・Single/Multi post-merge browser smokeもPASSです。
 
@@ -100,4 +100,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6 / M7はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。M8 — User Guide & Technical ManualはIMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDINGです。M8 Draft PRのReady / mergeは別Human Gateです。
+M4.5 / M6 / M7はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。M8 — User Guide & Technical ManualはIMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASSです。PR #13はOPEN / Draftを維持し、Ready / merge / post-merge Production confirmationは別Human Gateです。

@@ -16,6 +16,16 @@
 - このdocs-only同期後のlive HEADはaccepted checkpointと分けてPR本文に記録する。製品・ops runner・tests/expected/Golden差分0を確認し、旧証拠を新deploymentの再測定に置き換えない。
 - PR #11はDraft。Ready transitionは別Human authorization待ち。merge / post-merge Production gateはpending / NOT_RUNであり、Production PASSではない。
 
+## M8 Current State
+
+`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。accepted exact-head Preview evidenceはproduct head `25ad78ca18519c0c8e6f211545f83d883000025a`に紐づきます。
+
+- Independent FULL Review: A. PASS / Required Fix: NONE（Human報告）。
+- Human UX Review: PASS。上部Guide導線、3分ガイド、Parameter Reference、中間フィンpitch / count、Beginner / Technical Manual階層、390px responsive、manual print / PDF usabilityを含む。
+- Human manual print / PDF visual acceptance: PASS。Agent-side local PDF generationが歴史的にUNVERIFIEDだった記録は保持し、Agent verificationへ書き換えない。
+- PR #13はOPEN / Draft。Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpending / NOT_RUN。manual Production mutationなし。
+- M5は`LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`。Radiance / EnergyPlus / SPAはNOT_RUNで、formal absolute-kWh validationは主張しない。
+
 ## 判定
 
 各gateは`PASS / BLOCKED / NOT_RUN`とtimestamp、expected/actual SHA、deployment ID、実測証拠をセットで記録します。全必須項目PASSでのみそのphaseをPASSにします。未確認はPASSではありません。`ops:verify`の終了0は出力scope内だけの合格で、レビュー/merge権限を与えません。
