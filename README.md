@@ -6,6 +6,8 @@
 
 ## Current state
 
+**M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING**。[検証計画・結果](docs/VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)に極域/時間分解能・数値境界・独立Single/Multi・実EPW製品経路・依存/負荷検証を記録しました。Radiance / EnergyPlus / SPA比較は未実行で、絶対kWhの正式validation完了ではありません。PR #10はDraft / review待ち、M6は未開始です。
+
 **M4 — Comparison UX / M4.5 — Multi-floor Mode はComplete** です。[PR #7](https://github.com/airesearchagl-art/Facade-Solar-Lab/pull/7)はsquash merge済みです。M4の単一階Workspaceを維持したまま、同一EPW条件で1–4棟のBuilding Caseと各棟の複数階を比較するbrowser-local Workspaceを実装済みです。
 
 - Minimal UI: 実装済み
@@ -17,7 +19,7 @@
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Production: PR #7のmain mergeによる自動deploymentがREADY。[canonical URL](https://facade-solar-lab.vercel.app/)はHTTP 200確認済み。closeoutでの手動Production操作はありません。これは物理性能validationの完了を意味しません。
+- Production履歴: PR #7のmain merge時に自動deployment READY / [canonical URL](https://facade-solar-lab.vercel.app/) HTTP 200を確認済み。M5ではProductionの手動操作・再検証はしていません。deployment成功は物理性能validationの完了を意味しません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainとM4.5 Multi-floor domainはいずれも既存`facade-v1-weather`を呼ぶadapterです。複数階では各Floorを`FacadeV1Parameters`へ変換し、`simulateFacadeV1()`を1回ずつ実行してBuilding Totalへ単純合算します。別のsolar / weather / shadow calculationは持ちません。
 

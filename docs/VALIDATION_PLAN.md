@@ -1,17 +1,19 @@
 # Validation Plan
 
-## M5 — Current: P1-A sub-hour temporal integrity
+## M5 — Current: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING
 
-P0-A focused review、P0-B protocol review、P0-C focused reviewはPASS / Required Fixなし（Human報告）。P1-Aでは既存hourly temporal validatorをraw minute付きslotへ一般化し、sub-hour EPWの時系列完全性を追加しました（§9）。Radiance外部比較は引き続きNOT RUNです。solar / geometry / energy式・UI・既存expected値は変更しません。極域、SPA比較、60/15/5分の影感度、annual kWhの物理validationは今回対象外です。
+P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fixなし（Human報告）。Completion Waveでrepository/localの追加検証A〜Eを実施しました（§10）。Radiance / EnergyPlus / SPAの実行環境は未検出で、第三者比較はNOT_RUNです。**M5全体のphysical validation COMPLETEではありません。** Completion WaveのIndependent Reviewは別工程です。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
 - 作業branch: feat/m5-validation-stability。この文書を含むlive HEADはGit/PRから取得し、product baselineと混同しません。
-- M4 / M4.5: COMPLETE。Case色選択も実装済み。M5: Current / validation未完了。M6: Planned / NOT STARTED。
+- M4 / M4.5: COMPLETE。M5: local検証完了 / external reference待ち。M6: Planned / NOT STARTED。
 - M4.5のterminal Run Artifactとimmutable Task Packetはhistorical auditとして保持し、再closeoutしません。
 - 数値の一致、Human UX PASS、Production READYは、絶対 [kWh] の物理的正しさや正式性能評価を意味しません。
 
 ## 1. 既存coverage — 重複実装しない範囲
+
+§1〜9は各checkpoint時点の棚卸し・実装・review履歴です。「未実施」「今回対象外」はその時点の範囲であり、現在の完了/未完了は§10が正本です。既存historical evidenceは削除しません。
 
 「十分」は表記したregression contractについての判断であり、全入力域・物理精度の保証ではありません。kickoff checkpointは **28 test files / 165 tests PASS**。P0-Aの追加結果は§6、残る不足は§3に分離します。
 
@@ -37,7 +39,7 @@ P0-A focused review、P0-B protocol review、P0-C focused reviewはPASS / Requir
 - IWEC smokeは外部solver比較でも実測性能検証でもありません。同じファイルで同じfinite値を得るだけの検証を追加しません。
 - raw EPW / ZIP / licenseはlocal-onlyで、public repo・外部APIへ送信しません。新dataは利用/再配布権確認後だけ採用し、public-safe出典・hash・集約結果を残します。
 
-## 3. M5で追加する最小backlog
+## 3. M5で追加する最小backlog（履歴）
 
 P0-A / P0-Cはfocused review PASS、P0-Bはprotocol review PASS / 外部比較NOT RUN。P1-Aはsub-hour時系列検証済みでindependent review待ち。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
 
@@ -214,3 +216,82 @@ P0-Bは **PROTOCOL_REVIEW_PASS / EXTERNAL_REFERENCE_NOT_RUN**（Human報告）�
 - final exact headはGit/PRから解決し、PR本文と完了報告に記録します。既存M1原本・immutable Task Packet・P0-B protocol / comparison fixtureは変更しません。
 
 **P1-A implementation/checks PASS / independent review pending**。PR #10はOPEN / Draft維持、Ready / mergeなし。M5全体は未完了、M6 NOT STARTED。Human GateでSTOP。
+
+## 10. Completion Wave — local verification / external boundary
+
+### Current state / source identity
+
+- 実施日: 2026-09-15。開始head: `ae11e54b5ea55cf8f045cb16198947bf8138063f`（P1-A review PASS、Human報告）。
+- 検証対象のproduct/test/runner checkpoint: `e2e9fad5f8797d943507f616e8ea28f839c7ffa7`。後続はdocs/evidence同期のみ。現在のfinal HEADはGitとPR #10から解決し、測定checkpointと混同しません。
+- M5: **LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING**。A〜Eのローカル検証PASS、Fのavailability調査完了 / 外部比較NOT_RUN。PR #10はDraft維持。Independent Review待ち、Ready / merge / M6は未許可です。
+- 正式な絶対kWh評価、SPA精度、Radiance/EnergyPlusとの一致を先に正しいと決めません。
+
+| Workstream | Result | Evidence / scope |
+| --- | --- | --- |
+| A Solar / time-step | PASS | 新規27 tests。緯度0/+70/-70、春秋分/夏冬至、Feb 29/年末/元日、offset -12/0/+5.5/+9/+14、5分刻み全日。polar day/night finite、高度<=0のdirect=0。3つの異なるTZプロセスで36太陽位置と8784 simulation summaryのJSON hash一致。 |
+| B Numerical | PASS (reproduced failures fixed) | 新規33 tests。grazing前/直後、接触±1/2epsilon、scale 1e-3〜1e6、datum 1e6/1e9、浅い/深い庇、非対称extension、near-zero/near-one、overflowの明示拒否。 |
+| C Independent composition | PASS | 新規3 parameterized tests。1/3/5 Floors × 2 Cases × 2 baselines、異なる方位/SHGC/階寸法、庇あり/なし/左右非対称。Multi変換helperを使わずSingle入力を組立。各floorの12か月/annual/summer/winter、建物和、delta一致。1floor exact一致。共有engineのcomposition検証であり外部物理oracleではない。 |
+| D Real EPW product path | PASS (local automated browser) | hash確認済みTokyo Hyakuri 8760/0 issues。Single 2案、Multi 2案×3階、edit→stale→rerun、Building Total / Floor Breakdown / 月別、色、CSV/画面値一致、PDF、390px横スクロールを確認。 |
+| E Dependency / workload | PASS | guard追加22 tests（negative21 + positive/relative edge1）。core/modelsのTS/TSXとrelative import graphを走査。13 workload × warmup1 + 計測3、結果hash不変。 |
+| F External solvers | NOT_RUN | PATHと代表配置でrtrace/oconv、EnergyPlus、SPAの利用可能なbinaryなし。インストール・download・license同意なし。Radiance全10ケースはPASS=0 / FAIL=0 / UNRESOLVED=0 / NOT_RUN=10、最大誤差N/A。 |
+
+### A — numerical conservation versus sensitivity
+
+[Machine-readable measurements](m5-completion-measurements.json)に全case、3反復のraw timing、中央値/最大、環境、TZ probe hashを保存しています。`startingCheckpoint`は測定対象のclean commitであり、この文書自身のcommitではありません。
+
+- TZ=UTC / Asia/Tokyo / America/Los_Angeles。hostの夏期offsetは0 / -540 / +420分と実際に異なり、計算hashは全て `e3a2d5e8ace69ba9e57c4ea0e18ab2f2d2dcd392797d8280ee5fe33c49056e21`。
+- 固定synthetic Wh profileの60/15/5分: 8760 / 35040 / 105120区間。単位時間あたりの放射を同一にして区間Whを保存的に分割。nighttime DNIも境界試験のため意図的に非0。実気象を模倣したoracleではありません。
+- 庇ありdirect年間値[kWh]: 919.6456237496157 / 920.3416079784585 / 921.52425755227。60分からの差は+0.6959842288428035 / +1.878633802654349 kWh。**感度であり5分を正解にしません。**
+- 庇ありdiffuse約649.8769436829 kWh、ground約525.6 kWhは全stepで絶対1e-6 kWh以内一致。庇なしdiffuseは独立手計算 `8760×120×0.5×4×0.5/1000 = 1051.2 kWh`、groundは `8760×300×0.2×0.5×4×0.5/1000 = 525.6 kWh` と照合。
+- 既存NOAA 2025/2024 reference、0.5° tolerance、365/366 algorithmは保持。polar finiteを高精度SPA一致とみなしません。
+
+### B — reproduced numerical failures / minimal fixes
+
+実装前の新規A〜C 61 testsでは52 PASS / 9 FAILを確認。追加したrelative-angle overflowも修正前FAILを再現しました。失敗に合わせて既存expected/toleranceを変更していません。
+
+- datum=1e9、2m×2m開口、正面45°/D=1mの解析解0.5が、従来shoelaceの巨大積同士の相殺で0になりました。通常scaleでは既存演算順序を保持し、`Number.EPSILON × (頂点数+2) × Σ|積| / 2` のroundoff見積が既存area epsilonを超える時だけ、同じshoelaceをlocal originから評価します。これは数値評価の安定化でありshadow / projection / 物理式の変更ではありません。
+- openingの長さまたは面積が既存resolution以下、derived area/widthのoverflow、datumでwidthが消失、polygon面積非有限はRangeError。既存 `GEOMETRY_EPSILON=1e-9`（座標[m] / 面積[m²]それぞれの従来境界）を変更していません。1mm scaleの相似形はPASS、1e-6m / 1e-12m開口はunsupportedとして明示error。
+- finiteな極端値でもtimezone→minute、相対角引算、庇derived寸法、interval/period/building energyが非有限になる場合は明示RangeError。通常solar/irradiance/energy式は不変。
+- 新しいsilent clampはありません。既存のarea<=epsilonを0とする規則、fractionのepsilon近傍0/1規則、NOAA cos(zenith)のroundoff clampは既存contractとして保持。全IEEE-754入力域の精度保証ではありません。
+- P0-Bのprotocol / comparison.json / harness / testsは変更せず、10個の記録済みFSL値も**exact一致**を保持。geometry treeは数値ガード追加により変わったため、旧protocolのsource checkpointを最新headの外部検証済み証拠へ読み替えません。外部solver実行時は旧checkpointで固定protocolを実行し、最新treeへの適用は別途reviewされた新checkpoint/protocolが必要です。
+
+### D — real EPW / browser / output evidence
+
+- 原本hash: `3D3781E80F39851D80D1B445D94DEFD0C69CD74574B89DDB6E17C0575064612E`、1,558,629 bytes。browserの通常EPW file inputに実ファイルを渡し、React state/resultの注入やsyntheticへの置換はしません。
+- localhost、既存Chrome 152 / Playwright。`setInputFiles`による実ファイル入力です。今回Native OS file chooser / 対話print dialogのHuman実操作を主張しません。最新Waveはlocal/repository検証を許可しているためlocal product pathとして扱います。過去M4 RF-01 Human closureは保持。
+- Single A/B: D=0.8/1.8m、annual 5535.816900423106 / 4047.023952658591 kWh。Multi A/Bは3floors、Bの1FのみD=1.8m。Building annual 16607.450701269318 / 15118.657753504802 kWh。これらはsmoke checkpointでありphysical expectedではありません。
+- CSV: Single 2行、Multi Building2 + Floor6行。annual/summer/winter/月別12値が表示の丸め値と一致し、Multiの全15系列は各Floor和と1e-8 kWh以内一致。raw EPWはCSVへ含めません。
+- A/B色 #0055cc / #d00080: chart/legend/Case識別へ即時反映、table numeric valuesとpolyline points不変、再計算不要。印刷 `print-color-adjust: exact`、Case線種を維持。
+- 製品の印刷ボタンとChrome live-DOM PDF出力を確認。Single A4 5頁 / Multi A4 6頁をPopplerで全頁renderして目視。KPI、月表/graph、階別比較、積層形状と色対応を確認。390pxはdocument overflowなし、横長の月表/graphは内部横スクロール可能。
+- HTTP 200、app-origin fatal/runtime errors 0、console errors 0、asset errors 0、request failures 0、外部request 0（localhost以外は拒否）。初期ad-hoc smokeでconsole 404が1件ありましたがURLを記録できていないためfavicon等と断定せず、上記再現runnerの全経路で再確認しました。
+- raw EPW / CSV / PDF / screenshots / user-specific pathはlocal-only、public repoへcommitしません。画面とPDFの検証は同じproduct checkpoint、Vercel/Productionの手動操作なし。
+
+### E — guard and workload limits
+
+- `fs/promises`、node:形式、re-export、dynamic import、require/import-equals/type import、browser globals、DOM/File/Canvas、Node-only package/process/Buffer、Dateをnegative fixtureで拒否。relative importが走査対象coreから外れる場合も検出します。
+- TypeScript 7の本repo packageには旧compiler AST APIがないため、追加依存を導入せずcomment/stringを区別する保守的lexical guardを採用。任意の難読化・構文・aliasを証明するsecurity sandboxではありません。
+- Windows 11 / x64 / Node v24.15.0 / Core Ultra 9 285K。独立workerごとにsetupを除外しwarmup1回＋計測3回。各runの結果hash一致、finite建物値を確認。1/3/10 Floors × 1/4 Cases × 8760/8784の12構成＋3 Floors×4 Cases×35040を実施。
+- hourly median 13.54〜431.74ms / max 433.66ms、15分代表 median 511.56ms / max 529.02ms。process high-water RSSは最大191076 KiB（約186.6 MiB、SSR/runtime/setup込み。engine単独peakではない）。全raw結果はJSONを参照。
+- Advisory: 低速端末・10階超・大量sub-hourでの応答時間や最大Floor数は未保証。main-thread同期計算は大負荷時に操作を待たせ得ます。benchmarkを理由にworker化、engine最適化、上限変更をしていません。
+
+### Reproduction / convergence / remaining gate
+
+```text
+npm test
+npm run typecheck
+npm run build
+npm run golden:check
+npm audit
+node scripts/validation/m5-completion/run.mjs
+node scripts/validation/m5-completion/browser.mjs EPW_LOCAL_FILE http://127.0.0.1:5175/
+git diff --check
+git diff --check origin/main...HEAD
+```
+
+Browser runnerは先にlocalhost dev serverを起動し、既存Playwright / Chromeが標準解決できない場合は `M5_PLAYWRIGHT_MODULE` / `M5_CHROME_EXECUTABLE` へ既存配置を指定します。自動installなし。EPWのhash不一致時は入力前に停止します。runner出力は `.local-validation/m5-completion/` 内のみ。新しい測定で保存済みJSONを黙って更新しません。
+
+- npm test: **34 files / 361 PASS / 10 skipped (371 total)**。新規85 PASS、既存276 PASSを保持。Radiance skipped10はNOT_RUNです。
+- typecheck / build / golden:check / audit / both diff checks: PASS。build 92 modules / dist、audit 0 vulnerabilities。M1原本2点とM4.5 Task Packet digestは不変、P0-B固定protocol不変。
+- 現在の未完了: Radiance実solver10件、SPA高精度比較、EnergyPlus/放射成分/年間physical reference・model discrepancy。利用環境/ライセンスとreview済み比較protocolを整えて実行するまでEXTERNAL_REFERENCE_PENDINGです。
+- 計測済み範囲以外の全デバイス保証、OS chooser/print dialog再操作、任意巨大入力の精度は主張しません。既存absolute kWh / diffuse近似 / cross-floor未実装の制限は維持。
+- 次工程: **Independent Review of M5 Completion Wave**。PR #10 Draft維持、Ready / merge / branch削除 / 手動Productionなし、M6 NOT STARTED。外部環境がないためローカル検証を繰り返すだけのcycleは不要です。
