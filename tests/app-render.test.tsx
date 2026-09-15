@@ -3,11 +3,12 @@ import { describe, expect, it } from "vitest";
 
 import { App } from "../src/app/App";
 
-describe("M4.5 application shell", () => {
-  it("server-renders separate Japanese-first single-floor and multi-floor modes", () => {
+describe("M8 application shell", () => {
+  it("server-renders mounted Japanese-first single, multi, and guide workspaces", () => {
     const html = renderToString(<App />);
     expect(html).toContain("単一階モード");
     expect(html).toContain("複数階モード");
+    expect(html).toContain("使い方・技術情報");
     expect(html).toContain("複数案比較");
     expect(html).toContain("デモ比較を試す");
     expect(html).toContain("サンプル気象データを使って、2つのファサード案の比較をすぐに確認できます。");
