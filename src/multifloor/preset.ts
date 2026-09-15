@@ -4,6 +4,7 @@ import {
   cloneMultiFloorCase,
   createMultiFloorWorkspace,
 } from "./case";
+import { readPresetFins, readShadingPresetVersion, shadingPresetVersion, type ShadingPresetVersion } from "../preset/shading";
 import type {
   MultiFloorCase,
   MultiFloorDefinition,
@@ -25,14 +26,13 @@ export const MAX_MULTI_FLOOR_PRESET_BYTES = 256 * 1024;
 const MAX_NAME_LENGTH = 120;
 const MAX_ID_LENGTH = 128;
 
-export interface MultiFloorCasePresetV1 {
+/** Historical API name; v1 overhang and v2 fin-bearing presets are both supported. */
+export interface MultiFloorCasePresetV1 extends ShadingPresetVersion {
   readonly kind: typeof MULTI_FLOOR_CASE_PRESET_KIND;
-  readonly schemaVersion: typeof MULTI_FLOOR_PRESET_SCHEMA_VERSION;
   readonly case: MultiFloorCase;
 }
-export interface MultiFloorWorkspacePresetV1 {
+export interface MultiFloorWorkspacePresetV1 extends ShadingPresetVersion {
   readonly kind: typeof MULTI_FLOOR_WORKSPACE_PRESET_KIND;
-  readonly schemaVersion: typeof MULTI_FLOOR_PRESET_SCHEMA_VERSION;
   readonly cases: readonly MultiFloorCase[];
   readonly baselineCaseId: string;
   readonly selectedCaseId: string;
@@ -92,7 +92,7 @@ function requireNumber(value: unknown, label: string): number {
   return value;
 }
 
-function readFloor(value: unknown, label: string): MultiFloorDefinition {
+function readFloor(value: unknown, label: string, version: 1 | 2): MultiFloorDefinition {
   const record = requireRecord(value, label);
   const opening = requireRecord(record.opening, `${label}.opening`);
   const overhangValue = record.overhang;
@@ -108,6 +108,7 @@ function readFloor(value: unknown, label: string): MultiFloorDefinition {
         };
       })();
   return {
+    ...readPresetFins(record, version, MultiFloorPresetError),
     id: requireId(record.id, `${label}.id`),
     name: requireString(record.name, `${label}.name`),
     floorHeightM: requireNumber(record.floorHeightM, `${label}.floorHeightM`),
@@ -125,7 +126,7 @@ function readFloor(value: unknown, label: string): MultiFloorDefinition {
   };
 }
 
-function readCase(value: unknown, label: string): MultiFloorCase {
+function readCase(value: unknown, label: string, version: 1 | 2): MultiFloorCase {
   const record = requireRecord(value, label);
   if (!Array.isArray(record.floors)) {
     throw new MultiFloorPresetError(`${label}.floorsが不正です。`);
@@ -141,7 +142,7 @@ function readCase(value: unknown, label: string): MultiFloorCase {
       record.groundReflectance,
       `${label}.groundReflectance`,
     ),
-    floors: record.floors.map((floor, index) => readFloor(floor, `${label}.floors[${index}]`)),
+    floors: record.floors.map((floor, index) => readFloor(floor, `${label}.floors[${index}]`, version)),
   };
 }
 
@@ -180,7 +181,7 @@ export function createMultiFloorCasePreset(item: MultiFloorCase): MultiFloorCase
   assertCaseValid(item);
   return {
     kind: MULTI_FLOOR_CASE_PRESET_KIND,
-    schemaVersion: MULTI_FLOOR_PRESET_SCHEMA_VERSION,
+    ...shadingPresetVersion(item.floors),
     case: copiedCase(item),
   };
 }
@@ -200,7 +201,7 @@ export function createMultiFloorWorkspacePreset(
   }
   return {
     kind: MULTI_FLOOR_WORKSPACE_PRESET_KIND,
-    schemaVersion: MULTI_FLOOR_PRESET_SCHEMA_VERSION,
+    ...shadingPresetVersion(workspace.cases.flatMap((item) => item.floors)),
     cases: workspace.cases.map(copiedCase),
     baselineCaseId: workspace.baselineCaseId,
     selectedCaseId,
@@ -231,15 +232,13 @@ export function parseMultiFloorPreset(text: string): MultiFloorPresetV1 {
     throw new MultiFloorPresetError("JSONを解析できませんでした。");
   }
   const record = requireRecord(value, "プリセット");
-  if (record.schemaVersion !== MULTI_FLOOR_PRESET_SCHEMA_VERSION) {
-    throw new MultiFloorPresetError("対応していないschemaVersionです。");
-  }
+  const version = readShadingPresetVersion(record, MultiFloorPresetError);
   if (record.kind === MULTI_FLOOR_CASE_PRESET_KIND) {
-    const item = readCase(record.case, "case");
+    const item = readCase(record.case, "case", version.schemaVersion);
     assertCaseValid(item);
     return {
       kind: MULTI_FLOOR_CASE_PRESET_KIND,
-      schemaVersion: MULTI_FLOOR_PRESET_SCHEMA_VERSION,
+      ...version,
       case: item,
     };
   }
@@ -247,10 +246,10 @@ export function parseMultiFloorPreset(text: string): MultiFloorPresetV1 {
     if (!Array.isArray(record.cases)) {
       throw new MultiFloorPresetError("casesが不正です。");
     }
-    const cases = record.cases.map((item, index) => readCase(item, `cases[${index}]`));
+    const cases = record.cases.map((item, index) => readCase(item, `cases[${index}]`, version.schemaVersion));
     const preset: MultiFloorWorkspacePresetV1 = {
       kind: MULTI_FLOOR_WORKSPACE_PRESET_KIND,
-      schemaVersion: MULTI_FLOOR_PRESET_SCHEMA_VERSION,
+      ...version,
       cases,
       baselineCaseId: requireId(record.baselineCaseId, "baselineCaseId"),
       selectedCaseId: requireId(record.selectedCaseId, "selectedCaseId"),

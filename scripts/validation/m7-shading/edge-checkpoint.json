@@ -1,0 +1,9 @@
+{
+  "checkpoint": "2ccbcc89cfe475df4df5a5ec42f0c899b250deaa",
+  "source": "pre-array FSL edge-fin regression, NOT independent physical validation",
+  "normalization": "omit directShadingModel identity string only; every numerical field and remaining result field exact",
+  "shadowCases": 90,
+  "annualCases": 3,
+  "intervals": 8760,
+  "digest": "f7a072ec055197fed534310da4049f054dcb14b51feb833dc703b157bbb75152"
+}

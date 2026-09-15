@@ -1,12 +1,16 @@
-import type { FacadeV1Parameters } from "../engine/facade-v1";
+import type { FacadeV2Parameters } from "../engine/facade-v2";
+import { cloneIntermediateFins } from "../geometry/facade-v2";
 import type { MultiFloorCase, MultiFloorDefinition } from "./types";
 
 export function floorToFacadeV1Parameters(
   item: Pick<MultiFloorCase, "facadeAzimuthDegFromNorth" | "groundReflectance">,
   floor: MultiFloorDefinition,
-): FacadeV1Parameters {
+): FacadeV2Parameters {
   return {
     facadeAzimuthDegFromNorth: item.facadeAzimuthDegFromNorth,
+    ...(floor.leftFin === undefined ? {} : { leftFin: { ...floor.leftFin } }),
+    ...(floor.intermediateFins === undefined ? {} : { intermediateFins: cloneIntermediateFins(floor.intermediateFins) }),
+    ...(floor.rightFin === undefined ? {} : { rightFin: { ...floor.rightFin } }),
     opening: {
       centerXM: floor.opening.centerXM,
       widthM: floor.opening.widthM,

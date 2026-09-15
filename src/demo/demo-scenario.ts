@@ -48,3 +48,12 @@ export function createDemoComparisonWorkspace(): ComparisonWorkspace {
     ),
   );
 }
+
+/** Separate synthetic comparison, keeping the established overhang demo intact. */
+export function createFinArrayDemoWorkspace(): ComparisonWorkspace {
+  const cases = [undefined, 2, 1].map((pitchM, i) => createComparisonCase(`case-${["a","b","c"][i]}`, ["案A・中間フィンなし", "案B・中心ピッチ2m", "案C・中心ピッチ1m"][i]!, {
+    ...DEMO_BASELINE_PARAMETERS,
+    ...(pitchM === undefined ? {} : { intermediateFins: { depthM: .6, bottomZM: .9, topZM: 3.3, layout: { mode: "pitch" as const, pitchM } } }),
+  }));
+  return { cases, baselineCaseId: cases[0]!.id };
+}

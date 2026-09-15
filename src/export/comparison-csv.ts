@@ -1,5 +1,6 @@
 import type { ComparisonRunResult } from "../comparison";
 import type { WeatherDataset } from "../weather";
+import { FIN_CSV_HEADERS, finCsvValues, ARRAY_CSV_HEADERS, arrayCsvValues } from "./fin-fields";
 
 export const COMPARISON_CSV_FILENAME = "facade-solar-comparison.csv";
 
@@ -70,7 +71,7 @@ export function createComparisonCsv(
     `${label}_基準案差_pct`,
   ]);
   const monthHeaders = Array.from({ length: 12 }, (_, index) => `${index + 1}月_kWh`);
-  const headers = [...BASE_HEADERS, ...periodHeaders, ...monthHeaders];
+  const headers = [...BASE_HEADERS, ...periodHeaders, ...monthHeaders, ...FIN_CSV_HEADERS, "計算モデル", "遮蔽値の意味", ...ARRAY_CSV_HEADERS];
   const rows = result.cases.map((item) => {
     const { parameters } = item;
     const overhang = parameters.overhang;
@@ -105,6 +106,8 @@ export function createComparisonCsv(
       parameters.groundReflectance,
       ...periodValues,
       ...item.simulation.monthly.map((month) => month.withOverhangKWh),
+      ...finCsvValues(parameters), item.simulation.modelVersion, "庇あり列は庇＋有効フィンの複合遮蔽。庇なし列は遮蔽物なし。HVAC負荷ではない。",
+      ...arrayCsvValues(parameters, parameters.opening.widthM),
     ];
   });
   return `\uFEFF${[headers, ...rows]

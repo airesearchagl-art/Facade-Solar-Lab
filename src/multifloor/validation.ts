@@ -1,4 +1,5 @@
-import { validateFacadeV1Parameters } from "../engine/facade-v1";
+import { validateFacadeV2Parameters } from "../engine/facade-v2";
+import { finInputIssues } from "../comparison/fin-input";
 import {
   MAX_MULTI_FLOOR_CASES,
   MIN_FLOORS_PER_CASE,
@@ -47,6 +48,7 @@ export function validateMultiFloorDefinition(
   floor: MultiFloorDefinition,
 ): readonly MultiFloorValidationIssue[] {
   const issues: MultiFloorValidationIssue[] = [];
+  issues.push(...finInputIssues(floor, floor.opening.widthM).map((finding) => ({ ...finding, caseId, floorId: floor.id })));
   if (floor.id.trim() === "") issues.push(issue(caseId, "id", "階IDが必要です。", floor.id));
   if (floor.name.trim() === "") issues.push(issue(caseId, "name", "階名称を入力してください。", floor.id));
   const numericFields: Array<readonly [string, number]> = [
@@ -141,7 +143,7 @@ export function validateMultiFloorCase(
     issues.push(...floorIssues);
     if (floorIssues.length === 0 && Number.isFinite(item.facadeAzimuthDegFromNorth) && Number.isFinite(item.groundReflectance)) {
       try {
-        validateFacadeV1Parameters(floorToFacadeV1Parameters(item, floor));
+        validateFacadeV2Parameters(floorToFacadeV1Parameters(item, floor));
       } catch {
         issues.push(issue(item.id, "parameters", "既存facade-v1へ渡す階形状が不正です。", floor.id));
       }

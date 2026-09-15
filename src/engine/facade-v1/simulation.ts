@@ -5,6 +5,7 @@ import {
   type LocalStandardTime,
   type WeatherDataset,
   type WeatherIntervalTime,
+  type WeatherRadiation,
 } from "../../weather";
 import {
   calculateSolarPosition,
@@ -20,6 +21,8 @@ import {
   type FacadeV1PeriodDefinition,
   type FacadeV1PeriodSummary,
   type FacadeV1SimulationResult,
+  type FacadeV1IntervalGain,
+  type FacadeV1SolarPosition,
 } from "./types";
 
 export const DEFAULT_FACADE_V1_PERIODS: FacadeV1PeriodDefinition = Object.freeze({
@@ -66,6 +69,17 @@ export function simulateFacadeV1(
 ): FacadeV1SimulationResult {
   assertWeatherDatasetUsable(dataset);
   validateFacadeV1Parameters(parameters);
+  return simulateFacadeWeather(dataset, parameters, periods, (radiation, solar) =>
+    calculateFacadeV1IntervalGain(parameters, radiation, solar));
+}
+
+/** Shared solar/calendar/monthly/period traversal. Called once per case/floor. */
+export function simulateFacadeWeather(
+  dataset: WeatherDataset,
+  parameters: FacadeV1Parameters,
+  periods: FacadeV1PeriodDefinition,
+  intervalGain: (radiation: WeatherRadiation, solar: FacadeV1SolarPosition) => FacadeV1IntervalGain,
+): FacadeV1SimulationResult {
   const monthly = Array.from({ length: 12 }, (_, index) => ({
     month: index + 1,
     withOverhangKWh: 0,
@@ -77,11 +91,7 @@ export function simulateFacadeV1(
       location: dataset.location,
       localStandardTime: solarTime(interval.time, canonicalYear),
     });
-    const gain = calculateFacadeV1IntervalGain(
-      parameters,
-      interval.radiation,
-      solar,
-    );
+    const gain = intervalGain(interval.radiation, solar);
     const month = monthly[interval.time.month - 1]!;
     month.withOverhangKWh += gain.withOverhangKWh;
     month.withoutOverhangKWh += gain.withoutOverhangKWh;

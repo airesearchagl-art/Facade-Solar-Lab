@@ -2,12 +2,12 @@
 
 ## M5 — Current: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING
 
-P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fixなし（Human報告）。Completion Waveでrepository/localの追加検証A〜Eを実施しました（§10）。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNです。**M5全体のphysical validation COMPLETEではありません。** M6 NOT STARTED。
+P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fixなし（Human報告）。Completion Waveでrepository/localの追加検証A〜Eを実施しました（§10）。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNです。**M5全体のphysical validation COMPLETEではありません。** M6はpost-merge gate PASSによりCOMPLETE。M7の追加検証は[Advanced Facade Shading](ADVANCED_FACADE_SHADING.md)へ分離します。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
 - 作業branch: feat/m5-validation-stability。この文書を含むlive HEADはGit/PRから取得し、product baselineと混同しません。
-- M4 / M4.5: COMPLETE。M5: local検証完了 / external reference待ち。M6: Planned / NOT STARTED。
+- M4 / M4.5 / M6: COMPLETE。M5: local検証完了 / external reference待ち。M7: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS。Independent FULL Re-Review A. PASS / Required Fix CLOSED、exact product headのHuman HTTP・Single/Multi CSV/PDF PASSは[受入証拠](ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)を参照。merge / M7 Production確認はpending。§10のPR/Ready/M6状態は当時の履歴として保持し、最新運用状態はROADMAPに従います。
 - M4.5のterminal Run Artifactとimmutable Task Packetはhistorical auditとして保持し、再closeoutしません。
 - 数値の一致、Human UX PASS、Production READYは、絶対 [kWh] の物理的正しさや正式性能評価を意味しません。
 

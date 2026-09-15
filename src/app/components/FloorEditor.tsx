@@ -1,4 +1,5 @@
 import type { MultiFloorDefinition } from "../../multifloor";
+import { FinEditor } from "./FinEditor";
 
 interface FloorEditorProps {
   readonly floor: MultiFloorDefinition;
@@ -77,6 +78,7 @@ export function FloorEditor({ floor, inputPrefix, issues, onChange }: FloorEdito
           </div>
         )}
       </fieldset>
+      <FinEditor fins={floor} widthM={floor.opening.widthM} sillZM={floor.opening.sillHeightM} headZM={floor.opening.sillHeightM + floor.opening.heightM} inputPrefix={inputPrefix} issues={issues} onChange={(fins) => onChange({ ...floor, leftFin: fins.leftFin, rightFin: fins.rightFin, intermediateFins: fins.intermediateFins })} />
     </div>
   );
 }

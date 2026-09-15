@@ -4,9 +4,23 @@
 
 M6は運用の検証・手順整備です。branchは`feat/m6-vercel-operation`、開始mainは`41e9c4f0cddeef876a90a63ae4ce07713027654a`（PR #10 squash merge）。製品のsolar / weather / geometry / energy式、既存expected、Golden、M5測定値を変更しません。
 
-Current state: `IMPLEMENTATION_COMPLETE / PRE_MERGE_GATE_PASS / MERGE_PRODUCTION_CONFIRMATION_PENDING`。M6 Completion Wave Independent ReviewはA. PASS / Required Fix: none / Blocker: none（Human報告）。PR #11はDraft維持、Ready transitionの別Human authorization待ちです。merge・manual Production操作も未許可です。最新HEADは`git rev-parse HEAD`、remote/PRから解決し、下記accepted checkpointやPR本文のdeployment/checksと混同しません。自己参照SHAを更新するだけのcommitやcloseout cycleを作りません。
+Current state: `COMPLETE`。M6 Completion Wave Independent ReviewはA. PASS / Required Fix: none / Blocker: none（Human報告）。PR #11 squash mergeとpost-merge automatic Production検証は完了済みです。M6 remaining tasksはありません。live HEADはGit/PRから解決し、下記checkpointと混同しません。この同期のmergeを記録するためのM6再closeout cycleは不要です。手動Production操作の権限は付与しません。
+
+### M6 post-merge closure — Phase 0
+
+2026-09-15T12:11:34.737Z、repository変更前に既存`ops:verify`と既存Playwright/Chromeでread-only検証（exit 0 / PASS）:
+
+- PR #11 MERGED、squash merge / fresh origin/main: `f3cd83962e462f3e28ed20373d3ad58ede5e835e`。
+- Deployment: `dpl_6rcmsQz5VaLjBi1XTBi3vtWavyir`、target=production、READY、source=git / ref=main / exact SHA一致。
+- canonical alias `facade-solar-lab.vercel.app`は当該deploymentを指し、project/team/configのdriftなし。
+- canonical `/`、`/assets/index-B6As79Y7.js`、`/assets/index-CmVKWan7.css`、`/favicon.svg`各HTTP200。
+- Single Demo / Multi Demo / rerun / finite results / mode切替 / 390px: PASS。
+- browser fatal/pageerror=0、console error=0、app asset error=0。
+- manual Production mutation: none。M6 COMPLETE。M7 branchからのdocumentation同期のみで、別M6 closeout PRは作らない。
 
 ### Accepted review / HTTP evidence
+
+以下はmerge前のhistorical checkpointです。pending表現は上記Phase 0でsupersededされ、Current Stateではありません。
 
 2026-09-15 Human提供のIndependent Review / Network証拠:
 

@@ -42,3 +42,10 @@ export function createMultiFloorDemoWorkspace(): MultiFloorWorkspace {
   );
   return addMultiFloorCase(createMultiFloorWorkspace(baseline), alternative);
 }
+
+export function createMultiFloorFinArrayDemoWorkspace(): MultiFloorWorkspace {
+  const cases = [undefined, 2, 1].map((pitchM, i) => createMultiFloorCase(`building-${["a","b","c"][i]}`, ["建物案A・中間フィンなし", "建物案B・中心ピッチ2m", "建物案C・中心ピッチ1m"][i]!, [1,2,3].map((sequence) => ({
+    ...demoFloor(sequence,.8), ...(pitchM === undefined ? {} : { intermediateFins: { depthM:.6,bottomZM:.9,topZM:3.3,layout:{mode:"pitch" as const,pitchM} } }),
+  }))));
+  return { cases, baselineCaseId: cases[0]!.id };
+}

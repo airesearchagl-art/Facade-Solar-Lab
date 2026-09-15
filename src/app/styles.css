@@ -835,6 +835,11 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .print-geometry-facts dt { font-weight: 800; }
   .print-geometry-facts dd { margin: 0; }
   .print-geometry-case .geometry-grid { grid-template-columns: 1fr; gap: 2mm; }
+  /* Array metadata must not force three narrow, page-tall columns to fragment. */
+  .print-geometry-cases.has-fin-array { display: block; }
+  .print-geometry-cases.has-fin-array .print-geometry-case { margin-bottom: 4mm; }
+  .print-geometry-cases.has-fin-array .geometry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .print-geometry h2 { break-after: avoid; }
   .print-geometry-cases.count-1 .geometry-grid,
   .print-geometry-cases.count-4 .geometry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .print-geometry-case .geometry-figure { margin: 0; padding: 2mm; }
@@ -888,4 +893,26 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .multifloor-case-report .solar-reference-disclaimer { margin: 2mm 0 0; font-size: 6.5pt; }
   .multifloor-case-report .solar-ray-legend { margin: 2mm 0; }
   .multifloor-case-report .solar-ray-legend li { font-size: 7pt; }
+}
+/* M7: shared controls and print-safe line/fill identity; no calculation state. */
+.fin-editors { min-width: 0; }
+.fin-summary { font-size: 0.76rem; line-height: 1.5; margin: 0.5rem 0; overflow-wrap: anywhere; }
+.fin-summary > div { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: 0.35rem; }
+.fin-summary dt { font-weight: 650; }
+.fin-summary dd { margin: 0; }
+.fin-line { stroke: #895124; stroke-width: 5; }
+.fin-line.rightFin { stroke: #614877; stroke-dasharray: 8 3; }
+.fin-projection { fill: #b9916450; stroke: #895124; stroke-width: 1; stroke-dasharray: 3 2; }
+.fin-projection.rightFin { fill: #80679120; stroke: #614877; stroke-dasharray: 6 3; }
+.fin-editors > h3, .intermediate-fin-editor, .fin-editors > .field-note { grid-column: 1 / -1; }
+.fin-line.intermediateFin { stroke: #23765e; stroke-width: 2; stroke-dasharray: 3 2; }
+.fin-projection.intermediateFin { fill: #23765e18; stroke: #23765e; stroke-dasharray: 3 2; }
+.array-summary { font-size: .78rem; line-height: 1.6; overflow-wrap: anywhere; }
+.array-summary p { margin: .25rem 0; }
+.floor-shading-inputs { table-layout: fixed; width: 100%; }
+.floor-shading-inputs td { white-space: normal; overflow-wrap: anywhere; }
+@media print {
+  .fin-line, .fin-projection { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .fin-summary { font-size: 7.5pt; }
+  .multifloor-print-summary h1 { font-size: 21pt; }
 }

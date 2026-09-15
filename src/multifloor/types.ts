@@ -1,7 +1,8 @@
 import type {
-  FacadeV1Parameters,
-  FacadeV1SimulationResult,
-} from "../engine/facade-v1";
+  FacadeV2Parameters,
+  FacadeSimulationResult,
+} from "../engine/facade-v2";
+import type { VerticalFins } from "../geometry/facade-v2";
 
 export interface MultiFloorOpening {
   readonly centerXM: number;
@@ -17,7 +18,7 @@ export interface MultiFloorOverhang {
   readonly rightExtensionM: number;
 }
 
-export interface MultiFloorDefinition {
+export interface MultiFloorDefinition extends VerticalFins {
   readonly id: string;
   readonly name: string;
   readonly floorHeightM: number;
@@ -78,8 +79,8 @@ export interface MultiFloorFloorResult {
   readonly name: string;
   readonly absoluteBaseZM: number;
   readonly definition: MultiFloorDefinition;
-  readonly parameters: FacadeV1Parameters;
-  readonly simulation: FacadeV1SimulationResult;
+  readonly parameters: FacadeV2Parameters;
+  readonly simulation: FacadeSimulationResult;
 }
 
 export interface MultiFloorCaseResult {

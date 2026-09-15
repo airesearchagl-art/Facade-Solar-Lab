@@ -2,6 +2,8 @@ import { useId, useMemo } from "react";
 
 import { createMultiFloorReferences, positionFloors, type MultiFloorCase } from "../../multifloor";
 import type { WeatherDataset } from "../../weather";
+import { finInputIssues } from "../../comparison/fin-input";
+import { deriveFinLayout } from "../../geometry/facade-v2";
 
 interface MultiFloorGeometryPreviewProps {
   readonly buildingCase: MultiFloorCase;
@@ -15,6 +17,7 @@ export function MultiFloorGeometryPreview({ buildingCase, selectedFloorId, datas
   const positioned = useMemo(() => positionFloors(buildingCase), [buildingCase]);
   const totalHeight = positioned.at(-1)?.topZM ?? 0;
   const geometryValid = totalHeight > 0 && positioned.every(({ floor }) =>
+    finInputIssues(floor, floor.opening.widthM).length === 0 &&
     Number.isFinite(floor.floorHeightM) && floor.floorHeightM > 0 &&
     Number.isFinite(floor.opening.widthM) && floor.opening.widthM > 0 &&
     Number.isFinite(floor.opening.heightM) && floor.opening.heightM > 0 &&
@@ -58,12 +61,29 @@ export function MultiFloorGeometryPreview({ buildingCase, selectedFloorId, datas
               <line className="drawing-line datum" x1="96" x2="296" y1={zToY(baseZM)} y2={zToY(baseZM)} />
               <rect className="opening-fill front-opening" x={left} y={zToY(baseZM + floor.opening.sillHeightM + floor.opening.heightM)} width={width} height={floor.opening.heightM * zScale} />
               {overhang === undefined ? null : <line className="drawing-line overhang-line" x1={left - overhang.leftExtensionM * xScale} x2={left + width + overhang.rightExtensionM * xScale} y1={zToY(baseZM + overhang.elevationM)} y2={zToY(baseZM + overhang.elevationM)} />}
+              {(["leftFin", "rightFin"] as const).map((key) => {
+                const fin = floor[key];
+                if (fin === undefined || fin.depthM === 0) return null;
+                const bottom = Math.max(0, fin.bottomZM);
+                const top = Math.min(floor.floorHeightM, fin.topZM);
+                if (top <= bottom) return null;
+                const x = key === "leftFin" ? left : left + width;
+                return <line key={key} data-floor-id={floor.id} data-fin={key} className={`drawing-line fin-line ${key}`} x1={x} x2={x} y1={zToY(baseZM + top)} y2={zToY(baseZM + bottom)}><title>{`${floor.name} ${key}: 出 ${fin.depthM} m / 下端 ${fin.bottomZM} m / 上端 ${fin.topZM} m（表示のみ階境界で区切る）`}</title></line>;
+              })}
               {gutter(floor, baseZM, topZM)}
+              {floor.intermediateFins && floor.intermediateFins.depthM > 0 ? deriveFinLayout(floor.opening.widthM, floor.intermediateFins.layout).positionsFromLeftM.map((offset, i) => {
+                const fin = floor.intermediateFins!;
+                const bottom = Math.max(0, fin.bottomZM), top = Math.min(floor.floorHeightM, fin.topZM);
+                if (top <= bottom) return null;
+                const x = left + offset * xScale;
+                return <line key={`array-${i}`} data-floor-id={floor.id} data-fin="intermediate" className="drawing-line fin-line intermediateFin" x1={x} x2={x} y1={zToY(baseZM + top)} y2={zToY(baseZM + bottom)}><title>{`${floor.name} 中間フィン ${i + 1}: 左端から${offset} m（階境界のclipは表示のみ）`}</title></line>;
+              }) : null}
               <title>{`${floor.name}: 階高 ${floor.floorHeightM} m / 開口 ${floor.opening.widthM} × ${floor.opening.heightM} m`}</title>
             </g>;
           })}
           <line className="drawing-line datum" x1="96" x2="296" y1={drawingTop} y2={drawingTop} />
         </svg>
+        <p className="field-note">左右端は端部フィン、開口内は中間フィン配列。長いフィンは階ごとの表示範囲で区切ります（可視化のみ）。上下階間の物理的遮蔽は未実装です。</p>
       </figure>
       <figure className="geometry-figure">
         <figcaption><strong>積層断面</strong><span>全階の日射参考線</span></figcaption>

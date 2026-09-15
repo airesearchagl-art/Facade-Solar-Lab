@@ -1,5 +1,7 @@
 # Facade Geometry Foundation
 
+この文書は後方互換基準`facade-v1`を記述します。M7の左右端部フィン・中間フィン配列・一般化影union・v2との共存は[Advanced Facade Shading](ADVANCED_FACADE_SHADING.md)を参照してください。
+
 M3は、鉛直ファサード上の矩形開口と、有限幅の水平庇1枚を扱うPure TypeScript geometry foundationです。直接日射の影は厳密なpolygon clippingで評価し、M2 weather baselineと分離した`facade-v1-weather` modelとして公開します。
 
 ## Coordinate and azimuth contract
