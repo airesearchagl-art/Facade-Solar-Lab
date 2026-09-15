@@ -6,6 +6,7 @@ import {
   validateRectangularOpening,
 } from "../../geometry";
 import type { WeatherRadiation } from "../../weather";
+import type { DirectShadowResult } from "../../geometry";
 import { WeatherDataError } from "../../weather";
 import { finiteNonNegative } from "../../models/numeric";
 import type {
@@ -97,6 +98,15 @@ export function calculateFacadeV1IntervalIrradiance(
     opening: parameters.opening,
     ...(parameters.overhang === undefined ? {} : { overhang: parameters.overhang }),
   });
+  return irradianceFromDirectShadow(parameters, radiation, directShadow);
+}
+
+/** Shared v1/v2 energy path. Geometry is the only substituted calculation. */
+export function irradianceFromDirectShadow(
+  parameters: FacadeV1Parameters,
+  radiation: RequiredFacadeV1Radiation,
+  directShadow: DirectShadowResult,
+): FacadeV1IntervalIrradiance {
   const beamIncidenceFactor = directShadow.frontFacing
     ? directShadow.facadeLocalSunVector.y
     : 0;
@@ -146,6 +156,14 @@ export function calculateFacadeV1IntervalGain(
     radiation,
     solar,
   );
+  return gainFromFacadeIrradiance(parameters, irradiance);
+}
+
+/** Common opening area / SHGC / Wh-to-kWh conversion; no v2 formula copy. */
+export function gainFromFacadeIrradiance(
+  parameters: FacadeV1Parameters,
+  irradiance: FacadeV1IntervalIrradiance,
+): FacadeV1IntervalGain {
   const opening = openingGeometryMetrics(parameters.opening);
   const scaleKWh =
     (opening.areaM2 * parameters.solarHeatGainCoefficient) / 1000;

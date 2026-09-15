@@ -1,4 +1,5 @@
 import type { WeatherDataset } from "../weather";
+import { FIN_CSV_HEADERS, finCsvValues } from "../export/fin-fields";
 import type { MultiFloorRunResult } from "./types";
 
 export const MULTI_FLOOR_CSV_FILENAME = "facade-solar-multifloor-comparison.csv";
@@ -33,7 +34,7 @@ export function createMultiFloorCsv(
     "開口高さ_m", "腰壁高さ_m", "庇あり", "庇出幅_m", "庇高さ_m", "左側延長_m",
     "右側延長_m", "SHGC", "年間_kWh", "夏期_kWh", "冬期_kWh", "年間基準案差_kWh",
     "年間基準案差_pct", "夏期基準案差_kWh", "夏期基準案差_pct", "冬期基準案差_kWh",
-    "冬期基準案差_pct", ...months,
+    "冬期基準案差_pct", ...months, ...FIN_CSV_HEADERS,
   ];
   const rows: Array<Array<string | number>> = [];
   for (const item of result.cases) {
@@ -50,6 +51,7 @@ export function createMultiFloorCsv(
       item.deltaFromBaseline.summer.kWh, item.deltaFromBaseline.summer.percent ?? "",
       item.deltaFromBaseline.winter.kWh, item.deltaFromBaseline.winter.percent ?? "",
       ...item.total.monthlyKWh,
+      ...FIN_CSV_HEADERS.map(() => ""),
     ]);
     for (const floor of item.floors) {
       const definition = floor.definition;
@@ -67,6 +69,7 @@ export function createMultiFloorCsv(
         floor.simulation.summary.heating.withOverhangKWh,
         "", "", "", "", "", "",
         ...floor.simulation.monthly.map((month) => month.withOverhangKWh),
+        ...finCsvValues(definition),
       ]);
     }
   }

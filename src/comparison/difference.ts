@@ -54,6 +54,18 @@ export function comparisonInputDifferences(
     appendNumber(differences, "overhang.rightExtensionM", "右側の張り出し", before.overhang.rightExtensionM, after.overhang.rightExtensionM, "m");
   }
   appendNumber(differences, "solarHeatGainCoefficient", "SHGC", before.solarHeatGainCoefficient, after.solarHeatGainCoefficient);
+  for (const key of ["leftFin", "rightFin"] as const) {
+    const left = before[key];
+    const right = after[key];
+    const label = key === "leftFin" ? "左フィン" : "右フィン";
+    if ((left !== undefined) !== (right !== undefined)) differences.push({ key: `${key}.enabled`, label, baselineValue: left !== undefined, caseValue: right !== undefined });
+    if (left !== undefined || right !== undefined) {
+      for (const [field, suffix] of [["depthM", "出"], ["bottomZM", "下端"], ["topZM", "上端"]] as const) {
+        if (left === undefined || right === undefined) differences.push({ key: `${key}.${field}`, label: `${label} ${suffix}`, baselineValue: left?.[field] ?? "—", caseValue: right?.[field] ?? "—", unit: "m" });
+        else appendNumber(differences, `${key}.${field}`, `${label} ${suffix}`, left[field], right[field], "m");
+      }
+    }
+  }
   appendNumber(differences, "groundReflectance", "地面反射率", before.groundReflectance, after.groundReflectance);
   return differences;
 }

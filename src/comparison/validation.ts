@@ -1,4 +1,5 @@
-import { validateFacadeV1Parameters } from "../engine/facade-v1";
+import { validateFacadeV2Parameters } from "../engine/facade-v2";
+import { finInputIssues } from "./fin-input";
 import {
   MAX_COMPARISON_CASES,
   MIN_COMPARISON_CASES,
@@ -42,6 +43,7 @@ export function validateComparisonCase(
 ): readonly ComparisonValidationIssue[] {
   const { id, name, parameters } = comparisonCase;
   const issues: ComparisonValidationIssue[] = [];
+  issues.push(...finInputIssues(parameters).map((finding) => ({ ...finding, caseId: id })));
   if (id.trim() === "") issues.push(issue(id, "id", "案のIDが必要です。"));
   if (name.trim() === "") issues.push(issue(id, "name", "案の名称を入力してください。"));
 
@@ -117,7 +119,7 @@ export function validateComparisonCase(
 
   if (issues.length === 0) {
     try {
-      validateFacadeV1Parameters(parameters);
+      validateFacadeV2Parameters(parameters);
     } catch {
       issues.push(
         issue(

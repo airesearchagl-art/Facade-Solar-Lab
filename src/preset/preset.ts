@@ -8,12 +8,12 @@ import {
   type ComparisonCase,
   type ComparisonWorkspace,
 } from "../comparison";
-import type { FacadeV1Parameters } from "../engine/facade-v1";
+import type { FacadeV2Parameters } from "../engine/facade-v2";
+import { readPresetFins, readShadingPresetVersion, shadingPresetVersion } from "./shading";
 import {
   CASE_PRESET_KIND,
   MAX_PRESET_BYTES,
   MAX_PRESET_NAME_LENGTH,
-  PRESET_SCHEMA_VERSION,
   WORKSPACE_PRESET_KIND,
   type AppliedPresetWorkspace,
   type FacadeCasePresetV1,
@@ -56,7 +56,7 @@ function requireNumber(value: unknown, label: string): number {
   return value;
 }
 
-function readParameters(value: unknown): FacadeV1Parameters {
+function readParameters(value: unknown, version: 1 | 2): FacadeV2Parameters {
   const record = requireRecord(value, "parameters");
   const opening = requireRecord(record.opening, "parameters.opening");
   const overhangValue = record.overhang;
@@ -72,6 +72,7 @@ function readParameters(value: unknown): FacadeV1Parameters {
         };
       })();
   return {
+    ...readPresetFins(record, version, FacadePresetError),
     facadeAzimuthDegFromNorth: requireNumber(
       record.facadeAzimuthDegFromNorth,
       "parameters.facadeAzimuthDegFromNorth",
@@ -94,12 +95,12 @@ function readParameters(value: unknown): FacadeV1Parameters {
   };
 }
 
-function readCase(value: unknown, index: number): ComparisonCase {
+function readCase(value: unknown, index: number, version: 1 | 2): ComparisonCase {
   const record = requireRecord(value, `cases[${index}]`);
   return {
     id: requireString(record.id, `cases[${index}].id`, MAX_PRESET_ID_LENGTH),
     name: requireString(record.name, `cases[${index}].name`, MAX_PRESET_NAME_LENGTH),
-    parameters: readParameters(record.parameters),
+    parameters: readParameters(record.parameters, version),
   };
 }
 
@@ -128,7 +129,7 @@ export function createCasePreset(comparisonCase: ComparisonCase): FacadeCasePres
   requireString(comparisonCase.name, "案の名称", MAX_PRESET_NAME_LENGTH);
   return {
     kind: CASE_PRESET_KIND,
-    schemaVersion: PRESET_SCHEMA_VERSION,
+    ...shadingPresetVersion([comparisonCase.parameters]),
     name: comparisonCase.name,
     parameters: cloneFacadeV1Parameters(comparisonCase.parameters),
   };
@@ -153,7 +154,7 @@ export function createWorkspacePreset(
   });
   return {
     kind: WORKSPACE_PRESET_KIND,
-    schemaVersion: PRESET_SCHEMA_VERSION,
+    ...shadingPresetVersion(cases.map((item) => item.parameters)),
     cases,
     baselineCaseId: workspace.baselineCaseId,
     selectedCaseId,
@@ -182,15 +183,13 @@ export function parseFacadePreset(text: string): FacadePresetV1 {
     throw new FacadePresetError("JSONを解析できませんでした。");
   }
   const record = requireRecord(value, "プリセット");
-  if (record.schemaVersion !== PRESET_SCHEMA_VERSION) {
-    throw new FacadePresetError("対応していないschemaVersionです。");
-  }
+  const version = readShadingPresetVersion(record, FacadePresetError);
   if (record.kind === CASE_PRESET_KIND) {
     const preset: FacadeCasePresetV1 = {
       kind: CASE_PRESET_KIND,
-      schemaVersion: PRESET_SCHEMA_VERSION,
+      ...version,
       name: requireString(record.name, "案の名称", MAX_PRESET_NAME_LENGTH),
-      parameters: readParameters(record.parameters),
+      parameters: readParameters(record.parameters, version.schemaVersion),
     };
     assertCaseValid({ id: "imported-case", name: preset.name, parameters: preset.parameters });
     return preset;
@@ -199,10 +198,10 @@ export function parseFacadePreset(text: string): FacadePresetV1 {
     if (!Array.isArray(record.cases)) {
       throw new FacadePresetError("casesが不正です。");
     }
-    const cases = record.cases.map((item, index) => readCase(item, index));
+    const cases = record.cases.map((item, index) => readCase(item, index, version.schemaVersion));
     const preset: FacadeWorkspacePresetV1 = {
       kind: WORKSPACE_PRESET_KIND,
-      schemaVersion: PRESET_SCHEMA_VERSION,
+      ...version,
       cases,
       baselineCaseId: requireString(
         record.baselineCaseId,

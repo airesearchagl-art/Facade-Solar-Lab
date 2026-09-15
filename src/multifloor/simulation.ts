@@ -1,4 +1,4 @@
-import { simulateFacadeV1 } from "../engine/facade-v1";
+import { simulateFacade } from "../engine/facade-v2";
 import { finiteNonNegative } from "../models/numeric";
 import type { WeatherDataset } from "../weather";
 import { floorToFacadeV1Parameters } from "./parameters";
@@ -82,7 +82,7 @@ export function simulateMultiFloorCase(
       absoluteBaseZM,
       definition: floor,
       parameters,
-      simulation: simulateFacadeV1(dataset, parameters),
+      simulation: simulateFacade(dataset, parameters),
     };
     absoluteBaseZM += floor.floorHeightM;
     return result;

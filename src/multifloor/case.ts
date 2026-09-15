@@ -40,6 +40,8 @@ export function cloneMultiFloorDefinition(
     name: floor.name,
     floorHeightM: floor.floorHeightM,
     opening: { ...floor.opening },
+    ...(floor.leftFin === undefined ? {} : { leftFin: { depthM: floor.leftFin.depthM, bottomZM: floor.leftFin.bottomZM, topZM: floor.leftFin.topZM } }),
+    ...(floor.rightFin === undefined ? {} : { rightFin: { depthM: floor.rightFin.depthM, bottomZM: floor.rightFin.bottomZM, topZM: floor.rightFin.topZM } }),
     ...(floor.overhang === undefined
       ? {}
       : { overhang: { ...floor.overhang } }),

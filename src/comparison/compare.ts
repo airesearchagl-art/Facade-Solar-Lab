@@ -1,7 +1,6 @@
-import { simulateFacadeV1 } from "../engine/facade-v1";
+import { simulateFacade, type FacadeSimulationResult } from "../engine/facade-v2";
 import type {
   FacadeV1PeriodSummary,
-  FacadeV1SimulationResult,
 } from "../engine/facade-v1";
 import type { WeatherDataset } from "../weather";
 import type {
@@ -36,8 +35,8 @@ function periodDelta(
 }
 
 function comparisonDelta(
-  simulation: FacadeV1SimulationResult,
-  baseline: FacadeV1SimulationResult,
+  simulation: FacadeSimulationResult,
+  baseline: FacadeSimulationResult,
 ): ComparisonCaseDelta {
   if (simulation.monthly.length !== 12 || baseline.monthly.length !== 12) {
     throw new RangeError("Comparison requires twelve aligned monthly values");
@@ -70,7 +69,7 @@ export function runComparison(
   assertComparisonWorkspaceValid(workspace);
   const simulations = workspace.cases.map((item) => ({
     item,
-    simulation: simulateFacadeV1(dataset, item.parameters),
+    simulation: simulateFacade(dataset, item.parameters),
   }));
   const baseline = simulations.find(
     ({ item }) => item.id === workspace.baselineCaseId,

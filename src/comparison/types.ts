@@ -1,12 +1,12 @@
 import type {
-  FacadeV1Parameters,
-  FacadeV1SimulationResult,
-} from "../engine/facade-v1";
+  FacadeV2Parameters,
+  FacadeSimulationResult,
+} from "../engine/facade-v2";
 
 export interface ComparisonCase {
   readonly id: string;
   readonly name: string;
-  readonly parameters: FacadeV1Parameters;
+  readonly parameters: FacadeV2Parameters;
 }
 
 export interface ComparisonWorkspace {
@@ -41,8 +41,8 @@ export interface ComparisonCaseDelta {
 export interface ComparisonCaseResult {
   readonly caseId: string;
   readonly name: string;
-  readonly parameters: FacadeV1Parameters;
-  readonly simulation: FacadeV1SimulationResult;
+  readonly parameters: FacadeV2Parameters;
+  readonly simulation: FacadeSimulationResult;
   readonly deltaFromBaseline: ComparisonCaseDelta;
 }
 
@@ -52,7 +52,7 @@ export interface ComparisonRunResult {
   readonly cases: readonly ComparisonCaseResult[];
 }
 
-export type InputDifferenceValue = number | boolean;
+export type InputDifferenceValue = number | boolean | "—";
 
 export interface InputDifference {
   readonly key: string;

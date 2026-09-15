@@ -1,10 +1,10 @@
-import type { FacadeV1Parameters } from "../engine/facade-v1";
+import type { FacadeV2Parameters } from "../engine/facade-v2";
 import type { ComparisonCase, ComparisonWorkspace } from "./types";
 
 export const MIN_COMPARISON_CASES = 1;
 export const MAX_COMPARISON_CASES = 4;
 
-export const DEFAULT_COMPARISON_PARAMETERS: FacadeV1Parameters = Object.freeze({
+export const DEFAULT_COMPARISON_PARAMETERS: FacadeV2Parameters = Object.freeze({
   facadeAzimuthDegFromNorth: 180,
   opening: Object.freeze({
     centerXM: 0,
@@ -23,11 +23,13 @@ export const DEFAULT_COMPARISON_PARAMETERS: FacadeV1Parameters = Object.freeze({
 });
 
 export function cloneFacadeV1Parameters(
-  parameters: FacadeV1Parameters,
-): FacadeV1Parameters {
+  parameters: FacadeV2Parameters,
+): FacadeV2Parameters {
   return {
     facadeAzimuthDegFromNorth: parameters.facadeAzimuthDegFromNorth,
     opening: { ...parameters.opening },
+    ...(parameters.leftFin === undefined ? {} : { leftFin: { depthM: parameters.leftFin.depthM, bottomZM: parameters.leftFin.bottomZM, topZM: parameters.leftFin.topZM } }),
+    ...(parameters.rightFin === undefined ? {} : { rightFin: { depthM: parameters.rightFin.depthM, bottomZM: parameters.rightFin.bottomZM, topZM: parameters.rightFin.topZM } }),
     ...(parameters.overhang === undefined
       ? {}
       : { overhang: { ...parameters.overhang } }),
@@ -45,7 +47,7 @@ function requireText(value: string, label: string): string {
 export function createComparisonCase(
   id: string,
   name: string,
-  parameters: FacadeV1Parameters = DEFAULT_COMPARISON_PARAMETERS,
+  parameters: FacadeV2Parameters = DEFAULT_COMPARISON_PARAMETERS,
 ): ComparisonCase {
   return {
     id: requireText(id, "case id"),
