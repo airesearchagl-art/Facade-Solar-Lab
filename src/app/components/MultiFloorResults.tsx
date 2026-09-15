@@ -193,6 +193,8 @@ export function MultiFloorResults({
         {result.cases.map((item, index) => <article key={item.caseId} className="multifloor-case-report">
           <h2><CaseMarker colors={colors} caseId={item.caseId} index={index} /> {item.name}{item.caseId === result.baselineCaseId ? " · 基準案" : ""}</h2>
           <h3>Floor Breakdown</h3><FloorTable item={item} coverage={dataset?.coverage} />
+          <h3>階別の遮蔽入力</h3>
+          <table className="data-table floor-shading-inputs"><thead><tr><th>階</th><th>水平庇 [m]</th><th>左右フィン（階床基準）</th></tr></thead><tbody>{item.floors.map((floor) => <tr key={floor.floorId}><th>{floor.name}</th><td>{floor.definition.overhang === undefined ? "なし" : `出 ${floor.definition.overhang.depthM} / 高さ ${floor.definition.overhang.elevationM} / 左右延長 ${floor.definition.overhang.leftExtensionM}, ${floor.definition.overhang.rightExtensionM}`}</td><td><FinSummary fins={floor.definition} /></td></tr>)}</tbody></table>
           <FloorMonthlyChart title={item.name + " — 階別月別日射熱取得"} series={caseFloorSeries(item)} colorOverride={colors[item.caseId]} />
           <h3>積層形状 · 全階の参考日射線</h3>
           <MultiFloorGeometryPreview buildingCase={item.definition} dataset={dataset} report />
@@ -201,3 +203,4 @@ export function MultiFloorResults({
     </section>
   );
 }
+import { FinSummary } from "./FinEditor";

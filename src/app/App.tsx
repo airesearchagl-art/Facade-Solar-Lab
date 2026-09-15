@@ -24,8 +24,10 @@ import {
   FACADE_V1_DIFFUSE_SHADING_MODEL,
   FACADE_V1_DIRECT_SHADING_MODEL,
   FACADE_V1_GROUND_REFLECTION_MODEL,
-  type FacadeV1Parameters,
 } from "../engine";
+import { FACADE_V2_DIRECT_SHADING_MODEL, type FacadeV2Parameters } from "../engine/facade-v2";
+import { hasActiveFins } from "../geometry/facade-v2";
+import { FinEditor, FinSummary } from "./components/FinEditor";
 import {
   COMPARISON_CSV_FILENAME,
   createComparisonCsv,
@@ -254,7 +256,7 @@ export function ResultsPanel({
           <article className="period-card" key={period.key}>
             <header>
               <div><h3>{labels[period.labelKey]}の日射熱取得</h3><span>{coverage === "partial" ? period.key === "annual" ? "読込区間のみ（通年ではありません）" : `${period.months}の読込区間のみ` : period.months}</span></div>
-              <small>庇ありの日射熱取得量</small>
+              <small>庇あり＝庇＋有効フィンの日射熱取得量</small>
             </header>
             <div className="table-scroll">
               <table className="data-table period-table">
@@ -322,7 +324,7 @@ export function PrintReportSummary({
                 <td>{item.caseId === result.baselineCaseId ? "はい" : "いいえ"}</td>
                 <td>{item.parameters.facadeAzimuthDegFromNorth}°</td>
                 <td>幅 {opening.widthM} m / 下端 {opening.sillZM} m / 上端 {opening.headZM} m</td>
-                <td>{overhang === undefined ? "なし" : `出 ${overhang.depthM} m / 高さ ${overhang.elevationZM} m / 左右 ${overhang.leftExtensionM}, ${overhang.rightExtensionM} m`}</td>
+                <td>{overhang === undefined ? "なし" : `出 ${overhang.depthM} m / 高さ ${overhang.elevationZM} m / 左右 ${overhang.leftExtensionM}, ${overhang.rightExtensionM} m`}<FinSummary fins={item.parameters} /></td>
                 <td>{item.parameters.solarHeatGainCoefficient}</td>
                 <td>{item.parameters.groundReflectance}</td>
               </tr>
@@ -369,6 +371,7 @@ export function PrintGeometryComparison({
                 <div><dt>開口</dt><dd>幅 {opening.widthM} m / 高さ {(opening.headZM - opening.sillZM).toFixed(2)} m</dd></div>
                 <div><dt>庇</dt><dd>{overhang === undefined ? "なし" : `出 ${overhang.depthM} m / 高さ ${overhang.elevationZM} m`}</dd></div>
               </dl>
+              <FinSummary fins={item.parameters} />
               <GeometryPreview comparisonCase={comparisonCase} dataset={dataset} />
             </article>
           );
@@ -491,7 +494,7 @@ function SingleFloorWorkspace() {
     setRunError(null);
   };
 
-  const updateSelectedParameters = (updater: (parameters: FacadeV1Parameters) => FacadeV1Parameters) => {
+  const updateSelectedParameters = (updater: (parameters: FacadeV2Parameters) => FacadeV2Parameters) => {
     mutateWorkspace((current) => {
       const item = current.cases.find((candidate) => candidate.id === selectedCase.id)!;
       return replaceComparisonCase(current, { ...item, parameters: updater(item.parameters) });
@@ -776,6 +779,7 @@ function SingleFloorWorkspace() {
               )}
             </fieldset>
 
+            <FinEditor fins={selectedCase.parameters} sillZM={selectedCase.parameters.opening.sillZM} headZM={selectedCase.parameters.opening.headZM} inputPrefix={selectedCase.id} issues={selectedIssues} onChange={(fins) => updateSelectedParameters((parameters) => ({ ...parameters, leftFin: fins.leftFin, rightFin: fins.rightFin }))} />
             <fieldset>
               <legend>ガラスと地面反射</legend>
               <div className="field-grid">
@@ -882,9 +886,9 @@ function SingleFloorWorkspace() {
           <article>
             <h3>計算モデル</h3>
             <dl className="identity-list">
-              <div><dt>計算モデル（modelVersion）</dt><dd><code>facade-v1-weather</code></dd></div>
-              <div><dt>形状モデル（geometryVersion）</dt><dd><code>facade-v1</code></dd></div>
-              <div><dt>直達日射（direct）</dt><dd><code>{FACADE_V1_DIRECT_SHADING_MODEL}</code></dd></div>
+              <div><dt>選択入力の計算モデル（modelVersion）</dt><dd><code>{hasActiveFins(selectedCase.parameters) ? "facade-v2-weather" : "facade-v1-weather"}</code></dd></div>
+              <div><dt>形状モデル（geometryVersion）</dt><dd><code>{hasActiveFins(selectedCase.parameters) ? "facade-v2" : "facade-v1"}</code></dd></div>
+              <div><dt>直達日射（direct）</dt><dd><code>{hasActiveFins(selectedCase.parameters) ? FACADE_V2_DIRECT_SHADING_MODEL : FACADE_V1_DIRECT_SHADING_MODEL}</code></dd></div>
               <div><dt>天空日射（diffuse）</dt><dd><code>{FACADE_V1_DIFFUSE_SHADING_MODEL}</code></dd></div>
               <div><dt>地面反射（ground）</dt><dd><code>{FACADE_V1_GROUND_REFLECTION_MODEL}</code></dd></div>
             </dl>
@@ -892,7 +896,7 @@ function SingleFloorWorkspace() {
           <article className="limitation-card">
             <h3>形状モデルの適用範囲</h3>
             <p><strong>有限幅の形状計算は直達日射の影だけに適用します。</strong></p>
-            <p>天空日射の遮蔽は等方性の2次元・無限幅近似です。地面反射は遮蔽しません。鉛直開口1つと、水平庇0または1つに対応します。</p>
+            <p>鉛直開口1つに水平庇・左右縦フィン各0または1つ。フィン有効時は <code>{FACADE_V2_DIRECT_SHADING_MODEL}</code> で重複影を合成します。天空日射は庇のみ等方性2D無限幅近似で、フィンの天空日射効果は含みません。地面反射は遮蔽しません。M5外部参照はNOT_RUNで、絶対kWhの正式な物理validationではありません。</p>
           </article>
         </div>
       </section>

@@ -10,7 +10,7 @@
 | M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Complete |
-| M7 — Advanced Facade Shading | 水平庇＋左右縦フィンのdirect shadow・Single/Multi・出力 | ACTIVE |
+| M7 — Advanced Facade Shading | 水平庇＋左右縦フィンのdirect shadow・Single/Multi・出力 | IMPLEMENTATION_COMPLETE / INDEPENDENT_REVIEW_PENDING |
 
 ## Milestone gates
 

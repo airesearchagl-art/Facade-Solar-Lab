@@ -6,6 +6,8 @@ import {
   type FacadeSolarReference,
 } from "../../solar-reference";
 import type { WeatherDataset } from "../../weather";
+import { finInputIssues } from "../../comparison/fin-input";
+import { FinSummary } from "./FinEditor";
 
 interface GeometryPreviewProps {
   readonly comparisonCase: ComparisonCase;
@@ -15,6 +17,7 @@ interface GeometryPreviewProps {
 function finiteGeometry(comparisonCase: ComparisonCase): boolean {
   const { opening, overhang } = comparisonCase.parameters;
   return (
+    finInputIssues(comparisonCase.parameters).length === 0 &&
     Number.isFinite(opening.widthM) &&
     opening.widthM > 0 &&
     Number.isFinite(comparisonCase.parameters.facadeAzimuthDegFromNorth) &&
@@ -75,9 +78,12 @@ export function GeometryPreview({ comparisonCase, dataset }: GeometryPreviewProp
     opening.headZM,
     overhang?.elevationZM ?? opening.headZM,
     1,
+    comparisonCase.parameters.leftFin?.topZM ?? 0,
+    comparisonCase.parameters.rightFin?.topZM ?? 0,
   );
-  const zScale = 132 / maxElevation;
-  const floorY = 174;
+  const minElevation = Math.min(0, comparisonCase.parameters.leftFin?.bottomZM ?? 0, comparisonCase.parameters.rightFin?.bottomZM ?? 0);
+  const zScale = 132 / (maxElevation - minElevation);
+  const floorY = 174 + minElevation * zScale;
   const zToY = (value: number) => floorY - value * zScale;
   const openingTop = zToY(opening.headZM);
   const openingBottom = zToY(opening.sillZM);
@@ -129,13 +135,19 @@ export function GeometryPreview({ comparisonCase, dataset }: GeometryPreviewProp
               />
             );
           })}
+          {(["leftFin", "rightFin"] as const).map((key) => {
+            const fin = comparisonCase.parameters[key];
+            if (fin === undefined || fin.depthM === 0) return null;
+            const width = Math.min(92, fin.depthM * 48);
+            return <rect key={key} className={`fin-projection ${key}`} x={170 - width} width={width} y={zToY(fin.topZM)} height={(fin.topZM - fin.bottomZM) * zScale}><title>{key === "leftFin" ? "左フィン側面投影（断面切断面ではない）" : "右フィン側面投影（断面切断面ではない）"}</title></rect>;
+          })}
           <text x="184" y={openingTop + 4}>上端 {opening.headZM.toFixed(2)} m</text>
           <text x="184" y={openingBottom + 4}>下端 {opening.sillZM.toFixed(2)} m</text>
           <text x="28" y="194">基準高さ 0.00 m</text>
           <text x="28" y="28">開口高 H {openingHeight.toFixed(2)} m</text>
           {overhang !== undefined ? (
             <>
-              <text x="28" y={zToY(overhang.elevationZM) - 8}>
+              <text x="28" y="44">
                 庇の出 D {overhang.depthM.toFixed(2)} m
               </text>
               <text x="184" y={zToY(overhang.elevationZM) - 8}>
@@ -181,30 +193,38 @@ export function GeometryPreview({ comparisonCase, dataset }: GeometryPreviewProp
           <rect
             className="opening-fill front-opening"
             x={openingLeft}
-            y="70"
+            y={openingTop}
             width={openingWidthPx}
-            height="84"
+            height={openingBottom - openingTop}
           />
           {overhang !== undefined ? (
             <line
               className="drawing-line overhang-line"
               x1={openingLeft - extensionLeft}
               x2={openingLeft + openingWidthPx + extensionRight}
-              y1="56"
-              y2="56"
+              y1={zToY(overhang.elevationZM)}
+              y2={zToY(overhang.elevationZM)}
             />
           ) : null}
+          {(["leftFin", "rightFin"] as const).map((key) => {
+            const fin = comparisonCase.parameters[key];
+            if (fin === undefined || fin.depthM === 0) return null;
+            const x = key === "leftFin" ? openingLeft : openingLeft + openingWidthPx;
+            return <line key={key} className={`drawing-line fin-line ${key}`} x1={x} x2={x} y1={zToY(fin.topZM)} y2={zToY(fin.bottomZM)}><title>{key === "leftFin" ? "左フィン" : "右フィン"}</title></line>;
+          })}
           <line className="dimension-line" x1={openingLeft} x2={openingLeft + openingWidthPx} y1="186" y2="186" />
           <text x="150" y="202" textAnchor="middle">
             開口幅 W {opening.widthM.toFixed(2)} m
           </text>
           {overhang !== undefined ? (
             <>
-              <text x="34" y="42">左張出 {overhang.leftExtensionM.toFixed(2)} m</text>
-              <text x="266" y="42" textAnchor="end">右張出 {overhang.rightExtensionM.toFixed(2)} m</text>
+              <text x="34" y="30">左張出 {overhang.leftExtensionM.toFixed(2)} m</text>
+              <text x="266" y="30" textAnchor="end">右張出 {overhang.rightExtensionM.toFixed(2)} m</text>
             </>
           ) : null}
         </svg>
+        <FinSummary fins={comparisonCase.parameters} />
+        <p className="field-note">縦線は端部フィン。断面の網掛けは側面投影で、中央断面の切断面ではありません。参考日射線は庇先端基準で、フィン影の輪郭ではありません。</p>
       </figure>
     </div>
   );

@@ -889,3 +889,20 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .multifloor-case-report .solar-ray-legend { margin: 2mm 0; }
   .multifloor-case-report .solar-ray-legend li { font-size: 7pt; }
 }
+/* M7: shared controls and print-safe line/fill identity; no calculation state. */
+.fin-editors { min-width: 0; }
+.fin-summary { font-size: 0.76rem; line-height: 1.5; margin: 0.5rem 0; overflow-wrap: anywhere; }
+.fin-summary > div { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: 0.35rem; }
+.fin-summary dt { font-weight: 650; }
+.fin-summary dd { margin: 0; }
+.fin-line { stroke: #895124; stroke-width: 5; }
+.fin-line.rightFin { stroke: #614877; stroke-dasharray: 8 3; }
+.fin-projection { fill: #b9916450; stroke: #895124; stroke-width: 1; stroke-dasharray: 3 2; }
+.fin-projection.rightFin { fill: #80679120; stroke: #614877; stroke-dasharray: 6 3; }
+.floor-shading-inputs { table-layout: fixed; width: 100%; }
+.floor-shading-inputs td { white-space: normal; overflow-wrap: anywhere; }
+@media print {
+  .fin-line, .fin-projection { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .fin-summary { font-size: 7.5pt; }
+  .multifloor-print-summary h1 { font-size: 21pt; }
+}
