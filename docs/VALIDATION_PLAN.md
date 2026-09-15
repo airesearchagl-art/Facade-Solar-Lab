@@ -2,7 +2,7 @@
 
 ## M5 — Current: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING
 
-P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fixなし（Human報告）。Completion Waveでrepository/localの追加検証A〜Eを実施しました（§10）。Radiance / EnergyPlus / SPAの実行環境は未検出で、第三者比較はNOT_RUNです。**M5全体のphysical validation COMPLETEではありません。** Completion WaveのIndependent Reviewは別工程です。
+P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fixなし（Human報告）。Completion Waveでrepository/localの追加検証A〜Eを実施しました（§10）。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNです。**M5全体のphysical validation COMPLETEではありません。** M6 NOT STARTED。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
@@ -223,7 +223,8 @@ P0-Bは **PROTOCOL_REVIEW_PASS / EXTERNAL_REFERENCE_NOT_RUN**（Human報告）�
 
 - 実施日: 2026-09-15。開始head: `ae11e54b5ea55cf8f045cb16198947bf8138063f`（P1-A review PASS、Human報告）。
 - 検証対象のproduct/test/runner checkpoint: `e2e9fad5f8797d943507f616e8ea28f839c7ffa7`。後続はdocs/evidence同期のみ。現在のfinal HEADはGitとPR #10から解決し、測定checkpointと混同しません。
-- M5: **LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING**。A〜Eのローカル検証PASS、Fのavailability調査完了 / 外部比較NOT_RUN。PR #10はDraft維持。Independent Review待ち、Ready / merge / M6は未許可です。
+- M5: **LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING**。A〜Eのローカル検証PASS、Fのavailability調査完了 / 外部比較NOT_RUN。PR #10はDraft維持。Ready / merge / M6は未許可です。
+- Completion Wave Independent Review: **A. PASS / Required Fix: none / Blocker: none**（Human報告）。Reviewed exact head: `269cf5fb7e3269c6b9d0295ccc2bd60c1e8ba833`。今回のterminal同期はdocumentationのみで、product / tests / runner / measurement JSON / P0-B protocol・comparison fixture / expected・Goldenは変更しません。
 - 正式な絶対kWh評価、SPA精度、Radiance/EnergyPlusとの一致を先に正しいと決めません。
 
 | Workstream | Result | Evidence / scope |
@@ -294,4 +295,4 @@ Browser runnerは先にlocalhost dev serverを起動し、既存Playwright / Chr
 - typecheck / build / golden:check / audit / both diff checks: PASS。build 92 modules / dist、audit 0 vulnerabilities。M1原本2点とM4.5 Task Packet digestは不変、P0-B固定protocol不変。
 - 現在の未完了: Radiance実solver10件、SPA高精度比較、EnergyPlus/放射成分/年間physical reference・model discrepancy。利用環境/ライセンスとreview済み比較protocolを整えて実行するまでEXTERNAL_REFERENCE_PENDINGです。
 - 計測済み範囲以外の全デバイス保証、OS chooser/print dialog再操作、任意巨大入力の精度は主張しません。既存absolute kWh / diffuse近似 / cross-floor未実装の制限は維持。
-- 次工程: **Independent Review of M5 Completion Wave**。PR #10 Draft維持、Ready / merge / branch削除 / 手動Productionなし、M6 NOT STARTED。外部環境がないためローカル検証を繰り返すだけのcycleは不要です。
+- Completion Wave Independent ReviewはPASS。次の作業は別のHuman instruction / authorization待ちです。PR #10 Draft維持、Ready / merge / branch削除 / 手動Productionなし、M6 NOT STARTED。今回のterminal同期自体を理由に新たなcloseout cycleは作りません。外部環境がないためローカル検証を繰り返すだけのcycleも不要です。

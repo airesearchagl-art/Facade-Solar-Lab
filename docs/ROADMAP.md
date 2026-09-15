@@ -14,7 +14,7 @@
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5はP0-A/P0-C/P1-A focused reviewとP0-B protocol review PASS後、[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)のlocal検証A〜Eを完了しました。Radiance / EnergyPlus / SPA外部比較はNOT_RUN、Completion WaveのIndependent Reviewは別工程です。M6はPlanned / NOT STARTED。
+- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5はP0-A/P0-C/P1-A focused reviewとP0-B protocol review PASS後、[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)のlocal検証A〜Eを完了しました。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPlanned / NOT STARTED。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Production deployment、Ready for Review、mergeはHuman Gateです。
 
