@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M7 — Advanced Facade Shading: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を[拡張contract](docs/ADVANCED_FACADE_SHADING.md)に従って実装しました。Draft handoffのみ。exact Git Preview証拠はPR本文で確認し、Ready / mergeは別Human Gateです。
+**M7 — Advanced Facade Shading: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を実装済みです。Independent FULL Re-Review A. PASS / Required Fix CLOSED、accepted product head `41302270ca4a84501f824ddef9f62194cad95b8e`のHuman HTTP・Single/Multi CSV/PDF acceptance PASSを[証拠](docs/ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)へ記録しました。PR #12はDraft維持、Readyは別Human Gate、merge / M7 Production確認はpendingです。
 
 **M6 — COMPLETE**。PR #11はsquash merge済み。[運用contract・post-merge証拠](docs/VERCEL_OPERATION.md)にGit自動Productionのprovenance・HTTP・Single/Multi browser PASSを記録しました。手動Production操作なし、M6の再closeoutは不要です。
 
@@ -19,7 +19,7 @@
 - Legacy日射計算engine: 実装済み（M1 regression baseline）
 - Original-source reference / Golden test: 実装済み
 - 実気象data: `.epw`をbrowser-localで読み込むUIを実装済み
-- Facade geometry: 有限幅庇＋端部・中間フィンのdirect-shadow polygon union実装済み（M7再review前）
+- Facade geometry: 有限幅庇＋端部・中間フィンのdirect-shadow polygon union実装済み（M7再review・Human acceptance PASS、外部physical validationは未実施）
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
@@ -96,4 +96,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M7 Advanced Facade ShadingはIMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING、Draft PRで引き継ぎます。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。
+M4.5 / M6はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M7 Advanced Facade ShadingはIMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS、Draft PRでReady transitionの別承認を待ちます。merge / M7 Production確認はpendingです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。M8 — User Guide & Technical ManualはPlannedのみ。別のHuman Task Packet / authorizationが必要で、自動移行しません。

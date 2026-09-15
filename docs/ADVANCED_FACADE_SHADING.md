@@ -1,6 +1,6 @@
 # M7 — Advanced Facade Shading
 
-Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING。M6はPR #11のpost-merge Phase 0 PASSによりCOMPLETE（[証拠](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)）。開始main: `f3cd83962e462f3e28ed20373d3ad58ede5e835e`。branch: `feat/m7-advanced-facade-shading`。live HEADはGit/PRで解決し、exact Git PreviewのHTTP/browser確認はPR本文の実測状態を参照する。localのPASSをremote PASSへ置き換えない。
+Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS。Independent FULL Re-Review A. PASS / Required Fix CLOSED、Human exact Preview acceptance PASS（証拠は下記）。PR #12はDraft維持、Ready承認とmerge / M7 Production確認はpending。M6はPR #11のpost-merge Phase 0 PASSによりCOMPLETE（[証拠](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)）。開始main: `f3cd83962e462f3e28ed20373d3ad58ede5e835e`。branch: `feat/m7-advanced-facade-shading`。live HEADはGit/PRで解決し、accepted product checkpointとは区別する。localのPASSをremote PASSへ置き換えない。
 
 ## Contract
 
@@ -64,7 +64,7 @@ Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING。M6
 
 既存Chrome/Playwrightのlocal実操作: 3案Demo → Case B編集 → P0/count129拒否 → pitch/count切替 → stale/rerun → 月別/階別/差分/形状 → 実CSV download → JSON download/再読込/置換確認/再計算 → 390px → print。Single W6/P1.5は4本、Multi各階P2/P1.5/P1は3+4+6=13本。localhost HTTP200、fatal/console/asset error0、document横overflowなし。Single 7頁 / Multi 9頁をPopplerで全頁目視（配列による狭い列の分断を修正）。native OS chooser/print dialog・新head Human acceptance・remote download確認とは区別する。
 
-旧head `2ccbcc89...` のExact Preview HTTP/assets・Single CSV/PDF・Multi CSV/PDFは**Human-reported PASS**（Required Fix Task Packet）。履歴として保持するが新headの証拠へ流用しない。新exact Git Previewのprovenance/browser/HTTP/assets/downloadの実測状態はPR #12本文へ記録する。認証HTTP/downloadがAgent経路で取得不能ならUNVERIFIED、bypass禁止。
+旧head `2ccbcc89...` のExact Preview HTTP/assets・Single CSV/PDF・Multi CSV/PDFは**Human-reported PASS**（Required Fix Task Packet）。履歴として保持するが後続headの証拠へ流用しない。配列実装headの認証HTTP/downloadは当時Agent経路で取得不能でUNVERIFIEDだったが、下記の新しいHuman exact Preview証拠により解消済み。過去のAgent測定結果をPASSへ改変せず、bypassも行わない。
 
 ### Array workload
 
@@ -82,8 +82,22 @@ Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING。M6
 
 再実行: 上記convergence一式、`node scripts/validation/m7-shading/array-workload.mjs`、dev server起動後`node scripts/validation/m7-shading/array-browser.mjs`。既存Playwright/Chromeを`OPS_PLAYWRIGHT_MODULE` / `OPS_CHROME_EXECUTABLE`で指定可、追加installなし。生成物はlocal-only、Task Packet/原本/外部気象は変更しない。
 
+## Human acceptance / Independent Re-Review
+
+2026-09-16 Human提供の受入・再レビュー結果（Agentによる新規HTTP測定や保存ファイル再検証ではない）:
+
+- Accepted product head: `41302270ca4a84501f824ddef9f62194cad95b8e`。
+- Exact Preview: `dpl_J2eGvNgJaqqeRQP4dQzRfsox3uVk` / [Preview URL](https://facade-solar-kd7fnzggp-airesearchagls-projects.vercel.app/)。Git / `feat/m7-advanced-facade-shading` / accepted product SHA、Preview (`target=null`) / READY。
+- Independent FULL Re-Review: **A. PASS**。Required Fix: **CLOSED**。Human exact Preview acceptance: **PASS**。
+- Human HTTP evidence: `/`、`/assets/index-D49WKT7i.js`、`/assets/index-B6EFbBDS.css`、`/favicon.svg`は各**200**。
+- Human saved-file acceptance: **Single CSV / Single PDF / Multi CSV / Multi PDFすべてPASS**。
+- Single B: 中心ピッチ2 m / 実配置3枚 / 左右余白1.0 m。Single C: 中心ピッチ1 m / 実配置6枚 / 左右余白0.5 m。
+- Multi B: 各階中心ピッチ2 m / 実配置3枚。Multi C: 各階中心ピッチ1 m / 実配置6枚。PDFの反復フィン立面・中間フィン入力要約PASS、CSV/PDF値は相互整合。
+- **PRE-MERGE GATE: PASS**。merge / M7 post-merge Production confirmationはpending / NOT_RUN。既存M6 ProductionのPASSとは分離する。
+- 今回の同期はdocs-only。product / engine / tests / runner / expected / Golden差分0をaccepted product headから確認し、同期後のlive HEADはGit/PRとPR本文で別記する。この受入証拠を新しいdocs-only deploymentのHTTP再測定・Human保存ファイル再確認とは称さない。自己参照SHA commit cycleを作らない。
+
 ## Review gate
 
 M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPlus / SPA / annual physical validation: NOT_RUN。M7 geometryは旧P0-B checkpointで外部検証済みと扱わない。
 
-PR #12を再作成せずDraft維持 / Independent FULL Re-Review待ち。Ready、merge、main直接変更、手動Production操作、次milestone開始は禁止。
+PR #12を再作成せずDraft維持。Independent FULL Re-ReviewとHuman acceptanceはPASS、次はReady transitionの別Human承認待ち。Ready、merge / auto-merge、main直接変更、branch削除、手動Production操作は禁止。M8 — User Guide & Technical ManualはPlanned / NOT STARTED、別Human instructionまで開始しない。

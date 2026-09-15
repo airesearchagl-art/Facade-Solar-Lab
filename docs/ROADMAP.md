@@ -10,12 +10,14 @@
 | M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Complete |
-| M7 — Advanced Facade Shading | 水平庇＋左右端部フィン＋中間フィン配列のdirect shadow・Single/Multi・出力 | IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_RE_REVIEW_PENDING |
+| M7 — Advanced Facade Shading | 水平庇＋左右端部フィン＋中間フィン配列のdirect shadow・Single/Multi・出力 | IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS |
+| M8 — User Guide & Technical Manual | In-app beginner guide + parameter reference + technical model manual | Planned |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5の[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary) A〜E / Independent ReviewはPASS、Required Fixなし（Human報告）。PR #10はmerge済み。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPR #11 squash merge後の[自動Production provenance・HTTP・browser gate](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)がPASSしCOMPLETEです。M7のみ新しいTask Packetで開始し、既存Draft PR #12 / Independent FULL Re-Reviewを次のgateとします。
+- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5の[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary) A〜E / Independent ReviewはPASS、Required Fixなし（Human報告）。PR #10はmerge済み。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPR #11 squash merge後の[自動Production provenance・HTTP・browser gate](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)がPASSしCOMPLETEです。M7はIndependent FULL Re-Review A. PASS / Required Fix CLOSED、[exact-head Human HTTP・Single/Multi CSV/PDF acceptance](ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review) PASS、PRE-MERGE GATE PASS。既存Draft PR #12のReady transitionは別Human承認待ちで、merge / M7 Production確認はpendingです。
+- M8はPlanned / NOT STARTED。上記guide・reference・manualの実装には別のHuman Task Packet / authorizationが必要で、このterminal syncでは開始しません。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Ready for Review、merge、manual Production操作はHuman Gateです。承認されたmain merge後のGit自動Productionは既存運用ですが、[post-merge release gate](RELEASE_GATE.md)でsource/alias/smokeを検証します。
 
