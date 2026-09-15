@@ -9,14 +9,14 @@
 | M4 — Comparison UX | 複数案比較、期間別指標、前提と差分の可視化 | Complete |
 | M4.5 — Multi-floor Mode | Building Case配下の複数階composition、建物合計・階別結果・積層形状 | Complete |
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING |
-| M6 — Vercel Operation | Preview/Production運用、監視、release gate | Planned |
+| M6 — Vercel Operation | Preview/Production運用、監視、release gate | Completion Wave — Draft / Independent Review gate; merge/Production確認pending |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
-- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5はP0-A/P0-C/P1-A focused reviewとP0-B protocol review PASS後、[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)のlocal検証A〜Eを完了しました。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPlanned / NOT STARTED。
+- M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5はP0-A/P0-C/P1-A focused reviewとP0-B protocol review PASS後、[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)のlocal検証A〜Eを完了しました。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。PR #10はmerge済みです。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6は[運用Completion Wave](VERCEL_OPERATION.md)を実施し、Draft / Independent Reviewへ引渡し。本PRのmerge/Production確認はpendingです。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
-- Production deployment、Ready for Review、mergeはHuman Gateです。
+- Ready for Review、merge、manual Production操作はHuman Gateです。承認されたmain merge後のGit自動Productionは既存運用ですが、[post-merge release gate](RELEASE_GATE.md)でsource/alias/smokeを検証します。
 
 ## M4.5 model boundary
 

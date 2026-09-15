@@ -2,7 +2,7 @@
 
 ## Start here
 
-1. Read `docs/VALIDATION_PLAN.md` §10 for M5 Completion Wave results, numerical limits, and remaining external-reference validation. Resolve live HEAD from Git/PR separately from the recorded measurement checkpoint.
+1. Read `docs/VERCEL_OPERATION.md` and `docs/RELEASE_GATE.md` for M6 operation/provenance gates. Read `docs/VALIDATION_PLAN.md` §10 for the completed M5 local validation and remaining external references. Resolve live HEAD from Git/PR separately from recorded checkpoints.
 2. M4.5 is terminal: `.agent-run/LR-20260914-FSL-M45-001/RUN_STATE.md` is historical audit context, not an active campaign. Verify its Task Packet SHA-256 when auditing it; do not create another M4.5 closeout cycle.
 3. Check the current branch, HEAD, remote, and working tree before editing.
 4. Preserve unrelated or pre-existing changes.
@@ -49,8 +49,9 @@ Add focused tests for changed engine behavior. Do not fabricate validation resul
 
 ## Scope and gates
 
-- Current milestone: M5 — LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING. P0-A/P0-C/P1-A focused reviews and P0-B protocol review passed. Completion Wave local solar/time-step, numerical, independent composition, real EPW browser/export, dependency/workload checks passed. Completion Wave Independent Review: A. PASS; Required Fix: none; Blocker: none (Human-reported). Radiance / EnergyPlus / SPA and annual physical comparison remain NOT_RUN. Do not count skipped external benchmarks or test doubles as solver PASS. Preserve the fixed P0-B protocol/checkpoint; numerical geometry changes require a separately reviewed checkpoint before claiming external validation of the new tree. M6 NOT STARTED.
-- Do not treat the M5 kickoff as physical validation PASS, change engine formulas/expected values, or begin M6 automatically.
+- Current milestone: M6 — Vercel Operation Completion Wave; Draft / Independent Review handoff, merge/Production confirmation pending. M5 remains LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING, Completion Wave Independent Review A. PASS / Required Fix: none / Blocker: none (Human-reported); PR #10 merged. Radiance / EnergyPlus / SPA and annual physical comparison remain NOT_RUN. Do not count skipped external benchmarks or test doubles as solver PASS. Preserve the fixed P0-B protocol/checkpoint; numerical geometry changes require a separately reviewed checkpoint before claiming external validation of the new tree.
+- M6 does not change calculation formulas/expected values or grant formal absolute physical validation. Do not begin another milestone automatically.
+- Normal feature push may trigger Git Preview. Git main merge may trigger automatic Production only after separate Human merge authorization. Manual Production deploy/promote/rollback, Vercel settings/env/protection changes and bypass-token generation remain unauthorized. Never use `vercel curl` for verification.
 - Do not mutate `main`, mark a PR Ready, merge, deploy Production, release, force-push, delete branches, or change repository permissions/visibility without a new Human instruction.
 - Never commit secrets, credentials, private URLs, personal data, client/project identities, unpublished design data, or user-specific absolute local paths.
 - Legacy MVP sources must remain byte-for-byte unchanged and retain the SHA-256 values recorded in `docs/LEGACY_BASELINE.md`.

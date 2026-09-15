@@ -11,7 +11,8 @@
     "build": "tsc --noEmit && vite build",
     "golden:check": "node scripts/generate-legacy-v01-golden.mjs --check",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "ops:verify": "node scripts/ops/verify-vercel-deployment.mjs"
   },
   "dependencies": {
     "react": "^19.3.0",
