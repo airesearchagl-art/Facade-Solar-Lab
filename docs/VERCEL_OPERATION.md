@@ -4,7 +4,18 @@
 
 M6は運用の検証・手順整備です。branchは`feat/m6-vercel-operation`、開始mainは`41e9c4f0cddeef876a90a63ae4ce07713027654a`（PR #10 squash merge）。製品のsolar / weather / geometry / energy式、既存expected、Golden、M5測定値を変更しません。
 
-現在の引渡しはDraft PR / Independent Review gateです。Ready・merge・manual Production操作は未許可です。最新HEADは`git rev-parse HEAD`、remote/PRから解決し、本文の記録checkpointと混同しません。final exact-head deployment、smoke、checksはPR本文に記録します。自己参照SHAを更新するだけのcommitやcloseout cycleを作りません。
+Current state: `IMPLEMENTATION_COMPLETE / PRE_MERGE_GATE_PASS / MERGE_PRODUCTION_CONFIRMATION_PENDING`。M6 Completion Wave Independent ReviewはA. PASS / Required Fix: none / Blocker: none（Human報告）。PR #11はDraft維持、Ready transitionの別Human authorization待ちです。merge・manual Production操作も未許可です。最新HEADは`git rev-parse HEAD`、remote/PRから解決し、下記accepted checkpointやPR本文のdeployment/checksと混同しません。自己参照SHAを更新するだけのcommitやcloseout cycleを作りません。
+
+### Accepted review / HTTP evidence
+
+2026-09-15 Human提供のIndependent Review / Network証拠:
+
+- Reviewed / accepted product head: `ce8e380717ea67613b0df00b0faf1fd7a6cc6e77`。
+- Exact Preview: `dpl_EDxgWfeMEfwbkDCV15WRk5UpvMDS` / [Preview URL](https://facade-solar-7n1xphlt6-airesearchagls-projects.vercel.app/)。
+- `/`、`/assets/index-B6As79Y7.js`、`/assets/index-CmVKWan7.css`、`/favicon.svg`はすべてHTTP 200。
+- `PREVIEW_HTTP_EVIDENCE=PASS`、`PRE-MERGE GATE=PASS`。以前のHTTP evidence pendingはこのHuman証拠で解消済み。独立レビューおよびHTTP200はAgentによる新規測定ではなくHuman確認結果として記録する。
+- 今回はdocs-only terminal sync。製品・ops runner・tests/expected/Goldenがaccepted headと同一であることをGit差分で確認し、同期後HEADはPR本文へ別記する。元の証拠を新deploymentのNetwork再測定と称さない。
+- Merge / post-merge Production confirmationはpending / NOT_RUN。Production PASSや外部solver PASSを意味しない。
 
 M5は`LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`、Independent Review A. PASS / Required Fixなし。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNです。M6成功は絶対kWhの正式な物理validationではありません。最新geometryの外部solver実行には別途review済みcheckpoint/protocolが必要です。
 
@@ -43,7 +54,7 @@ Production baseline（**M6のpost-merge証拠ではない**）:
 - canonical aliasのproject/deployment IDが一致。deployment aliasesはcanonical、`facade-solar-lab-airesearchagls-projects.vercel.app`、`facade-solar-lab-git-main-airesearchagls-projects.vercel.app`。
 - build log: 92 modules、`dist/index.html`、`index-B6As79Y7.js`、`index-CmVKWan7.css`、build/deploy完了。
 - anonymous canonical index / JS / CSSは各HTTP 200。Single/Multi Demo、mode切替、有限結果、390px操作を確認。
-- **Finding:** Chromeの暗黙`/favicon.ico`要求が404。現在のProductionを完全smoke PASS / known-goodと偽装しない。本branchで`index.html`に明示SVG faviconを指定する最小の静的asset修正を加え、Previewで再検証する。Production解消は本PRのauthorized merge後の別gate。
+- **Finding:** Chromeの暗黙`/favicon.ico`要求が404。現在のProductionを完全smoke PASS / known-goodと偽装しない。本branchの明示SVG favicon修正は上記accepted PreviewでHumanが`/favicon.svg` HTTP200を確認済み。Production解消は本PRのauthorized merge後の別gate。
 
 ## B/C. Provenance + HTTP + browser
 
@@ -80,9 +91,9 @@ npm.cmd run ops:verify -- --sha <MERGED_MAIN_SHA> --ref main --target production
 
 ### Protected Preview
 
-現在はdeployment固有URLへの匿名HTTPがSSOへ302になります。これは`HTTP_AUTH_OR_REDIRECT`であり製品HTTP200ではありません。CLIのAPI認証とDeployment Protectionのブラウザ認証は別です。
+記録された匿名probeはdeployment固有URLからSSOへ302でした。これは`HTTP_AUTH_OR_REDIRECT`であり製品HTTP200ではありません。CLIのAPI認証とDeployment Protectionのブラウザ認証は別です。accepted PreviewのHTTP evidenceは上記Human Network確認でPASSになりましたが、匿名`ops:verify`の過去のBLOCKED出力をPASSへ改変しません。
 
-既存の認証済みChromeで**exact deployment URL**を開き、indexの表示、Single/Multi Demo、console、assets、390pxを確認します。Networkを利用できるsurfaceならreload時のdocument/JS/CSS/faviconのstatusと同一origin pathだけを記録します（cookie/header/HAR丸ごとの保存禁止）。Network statusを取得できないsurfaceでは、実画面の成功からHTTP200を推測せず**HTTP evidence pending**を残します。
+以降の検証でも既存の認証済みChromeで**exact deployment URL**を開き、indexの表示、Single/Multi Demo、console、assets、390pxを確認します。Networkを利用できるsurfaceならreload時のdocument/JS/CSS/faviconのstatusと同一origin pathだけを記録します（cookie/header/HAR丸ごとの保存禁止）。Agent surfaceでNetwork statusを取得できず、対応するHuman証拠もない場合は、実画面の成功からHTTP200を推測せず**HTTP evidence pending**を残します。
 
 `vercel curl`、share URL生成、bypass token、protection変更、cookie抽出、ユーザーprofileコピーは禁止。MCP protected-fetchもbypass record非生成を保証できない場合は使用しません。認証/権限変更が必要ならHuman Gate。ログイン画面や他branch/Productionの成功をPreviewの代用にしません。
 
@@ -96,12 +107,14 @@ feature normal push → Git Preview → exact-head checks → Independent Review
 
 全case共通で時刻、expected SHA/ref、actual ID/SHA/target、failed check、public-safe log行を記録。まずsource/deployment/logを特定し、無条件のredeployはしません。
 
-Read-only probe記号:
+Read-only probe記号（既存認証済みCLIを使用）:
+
+以下のCLI例は検証済み59.17.0を`--offline`で既存npm cacheから解決します。cache miss / 認証不足はBLOCKED。自動download/install/login、`--offline`を外したretry、別versionへのfallbackは行わず、Humanによる環境準備を待ちます。repository dependencyは追加しません。
 
 - **P**: 上記`ops:verify`（exact deployment指定）。
-- **L**: `npx.cmd --yes vercel@latest inspect <DPL_ID> --logs --scope team_44GttBgV6NXj8jDRnTiI3nXt --non-interactive`。build logをローカルで必要範囲だけ確認。raw logを無審査で公開しない。
+- **L**: `npx.cmd --offline --yes vercel@59.17.0 inspect <DPL_ID> --logs --scope team_44GttBgV6NXj8jDRnTiI3nXt --non-interactive`。build logをローカルで必要範囲だけ確認。raw logを無審査で公開しない。
 - **G**: `git fetch origin`、`git rev-parse origin/<ref>`、`gh pr view <PR_NUMBER> --json state,headRefOid,baseRefOid,statusCheckRollup`。
-- **I**: `npx.cmd --yes vercel@latest api "/v6/deployments?projectId=prj_IFtMR3MoADBBYm4YjLuXQ2BmcaN6" --method GET --raw --scope team_44GttBgV6NXj8jDRnTiI3nXt --non-interactive`。一覧はID/source/ref/SHA/target/stateだけ抽出。該当なしを全履歴なしと断定せずpaginationを確認。Windows cmd境界で`&`を連結せずscopeを別引数にする。
+- **I**: `npx.cmd --offline --yes vercel@59.17.0 api "/v6/deployments?projectId=prj_IFtMR3MoADBBYm4YjLuXQ2BmcaN6" --method GET --raw --scope team_44GttBgV6NXj8jDRnTiI3nXt --non-interactive`。一覧はID/source/ref/SHA/target/stateだけ抽出。該当なしを全履歴なしと断定せずpaginationを確認。Windows cmd境界で`&`を連結せずscopeを別引数にする。
 - **B**: exact URLの通常ブラウザ。Console/Networkはアプリoriginに限定しsecret/SSO URLを転載しない。Vercel Functionsログなしをbrowser JS無エラーの証拠にしない。
 
 | Case / 最初の確認 | Probe | PASS条件 | BLOCKED条件 / 次アクション |

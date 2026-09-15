@@ -1,5 +1,15 @@
 # Release gate — Git-triggered Vercel
 
+## M6 Current State
+
+`IMPLEMENTATION_COMPLETE / PRE_MERGE_GATE_PASS / MERGE_PRODUCTION_CONFIRMATION_PENDING`。
+
+- Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。
+- Reviewed / accepted head: `ce8e380717ea67613b0df00b0faf1fd7a6cc6e77`、Preview `dpl_EDxgWfeMEfwbkDCV15WRk5UpvMDS`。
+- Human Network evidence: `/`、`/assets/index-B6As79Y7.js`、`/assets/index-CmVKWan7.css`、`/favicon.svg`すべてHTTP200。`PREVIEW_HTTP_EVIDENCE=PASS`、`PRE-MERGE GATE=PASS`。[証拠の帰属とscope](VERCEL_OPERATION.md#accepted-review--http-evidence)を参照。
+- このdocs-only同期後のlive HEADはaccepted checkpointと分けてPR本文に記録する。製品・ops runner・tests/expected/Golden差分0を確認し、旧証拠を新deploymentの再測定に置き換えない。
+- PR #11はDraft。Ready transitionは別Human authorization待ち。merge / post-merge Production gateはpending / NOT_RUNであり、Production PASSではない。
+
 ## 判定
 
 各gateは`PASS / BLOCKED / NOT_RUN`とtimestamp、expected/actual SHA、deployment ID、実測証拠をセットで記録します。全必須項目PASSでのみそのphaseをPASSにします。未確認はPASSではありません。`ops:verify`の終了0は出力scope内だけの合格で、レビュー/merge権限を与えません。

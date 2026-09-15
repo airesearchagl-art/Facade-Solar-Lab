@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M6 — Vercel Operation Completion Wave**: [運用contract・smoke・incident手順](docs/VERCEL_OPERATION.md)と[release gate](docs/RELEASE_GATE.md)を整備し、Draft / Independent Reviewへ引き渡します。M6 PR自身のmerge・automatic Production確認は未実施です。
+**M6 — IMPLEMENTATION_COMPLETE / PRE_MERGE_GATE_PASS / MERGE_PRODUCTION_CONFIRMATION_PENDING**。[運用contract・smoke・incident手順](docs/VERCEL_OPERATION.md)と[release gate](docs/RELEASE_GATE.md)を整備し、Independent Review A. PASS / Required Fixなし、accepted exact PreviewのHuman HTTP証拠PASS（index・JS・CSS・favicon.svg各200）を記録しました。PR #11はDraft維持、Ready transitionの別Human authorization待ちです。merge・post-merge automatic Production確認は未実施です。
 
 **M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING**。[検証計画・結果](docs/VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary)に極域/時間分解能・数値境界・独立Single/Multi・実EPW製品経路・依存/負荷検証を記録しました。Completion Wave Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。PR #10はmerge済みです。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、絶対kWhの正式validation完了ではありません。
 
@@ -21,7 +21,7 @@
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Production基準: PR #10のmain `41e9c4f0cddeef876a90a63ae4ce07713027654a`からのGit自動deployment READY / [canonical URL](https://facade-solar-lab.vercel.app/) HTTP200をM6でread-only確認。faviconの404 findingとPreviewでの修正検証は運用文書/PRに記録します。手動Production操作はなく、deployment成功は物理性能validationを意味しません。
+- Production基準: PR #10のmain `41e9c4f0cddeef876a90a63ae4ce07713027654a`からのGit自動deployment READY / [canonical URL](https://facade-solar-lab.vercel.app/) HTTP200をM6でread-only確認。faviconの404 findingはaccepted Previewの`favicon.svg` HTTP200で修正確認済みですが、Productionへの反映・確認はmerge後の別gateです。手動Production操作はなく、deployment成功は物理性能validationを意味しません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。M4 Comparison domainとM4.5 Multi-floor domainはいずれも既存`facade-v1-weather`を呼ぶadapterです。複数階では各Floorを`FacadeV1Parameters`へ変換し、`simulateFacadeV1()`を1回ずつ実行してBuilding Totalへ単純合算します。別のsolar / weather / shadow calculationは持ちません。
 
@@ -92,4 +92,4 @@ npm audit
 
 ## Development status
 
-M4.5は完了、M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6は運用実装のDraft / Independent Review gateで、merge/Production確認は別phaseです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。
+M4.5は完了、M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はIndependent Review / Human HTTP証拠PASS、PRE-MERGE gate PASSでReady transition承認待ちです。merge/Production確認は別phaseです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。次milestoneには別のHuman Task Packet / authorizationが必要で、自動移行しません。
