@@ -1,5 +1,4 @@
 import type {
-  WeatherCoverage,
   WeatherDataset,
   WeatherInterval,
   WeatherRadiation,
@@ -12,7 +11,7 @@ import {
 import type { WeatherParseOptions, WeatherSourceProvenance } from "../provenance";
 import { createWeatherIntervalTime } from "../time";
 import { parseEpwHeaders, splitEpwCsvLine } from "./headers";
-import { validateHourlyTemporalIntegrity } from "./temporal";
+import { validateEpwTemporalIntegrity } from "./temporal";
 
 const MINIMUM_DATA_FIELDS = 16;
 
@@ -137,21 +136,6 @@ function parseRecord(
   }
 }
 
-// Detailed sub-hour temporal validation is deferred; preserve its existing classification.
-function classifySubhourCoverage(
-  intervalCount: number,
-  recordsPerHour: number,
-): WeatherCoverage {
-  if (
-    recordsPerHour > 1 &&
-    (intervalCount === 8760 * recordsPerHour ||
-      intervalCount === 8784 * recordsPerHour)
-  ) {
-    return "full-year-subhour";
-  }
-  return "partial";
-}
-
 function fnv1a32(value: string): string {
   let hash = 0x811c9dc5;
   for (let index = 0; index < value.length; index += 1) {
@@ -180,18 +164,13 @@ export function parseEpw(text: string, options: WeatherParseOptions): WeatherDat
     if (interval !== null) intervals.push(interval);
   }
 
-  let coverage: WeatherCoverage;
-  if (headers.recordsPerHour === 1) {
-    const temporal = validateHourlyTemporalIntegrity(
-      intervals,
-      headers.dataPeriods[0]!,
-      splitEpwCsvLine(headers.raw[4] ?? "")[1]?.toLowerCase() === "yes",
-    );
-    coverage = temporal.coverage;
-    for (const issue of temporal.issues) issues.push(issue);
-  } else {
-    coverage = classifySubhourCoverage(intervals.length, headers.recordsPerHour);
-  }
+  const temporal = validateEpwTemporalIntegrity(
+    intervals,
+    headers.dataPeriods[0]!,
+    splitEpwCsvLine(headers.raw[4] ?? "")[1]?.toLowerCase() === "yes",
+    headers.intervalMinutes,
+  );
+  for (const issue of temporal.issues) issues.push(issue);
 
   const provenance: WeatherSourceProvenance = {
     sourceType: options.sourceType ?? "epw",
@@ -212,7 +191,7 @@ export function parseEpw(text: string, options: WeatherParseOptions): WeatherDat
     intervalMinutes: headers.intervalMinutes,
     dataPeriods: headers.dataPeriods,
     intervals,
-    coverage,
+    coverage: temporal.coverage,
     provenance,
     issues,
   };

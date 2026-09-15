@@ -1,8 +1,8 @@
 # Validation Plan
 
-## M5 — Current: P0-C weather entry boundary
+## M5 — Current: P1-A sub-hour temporal integrity
 
-P0-A focused review PASS、P0-B protocol review PASS / Required Fixなし（Human報告、P0-B head 9d25a83e6a3fe05699ed4396d9c77ea6d5dd9b62）。Radiance外部比較は引き続きNOT RUNです。P0-CではW-01の残る入口境界をcharacterizeし、partial weatherの年間/季節表示のみ最小修正しました（§8）。solar / geometry / energy式・EPW temporal logic・既存expected値は変更しません。annual kWhの物理validation、詳細sub-hour、極域は今回対象外です。
+P0-A focused review、P0-B protocol review、P0-C focused reviewはPASS / Required Fixなし（Human報告）。P1-Aでは既存hourly temporal validatorをraw minute付きslotへ一般化し、sub-hour EPWの時系列完全性を追加しました（§9）。Radiance外部比較は引き続きNOT RUNです。solar / geometry / energy式・UI・既存expected値は変更しません。極域、SPA比較、60/15/5分の影感度、annual kWhの物理validationは今回対象外です。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
@@ -18,7 +18,7 @@ P0-A focused review PASS、P0-B protocol review PASS / Required Fixなし（Huma
 | 対象 | 既存の根拠 | 維持する検証 / 限界 |
 | --- | --- | --- |
 | M1 Golden | tests/legacy-v01-golden.test.ts、scripts/generate-legacy-v01-golden.mjs | 原本HTMLの独立VM実行から8 fixture cases、全12か月・年間/夏期/冬期をabsolute 1e-9で比較。幅/SHGC scaling、D/HとO/H相似性を保持。Legacyを物理正解にしない。 |
-| EPW / LST | tests/epw-parser.test.ts、tests/weather-time.test.ts、tests/weather-file-adapter.test.ts | LOCATION / DATA PERIODS、正常な8760/8784、15分区間、年末end/midpoint、Gregorian leap、欠測/負放射・不正行・拡張子拒否を維持。kickoff時の行数分類だけの不足をP0-A hourly検証（§6）で補う。sub-hour通年の完全性は未検証。 |
+| EPW / LST | tests/epw-parser.test.ts、tests/epw-subhour-temporal.test.ts、tests/weather-time.test.ts、tests/weather-file-adapter.test.ts | LOCATION / DATA PERIODS、8760/8784、年末end/midpoint、Gregorian leap、欠測/負放射・不正行・拡張子拒否を維持。P0-A hourly（§6）に続き、P1-Aで15分35040/35136の完全性・sub-hour異常拒否を追加（§9）。物理的な計算精度や時間分解能感度の証拠ではない。 |
 | 太陽位置 | tests/solar-position.test.ts | 独立NOAA/GML値: 2025年5点、2024年Feb 29・Jun 21・Dec 21の3点。0.01°表示値に対する既存0.5° tolerance、365/366分母を維持。東京以外・極域・高精度SPAとの一致は未検証。 |
 | 放射・energy | tests/weather-irradiance.test.ts、tests/facade-weather.test.ts | DNI/DHI/GHI成分別手計算、D=0、背面direct=0、sub-hour Wh二重積分防止、M2/M3 D=0のexact一致。8784→canonical 2000→366分母のhelper経路も既存。ただしleap/sub-hour通年simulationの独立oracleではない。 |
 | direct / polygon | tests/facade-direct-shadow.test.ts、tests/facade-polygon.test.ts | 正面45°の半/全遮蔽・窓頭gap、平行移動、3倍scale、shoelace面積、空/全/部分intersection、接触面積0、重複頂点。別実装で同じ手計算testを増やさない。 |
@@ -39,14 +39,15 @@ P0-A focused review PASS、P0-B protocol review PASS / Required Fixなし（Huma
 
 ## 3. M5で追加する最小backlog
 
-P0-Aはfocused review PASS、P0-Bはprotocol review PASS / 外部比較NOT RUN。P0-Cは入口境界のtests/UI修正済みでindependent review待ち。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
+P0-A / P0-Cはfocused review PASS、P0-Bはprotocol review PASS / 外部比較NOT RUN。P1-Aはsub-hour時系列検証済みでindependent review待ち。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
 
 | 優先度 / ID | 追加する検証と不足の根拠 | 完了条件 / 再利用 |
 | --- | --- | --- |
 | P0-A / W-01 hourly時系列完全性 | 実装・検証済み / focused review PASS。月日・hourの時間枠、header期間、重複・欠落・逆順、8760/8784・年境界を検査。 | §6のcontract/tests。元の順序・値を保持し、temporal errorがあるdatasetを既存usable guardで拒否。行数一致だけではfull-yearにしない。 |
-| P0-C / W-01 残る入口境界 | §8で空白/欠測放射・複数DATA PERIODSの既存拒否を確認。partialの無警告年間KPI表示を修正。 | canonical coverageを再利用し、Single/Multiの気象欄・結果・印刷で読込期間のみと明示。計算値/temporal検査は変更しない。independent review待ち。 |
+| P0-C / W-01 残る入口境界 | §8で空白/欠測放射・複数DATA PERIODSの既存拒否を確認。partialの無警告年間KPI表示を修正。focused review PASS。 | canonical coverageを再利用し、Single/Multiの気象欄・結果・印刷で読込期間のみと明示。計算値/temporal検査は変更なし。 |
 | P0-B / P-01 独立direct benchmark | §7で10ケース・strict tolerance・独立scene/ray sampler・比較fixtureを準備済み。Radiance未検出のため10件NOT RUN、第三者PASSなし。 | 既存Radiance利用時のversion/binary hash、全case出力/誤差を記録。geometry fractionのみ。自前projection/clippingやGoldenをreferenceへ流用しない。 |
-| P1 / S-01 solar / interval感度 | NOAAは東京8点のみ。full-year-subhour calendarと通算、極域、地平線近傍、時間分解能による影誤差が未評価。 | synthetic 8760/8784と15分通年（35,040/35,136区間）、Feb 29/年境界、混合source yearを追加。UTC/Asia-Tokyo/America-New_Yorkの別processで同一結果を確認。独立SPA比較と60/15/5分感度を分離。 |
+| P1-A / W-01 sub-hour時系列完全性 | §9でraw minute付きcalendar slotを検証。15分35040/35136、欠落・重複・逆順・Feb 29・年境界・TMY source yearを確認。 | hourly validatorを一般化して再利用、元レコード不変、既存error codeで拒否。independent review待ち。 |
+| P1 / S-01 solar / interval感度 | NOAAは東京8点のみ。P1-Aのingestion完全性と、sub-hour通年solar-calendar/energy通算・極域・地平線・影感度の物理評価は別。後者は未実施。 | canonical 8760/8784、35040/35136でsimulation側のcalendar/通算を検証。UTC/Asia-Tokyo/America-New_Yorkの別process比較、独立SPA比較、60/15/5分感度は後続に分離。P1-Aのparser検証を重複実装しない。 |
 | P1 / G-01 数値境界 | 共有1e-9は座標・面積・方向判定に使われるが、極端scaleの誤差保証なし。 | sy/sz閾値前後、接触±epsilon、微小/大寸法・大datum、有限値同士のoverflowを固定caseで確認。bounded shade/非負energy/finiteまたは明示errorを要求。通常scaleの解析解を再利用し、対応範囲外を無理にPASSにしない。 |
 | P1 / P-02 物理model差 | finite-width diffuse、ground遮蔽、角度依存glass、1点midpointの影響量が未測定。 | 同一model比較と異なるmodelの感度比較を分ける。成分/interval/月/期間別のsigned bias・絶対誤差を記録し、annual cancellationで合格させない。有限幅diffuse等は実装しない。 |
 | P1 / M-01 composition拡張 | 1 Floor testのinput変換共有と、実EPW Multiでfinite完走以上のoracleが不足。 | 異なるSHGC/方位/庇ありなし/非対称/階数の少数caseで、変換helperを使わず手でsingle入力を構成。既存real EPWを安全に使える時だけ各Floor・12か月・期間和/差分を比較。shared-engine一致はcomposition証拠のみ。 |
@@ -127,7 +128,7 @@ kickoffの完了は **inventory / plan complete** であり、M5 validation COMP
 - 既存のpartialファイル（1日宣言内の1時間fixtureを含む）は維持します。宣言期間内かつ観測された最初〜最後の時間枠が連続していることを要求し、`coverage=partial`を返します。宣言されたpartial期間の両端まで揃っていることや通年性能は保証しません。
 - Dec 31→Jan 1は宣言期間が年境界を跨ぐ場合に許可します。1/1–12/31の後に次年1/1を追加して新cycleとして通過させません。複数年連続データの新規対応はしません。
 - `INTERVAL_DUPLICATE` / `INTERVAL_MISSING` / `INTERVAL_OUT_OF_ORDER` / `INTERVAL_OUT_OF_PERIOD` はseverity=error。期間日付不正は既存 `HEADER_INVALID`。temporal error時はfull-year coverageを付けず、既存 `assertWeatherDatasetUsable()` が計算利用を拒否します。放射等の既存error検査も維持します。
-- detailed sub-hour検証は今回対象外。既存のsub-hour parser / count-based coverage / Wh interval accountingはそのままで、P0-A PASSをsub-hour完全性へ拡張しません。UIはSingle/Multiの既存日本語エラー辞書への4項目ずつの追加のみです。
+- P0-A時点ではsub-hour検証は対象外でcount-based coverageを維持しました。後続P1-Aでその分類を置換します（§9）。Wh interval accountingは不変、P0-A当時のPASSをsub-hour完全性へ遡及適用しません。P0-AのUI変更は既存日本語エラー辞書への4項目ずつの追加のみです。
 
 外部仕様の確認: EPWは部分年も許容し、LeapYear ObservedはYes/Noです。EnergyPlusのNoによるFeb 29除外と、FSLの原レコードを捨てない互換方針は区別します。[EnergyPlus公式 EPW format / data dictionary](https://energyplus.readthedocs.io/en/latest/auxiliary-programs/auxiliary-programs.html)（参照: 2026-09-15）。これは第三者solver比較の実行結果ではありません。
 
@@ -173,7 +174,7 @@ P0-Bは **PROTOCOL_REVIEW_PASS / EXTERNAL_REFERENCE_NOT_RUN**（Human報告）�
 - `src/app/weather-coverage.tsx` は既存 `WeatherDataset.coverage` を表示へ写すだけです。interval再走査・年判定・新state/effectは追加せず、EPW temporal logicを複製しません。
 - partialでは「部分期間の気象データ」「通年結果ではありません」を気象欄、結果、印刷概要へ明示。Single/Multi共通でannual表示を「読込期間合計」、season表示を「夏期の読込分」「冬期の読込分」とします。MultiのBuilding Total、Floor Breakdown、階別差分、印刷用全階表、footerも同じ区分です。
 - 月別/差分も読込区間のみ。未読込期間の集計0は放射ゼロの確認ではなく、夏期/冬期全体の充足を保証しません。年間換算・silent fillは行いません。partialを拒否する新仕様にはせず、従来の部分期間計算を維持します。
-- full-year-8760 / full-leap-year-8784 / full-year-subhourの従来ラベルは維持。これはcanonical分類の表示contractであり、未実施のsub-hour完全性を新たにPASSとはしません。
+- full-year-8760 / full-leap-year-8784 / full-year-subhourの従来ラベルは維持。これはcanonical分類の表示contractであり、P0-C時点で未実施だったsub-hour完全性をその表示testでPASSとはしません。後続P1-Aのingestion検証は§9。
 - solar / geometry / energy / weather parser、計算結果shape、既存expected、CSV / preset / package filesは差分0。CSVの既存年間/季節列名やschemaは今回対象外で変更していません。partial CSVを通年証拠として使用しないでください。
 
 ### 検証結果 / 現在のGate
@@ -184,4 +185,32 @@ P0-Bは **PROTOCOL_REVIEW_PASS / EXTERNAL_REFERENCE_NOT_RUN**（Human報告）�
 - 表示確認はSSRと既存print CSSの適用経路確認です。今回はnative OS EPW選択・実ブラウザ操作・PDF保存・390px目視の再実行はしておらず、そのPASSは主張しません。W-01の今回の入口境界と、P1/U-01製品操作acceptanceを分離します。
 - exact final headはGit/PRから解決し、PR本文と完了報告へ同期します。M1原本・immutable Task Packet・P0-B protocol / reference fixtureは変更しません。
 
-**P0-C implementation/checks PASS / independent review pending**。PR #10はOPEN / Draft維持。M5全体は未完了、Radiance NOT_RUN、M6 NOT STARTED。Ready / mergeせずHuman GateでSTOP。
+**P0-C implementation/checks / focused independent review PASS**（Human報告、Required Fixなし、reviewed head 2fedf051a9ebd54c507cfe41458a7e2a9f76a080）。後続Human authorizationによるP1-Aは次節。
+
+## 9. P1-A — sub-hour temporal integrity
+
+### Contract
+
+- 対象は既存parserの単一DATA PERIOD / recordsPerHour > 1（60の正整数約数）。headerと各行の日時・minute整合は既存処理で確認後、`validateEpwTemporalIntegrity()` へ渡します。15分専用logicにはしません。
+- `step = 60 / recordsPerHour` 分、`slotsPerDay = 24 * recordsPerHour`。canonical dateのday index、`(rawHour - 1) * recordsPerHour`、`rawMinute / step - 1` でslotを決定。15分なら同じhour内の15/30/45/60分は別slotです。raw 24:60は元の日付の最終slotであり、正規化された翌日00:00をキーにしません。
+- P0-Aのcalendar選択（LeapYear Observed=Yesまたは実Feb 29で366日、他は365日）・宣言開始日からの相対offset・Mapによる重複/欠落・元順序の逆順検知を共用。source yearは書換えずTMYの年変化をslot順序に使いません。Noでも実Feb 29を保持し、NoかつFeb 29なしではraw source yearの閏年だけから欠落日を推定しない互換方針です。
+- 通年宣言は開始/終了日inclusive、先頭/末尾を含む全slotを各1回、順序どおり要求します。15分では35040または35136。件数だけの `classifySubhourCoverage()` を除去し、temporal errorがない通年だけ `full-year-subhour` とします。件数一致のduplicate+missingやswapも不合格です。放射等の別parse errorは引き続きusable guardで拒否します。
+- Partial宣言はP0-A同様、宣言期間内かつ観測spanのslot連続性を要求。宣言したpartial期間の両端までの充足は保証しません。連続した既存partial fixtureは維持し、P0-Cの「読込期間のみ」の表示をそのまま使います。
+- Dec→Janは宣言期間が年境界を跨ぐ場合だけ順方向に許可。April→Marchの通年も全slotを検査。追加の次年cycleを黙って許容することはありません。複数年連続データやmultiple DATA PERIODSの新規対応ではありません。
+- `INTERVAL_MISSING` / `INTERVAL_DUPLICATE` / `INTERVAL_OUT_OF_ORDER` / `INTERVAL_OUT_OF_PERIOD` をseverity=errorで再利用。invalid minuteは既存 `TIME_INVALID`、不正header日付は `HEADER_INVALID`。silent sort / fill / duplicate除去なし。source year・flags・放射値・sourceLine・元順序を保持します。
+- Hourlyでは `rawMinute=60` / step=60により従来slotと同値。issue code/message、coverage、partial/leap/TMY契約を維持。UI、solar / geometry / energy式、Wh積算、既存expectedは変更なし。
+
+仕様参照: [EnergyPlus公式 EPW data dictionary](https://energyplus.readthedocs.io/en/latest/auxiliary-programs/auxiliary-programs.html#energyplus-weather-file-epw-data-dictionary)（2026-09-15再確認）。Hour 1–24 / Minute 1–60とDATA PERIODSのrecords/hourを確認しました。FSLのminute整合・欠測拒否・単一典型年という入力制約を、EnergyPlus solver全体の受入仕様とは混同しません。
+
+### Validation / gate
+
+- 新規 `tests/epw-subhour-temporal.test.ts`: **34 PASS**。実装前は同じ34件が **7 PASS / 27 FAIL** となり、sub-hourの欠落/重複/逆順が見逃されることを再現しました。新しい判定に合わせてexpectedを緩めていません。
+- 15分通常年35040・閏年35136、通常/閏年の先頭/中間/末尾1区間欠落、同一hour内duplicate / swap、件数維持duplicate+missing、Feb 29全96区間欠落（Yes時）、Feb 28→29→Mar 1、Dec→Jan/逆順/重複cycle/境界gap、April→March通年、partial gap/期間外、不正minute/header、全有効records/hourの短い連続/欠落caseを検査。
+- 混合TMY source yearの全35040行でraw year/month/day/hour/minute、flags、GHI/DNI/DHI、sourceLineの元順序一致を確認。通年fixtureは固定のsynthetic calendarから生成し、validatorのslot/dayOfYearをexpected側で使用しません。raw EPWや大型fixtureは追加commitしません。
+- focused: **4 files / 89 PASS**（新規34 + 既存EPW parser27 + P0-C入口23 + LST5）。既存hourly 8760/8784・missing/duplicate/order/leap/partial/TMY/year-boundary testsは変更なし。
+- Full convergence: npm test **31 files / 276 PASS / 10 skipped**。既存242件の回帰を保持。Radiance外部比較10件のSKIPはNOT_RUNでありPASSではありません。
+- npm run typecheck / npm run build / npm run golden:check / git diff --check: PASS。Vite build 91 modules / dist、npm audit 0 vulnerabilities。
+- UI / browser / 実EPW smoke / polar day-night / SPA / 60・15・5分の影感度 / 通年physical validationは今回未実施。parser時系列PASSをsolar/energy計算精度のPASSに拡張しません。Radiance NOT_RUNを維持。
+- final exact headはGit/PRから解決し、PR本文と完了報告に記録します。既存M1原本・immutable Task Packet・P0-B protocol / comparison fixtureは変更しません。
+
+**P1-A implementation/checks PASS / independent review pending**。PR #10はOPEN / Draft維持、Ready / mergeなし。M5全体は未完了、M6 NOT STARTED。Human GateでSTOP。

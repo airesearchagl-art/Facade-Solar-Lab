@@ -2,11 +2,12 @@ import type { WeatherCoverage, WeatherDataPeriod, WeatherInterval } from "../can
 import type { WeatherParseIssue } from "../issues";
 import { dayOfYear } from "../time";
 
-/** Validate one hourly EPW period without rewriting source years, records, or order. */
-export function validateHourlyTemporalIntegrity(
+/** Validate one EPW period after header/record time validation, without rewriting input. */
+export function validateEpwTemporalIntegrity(
   intervals: readonly WeatherInterval[],
   period: WeatherDataPeriod,
   leapYearObserved: boolean,
+  intervalMinutes: number,
 ): { readonly coverage: WeatherCoverage; readonly issues: readonly WeatherParseIssue[] } {
   // Typical-year source years may change between months. Calendar slots, not raw
   // source years or row count, identify intervals. Never discard observed Feb 29.
@@ -14,14 +15,19 @@ export function validateHourlyTemporalIntegrity(
     ({ time }) => time.month === 2 && time.day === 29,
   );
   const calendarYear = leap ? 2000 : 2001;
-  const hoursInYear = (leap ? 366 : 365) * 24;
-  const firstHour = (month: number, day: number): number =>
-    (dayOfYear(calendarYear, month, day) - 1) * 24;
+  // The parser already requires an integer divisor of 60 and aligned raw minutes.
+  const slotsPerHour = 60 / intervalMinutes;
+  const slotsPerDay = 24 * slotsPerHour;
+  const slotsInYear = (leap ? 366 : 365) * slotsPerDay;
+  const firstSlot = (month: number, day: number): number =>
+    (dayOfYear(calendarYear, month, day) - 1) * slotsPerDay;
+  const unit = intervalMinutes === 60 ? "hourly" : "sub-hour";
+  const unitLabel = intervalMinutes === 60 ? "Hourly" : "Sub-hour";
   let periodStart: number;
   let periodEnd: number;
   try {
-    periodStart = firstHour(period.startMonth, period.startDay);
-    periodEnd = firstHour(period.endMonth, period.endDay) + 23;
+    periodStart = firstSlot(period.startMonth, period.startDay);
+    periodEnd = firstSlot(period.endMonth, period.endDay) + slotsPerDay - 1;
   } catch (error) {
     return {
       coverage: "partial",
@@ -35,23 +41,26 @@ export function validateHourlyTemporalIntegrity(
     };
   }
   // Anchoring to the declared start permits Dec -> Jan only for a wrapping period.
-  const offset = (hour: number): number =>
-    (hour - periodStart + hoursInYear) % hoursInYear;
-  const periodHours = offset(periodEnd) + 1;
-  const fullYear = periodHours === hoursInYear;
+  const offset = (slot: number): number =>
+    (slot - periodStart + slotsInYear) % slotsInYear;
+  const periodSlots = offset(periodEnd) + 1;
+  const fullYear = periodSlots === slotsInYear;
   const issues: WeatherParseIssue[] = [];
   const seen = new Map<number, number>();
   let previous: number | undefined;
-  let minimum = hoursInYear;
+  let minimum = slotsInYear;
   let maximum = -1;
 
   for (const { time, sourceLine } of intervals) {
-    const slot = offset(firstHour(time.month, time.day) + time.rawHour - 1);
-    if (slot >= periodHours) {
+    // Raw EPW interval-end minute identifies the slot inside its raw hour.
+    // 24:60 remains on its source date; normalized next-day 00:00 is not used.
+    const slot = offset(firstSlot(time.month, time.day)
+      + (time.rawHour - 1) * slotsPerHour + time.rawMinute / intervalMinutes - 1);
+    if (slot >= periodSlots) {
       issues.push({
         severity: "error",
         code: "INTERVAL_OUT_OF_PERIOD",
-        message: "Hourly interval lies outside the declared DATA PERIODS date range",
+        message: `${unitLabel} interval lies outside the declared DATA PERIODS date range`,
         line: sourceLine,
         field: "timestamp",
       });
@@ -61,7 +70,7 @@ export function validateHourlyTemporalIntegrity(
       issues.push({
         severity: "error",
         code: "INTERVAL_DUPLICATE",
-        message: `Duplicate hourly calendar interval; first occurrence at line ${firstLine}`,
+        message: `Duplicate ${unit} calendar interval; first occurrence at line ${firstLine}`,
         line: sourceLine,
         field: "timestamp",
       });
@@ -70,7 +79,7 @@ export function validateHourlyTemporalIntegrity(
       issues.push({
         severity: "error",
         code: "INTERVAL_OUT_OF_ORDER",
-        message: "Hourly intervals must follow the declared period in source order",
+        message: `${unitLabel} intervals must follow the declared period in source order`,
         line: sourceLine,
         field: "timestamp",
       });
@@ -84,7 +93,7 @@ export function validateHourlyTemporalIntegrity(
   // Annual declarations require every slot, including both endpoints. Partial
   // files retain their existing support; only their observed span must be intact.
   const firstExpected = fullYear ? 0 : minimum;
-  const lastExpected = fullYear ? hoursInYear - 1 : maximum;
+  const lastExpected = fullYear ? slotsInYear - 1 : maximum;
   let missing = 0;
   for (let slot = firstExpected; slot <= lastExpected; slot += 1) {
     if (!seen.has(slot)) missing += 1;
@@ -93,13 +102,13 @@ export function validateHourlyTemporalIntegrity(
     issues.push({
       severity: "error",
       code: "INTERVAL_MISSING",
-      message: `${missing} hourly interval(s) missing from ${fullYear ? "the declared full year" : "the observed partial span"}; no filling was performed`,
+      message: `${missing} ${unit} interval(s) missing from ${fullYear ? "the declared full year" : "the observed partial span"}; no filling was performed`,
       field: "timestamp",
     });
   }
   return {
     coverage: fullYear && issues.length === 0
-      ? (leap ? "full-leap-year-8784" : "full-year-8760")
+      ? (slotsPerHour > 1 ? "full-year-subhour" : leap ? "full-leap-year-8784" : "full-year-8760")
       : "partial",
     issues,
   };
