@@ -6,7 +6,9 @@
 
 ## Current state
 
-**M7 — Advanced Facade Shading: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を実装済みです。Independent FULL Re-Review A. PASS / Required Fix CLOSED、accepted product head `41302270ca4a84501f824ddef9f62194cad95b8e`のHuman HTTP・Single/Multi CSV/PDF acceptance PASSを[証拠](docs/ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)へ記録しました。PR #12はDraft維持、Readyは別Human Gate、merge / M7 Production確認はpendingです。
+**M8 — User Guide & Technical Manual: IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING**。上部の「使い方・技術情報」から、3分ガイド、Single/Multiの使い分け、入力パラメータ辞典、結果・保存・出力、技術詳細、適用範囲を閲覧できます。`#single` / `#multi` / `#guide`のhash navigationで、Guide往復時もSingle/Multiの入力・結果・stale stateを保持します。[Guide contract](docs/USER_GUIDE.md)。
+
+**M7 — Advanced Facade Shading: COMPLETE**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を実装済みです。Independent FULL Re-Review A. PASS / Required Fix CLOSED、accepted product head `41302270ca4a84501f824ddef9f62194cad95b8e`のHuman HTTP・Single/Multi CSV/PDF acceptance PASSを[証拠](docs/ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)へ記録しました。PR #12はsquash merge済み。main `642136058d538e89d29971b0a586f86ea3aaa926`のGit自動Production provenance・HTTP・Single/Multi post-merge browser smokeもPASSです。
 
 **M6 — COMPLETE**。PR #11はsquash merge済み。[運用contract・post-merge証拠](docs/VERCEL_OPERATION.md)にGit自動Productionのprovenance・HTTP・Single/Multi browser PASSを記録しました。手動Production操作なし、M6の再closeoutは不要です。
 
@@ -23,7 +25,7 @@
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Production確認checkpoint: main `f3cd83962e462f3e28ed20373d3ad58ede5e835e` / `dpl_6rcmsQz5VaLjBi1XTBi3vtWavyir`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・favicon.svg各200、Single/Multi・rerun・390px PASS。deployment成功は物理性能validationを意味しません。
+- Production確認checkpoint: main `642136058d538e89d29971b0a586f86ea3aaa926` / `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・favicon.svg各200、M7 Single/Multi fin edit・rerun・390px PASS。deployment成功は物理性能validationを意味しません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。Single/Multiはcanonical `simulateFacade()`へ渡し、有効フィンなしなら既存`facade-v1-weather`、ありなら`facade-v2-weather`を使います。各Floorで1回だけ実行し、Building Totalは単純合算です。solar / weather / SHGC / energy aggregationは共有し、M7でdirect shadowだけを拡張しています。
 
@@ -65,7 +67,7 @@ npm audit
 ├─ src/
 │  ├─ app/       # React UI
 │  ├─ comparison/ # Pure TS Case / baseline / delta / difference domain
-│  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1 engine
+│  ├─ engine/    # UI非依存のlegacy-v01 / weather-v1 / facade-v1/v2 engine
 │  ├─ geometry/  # Facade-local geometry / clipping / direct shadow
 │  ├─ models/    # Domain model領域
 │  ├─ multifloor/ # Pure TS Building Case / Floor / aggregate / preset / CSV
@@ -91,9 +93,11 @@ npm audit
 - [Weather foundation](docs/WEATHER_FOUNDATION.md)
 - [Facade geometry foundation](docs/FACADE_GEOMETRY.md)
 - [Comparison UX](docs/COMPARISON_UX.md)
+- [In-app user guide contract](docs/USER_GUIDE.md)
+- [Advanced facade shading](docs/ADVANCED_FACADE_SHADING.md)
 - [Vercel operation / incident runbook](docs/VERCEL_OPERATION.md)
 - [Release gate](docs/RELEASE_GATE.md)
 
 ## Development status
 
-M4.5 / M6はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M7 Advanced Facade ShadingはIMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS、Draft PRでReady transitionの別承認を待ちます。merge / M7 Production確認はpendingです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。M8 — User Guide & Technical ManualはPlannedのみ。別のHuman Task Packet / authorizationが必要で、自動移行しません。
+M4.5 / M6 / M7はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。第三者による絶対値 `[kWh]` の正式な物理validationは未完了です。M8 — User Guide & Technical ManualはIMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDINGです。M8 Draft PRのReady / mergeは別Human Gateです。

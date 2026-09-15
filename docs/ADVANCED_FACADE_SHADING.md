@@ -1,6 +1,6 @@
 # M7 — Advanced Facade Shading
 
-Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCEPTANCE_PASS / PRE_MERGE_GATE_PASS。Independent FULL Re-Review A. PASS / Required Fix CLOSED、Human exact Preview acceptance PASS（証拠は下記）。PR #12はDraft維持、Ready承認とmerge / M7 Production確認はpending。M6はPR #11のpost-merge Phase 0 PASSによりCOMPLETE（[証拠](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)）。開始main: `f3cd83962e462f3e28ed20373d3ad58ede5e835e`。branch: `feat/m7-advanced-facade-shading`。live HEADはGit/PRで解決し、accepted product checkpointとは区別する。localのPASSをremote PASSへ置き換えない。
+Current state: **MERGED / PRODUCTION_PROVENANCE_PASS / PRODUCTION_BROWSER_SMOKE_PASS / COMPLETE**。Independent FULL Re-Review A. PASS / Required Fix CLOSED、Human exact Preview acceptance PASS（証拠は下記）。PR #12はsquash merge済み。main: `642136058d538e89d29971b0a586f86ea3aaa926`。Git automatic Production: `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v`。開始mainは`f3cd83962e462f3e28ed20373d3ad58ede5e835e`、M7 branchは`feat/m7-advanced-facade-shading`。accepted product checkpoint・squash merge commit・live HEADを区別する。
 
 ## Contract
 
@@ -93,11 +93,21 @@ Current state: IMPLEMENTATION_COMPLETE / INDEPENDENT_RE_REVIEW_PASS / HUMAN_ACCE
 - Human saved-file acceptance: **Single CSV / Single PDF / Multi CSV / Multi PDFすべてPASS**。
 - Single B: 中心ピッチ2 m / 実配置3枚 / 左右余白1.0 m。Single C: 中心ピッチ1 m / 実配置6枚 / 左右余白0.5 m。
 - Multi B: 各階中心ピッチ2 m / 実配置3枚。Multi C: 各階中心ピッチ1 m / 実配置6枚。PDFの反復フィン立面・中間フィン入力要約PASS、CSV/PDF値は相互整合。
-- **PRE-MERGE GATE: PASS**。merge / M7 post-merge Production confirmationはpending / NOT_RUN。既存M6 ProductionのPASSとは分離する。
+- **PRE-MERGE GATE: PASS**（merge前履歴）。M7 post-merge Production confirmationは下記closeoutでPASS。
 - 今回の同期はdocs-only。product / engine / tests / runner / expected / Golden差分0をaccepted product headから確認し、同期後のlive HEADはGit/PRとPR本文で別記する。この受入証拠を新しいdocs-only deploymentのHTTP再測定・Human保存ファイル再確認とは称さない。自己参照SHA commit cycleを作らない。
+
+## Post-merge Production closeout
+
+`2026-09-16T03:35+09:00`にM8 Phase 0としてread-only確認。
+
+- GitHub PR #12: merged、squash commitとmainは`642136058d538e89d29971b0a586f86ea3aaa926`で一致。
+- Vercel `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v`: source Git、branch main、exact SHA、target production、READY、Current。canonical `facade-solar-lab.vercel.app`割当一致。
+- HTTP `/`、`/favicon.svg`、build JS/CSS: 200 / MIME PASS / non-empty。
+- canonical browser: Single/Multi fin pitch demo、Floor selection、pitch edit、stale、rerun、finite results、repeated fin geometry、Building Total、390px PASS。app-origin fatal/console error 0、asset 404 = 0。
+- CSV/PDFの再Human acceptanceは要求せず、manual Production mutationなし。詳細は[M8 Guide contractのPhase 0記録](USER_GUIDE.md#m7-post-merge-closure-used-by-m8)。
 
 ## Review gate
 
 M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPlus / SPA / annual physical validation: NOT_RUN。M7 geometryは旧P0-B checkpointで外部検証済みと扱わない。
 
-PR #12を再作成せずDraft維持。Independent FULL Re-ReviewとHuman acceptanceはPASS、次はReady transitionの別Human承認待ち。Ready、merge / auto-merge、main直接変更、branch削除、手動Production操作は禁止。M8 — User Guide & Technical ManualはPlanned / NOT STARTED、別Human instructionまで開始しない。
+PR #12はsquash merge済みでM7はCOMPLETE。M8 — User Guide & Technical Manualは別Human Task Packetにより開始され、[M8 contract](USER_GUIDE.md)のIMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDINGへ進んだ。M5 external referencesはNOT_RUNのまま。

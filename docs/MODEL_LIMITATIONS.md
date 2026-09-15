@@ -8,6 +8,15 @@ M7は`facade-v2-weather`で水平庇＋左右端部フィン＋中間フィン�
 
 M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPlus / SPA / annual physical validation: NOT_RUN。M7は旧P0-B checkpointで外部validation済みとは扱いません。
 
+M8の[in-app Guide](USER_GUIDE.md)は、これらの適用範囲をBeginner Guide / Parameter Reference / Results Guide / Technical Manualへ整理したdocumentation layerです。Guide追加は計算精度、外部solver比較、absolute-kWh validationの状態を変更しません。
+
+## In-app guide boundary
+
+- Guideはstatic client contentで、計算engine、weather parser、preset schema、CSV/PDF結果contractへ新しい物理挙動を追加しません。
+- `#single` / `#multi` / `#guide`のhash navigationはSingle/Multiをmount維持し、Guide往復だけで入力・EPW dataset・result・dirty/stale stateをresetしません。
+- Guideの「庇あり」はM7時点の歴史的なUI列名で、庇と有効な端部・中間フィンの複合遮蔽後を意味します。「庇なし」は遮蔽物なしreferenceです。
+- GuideのMulti説明で、Building Totalは各Floor canonical resultのsimple sum、Floor Breakdownは各Floor個別結果です。cross-floor physical shadingやHVAC loadを意味しません。
+
 ## Comparison UX limitations
 
 - 同時比較は最大4 Caseです。自動最適化、score、推奨案判定を行いません。

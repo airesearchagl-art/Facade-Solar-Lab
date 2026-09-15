@@ -4,6 +4,10 @@
 
 `COMPLETE`。PR #11 squash merge後、M7開始前のread-only Phase 0でpost-merge gate PASS。main `f3cd83962e462f3e28ed20373d3ad58ede5e835e` / Production `dpl_6rcmsQz5VaLjBi1XTBi3vtWavyir` READY。provenance・canonical alias・index/JS/CSS/favicon.svg各200・Single/Multi/rerun/390px PASS、fatal/asset errors 0。手動Production操作なし。[Phase 0証拠](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)。
 
+## M7 Current State
+
+`COMPLETE`。PR #12 squash merge後、M8開始前のread-only Phase 0でpost-merge gate PASS。main `642136058d538e89d29971b0a586f86ea3aaa926` / Production `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v` READY。Git/main/exact source、canonical alias、index/JS/CSS/favicon.svg各200、Single/Multi fin edit・stale・rerun・finite result・Floor selection・Building Total・390px PASS、app-origin fatal/asset errors 0。手動Production操作なし。[証拠](VERCEL_OPERATION.md#m7-post-merge-closure--m8-phase-0)。
+
 以下はmerge前のhistorical evidence（pending記述は上記完了状態でsuperseded）:
 
 - Independent Review: A. PASS / Required Fix: none / Blocker: none（Human報告）。
