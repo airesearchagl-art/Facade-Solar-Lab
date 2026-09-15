@@ -1,4 +1,5 @@
 import { simulateFacadeV1 } from "../engine/facade-v1";
+import { finiteNonNegative } from "../models/numeric";
 import type { WeatherDataset } from "../weather";
 import { floorToFacadeV1Parameters } from "./parameters";
 import type {
@@ -15,10 +16,10 @@ import type {
 import { assertMultiFloorWorkspaceValid } from "./validation";
 
 function sum(values: readonly number[]): number {
-  if (values.length === 1) return values[0]!;
+  if (values.length === 1) return finiteNonNegative(values[0]!, "building gain");
   let total = 0;
   for (const value of values) total += value;
-  return total;
+  return finiteNonNegative(total, "building gain");
 }
 
 export function aggregateMultiFloorResults(

@@ -1,4 +1,5 @@
 import { normalizeAzimuthDeg } from "../../geometry";
+import { finiteNonNegative } from "../../models/numeric";
 import {
   assertWeatherDatasetUsable,
   type LocalStandardTime,
@@ -49,8 +50,8 @@ function summarize(
     }
   }
   return {
-    withOverhangKWh,
-    withoutOverhangKWh,
+    withOverhangKWh: finiteNonNegative(withOverhangKWh, "period gain with overhang"),
+    withoutOverhangKWh: finiteNonNegative(withoutOverhangKWh, "period gain without overhang"),
     reductionPercent:
       withoutOverhangKWh > 0
         ? (1 - withOverhangKWh / withoutOverhangKWh) * 100

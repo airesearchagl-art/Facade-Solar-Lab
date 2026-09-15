@@ -7,6 +7,7 @@ import {
 } from "../../geometry";
 import type { WeatherRadiation } from "../../weather";
 import { WeatherDataError } from "../../weather";
+import { finiteNonNegative } from "../../models/numeric";
 import type {
   FacadeV1IntervalGain,
   FacadeV1IntervalIrradiance,
@@ -73,8 +74,10 @@ function shadedSkyViewFactor(parameters: FacadeV1Parameters): number {
   const gapM = overhang.elevationZM - parameters.opening.headZM;
   let sum = 0;
   for (let index = 0; index < DIFFUSE_STRIP_COUNT; index += 1) {
-    const distanceM =
-      gapM + (opening.heightM * (index + 0.5)) / DIFFUSE_STRIP_COUNT;
+    const distanceM = finiteNonNegative(
+      gapM + (opening.heightM * (index + 0.5)) / DIFFUSE_STRIP_COUNT,
+      "diffuse strip distance",
+    );
     sum += 0.5 * Math.sin(Math.atan(distanceM / overhang.depthM));
   }
   return sum / DIFFUSE_STRIP_COUNT;
@@ -122,14 +125,14 @@ export function calculateFacadeV1IntervalIrradiance(
     diffuseWithOverhangWhPerM2,
     diffuseWithoutOverhangWhPerM2,
     groundReflectedWhPerM2,
-    totalWithOverhangWhPerM2:
+    totalWithOverhangWhPerM2: finiteNonNegative(
       directWithOverhangWhPerM2 +
       diffuseWithOverhangWhPerM2 +
-      groundReflectedWhPerM2,
-    totalWithoutOverhangWhPerM2:
+      groundReflectedWhPerM2, "total irradiance with overhang"),
+    totalWithoutOverhangWhPerM2: finiteNonNegative(
       directWithoutOverhangWhPerM2 +
       diffuseWithoutOverhangWhPerM2 +
-      groundReflectedWhPerM2,
+      groundReflectedWhPerM2, "total irradiance without overhang"),
   };
 }
 
@@ -147,8 +150,8 @@ export function calculateFacadeV1IntervalGain(
   const scaleKWh =
     (opening.areaM2 * parameters.solarHeatGainCoefficient) / 1000;
   return {
-    withOverhangKWh: irradiance.totalWithOverhangWhPerM2 * scaleKWh,
-    withoutOverhangKWh: irradiance.totalWithoutOverhangWhPerM2 * scaleKWh,
+    withOverhangKWh: finiteNonNegative(irradiance.totalWithOverhangWhPerM2 * scaleKWh, "interval gain with overhang"),
+    withoutOverhangKWh: finiteNonNegative(irradiance.totalWithoutOverhangWhPerM2 * scaleKWh, "interval gain without overhang"),
     irradiance,
   };
 }

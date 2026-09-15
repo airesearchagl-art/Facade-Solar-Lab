@@ -30,6 +30,9 @@ export function facadeLocalSunVector(
   }
   const relativeAzimuthRadians =
     (solarAzimuthDegFromNorth - facadeAzimuthDegFromNorth) * DEG_TO_RAD;
+  if (!Number.isFinite(relativeAzimuthRadians)) {
+    throw new RangeError("relative solar azimuth must remain finite");
+  }
   const elevationRadians = solarElevationDeg * DEG_TO_RAD;
   const horizontal = Math.cos(elevationRadians);
   return {
