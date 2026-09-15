@@ -1,8 +1,8 @@
 # Validation Plan
 
-## M5 — Current: P0-A hourly EPW temporal integrity
+## M5 — Current: P0-B independent direct-shadow protocol
 
-Human authorizationにより、棚卸し後のP0-Aとしてhourly EPWの時系列完全性検証を追加しました。重複・欠落・逆順・通年完全性を既存parser/issue contractで検査します。solar / geometry / energy式・既存expected値は変更しません。詳細sub-hour、極域、第三者solver比較は今回は実施しません。
+P0-AはHuman報告のIndependent Focused Review PASS / Required Fixなし（head 61b8313d1c141f1f5b1afa472160976bc9f10011）。続くP0-Bは有限幅庇のdirect-shadowだけを対象に、独立3D ray-intersection protocolを準備しました。Radiance executable未検出のため外部比較はNOT RUN、許可されたfallbackとしてfixture / runner / protocolを提出します。solar / geometry / energy式・既存expected値は変更しません。annual kWh、diffuse / ground / SHGC / HVAC、詳細sub-hour、極域は今回対象外です。
 
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
@@ -39,13 +39,13 @@ Human authorizationにより、棚卸し後のP0-Aとしてhourly EPWの時系�
 
 ## 3. M5で追加する最小backlog
 
-P0-Aのhourly部分は実装・検証済みでreview待ち、その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
+P0-Aはfocused review PASS、P0-Bはprotocol準備済み / 外部比較NOT RUN。その他は **未実施 / PLANNED**。P0は後続評価の前提、P1はM5の信頼性判断に必要、P2は運用範囲の明確化です。失敗は記録し、式やexpectedを都合よく修正しません。
 
 | 優先度 / ID | 追加する検証と不足の根拠 | 完了条件 / 再利用 |
 | --- | --- | --- |
-| P0-A / W-01 hourly時系列完全性 | 実装・検証済み / review待ち。月日・hourの時間枠、header期間、重複・欠落・逆順、8760/8784・年境界を検査。 | §6のcontract/tests。元の順序・値を保持し、temporal errorがあるdatasetを既存usable guardで拒否。行数一致だけではfull-yearにしない。 |
+| P0-A / W-01 hourly時系列完全性 | 実装・検証済み / focused review PASS。月日・hourの時間枠、header期間、重複・欠落・逆順、8760/8784・年境界を検査。 | §6のcontract/tests。元の順序・値を保持し、temporal errorがあるdatasetを既存usable guardで拒否。行数一致だけではfull-yearにしない。 |
 | P0 / W-01 残る入口境界 | 空白放射、partial入力の年間表示、複数DATA PERIODS拒否の明示characterizationは後続。 | P0-Aの時間枠testを重複実装しない。部分期間の表示/通年評価方針を別途確定し、現在のpartial互換性を完全な年間証拠と扱わない。 |
-| P0 / P-01 独立direct benchmark | 手計算と自前polygon以外のsolver比較がない。§4の固定行列を別solverで評価する。 | 入力/solver version/scene/hash/全case出力/誤差を保存し、遮蔽率と入射directを別評価。自前projection/clippingやGoldenを外部expectedへ流用しない。 |
+| P0-B / P-01 独立direct benchmark | §7で10ケース・strict tolerance・独立scene/ray sampler・比較fixtureを準備済み。Radiance未検出のため10件NOT RUN、第三者PASSなし。 | 既存Radiance利用時のversion/binary hash、全case出力/誤差を記録。geometry fractionのみ。自前projection/clippingやGoldenをreferenceへ流用しない。 |
 | P1 / S-01 solar / interval感度 | NOAAは東京8点のみ。full-year-subhour calendarと通算、極域、地平線近傍、時間分解能による影誤差が未評価。 | synthetic 8760/8784と15分通年（35,040/35,136区間）、Feb 29/年境界、混合source yearを追加。UTC/Asia-Tokyo/America-New_Yorkの別processで同一結果を確認。独立SPA比較と60/15/5分感度を分離。 |
 | P1 / G-01 数値境界 | 共有1e-9は座標・面積・方向判定に使われるが、極端scaleの誤差保証なし。 | sy/sz閾値前後、接触±epsilon、微小/大寸法・大datum、有限値同士のoverflowを固定caseで確認。bounded shade/非負energy/finiteまたは明示errorを要求。通常scaleの解析解を再利用し、対応範囲外を無理にPASSにしない。 |
 | P1 / P-02 物理model差 | finite-width diffuse、ground遮蔽、角度依存glass、1点midpointの影響量が未測定。 | 同一model比較と異なるmodelの感度比較を分ける。成分/interval/月/期間別のsigned bias・絶対誤差を記録し、annual cancellationで合格させない。有限幅diffuse等は実装しない。 |
@@ -55,13 +55,13 @@ P0-Aのhourly部分は実装・検証済みでreview待ち、その他は **未�
 
 ## 4. Third-party physical validationの具体案
 
-### 4.1 候補と役割（今回は調査のみ）
+### 4.1 候補と役割（kickoff案。P0-B適用範囲は§7）
 
 1. **第一候補: Radianceの独立ray intersection / irradiance**。開口面の等面積gridから固定太陽方向へrayを出し、庇hit率を自前遮蔽率と比較する。rtrace -oLのfirst intersection distanceなら自前polygon algorithmを共有しない。no-hit/self-hit判別は庇なし/全遮蔽controlで校正する。成分別irradianceには-I+、direct-onlyには-ab 0を使い、luxへ変換しない。[Radiance公式 rtrace](https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/rtrace.pdf)
 2. **第二候補: EnergyPlus 25.2.0の外部遮蔽比較**（固定版候補でありlatestではない）。単一壁/開口/不透明水平庇、ShadowCalculationのPolygonClipping / Timestepでsunlit fractionを照合する。太陽位置・集計時刻を別途合わせ、実行版の出力dictionaryで対象surfaceと単位を確定する。HVAC energyをFSL kWhと直比較しない。[公式設定文書](https://github.com/NatLabRockies/EnergyPlus/blob/v25.2.0/doc/input-output-reference/src/overview/group-simulation-parameters.tex)、[公式Shading Module](https://github.com/NatLabRockies/EnergyPlus/blob/v25.2.0/doc/engineering-reference/src/climate-sky-and-solar-shading-calculations/shading-module.tex)
 3. **太陽位置だけのreference: NLR/NREL SPA**。公開calculator/技術報告を候補とし、LST/UTC・幾何高度/屈折補正高度を区別する。facade/heat-gain solverではない。コード取得のlicense/登録条件は別途確認し、無断vendorしない。[公式SPA](https://midcdmz.nlr.gov/spa/)、[公開calculator](https://midcdmz.nlr.gov/solpos/spa.html)
 
-文書参照日: 2026-09-15。local PATHにenergyplus / rtrace / oconvは見つからず、別場所のinstall有無は未調査。インストール・ライセンス同意・solver実行は行っていません。後続で採用版のbinary/version/hash、実行環境と利用条件を確定します。
+文書参照日: 2026-09-15。kickoff時はlocal PATHにenergyplus / rtrace / oconvを確認できず、別場所は未調査でした。P0-Bの追加確認は§7。インストール・ライセンス同意・実solver実行は行っていません。後続で採用版のbinary/version/hash、実行環境と利用条件を確定します。
 
 ### 4.2 共通条件と最初の固定行列
 
@@ -90,6 +90,8 @@ P0-Aのhourly部分は実装・検証済みでreview待ち、その他は **未�
 - ground遮蔽、角度依存glass、cross-floor physical shadingは未実装。EnergyPlus等のtransmitted solar/window heat gainにはFSL定数SHGCと異なる物理が含まれ得るので、まず受照面incident energyで比較する。複数階は独立Floorを別々に評価して和を比較し、上下階の遮蔽物を追加しない。
 
 ### 4.4 判定 / evidenceを先に固定
+
+P0-Bのgeometry fractionには、下記kickoff提案の0.005ではなく、§7 / 固定protocolの1e-6（boundary 1e-5）とray境界探索を採用します。以下のannual/irradiance案は未実施のままです。
 
 - 以下は**検証計画の提案値**で、規格の許容値でも測定済みPASSでもない。実行前の独立reviewでversion付きprotocolとして固定する。
 - direct幾何: grid最終2段のlit fraction差≤0.002、FSL対reference差≤0.005を初期予算とする。未収束はUNRESOLVEDでありFSL PASSではない。grazing/zeroは別bucket。
@@ -138,4 +140,20 @@ kickoffの完了は **inventory / plan complete** であり、M5 validation COMP
 - Tokyo Hyakuri既存local EPW: §2のhashを確認し、変更後parserで8760 / 0 issues / usable PASS。rawデータの変更・追加commit・外部送信なし。新しいbrowser/第三者物理validationを実施したとは扱いません。
 - exact final headとPR stateはGit/PRから解決し、PR本文と完了報告へ記録します。この文書の自己参照SHAは固定しません。
 
-**P0-A implementation/checks PASS — independent review pending**。M5全体は未完了、残backlogは自動実行しません。PR #10はDraft維持でSTOP。Ready / merge / main直接変更 / 手動Production / branch削除 / M6開始は行いません。
+**P0-A implementation/checks / independent focused review PASS**（Human報告、Required Fixなし）。後続Human authorizationによるP0-Bは次節。M5全体は未完了です。
+
+## 7. P0-B — independent direct-shadow benchmark
+
+- 正本: [protocol / 再現手順 / 積分の前提](../scripts/validation/radiance-direct-shadow/README.md)、[固定入力](../scripts/validation/radiance-direct-shadow/protocol.json)、[機械可読comparison fixture](../scripts/validation/radiance-direct-shadow/comparison.json)。
+- Protocol ID: FSL-M5-P0B-DIRECT-1。入力/許容差はFSL測定前に固定。SHA-256: 8b2ef0e48d63c00f58227feab8a012862c43af04c6e13617fff1cdb65c2a62cf。
+- 10ケース: 庇なし、完全無遮蔽、部分、ほぼ全遮蔽、全遮蔽control、非対称とmirror、中間方位、azimuth grazing、低高度。全geometry/角度を固定し除外しません。
+- 許容差: shaded fraction absolute error ≤1e-6、boundary ≤1e-5。reference budgetは1/4。粗いgridの一致をPASS扱いせず、外部hit/missの二分探索24/32/40回と段間収束を要求。詳細な限定shape仮定・integration誤差とsolver交差誤差の区別はREADMEに明記。
+- Reference側にFSL helper/import/壁面影投影/polygon clippingなし。独立ENU sceneの不透明矩形庇にrtraceを使用するrunnerを用意。FSL側は別adapterで測定します。mock 3D ray/plane test doubleはharness試験専用で、外部benchmark集計へ混ぜません。
+- 実行可否: PATH、代表的なRadiance/Ladybug配置先、関連installation registryでrtrace/oconv未検出。system-wide install / repo-local download / license同意なし。全disk探索ではないため、別配置が提供された場合は既存binaryを指定可能です。
+- `--prepare`と`--run`の未導入fallbackを実行。10ケースのFSL値を取得し、referenceFraction/absoluteErrorは全件null。**Radiance PASS 0 / FAIL 0 / UNRESOLVED 0 / NOT_RUN 10 / 最大誤差 N/A**。外部実行経路のCLI互換性、数値交差精度、実測収束は未確認です。
+- FSL geometry source checkpoint: 61b8313d1c141f1f5b1afa472160976bc9f10011、geometry tree: 08b15bc0d2ea6671347bca7eba2d82f87aeca971。source checkpointとfixture自身のcommitを混同せず、harness/protocol digestを併記。final headはGit/PRから解決します。
+- `npm test`: **29 files / 219 PASS / 10 skipped**。新規36件はprotocol/scene/sampler/comparator testsで、10 skippedは未取得Radiance比較そのもの。既存183件のP0-A・M1 Golden・M2 NOAA/interval・M3 geometry・Single/Multi regression維持。
+- typecheck / build / golden:check / git diff --check: PASS。buildは90 modules / dist、audit 0 vulnerabilities。M1原本2点hash、immutable Task Packet digest不変。
+- P0-B差分: validation scripts・新test・文書のみ。src/**、既存expected、package/lockfile、legacy、immutable Run Artifactの変更なし。大型binary / raw weather追加なし。
+
+現在は **P0-B PROTOCOL_PREPARED / EXTERNAL_REFERENCE_NOT_RUN**。これは許可されたfallback成果物であり、geometry physical validation PASSでもP0-B外部比較完了でもありません。次はprotocol review / 利用可能なRadiance環境での全case実行。PR #10はDraft維持でSTOP、Ready / merge / M6開始はしません。
