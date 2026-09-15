@@ -1,0 +1,219 @@
+{
+  "checkedAtUtc": "2026-09-15T23:01:23.442Z",
+  "node": "v24.15.0",
+  "cpu": "Intel(R) Core(TM) Ultra 9 285K",
+  "intervals": 8760,
+  "method": "One single-candidate warmup per arm, one measured study per grid; median of candidate times within run. Total includes baseline and per-candidate validation, excludes worker setup/structured cloning/UI rendering. Local CPU evidence, no SLA or physical validation.",
+  "rows": [
+    {
+      "arm": "no-fins",
+      "grid": "8x1",
+      "count": 8,
+      "totalMs": 123.38110000000006,
+      "medianCandidateMs": 13.396299999999997,
+      "maxCandidateMs": 14.460900000000038,
+      "progressEvents": 9,
+      "valid": 8
+    },
+    {
+      "arm": "no-fins",
+      "grid": "16x1",
+      "count": 16,
+      "totalMs": 223.77910000000008,
+      "medianCandidateMs": 13.140150000000062,
+      "maxCandidateMs": 13.411499999999933,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "no-fins",
+      "grid": "32x1",
+      "count": 32,
+      "totalMs": 421.5160000000001,
+      "medianCandidateMs": 12.984599999999887,
+      "maxCandidateMs": 14.574200000000019,
+      "progressEvents": 33,
+      "valid": 32
+    },
+    {
+      "arm": "no-fins",
+      "grid": "64x1",
+      "count": 64,
+      "totalMs": 820.3540999999998,
+      "medianCandidateMs": 12.810400000000072,
+      "maxCandidateMs": 14.80540000000019,
+      "progressEvents": 65,
+      "valid": 64
+    },
+    {
+      "arm": "no-fins",
+      "grid": "4x4",
+      "count": 16,
+      "totalMs": 200.4951000000001,
+      "medianCandidateMs": 11.85044999999991,
+      "maxCandidateMs": 12.515300000000025,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "no-fins",
+      "grid": "6x6",
+      "count": 36,
+      "totalMs": 490.58219999999983,
+      "medianCandidateMs": 12.430499999999938,
+      "maxCandidateMs": 16.708999999999833,
+      "progressEvents": 37,
+      "valid": 36
+    },
+    {
+      "arm": "no-fins",
+      "grid": "8x8",
+      "count": 64,
+      "totalMs": 1051.2877000000003,
+      "medianCandidateMs": 16.453700000000026,
+      "maxCandidateMs": 17.179599999999937,
+      "progressEvents": 65,
+      "valid": 64
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "8x1",
+      "count": 8,
+      "totalMs": 626.9660999999996,
+      "medianCandidateMs": 68.44720000000007,
+      "maxCandidateMs": 75.7491,
+      "progressEvents": 9,
+      "valid": 8
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "16x1",
+      "count": 16,
+      "totalMs": 1180.1112000000003,
+      "medianCandidateMs": 68.56980000000021,
+      "maxCandidateMs": 74.6840000000002,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "32x1",
+      "count": 32,
+      "totalMs": 2318.2894000000006,
+      "medianCandidateMs": 69.3184999999994,
+      "maxCandidateMs": 79.14120000000003,
+      "progressEvents": 33,
+      "valid": 32
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "64x1",
+      "count": 64,
+      "totalMs": 5097.1839,
+      "medianCandidateMs": 70.61149999999998,
+      "maxCandidateMs": 195.3679000000011,
+      "progressEvents": 65,
+      "valid": 64
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "4x4",
+      "count": 16,
+      "totalMs": 1196.2183999999997,
+      "medianCandidateMs": 70.40390000000025,
+      "maxCandidateMs": 72.08899999999994,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "6x6",
+      "count": 36,
+      "totalMs": 2644.989099999999,
+      "medianCandidateMs": 72.01185000000078,
+      "maxCandidateMs": 75.76279999999679,
+      "progressEvents": 37,
+      "valid": 36
+    },
+    {
+      "arm": "pitch-1.5m",
+      "grid": "8x8",
+      "count": 64,
+      "totalMs": 4495.5128,
+      "medianCandidateMs": 68.84195,
+      "maxCandidateMs": 72.71310000000085,
+      "progressEvents": 65,
+      "valid": 64
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "8x1",
+      "count": 8,
+      "totalMs": 1099.8510000000024,
+      "medianCandidateMs": 122.05505000000085,
+      "maxCandidateMs": 125.9327000000012,
+      "progressEvents": 9,
+      "valid": 8
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "16x1",
+      "count": 16,
+      "totalMs": 2032.6699000000008,
+      "medianCandidateMs": 118.92374999999993,
+      "maxCandidateMs": 129.27929999999833,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "32x1",
+      "count": 32,
+      "totalMs": 4020.572,
+      "medianCandidateMs": 119.54030000000057,
+      "maxCandidateMs": 149.52850000000035,
+      "progressEvents": 33,
+      "valid": 32
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "64x1",
+      "count": 64,
+      "totalMs": 7570.265999999996,
+      "medianCandidateMs": 115.85725000000093,
+      "maxCandidateMs": 125.34779999999955,
+      "progressEvents": 65,
+      "valid": 64
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "4x4",
+      "count": 16,
+      "totalMs": 1978.3879000000015,
+      "medianCandidateMs": 116.05869999999777,
+      "maxCandidateMs": 121.13130000000092,
+      "progressEvents": 17,
+      "valid": 16
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "6x6",
+      "count": 36,
+      "totalMs": 4429.005400000002,
+      "medianCandidateMs": 119.13090000000011,
+      "maxCandidateMs": 129.83069999999861,
+      "progressEvents": 37,
+      "valid": 36
+    },
+    {
+      "arm": "pitch-0.6m",
+      "grid": "8x8",
+      "count": 64,
+      "totalMs": 7901.915199999996,
+      "medianCandidateMs": 123.34310000000187,
+      "maxCandidateMs": 132.1123000000007,
+      "progressEvents": 65,
+      "valid": 64
+    }
+  ]
+}

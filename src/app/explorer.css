@@ -1,0 +1,60 @@
+.explorer-panel { border-top: 4px solid #287b81; min-width: 0; }
+.explorer-panel p, .explorer-panel pre { overflow-wrap: anywhere; }
+.explorer-panel pre { white-space: pre-wrap; max-width: 100%; font-size: .78rem; }
+.explorer-panel figure { margin: 1.2rem 0; min-width: 0; }
+.explorer-panel figcaption { font-weight: 750; margin-bottom: .5rem; }
+.explorer-panel select { width: 100%; min-height: 44px; padding: .55rem; border: 1px solid #8eaaa9; background: white; border-radius: 6px; color: #183133; }
+.explorer-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.explorer-range { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: .8rem; }
+.explorer-axis-editor { min-width: 0; }
+.explorer-run, .explorer-exports { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin: 1rem 0; }
+.explorer-panel button { min-height: 40px; }
+.explorer-panel button:focus-visible, .explorer-point:focus-visible { outline: 3px solid #cc6b1e; outline-offset: 3px; }
+.explorer-progress { margin: 1rem 0; font-variant-numeric: tabular-nums; }
+.explorer-progress progress { width: min(60%, 360px); accent-color: #287b81; }
+.explorer-chart-scroll { overflow-x: auto; }
+.explorer-chart-scroll svg { display: block; width: 100%; min-width: 530px; font-size: 11px; }
+.explorer-axis { stroke: #7e9292; }
+.explorer-line { fill: none; stroke: #176c76; stroke-width: 2; }
+.explorer-baseline { stroke: #865234; stroke-width: 2; }
+.explorer-point { fill: #216d77; stroke: white; stroke-width: 1.5; cursor: pointer; }
+.explorer-point.selected { fill: #b95317; stroke: #502b18; stroke-width: 2; }
+.explorer-table, .explorer-heatmap { border-collapse: collapse; font-size: .78rem; font-variant-numeric: tabular-nums; }
+.explorer-table th, .explorer-table td, .explorer-heatmap th, .explorer-heatmap td { padding: .55rem; border: 1px solid #b4c7c6; text-align: left; }
+.explorer-table caption, .explorer-heatmap caption { text-align: left; margin: .6rem 0; }
+.explorer-table tr[aria-selected="true"] { background: #e2f1ef; }
+.explorer-heatmap td { padding: 0; }
+.explorer-heatmap button { border: 2px solid transparent; padding: .6rem; width: 100%; font: inherit; }
+.explorer-heatmap button[aria-pressed="true"] { border-color: #d06520; }
+.explorer-heatmap .invalid-cell { background: repeating-linear-gradient(45deg, #ddd 0 3px, #fafafa 3px 6px); color: #6b2525; }
+.explorer-detail { padding: 1rem; border: 1px solid #b4c7c6; margin-top: 1.2rem; min-width: 0; }
+@media (max-width: 680px) {
+  .explorer-controls { grid-template-columns: 1fr; }
+  .explorer-panel .section-heading { flex-wrap: wrap; }
+  .explorer-range { gap: .4rem; }
+  .explorer-detail { padding: .6rem; }
+}
+@media print {
+  @page explorer { size: A4 landscape; margin: 12mm; }
+  .app-shell.explorer-print { page: explorer; }
+  .app-shell:not(.explorer-print) > .explorer-panel { display: none !important; }
+  .app-shell.explorer-print > :not(.explorer-panel) { display: none !important; }
+  .explorer-panel, .explorer-panel * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .explorer-panel .no-print { display: none !important; }
+  .explorer-panel .section-heading { display: block; }
+  .explorer-panel .table-scroll, .explorer-chart-scroll { overflow: visible; }
+  .explorer-chart-scroll svg { min-width: 0; width: 100%; }
+  .explorer-table { width: 100%; table-layout: fixed; font-size: 7pt; }
+  .explorer-table th, .explorer-table td { padding: 1mm; overflow-wrap: anywhere; }
+  .explorer-table button, .explorer-heatmap button { display: block !important; min-height: 0; padding: 1mm; font-size: inherit; }
+  .explorer-heatmap { width: 100%; table-layout: fixed; font-size: 7pt; }
+  .explorer-heatmap button { overflow-wrap: anywhere; }
+  .explorer-panel thead { display: table-header-group; }
+  .explorer-panel tr, .explorer-panel figure { break-inside: avoid; }
+  .explorer-panel details > * { display: block; }
+  .explorer-panel .stale-banner { display: block !important; }
+  .explorer-detail { break-before: page; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .explorer-panel *, .explorer-panel *::before, .explorer-panel *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

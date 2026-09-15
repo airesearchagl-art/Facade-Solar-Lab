@@ -14,6 +14,7 @@ const engineSources = import.meta.glob(
     "../src/export/**/*.{ts,tsx}",
     "../src/preset/**/*.{ts,tsx}",
     "../src/multifloor/**/*.{ts,tsx}",
+    "../src/explorer/**/*.{ts,tsx}",
   ],
   {
   eager: true,

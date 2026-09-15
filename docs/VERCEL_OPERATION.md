@@ -18,6 +18,10 @@ Current state: `COMPLETE`。M6 Completion Wave Independent ReviewはA. PASS / Re
 - browser fatal/pageerror=0、console error=0、app asset error=0。
 - manual Production mutation: none。M6 COMPLETE。M7 branchからのdocumentation同期のみで、別M6 closeout PRは作らない。
 
+### M8 post-merge closure — M9 Phase 0
+
+PR #13 squash merge / main `d1dc91fd18ea6149424c8b192174ab0a130dcb97`。Git自動Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1` READY、canonical alias、source Git/main/exact SHA、HTTP index/JS/CSS/favicon.svg、Guide/Single/Multi/390px smoke PASS。Read-only確認 `2026-09-15T22:39:53.092Z`。[詳細証拠](USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。M8 COMPLETE、manual Production mutationなし。M9は通常feature pushのGit Previewのみ許可し、Ready/merge/post-merge Productionは別Human Gateです。
+
 ### M7 post-merge closure — M8 Phase 0
 
 2026-09-16T03:35+09:00、M8実装前にread-only確認:
