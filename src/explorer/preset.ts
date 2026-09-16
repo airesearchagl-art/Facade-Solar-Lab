@@ -8,7 +8,7 @@ function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new RangeError("探索JSONの形式が不正です。");
   return value as Record<string, unknown>;
 }
-function readAxis(value: unknown): SweepAxis {
+export function readAxis(value: unknown): SweepAxis {
   const axis = record(value);
   if (!AXES.some(item => item.key === axis.key) || ![axis.min, axis.max, axis.step].every(item => typeof item === "number" && Number.isFinite(item))) throw new RangeError("探索軸が不正です。");
   return { key: axis.key as AxisKey, min: axis.min as number, max: axis.max as number, step: axis.step as number };

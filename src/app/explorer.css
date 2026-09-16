@@ -28,6 +28,9 @@
 .explorer-heatmap button[aria-pressed="true"] { border-color: #d06520; }
 .explorer-heatmap .invalid-cell { background: repeating-linear-gradient(45deg, #ddd 0 3px, #fafafa 3px 6px); color: #6b2525; }
 .explorer-detail { padding: 1rem; border: 1px solid #b4c7c6; margin-top: 1.2rem; min-width: 0; }
+.multi-explorer-scope { min-width: 0; border: 1px solid #9ebfbe; padding: 1rem; }
+.multi-explorer-scope label { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; margin-right: 1.5rem; }
+.multi-explorer-panel tfoot { background: #e2f1ef; font-weight: 700; }
 @media (max-width: 680px) {
   .explorer-controls { grid-template-columns: 1fr; }
   .explorer-panel .section-heading { flex-wrap: wrap; }

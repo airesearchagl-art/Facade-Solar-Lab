@@ -1,22 +1,36 @@
-import { metricValue } from "../../explorer/study";
 import { axisLabel } from "../../explorer/sweep";
-import type { Metric, StudyCandidate, StudyResult } from "../../explorer/types";
+import type { Metric, StudyDeltas, SweepDefinition } from "../../explorer/types";
+
+/** Presentation-only projection shared by Single and Building; not an engine result. */
+type ChartSummary = Record<"annual" | "cooling" | "heating", { readonly withOverhangKWh: number }>;
+export type ChartCandidate = { readonly id: string; readonly a: number; readonly b?: number } & (
+  | { readonly status: "VALID"; readonly simulation: { readonly summary: ChartSummary }; readonly delta: StudyDeltas }
+  | { readonly status: "INVALID"; readonly issues: readonly string[] }
+);
+export interface ChartStudy { readonly snapshot: { readonly sweep: SweepDefinition }; readonly baseline: { readonly summary: ChartSummary }; readonly candidates: readonly ChartCandidate[] }
+function metricValue(candidate: ChartCandidate, metric: Metric): number | null {
+  if (candidate.status === "INVALID") return null;
+  if (metric === "annualDelta") return candidate.delta.annual;
+  if (metric === "coolingDelta") return candidate.delta.cooling;
+  if (metric === "heatingDelta") return candidate.delta.heating;
+  return candidate.simulation.summary[metric].withOverhangKWh;
+}
 
 const WIDTH = 660, HEIGHT = 270, LEFT = 66, TOP = 22;
 function scale(values: readonly number[], start: number, end: number) {
   const min = Math.min(...values), max = Math.max(...values);
   return { min, max, at: (value: number) => max === min ? (start + end) / 2 : start + (value - min) / (max - min) * (end - start) };
 }
-function pointTitle(candidate: StudyCandidate): string {
+function pointTitle(candidate: ChartCandidate): string {
   return candidate.status === "INVALID" ? `${candidate.id}: INVALID ${candidate.issues.join(" / ")}`
     : `${candidate.id} · A=${candidate.a}${candidate.b === undefined ? "" : ` B=${candidate.b}`} · 合計=${candidate.simulation.summary.annual.withOverhangKWh} · 夏期=${candidate.simulation.summary.cooling.withOverhangKWh} · 冬期=${candidate.simulation.summary.heating.withOverhangKWh} · Δ=${candidate.delta.annual}/${candidate.delta.cooling}/${candidate.delta.heating} kWh`;
 }
-function Dot({ candidate, x, y, selected, onSelect }: { candidate: StudyCandidate; x: number; y: number; selected: string; onSelect: (id: string) => void }) {
+function Dot({ candidate, x, y, selected, onSelect }: { candidate: ChartCandidate; x: number; y: number; selected: string; onSelect: (id: string) => void }) {
   return <circle cx={x} cy={y} r={selected === candidate.id ? 7 : 5} className={selected === candidate.id ? "explorer-point selected" : "explorer-point"}
     role="button" tabIndex={0} aria-label={pointTitle(candidate)} aria-pressed={selected === candidate.id}
     onClick={() => onSelect(candidate.id)} onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(candidate.id); } }}><title>{pointTitle(candidate)}</title></circle>;
 }
-export function ExplorerCharts({ study, metric, metricLabel, selected, onSelect }: { study: StudyResult; metric: Metric; metricLabel: string; selected: string; onSelect: (id: string) => void }) {
+export function ExplorerCharts({ study, metric, metricLabel, selected, onSelect }: { study: ChartStudy; metric: Metric; metricLabel: string; selected: string; onSelect: (id: string) => void }) {
   const candidates = study.candidates;
   const valid = candidates.filter(candidate => candidate.status === "VALID");
   const period = metric.replace("Delta", "") as "annual" | "cooling" | "heating";

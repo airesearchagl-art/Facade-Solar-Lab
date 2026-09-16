@@ -91,7 +91,7 @@ const TOC = [
   ["はじめに", "guide-intro"], ["3分で試す", "guide-quick"],
   ["単一階 / 複数階", "guide-modes"], ["パラメータ", "guide-parameters"],
   ["検討例", "guide-examples"], ["パラメトリック探索", "guide-explorer"], ["結果の読み方", "guide-results"],
-  ["保存・出力", "guide-exports"], ["技術詳細", "guide-technical"],
+  ["複数階探索", "guide-multi-explorer"], ["保存・出力", "guide-exports"], ["技術詳細", "guide-technical"],
   ["適用範囲", "guide-limitations"],
 ] as const;
 
@@ -252,7 +252,7 @@ export function UserGuide({ onNavigate }: { readonly onNavigate: (mode: Workspac
 
           <section className="guide-section" id="guide-explorer" aria-labelledby="guide-explorer-title">
             <div className="guide-heading"><p>PARAMETRIC DESIGN EXPLORER</p><h2 id="guide-explorer-title">少しずつ条件を変えて、傾向を見る</h2></div>
-            <p>Singleの選択中の案を基準にする、独立した探索結果です。通常の比較案を一括変更せず、候補を選んでから追加できます。Multi探索は対象外です。</p>
+            <p>Singleの選択中の案を基準にする、独立した探索結果です。通常の比較案を一括変更せず、候補を選んでから追加できます。Multiでは下記「複数階探索」を使います。</p>
             <ol>
               <li>単一階モードでEPWまたはデモ気象を用意し、元にする案を選びます。</li>
               <li>「パラメトリック探索」→「探索を設定する」を開きます。</li>
@@ -272,6 +272,19 @@ export function UserGuide({ onNavigate }: { readonly onNavigate: (mode: Workspac
             </details>
           </section>
 
+          <section className="guide-section" id="guide-multi-explorer" aria-labelledby="guide-multi-explorer-title">
+            <div className="guide-heading"><p>M10 · MULTI-FLOOR EXPLORER</p><h2 id="guide-multi-explorer-title">階の変更と、建物全体の感度をつなぐ</h2></div>
+            <p>Multi Workspaceの「複数階パラメトリック探索」では、選択中の建物案・気象を基準に最大{MAX_STUDY_CANDIDATES}候補をWorkerで計算します。通常Multiの計算結果が未実行でも利用できます。</p>
+            <ol className="guide-steps">
+              <li><strong>選択階のみ</strong>：3階建てデモの2Fを選び、庇の出0.8〜2.0 mを探索。1F・3Fは固定し、2Fの変更がBuilding Totalに与える差を見ます。</li>
+              <li><strong>全階共通</strong>：全Floorへ同じ庇出を適用。2DでSHGCも追加すると、建物の夏期差・冬期差をHeatmap / Trade-offで比較できます。階別の独立組合せ探索・自動最適化・順位付けではありません。</li>
+              <li><strong>推奨値</strong>：A/Bの軸変更とリセットは単位に合う範囲へ更新。形状依存軸は共通範囲を使い、なければエラーにします。方位角・地面反射率は建物共通のため全階scopeのみ。庇・フィン・pitch/count方式を勝手に追加・変換しません。</li>
+              <li><strong>Floor Breakdown</strong>：全階の合計・夏期・冬期と基準差を表示。Building TotalはFloorのcanonical結果の単純和です。全階scopeでは表示階を切り替えて候補時の形状を確認できます。</li>
+              <li><strong>通常比較に戻す</strong>：「複数階比較案に追加」で全Floor入力を新しい建物案へコピー（最大4案）。通常の「複数階比較を実行」で明示rerun。自動再計算・上書き・削除はしません。</li>
+              <li><strong>出力とSTALE</strong>：CSVは建物行＋各Floor行、JSONは入力のみ、印刷/PDFは定義・グラフ・階別寄与・選択候補形状。気象・案・階選択・scope・範囲変更後はSTALEとなり、再実行まで転送・CSV・印刷不可。JSON読込は確認後に適用し、気象を用意して再実行します。</li>
+            </ol>
+            <p className="guide-warning">cross-floor physical shadingはありません。階間の相互遮蔽を表しません。M5外部参照NOT_RUN、絶対kWhの正式物理validation未完了。partialは読込期間のみ、syntheticは実測・性能証明ではありません。</p>
+          </section>
           <section className="guide-section" id="guide-results" aria-labelledby="guide-results-title">
             <div className="guide-heading"><p>RESULTS GUIDE</p><h2 id="guide-results-title">結果の読み方</h2></div>
             <div className="result-guide-grid">

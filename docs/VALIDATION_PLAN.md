@@ -7,7 +7,7 @@ P0-A / P0-C / P1-A focused reviewとP0-B protocol reviewはPASS / Required Fix�
 - 棚卸し日: 2026-09-15 (Asia/Tokyo)
 - 固定product baseline: main @ bcc6b5a4e93a25a3c2b334e305fcbfd09a140403
 - 作業branch: feat/m5-validation-stability。この文書を含むlive HEADはGit/PRから取得し、product baselineと混同しません。
-- M4 / M4.5 / M6 / M7 / M8: COMPLETE。M5: local検証完了 / external reference待ち。M7の受入証拠は[Advanced Facade Shading](ADVANCED_FACADE_SHADING.md)、M8 PR #13 squash merge / Git Production / HTTP / browser証拠は[Guide closeout](USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。M9はSingle Explorer implementation complete / Human UX Review pending / Independent FULL Review pending。[M9 contract・検証・performance](PARAMETRIC_EXPLORER.md)を参照。§10のPR/Ready/M6状態は当時の履歴として保持します。
+- M4 / M4.5 / M6 / M7 / M8 / M9: COMPLETE。M5: local検証完了 / external reference待ち。M10はimplementation complete / RF-M10-REVIEW-01 RESOLVED / Focused Independent Re-Review PASS / Human UX PASS / PRE_MERGE_GATE_PASS（Human報告）、Required Fix NONE OPEN。実装セッションの検証・performance、独立review、Human受理、実装セッション外CSV/PDF inspectionを[M10証拠](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)で区別。JSONはHuman受理のみ、PDF向き・末尾空白ページはAdvisory。PR #15 Draft、merge / post-merge Production確認pending。既存M1〜M9 expected/Golden・測定checkpoint・§10のhistorical gateは変更しません。M11 NOT STARTED。
 - M4.5のterminal Run Artifactとimmutable Task Packetはhistorical auditとして保持し、再closeoutしません。
 - 数値の一致、Human UX PASS、Production READYは、絶対 [kWh] の物理的正しさや正式性能評価を意味しません。
 
