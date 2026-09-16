@@ -2,7 +2,7 @@
 
 ## Status
 
-`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記証拠）。M9もPR #14 merge / Production provenance・HTTP/assets確認済みでCOMPLETE。過去の保護Preview HTTP未確認・saved-file未再検証の帰属は[M9履歴](PARAMETRIC_EXPLORER.md)に保持。M10の複数階探索章は実装済み、Human UX / Independent FULL Review pending。[M10 contract](MULTIFLOOR_PARAMETRIC_EXPLORER.md)。
+`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記証拠）。M9もPR #14 merge / Production provenance・HTTP/assets確認済みでCOMPLETE。過去の保護Preview HTTP未確認・saved-file未再検証の帰属は[M9履歴](PARAMETRIC_EXPLORER.md)に保持。M10の複数階探索章は実装済み、RF-M10-REVIEW-01 RESOLVED、Focused Independent Re-Review / Human UX PASS（Human報告）。保存JSONはHuman受理、CSV/PDFは実装セッション外のartifact inspectionを区別し、PDF向き・末尾空白ページはAdvisoryのみ。[M10証拠の帰属](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。PR #15 Draft、merge / post-merge Production確認はpending。
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 

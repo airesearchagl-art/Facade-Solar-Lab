@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M10 — Multi-floor Parametric Explorer: IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING**。Multiの選択階のみ／全階共通scope、1D/2D探索（最大64）、Building TotalとFloor Breakdown・形状、通常Multiへの追加（最大4案）、CSV・入力専用JSON・印刷/PDFを実装。M9のrange/Workerと既存Multi計算を再利用し、物理式は変更しません。[M10 contract・検証・review handoff](docs/MULTIFLOOR_PARAMETRIC_EXPLORER.md)。M11 NOT STARTED。
+**M10 — Multi-floor Parametric Explorer: IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS**（Human報告）。Required Fix: NONE OPEN。Multiの選択階のみ／全階共通scope、1D/2D探索（最大64）、Building TotalとFloor Breakdown・形状、通常Multiへの追加（最大4案）、CSV・入力専用JSON・印刷/PDFを実装。M9のrange/Workerと既存Multi計算を再利用し、物理式は変更しません。[M10 contract・証拠の帰属・PDF Advisory](docs/MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。PR #15 OPEN / Draft、Ready承認・merge・post-merge Production確認は後続Gate。M11 NOT STARTED。
 
 **M9 — Parametric Design Explorer: COMPLETE**。PR #14 squash merge `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099`、Git自動Production provenance・HTTP/assets/Worker PASS。[M9履歴](docs/PARAMETRIC_EXPLORER.md)。Singleの15軸・1D/2D・canonical Worker・immutable snapshot/STALE・CSV/JSON/printを維持。Ready / merge / manual Productionは別Human Gateです。
 
@@ -104,4 +104,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6 / M7 / M8 / M9はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M10はcurrent milestoneで、Draft PR #15上で実装済み・review / Human acceptance中です。Ready / merge / post-merge Production confirmationは後続Gateとして扱い、M11 NOT STARTEDです。
+M4.5 / M6 / M7 / M8 / M9はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M10はcurrent milestoneで、Draft PR #15上で実装済み・Required Fix解消・Focused Independent Re-Review / Human UX受理済みです。Ready / merge / post-merge Production confirmationは後続Gateとして扱い、M11 NOT STARTEDです。

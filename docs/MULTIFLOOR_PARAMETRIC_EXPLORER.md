@@ -2,9 +2,9 @@
 
 ## Current state / resume
 
-`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。
+`IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`（Human報告）。Required Fix: NONE OPEN。
 Branch: `feat/m10-multifloor-parametric-explorer`。Base: `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099`。
-live HEAD / existing Draft PR / exact Git PreviewはGitとPR本文からfreshに解決します。このファイルを含むcommit SHAを自己参照固定しません。既存PRを再作成しないこと。Ready / merge / manual Production / branch deletionは未許可。M11 NOT STARTED。
+PR #15 OPEN / Draft。live HEAD / exact Git PreviewはGitとPR本文からfreshに解決し、下記reviewed checkpointsと区別します。このファイルを含むcommit SHAを自己参照固定しません。既存PRを再作成しないこと。次はReady transition authorization待ち。merge / post-merge Production確認はpending。Ready / merge / manual Production / branch deletionは未許可。M11 NOT STARTED。
 
 ## M9 closeout — Phase 0
 
@@ -70,7 +70,7 @@ Guide `#guide-multi-explorer`は2Fのみ庇探索、全階庇×SHGC、Floor和�
 
 ## Local validation evidence
 
-2026-09-16、implementation-session evidence（Independent Reviewではない）:
+2026-09-16、implementation-sessionのhistorical evidence（Independent Reviewではない）。当時のsaved-file / PDF未確認を後続Human受理・artifact inspectionでAgent verificationへ書き換えません。現在の受理状態は末尾のterminal acceptanceを参照:
 
 - 45 test files / **661 PASS / 10 external-reference SKIP=NOT_RUN**。追加32 tests。M1〜M9 expected/Golden維持。
 - focused 108 PASS: Multi generation/scopes/全15軸/64 cap/immutable/all-floor recommendations/不足shape/layout/階付きINVALID/canonical exact/transfer/CSV/JSON/SSR/Worker、およびM9 AxisEditor・dependency boundary回帰。
@@ -103,9 +103,15 @@ totalはbaselineとcandidate validation/calculationを含み、Worker起動・st
 
 再現: `node scripts/validation/m10-explorer/workload.mjs`。stdoutに各runとmachine-readable全結果を出力。自動的にcheckpointを上書きしません。
 
-## Remaining acceptance / limitations
+## Terminal acceptance / evidence attribution
 
-Human UXとIndependent FULL Reviewは未実施。Human確認5点:
+2026-09-16のHuman Terminal Evidence Sync指示に基づく記録。今回Agentが独立レビュー・Human UX・保存artifact検査を再実施したという意味ではありません。
+
+- Independent FULL Review: B. REQUIRED FIX、original reviewed product head `418c693ceb21e85ece6b1afc2032efb126d41293`。RF-M10-REVIEW-01 / P2はREADME Development statusのstale記述。
+- RF-M10-REVIEW-01: RESOLVED。Fix / focused reviewed head `6a5d305e04a24397612bc623ed75f90b51c2cabe`、Focused Independent Re-Review PASS（Human報告）。reviewed deltaはREADME.mdの1段落のみ、product behavioral diff=0。Required Fix: NONE OPEN。
+- Human UX Review: PASS。以下5点に加え、保存CSVの使いやすさ・内容、保存JSONの使いやすさ、print/PDF目視をHumanが受理。
+
+Human受理済みの5点（Agentによる新規Human acceptanceではない）:
 
 1. Multiから探索を自然に発見できるか。
 2. 選択階のみ／全階共通の対象がすぐ分かるか。
@@ -113,4 +119,13 @@ Human UXとIndependent FULL Reviewは未実施。Human確認5点:
 4. 候補を通常Multi比較案へ戻す流れが自然か。
 5. 390pxでも主要操作が可能か。
 
-M5 `LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`、Radiance / EnergyPlus / SPA / annual physical comparison NOT_RUN、formal absolute-kWh validation NOT COMPLETE。finite-width diffuse/fin diffuse/cross-floor physical shading未実装。既存の近似モデルを維持。M11 NOT STARTED。Draft引渡し後STOP、Ready/mergeは別Human Gate。
+- 実装セッション外のartifact inspection（Human提供報告）: CSVはUTF-8 BOM / CRLF / 31 columns、metadata candidateCount=42、baselineを含む43 building rows + 129 Floor rows = 172 data rows、structurally parseable。
+- 同PDF inspection: Building Total、Heatmap / Trade-off、Floor Breakdown、candidate geometry、complete inputs、limitationsの存在を確認。
+- **Advisory only:** 提供PDFはportrait A4ページ上で内容が90°回転し、末尾空白ページあり。HumanがUXを明示受理しているため非blockingの将来print/PDF polishであり、Required Fixを再openしません。今回PDF実装修正なし。
+- 保存JSON artifactはreviewerへ独立提供されていません。JSON受理はHuman-attributedであり、Independent saved-file verificationとは呼びません。
+- 実装セッションの661 PASS / 10 external-reference SKIP、local/Preview操作、performance記録は当時の帰属を保持。独立review結果やartifact inspectionと混同しません。別の独立test/performance再実行結果を捏造しません。
+- 記録済みGit Preview `dpl_AzopJkr4KS2Px29igG2TcrjFFp2T` / source `418c693ceb21e85ece6b1afc2032efb126d41293` / READYはproduct checkpoint。docs-only terminal headの新deploymentや新HTTP測定へ読み替えません。匿名Preview HTTPはProtectionによる302、HTTP/assets証拠はUNVERIFIED / BLOCKEDのままです。Human受理の集約状態PRE_MERGE_GATE_PASSを匿名HTTP200や全測定項目PASSと同一視しません。
+- 今回はdocs-only terminal sync。accepted fix headからsrc/app / src/explorer / engine / weather / geometry / multifloor calculation / tests / Golden・validation runner behavioral diff=0をGitで確認し、terminal headとfresh checksはPR本文へ記録します。
+- PRE_MERGE_GATE_PASS（Human報告）。PR #15 OPEN / Draft、Ready承認待ち、merge / post-merge Production確認PENDING。PDF Advisoryを保持し、Ready・mergeを自動実行しません。
+
+M5 `LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`、Radiance / EnergyPlus / SPA / annual physical comparison NOT_RUN、formal absolute-kWh validation NOT COMPLETE。finite-width diffuse/fin diffuse/cross-floor physical shading未実装。既存の近似モデルを維持。M11 NOT STARTED。STOP — Ready transition authorization待ち。

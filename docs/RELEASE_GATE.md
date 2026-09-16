@@ -32,7 +32,7 @@
 
 ## M10 Current State
 
-`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。新exact-head Git Previewとbrowser/HTTPの実測結果はPR本文で同期。Human UX / Independent FULL ReviewはAgentで代行せず、Ready / merge / post-merge Productionは別gate。M11 NOT STARTED。[M10 acceptanceと未検証項目](MULTIFLOOR_PARAMETRIC_EXPLORER.md)。
+`IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`（Human報告）。初回FULL Review B. REQUIRED FIXのREADME P2はfix head `6a5d305e04a24397612bc623ed75f90b51c2cabe`で解消、Focused Independent Re-Review PASS、Required Fix NONE OPEN。HumanはUXと保存CSV/JSON・PDFを受理。実装セッション外のCSV/PDF inspection、JSON Human-only attribution、非blocking PDF向き・末尾空白ページAdvisoryは[M10証拠](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)を参照。匿名Preview HTTP/assetsはProtectionによりUNVERIFIED / BLOCKEDのままで、受理状態をHTTP200測定証拠へ変換しません。PR #15 OPEN / Draft、Ready承認待ち、merge / post-merge Production確認PENDING。新docs-only headはGit/PRで別途記録し、過去Previewの測定SHAと混同しません。M11 NOT STARTED。
 
 ## 判定
 
