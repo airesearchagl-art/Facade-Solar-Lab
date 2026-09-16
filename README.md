@@ -104,4 +104,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6 / M7 / M8はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M9は上記Human受理済みpre-merge state、PR #14はOPEN / Draft。Ready / merge / post-merge Production confirmationは別Human Gate、M10 NOT STARTEDです。
+M4.5 / M6 / M7 / M8 / M9はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M10はcurrent milestoneで、Draft PR #15上で実装済み・review / Human acceptance中です。Ready / merge / post-merge Production confirmationは後続Gateとして扱い、M11 NOT STARTEDです。
