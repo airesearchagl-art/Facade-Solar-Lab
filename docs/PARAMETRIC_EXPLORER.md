@@ -2,9 +2,24 @@
 
 ## Current state / resume
 
-`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING`。
+`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。
 Branch: `feat/m9-parametric-design-explorer`。Base: M8 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`。
 live HEAD / Draft PR / exact Git PreviewはGitとPR本文からfreshに解決し、下記の実装・測定checkpointと区別します。Ready / merge / manual Production / branch deletionは未許可。M10 NOT STARTED。
+
+## Terminal acceptance / evidence attribution
+
+2026-09-16のHuman Terminal Evidence Sync指示に基づく記録。今回AgentがIndependent ReviewやHuman UXを再実施したという意味ではありません。
+
+- Initial Independent FULL Review: A. PASS、reviewed previous head `4891c20e230862bc845e3a01c36192c91d20e3e2`（Human報告）。
+- RF-M9-UX-01: RESOLVED。Focused Independent Re-Review: PASS、reviewed / accepted implementation head `abdceeaf83f934eadd72617aa1fb08d3ffc65417`（Human報告）。Required Fix: NONE OPEN。
+- Human UX Review: PASS。Explorerの見つけやすさ、1D範囲入力・結果理解、2D Heatmap / Trade-offの意味、候補→通常Single比較、390px usabilityを受理。RFのA/B変更によるmin/max/step切替・単位追随・推奨値リセット・重複軸防止を含みます。
+- Accepted exact Preview: `dpl_6BKxuATMaQcbGUX3zjxXSTM1kawF`、[Preview](https://facade-solar-ccaeulg0t-airesearchagls-projects.vercel.app/)、Git / `feat/m9-parametric-design-explorer` / exact source `abdceeaf83f934eadd72617aa1fb08d3ffc65417` / READY / Preview（raw target=null）。実装時のprovenance / browser evidenceを保持し、docs-only terminal headの再測定へ読み替えません。
+- 実装セッションのlocal evidence: 44 files / 629 PASS / 外部参照10 SKIP=NOT_RUN、focused 52 PASS。独立code/delta review、Human UX acceptanceと帰属を分けます。terminal docs同期後のfresh checksはPR本文へ別記します。
+- 匿名HTTP: Deployment Protectionによるindex302、HTTP200証拠はUNVERIFIED / BLOCKED。Human受理の集約状態 `PRE_MERGE_GATE_PASS` とHTTP測定gateを区別し、browser表示成功からindex / JS / CSS / faviconの200を推測しません。過去のops:verify BLOCKEDをPASSへ変更しません。
+- Saved-file acceptanceはRF-M9-UX-01後に明示的な再実施証拠なし。既存CSV/JSONのpure tests・過去のnative入力経路・PDF等のUNVERIFIEDとHuman/Agent帰属を保持し、新規saved-file PASSを追加しません。
+- このterminal同期はdocumentation / current-state recordsのみ。accepted implementation headからsrc/app・src/explorer・engine・weather・geometry・tests・validation runner / Goldenの差分0を確認し、terminal headはGit/PRから解決します。自動Git Previewが生成されても上記accepted Previewを新SHAの証拠と称しません。
+- M8 COMPLETE。M5 LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING、Radiance / EnergyPlus / SPA / annual physical validation NOT_RUN。Formal absolute-kWh validation NOT COMPLETE。
+- PR #14 OPEN / Draft。merge / post-merge Production confirmation pending。Ready / merge / auto-merge / branch deletion / manual Productionは未許可。M10 NOT STARTED。次工程は別HumanによるReady transition authorization待ちであり、この同期だけで実行しません。
 
 ## Product contract
 
@@ -28,7 +43,7 @@ Axis A必須、B任意・異なるkey。min / max / stepは有限、小数6桁�
 
 ## RF-M9-UX-01 — axis-aware starter ranges
 
-旧head `4891c20e230862bc845e3a01c36192c91d20e3e2` のIndependent FULL ReviewはA. PASS（Human報告）。その後のHuman UX指摘「軸変更で旧単位の範囲を保持」は今回RESOLVED。修正後headはGit/PRから解決し、Human UX / Focused Independent Re-Reviewは未実施です。
+旧head `4891c20e230862bc845e3a01c36192c91d20e3e2` のIndependent FULL ReviewはA. PASS（Human報告）。その後のHuman UX指摘「軸変更で旧単位の範囲を保持」は今回RESOLVED。修正head `abdceeaf83f934eadd72617aa1fb08d3ffc65417` のFocused Independent Re-Review / Human UXは、その後HumanよりPASSと報告されました。修正時点の未実施状態は上記terminal acceptanceでsupersededされます。
 
 `src/explorer/sweep.ts` のAXESにlabel / unit / recommendationを集約し、`recommendedSweepAxis(source, key)`をA/Bで共用します。パラメータ変更時にkey/min/max/stepを同時置換。「推奨値に戻す」でも現在のCaseを基に再生成します。通常の手入力、他方のrange編集、Case変更では範囲を上書きせず、既存STALE / 明示rerunを維持します。
 
@@ -109,7 +124,7 @@ Local export: CSV/JSONのクリックは実施したもののdownload eventをsu
 
 実装セッションの最終checksとexact PreviewはPR本文へ記録します。初回実装時はHuman UX ReviewとIndependent FULL Reviewを未実施として分離しました（後続review / RF修正は上記）。通常browser limitationはUNVERIFIEDのまま扱います。
 
-Human UX handoff（5点）:
+Human UX handoffの履歴（以下5点は上記Human acceptanceでPASS、Agentによる新規acceptanceではありません）:
 
 1. Singleから探索を自然に発見できるか。
 2. 1Dの範囲設定と結果が理解できるか。
