@@ -6,7 +6,7 @@
 
 ## Current state
 
-**M9 — Parametric Design Explorer: IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING**。Singleの選択Caseと気象から15軸の1D/2D探索（最大64候補）をWorkerで実行します。感度line、Heatmap、夏期/冬期Trade-off、exact table、候補詳細、通常Singleへの追加、CSV・入力専用JSON・印刷/PDFを実装しました。入力変更後はSTALEとなり再実行が必要です。自動最適化や外部physical validationではありません。[探索contract・実測・review handoff](docs/PARAMETRIC_EXPLORER.md)。Ready / merge / manual Productionは別Human Gate。M10 NOT STARTED。
+**M9 — Parametric Design Explorer: IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING**。Singleの選択Caseと気象から15軸の1D/2D探索（最大64候補）をWorkerで実行します。感度line、Heatmap、夏期/冬期Trade-off、exact table、候補詳細、通常Singleへの追加、CSV・入力専用JSON・印刷/PDFを実装しました。入力変更後はSTALEとなり再実行が必要です。自動最適化や外部physical validationではありません。[探索contract・実測・review handoff](docs/PARAMETRIC_EXPLORER.md)。Ready / merge / manual Productionは別Human Gate。M10 NOT STARTED。
 
 **M8 — User Guide & Technical Manual: COMPLETE**。PR #13は`d1dc91fd18ea6149424c8b192174ab0a130dcb97`へsquash merge済み。Git自動Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`のprovenance・HTTP・canonical browser smoke PASS。[M8 closeout](docs/USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。上部Guideと`#single` / `#multi` / `#guide`間でWorkspace状態を保持します。
 

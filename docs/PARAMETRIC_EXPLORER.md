@@ -2,7 +2,7 @@
 
 ## Current state / resume
 
-`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。
+`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING`。
 Branch: `feat/m9-parametric-design-explorer`。Base: M8 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`。
 live HEAD / Draft PR / exact Git PreviewはGitとPR本文からfreshに解決し、下記の実装・測定checkpointと区別します。Ready / merge / manual Production / branch deletionは未許可。M10 NOT STARTED。
 
@@ -25,6 +25,33 @@ Axis A必須、B任意・異なるkey。min / max / stepは有限、小数6桁�
 候補数は`(floor((max-min)/step)+1)`の軸積。1D/2Dとも**最大64**を実行前に表示・拒否し、切捨てません。shapeがなければ元Caseで有効化する案内を出し、暗黙追加しません。pitch/countは元Caseの配置方式を先に一致させます。
 
 候補IDはB行→A列順の`candidate-{B index+1}-{A index+1}`。各候補はexact full parametersの独立deep cloneです。元Caseの入力不正・範囲不正はstudy全体を拒否。範囲内の形状不成立、SHGC不正、128枚超などはcandidate単位の`INVALID + reason`で残し、0には変換しません。
+
+## RF-M9-UX-01 — axis-aware starter ranges
+
+旧head `4891c20e230862bc845e3a01c36192c91d20e3e2` のIndependent FULL ReviewはA. PASS（Human報告）。その後のHuman UX指摘「軸変更で旧単位の範囲を保持」は今回RESOLVED。修正後headはGit/PRから解決し、Human UX / Focused Independent Re-Reviewは未実施です。
+
+`src/explorer/sweep.ts` のAXESにlabel / unit / recommendationを集約し、`recommendedSweepAxis(source, key)`をA/Bで共用します。パラメータ変更時にkey/min/max/stepを同時置換。「推奨値に戻す」でも現在のCaseを基に再生成します。通常の手入力、他方のrange編集、Case変更では範囲を上書きせず、既存STALE / 明示rerunを維持します。
+
+| 軸 | min → max / step | 単位 |
+| --- | --- | --- |
+| 方位 | 0 → 315 / 45 | ° |
+| SHGC | 0.2 → 0.8 / 0.1 | - |
+| 地面反射率 | 0 → 0.6 / 0.1 | - |
+| 庇の出 | 0.8 → 2 / 0.2 | m |
+| 庇の左右延長 | 0 → 1.5 / 0.25 | m |
+| 左右端部 / 中間フィンの出 | 0 → 1.2 / 0.2 | m |
+| 中間フィンpitch | 0.5 → 3 / 0.5 | m |
+| 中間フィンcount | 1 → 8 / 1 | 枚 |
+| 庇高さ | opening.headを小数6桁で上方量子化 → +0.6 / 0.1 | m |
+| 開口幅 / 下端 / 上端 | 現値を小数6桁へ量子化して±0.6 / 0.2 | m |
+
+幅は正値、下端のmaxは現head未満、上端のminは現sill超となるよう整数格子の境界で短縮します。通常各軸最大8値、組合せ最大64。表現不能・非有限の元形状から有効な推奨値を捏造せず、空欄と既存validation errorを維持。手入力の小数6桁規則・max64拒否は緩めません。
+
+これらはUIの探索開始値であり形状全体の成立・物理/法的妥当性・最適性を保証しません。特にhead変更による既存庇との干渉等はcanonical validationが判定します。shapeやpitch/count方式を自動追加/変換しません。2D ON時はB=SHGC（A=SHGCなら方位）を推奨値で初期化し、相手側の選択keyは両selectでdisabled。pure duplicate validationも保持します。
+
+検証（2026-09-16）: focused 52 PASS（追加28件）、全44 files / 629 PASS / 外部参照10 SKIP=NOT_RUN。typecheck / build / Golden / audit（0 vulnerabilities）/ diff checks PASS。既存engine・weather・geometry・comparison・multifloor・Golden・M1原本は変更なし。
+
+Local Chrome: A 庇→方位→SHGC→庇、B SHGC→方位→pitch、候補数49→56→42、単位/値の即時切替、手入力・Case形状変更時保持、A/Bリセット、重複disabled、A=SHGCでB=方位、実行→STALE→再実行→候補追加PASS。64候補の実Workerは24/64でcancelし未完了結果を拒否。390pxでdocument幅375px、range入力各92.4px、両軸/リセット/実行操作が収まることを目視確認。観測consoleは拡張originのSentry errorのみでproduct fatal/asset404は観測なし。新exact Git Previewのprovenanceと再確認結果はPR #14本文へ記録します。HTTP status未取得を200扱いせず、Human UX acceptanceも代行したとしません。
 
 ## Snapshot / lifecycle
 
@@ -80,7 +107,7 @@ Local Chrome (`2026-09-16`, synthetic 8760)ではSingle導線、weather missing�
 
 Local export: CSV/JSONのクリックは実施したもののdownload eventをsurfaceが返さず、download管理画面はbrowser policyでアクセス不可。printクリック後のnative print UI/PDFもこのsurfaceではinspect不可。保存ファイルの目視・browser JSON再取込・PDF visual acceptanceはUNVERIFIEDで、純CSV/JSON/SSR検証と区別します。browser policyを迂回する別制御やdownload先探索は行いません。長時間local sessionではpage URLに帰属するextension messagingと思われる3件の`A listener indicated an asynchronous response...`を観測（productにextension messaging APIなし）；最終Previewのfresh console確認と分離し、当該local sessionを無条件にerror0としません。
 
-実装セッションの最終checksとexact PreviewはPR本文へ記録します。Human UX ReviewとIndependent FULL Reviewは未実施として分離し、通常browser limitationはUNVERIFIEDのまま扱います。
+実装セッションの最終checksとexact PreviewはPR本文へ記録します。初回実装時はHuman UX ReviewとIndependent FULL Reviewを未実施として分離しました（後続review / RF修正は上記）。通常browser limitationはUNVERIFIEDのまま扱います。
 
 Human UX handoff（5点）:
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記post-merge証拠）。M9で追加した探索章は[独立した探索contract](PARAMETRIC_EXPLORER.md)に従い、Human UX / Independent FULL Review待ち。
+`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記post-merge証拠）。M9で追加した探索章は[独立した探索contract](PARAMETRIC_EXPLORER.md)に従い、RF-M9-UX-01修正後のHuman UX / Focused Independent Re-Review待ち。
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 

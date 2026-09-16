@@ -28,7 +28,7 @@
 
 ## M9 Current State
 
-`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。Draft維持、Ready / merge / post-merge Productionは未許可。最終headとGit PreviewはPR本文で解決。M9 Task Packetに従い、保護されたPreviewでHTTP statusを読めない場合はUNVERIFIEDを記録して実装waveを継続できますが、HTTP PASSやpre-merge acceptance PASSを推測しません。Human UXとIndependent reviewは別gate。[M9 contract](PARAMETRIC_EXPLORER.md)。
+`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING`。Draft維持、Ready / merge / post-merge Productionは未許可。最終headとGit PreviewはPR本文で解決。M9 Task Packetに従い、保護されたPreviewでHTTP statusを読めない場合はUNVERIFIEDを記録して実装waveを継続できますが、HTTP PASSやpre-merge acceptance PASSを推測しません。Human UXとIndependent reviewは別gate。[M9 contract](PARAMETRIC_EXPLORER.md)。
 
 ## 判定
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MAX_COMPARISON_CASES, type ComparisonCase } from "../../comparison";
-import { AXES, axisLabel, candidateCount, parameterValue, validateStudyDefinition } from "../../explorer/sweep";
+import { AXES, axisLabel, axisMetadata, candidateCount, parameterValue, recommendedSecondaryAxis, recommendedSweepAxis, validateStudyDefinition } from "../../explorer/sweep";
 import { freezeDeep, studyInputKey } from "../../explorer/study";
 import { studyCsv } from "../../explorer/export";
 import { parseStudyPreset, studyPreset } from "../../explorer/preset";
@@ -12,20 +12,21 @@ import { WeatherCoverageNotice, weatherPeriodLabels } from "../weather-coverage"
 import { GeometryPreview } from "./GeometryPreview";
 import { ExplorerCharts } from "./ExplorerCharts";
 
-const DEFAULT_SWEEP: SweepDefinition = { a: { key: "overhang.depthM", min: 0.8, max: 2, step: 0.2 } };
 function saveText(name: string, value: string, type: string) {
   const url = URL.createObjectURL(new Blob([value], { type }));
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = name;
   document.body.append(anchor); anchor.click(); anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-function AxisEditor({ axis, name, onChange }: { axis: SweepAxis; name: string; onChange: (axis: SweepAxis) => void }) {
+export function AxisEditor({ source, axis, name, otherKey, onChange }: { source: ComparisonCase; axis: SweepAxis; name: string; otherKey?: AxisKey; onChange: (axis: SweepAxis) => void }) {
+  const { unit } = axisMetadata(axis.key);
   return <fieldset className="explorer-axis-editor"><legend>Axis {name}</legend>
-    <label className="field"><span>探索パラメータ {name}</span><select value={axis.key} onChange={event => onChange({ ...axis, key: event.target.value as AxisKey })}>
-      {AXES.map(item => <option key={item.key} value={item.key}>{item.label} [{item.unit}]</option>)}
+    <label className="field"><span>探索パラメータ {name}</span><select value={axis.key} onChange={event => onChange(recommendedSweepAxis(source, event.target.value as AxisKey))}>
+      {AXES.map(item => <option key={item.key} value={item.key} disabled={item.key === otherKey}>{item.label} [{item.unit}]</option>)}
     </select></label>
     <div className="explorer-range">{([['min','最小'],['max','最大'],['step','刻み']] as const).map(([key, label]) =>
-      <label className="field" key={key}><span>{label} {name}</span><input type="number" step="any" value={Number.isFinite(axis[key]) ? axis[key] : ""} onChange={event => onChange({ ...axis, [key]: event.target.valueAsNumber })} /></label>)}</div>
+      <label className="field" key={key}><span>{label} {name} [{unit}]</span><input type="number" step="any" value={Number.isFinite(axis[key]) ? axis[key] : ""} onChange={event => onChange({ ...axis, [key]: event.target.valueAsNumber })} /></label>)}</div>
+    <button type="button" className="secondary-button" onClick={() => onChange(recommendedSweepAxis(source, axis.key))}>推奨値に戻す</button>
   </fieldset>;
 }
 export function ExplorerResults({ study, selected, onSelect, metric, metricLabel }: { study: StudyResult; selected: string; onSelect: (id: string) => void; metric: Metric; metricLabel: string }) {
@@ -49,7 +50,7 @@ export function ParametricExplorer({ dataset, source, caseCount, weatherLoading,
   onImport: (source: ComparisonCase) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [sweep, setSweep] = useState<SweepDefinition>(DEFAULT_SWEEP);
+  const [sweep, setSweep] = useState<SweepDefinition>(() => ({ a: recommendedSweepAxis(source, "overhang.depthM") }));
   const [result, setResult] = useState<StudyResult | null>(null);
   const [binding, setBinding] = useState<{ dataset: WeatherDataset; inputKey: string } | null>(null);
   const [invalidated, setInvalidated] = useState(true);
@@ -104,16 +105,16 @@ export function ParametricExplorer({ dataset, source, caseCount, weatherLoading,
       <p className="result-reading">自動最適化・ランキングではありません。小さい値が自動的に最良とは限りません。計算値は日射熱取得量で、HVAC負荷・正式な絶対kWh性能評価ではありません。</p>
       {!weatherUsable ? <p role="status">Singleで有効な気象データを読み込むか、デモを選んでください。比較結果が未計算でも探索できます。</p> : null}
       <div className="explorer-controls no-print">
-        <AxisEditor name="A" axis={sweep.a} onChange={a => setSweep({ ...sweep, a })} />
-        <div><label className="switch-row"><input type="checkbox" checked={!!sweep.b} onChange={event => setSweep(event.target.checked ? { ...sweep, b: { key: "solarHeatGainCoefficient", min: 0.3, max: 0.6, step: 0.1 } } : { a: sweep.a })} />2D探索（Axis Bを追加）</label>
-          {sweep.b ? <AxisEditor name="B" axis={sweep.b} onChange={b => setSweep({ ...sweep, b })} /> : <p>まずは1パラメータの変化を確認します。</p>}</div>
+        <AxisEditor name="A" source={source} axis={sweep.a} otherKey={sweep.b?.key} onChange={a => setSweep(current => ({ ...current, a }))} />
+        <div><label className="switch-row"><input type="checkbox" checked={!!sweep.b} onChange={event => { const enabled = event.target.checked; setSweep(current => enabled ? { ...current, b: recommendedSecondaryAxis(source, current.a.key) } : { a: current.a }); }} />2D探索（Axis Bを追加）</label>
+          {sweep.b ? <AxisEditor name="B" source={source} axis={sweep.b} otherKey={sweep.a.key} onChange={b => setSweep(current => ({ ...current, b }))} /> : <p>まずは1パラメータの変化を確認します。</p>}</div>
       </div>
       <div className="explorer-run no-print"><strong>候補数: {definition.count ?? "—"} / 最大{MAX_STUDY_CANDIDATES}</strong>
         <button type="button" className="run-button" disabled={!weatherUsable || !!definition.error || status === "running"} onClick={run}>探索を実行</button>
         <button type="button" className="secondary-button" disabled={status !== "running"} onClick={() => { client.cancel(); setStatus("canceled"); setInvalidated(true); setMessage("キャンセルしました。未完了runは結果として採用していません。"); }}>キャンセル</button>
       </div>
       {definition.error ? <p role="alert" className="field-error no-print">{definition.error}</p> : null}
-      <p className="no-print">小数6桁以内。min + index × stepの格子でmax以下まで（端点を勝手に追加しません）。shapeや配置方式は元の案で先に有効化してください。</p>
+      <p className="no-print">パラメータ変更時は推奨範囲へ切り替わります。推奨値は探索開始用で、形状成立や性能を保証しません。小数6桁以内。min + index × stepの格子でmax以下まで（端点を勝手に追加しません）。shapeや配置方式は元の案で先に有効化してください。</p>
       <div className="explorer-progress no-print" role="status" aria-live="polite"><progress max={Math.max(1, progress.total)} value={progress.completed} aria-label="探索進捗" /> {progress.completed} / {progress.total} · {status}</div>
       {message ? <p role="status" className="message no-print">{message}</p> : null}
       <div className="explorer-exports no-print">
