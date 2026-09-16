@@ -11,14 +11,16 @@
 | M5 — Validation / Stability | Golden・geometry・weather・third-party比較・boundary test | LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING |
 | M6 — Vercel Operation | Preview/Production運用、監視、release gate | Complete |
 | M7 — Advanced Facade Shading | 水平庇＋左右端部フィン＋中間フィン配列のdirect shadow・Single/Multi・出力 | Complete |
-| M8 — User Guide & Technical Manual | In-app beginner guide + parameter reference + technical model manual | IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS |
+| M8 — User Guide & Technical Manual | In-app beginner guide + parameter reference + technical model manual | Complete |
+| M9 — Parametric Design Explorer | Single 1D/2D sensitivity・Worker・candidate transfer・study export | IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING |
 
 ## Milestone gates
 
 - 各milestoneでscope・model前提・acceptance criteriaを新しいTask Packetとして確定します。
 - M4.5はHuman UX / Independent Review PASSを経てPR #7をsquash merge済みです。M5の[Completion Wave](VALIDATION_PLAN.md#10-completion-wave--local-verification--external-boundary) A〜E / Independent ReviewはPASS、Required Fixなし（Human報告）。PR #10はmerge済み。Radiance / EnergyPlus / SPA / annual physical external validationはNOT_RUNで、M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGです。M6はPR #11 squash merge後の[自動Production provenance・HTTP・browser gate](VERCEL_OPERATION.md#m6-post-merge-closure--phase-0)がPASSしCOMPLETEです。
 - M7はIndependent FULL Re-Review A. PASS / Required Fix CLOSED、[exact-head Human HTTP・Single/Multi CSV/PDF acceptance](ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review) PASS、PR #12 squash merge後のGit Production `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v` provenance・HTTP/assets・canonical browser smoke PASSによりCOMPLETEです。main checkpointは`642136058d538e89d29971b0a586f86ea3aaa926`です。
-- M8は[in-app Guide contract](USER_GUIDE.md)に沿ってIMPLEMENTATION_COMPLETEです。Independent FULL Review A. PASS / Required Fix NONE、Human UX Review（manual print / PDF visual acceptanceを含む）PASS、PRE-MERGE GATE PASSです。PR #13はOPEN / Draftを維持し、Ready / merge / post-merge Production confirmationはpendingで、自動移行しません。
+- M8はPR #13 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`とGit Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`のprovenance・HTTP/assets・Guide/Single/Multi/390px smoke PASSによりCOMPLETEです。[M8 closeout](USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。
+- M9は[探索contract](PARAMETRIC_EXPLORER.md)に沿って実装・local検証済み。旧headのIndependent FULL Review A. PASS（Human報告）。RF-M9-UX-01修正後はHuman UX / Focused Independent Re-Review待ち、Draft維持。M10は開始しません。
 - M5のvalidation完了前に絶対値を正式性能評価として扱いません。
 - Ready for Review、merge、manual Production操作はHuman Gateです。承認されたmain merge後のGit自動Productionは既存運用ですが、[post-merge release gate](RELEASE_GATE.md)でsource/alias/smokeを検証します。
 

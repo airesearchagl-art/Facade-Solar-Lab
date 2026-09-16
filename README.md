@@ -6,7 +6,9 @@
 
 ## Current state
 
-**M8 — User Guide & Technical Manual: IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS**。Independent FULL Review A. PASS / Required Fix NONE、Human UX Review（manual print / PDF visual acceptanceを含む）PASSです。上部の「使い方・技術情報」から、3分ガイド、Single/Multiの使い分け、入力パラメータ辞典、結果・保存・出力、技術詳細、適用範囲を閲覧できます。`#single` / `#multi` / `#guide`のhash navigationで、Guide往復時もSingle/Multiの入力・結果・stale stateを保持します。PR #13はOPEN / Draftを維持し、Ready / merge / post-merge Production confirmationはpendingです。[Guide contract](docs/USER_GUIDE.md)。
+**M9 — Parametric Design Explorer: IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING**。Singleの選択Caseと気象から15軸の1D/2D探索（最大64候補）をWorkerで実行します。感度line、Heatmap、夏期/冬期Trade-off、exact table、候補詳細、通常Singleへの追加、CSV・入力専用JSON・印刷/PDFを実装しました。入力変更後はSTALEとなり再実行が必要です。自動最適化や外部physical validationではありません。[探索contract・実測・review handoff](docs/PARAMETRIC_EXPLORER.md)。Ready / merge / manual Productionは別Human Gate。M10 NOT STARTED。
+
+**M8 — User Guide & Technical Manual: COMPLETE**。PR #13は`d1dc91fd18ea6149424c8b192174ab0a130dcb97`へsquash merge済み。Git自動Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`のprovenance・HTTP・canonical browser smoke PASS。[M8 closeout](docs/USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。上部Guideと`#single` / `#multi` / `#guide`間でWorkspace状態を保持します。
 
 **M7 — Advanced Facade Shading: COMPLETE**。水平庇＋左右端部フィン＋中間フィン配列のdirect shadow、Single/Multi比較・保存・出力を実装済みです。Independent FULL Re-Review A. PASS / Required Fix CLOSED、accepted product head `41302270ca4a84501f824ddef9f62194cad95b8e`のHuman HTTP・Single/Multi CSV/PDF acceptance PASSを[証拠](docs/ADVANCED_FACADE_SHADING.md#human-acceptance--independent-re-review)へ記録しました。PR #12はsquash merge済み。main `642136058d538e89d29971b0a586f86ea3aaa926`のGit自動Production provenance・HTTP・Single/Multi post-merge browser smokeもPASSです。
 
@@ -25,7 +27,7 @@
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Production確認checkpoint: main `642136058d538e89d29971b0a586f86ea3aaa926` / `dpl_DyRqKwmhrdHo8gQNqw9pqqmyAR7v`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・favicon.svg各200、M7 Single/Multi fin edit・rerun・390px PASS。deployment成功は物理性能validationを意味しません。
+- Production確認checkpoint: main `d1dc91fd18ea6149424c8b192174ab0a130dcb97` / `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・favicon.svg各200、M8 Guide / Single / Multi / 390px smoke PASS。deployment成功は物理性能validationを意味しません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。Single/Multiはcanonical `simulateFacade()`へ渡し、有効フィンなしなら既存`facade-v1-weather`、ありなら`facade-v2-weather`を使います。各Floorで1回だけ実行し、Building Totalは単純合算です。solar / weather / SHGC / energy aggregationは共有し、M7でdirect shadowだけを拡張しています。
 

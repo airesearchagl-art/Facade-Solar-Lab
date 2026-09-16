@@ -60,6 +60,9 @@ import { GeometryPreview } from "./components/GeometryPreview";
 import { MonthlyChart } from "./components/MonthlyChart";
 import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
 import { UserGuide } from "./components/UserGuide";
+import { ParametricExplorer } from "./components/ParametricExplorer";
+import { transferCandidate } from "../explorer/study";
+import "./explorer.css";
 import { applyPresetToAppState } from "./preset-state";
 import { parseBrowserEpwFile } from "./weather-file";
 import { WeatherCoverageNotice, weatherPeriodLabels } from "./weather-coverage";
@@ -818,6 +821,15 @@ function SingleFloorWorkspace() {
           </section>
         </div>
       </section>
+
+      <ParametricExplorer
+        dataset={dataset}
+        source={selectedCase}
+        caseCount={workspace.cases.length}
+        weatherLoading={loadingWeather}
+        onTransfer={(candidate) => mutateWorkspace((current) => transferCandidate(current, candidate, true))}
+        onImport={(source) => mutateWorkspace((current) => replaceComparisonCase(current, { ...source, id: selectedCase.id }))}
+      />
 
       <PresetPanel
         selectedCaseName={selectedCase.name}

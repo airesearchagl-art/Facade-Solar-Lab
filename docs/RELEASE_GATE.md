@@ -18,13 +18,17 @@
 
 ## M8 Current State
 
-`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。accepted exact-head Preview evidenceはproduct head `25ad78ca18519c0c8e6f211545f83d883000025a`に紐づきます。
+`COMPLETE`。PR #13 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`、Git自動Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`のpost-merge provenance / canonical alias / HTTP-assets / browser smoke PASS。[証拠](USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。以下accepted product head `25ad78ca18519c0c8e6f211545f83d883000025a`のreview/acceptanceはhistorical checkpointとして保持します。
 
 - Independent FULL Review: A. PASS / Required Fix: NONE（Human報告）。
 - Human UX Review: PASS。上部Guide導線、3分ガイド、Parameter Reference、中間フィンpitch / count、Beginner / Technical Manual階層、390px responsive、manual print / PDF usabilityを含む。
 - Human manual print / PDF visual acceptance: PASS。Agent-side local PDF generationが歴史的にUNVERIFIEDだった記録は保持し、Agent verificationへ書き換えない。
-- PR #13はOPEN / Draft。Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpending / NOT_RUN。manual Production mutationなし。
+- PR #13はMERGED。M8 remaining tasksなし。manual Production mutationなし。
 - M5は`LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`。Radiance / EnergyPlus / SPAはNOT_RUNで、formal absolute-kWh validationは主張しない。
+
+## M9 Current State
+
+`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / HUMAN_UX_REVIEW_PENDING / FOCUSED_INDEPENDENT_RE_REVIEW_PENDING`。Draft維持、Ready / merge / post-merge Productionは未許可。最終headとGit PreviewはPR本文で解決。M9 Task Packetに従い、保護されたPreviewでHTTP statusを読めない場合はUNVERIFIEDを記録して実装waveを継続できますが、HTTP PASSやpre-merge acceptance PASSを推測しません。Human UXとIndependent reviewは別gate。[M9 contract](PARAMETRIC_EXPLORER.md)。
 
 ## 判定
 

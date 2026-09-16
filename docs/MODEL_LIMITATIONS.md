@@ -10,6 +10,13 @@ M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPl
 
 M8の[in-app Guide](USER_GUIDE.md)は、これらの適用範囲をBeginner Guide / Parameter Reference / Results Guide / Technical Manualへ整理したdocumentation layerです。Guide追加は計算精度、外部solver比較、absolute-kWh validationの状態を変更しません。
 
+## M9 explorer boundary
+
+- Singleの1D/2D候補展開・感度表示であり自動最適化ではありません。最大64候補、通常比較へ戻せるのは最大4案です。Multi sweepは未実装です。
+- 各候補は既存canonical engineへ渡します。大量比較・同一engineとのexact一致・Worker導入は物理validationの代替ではありません。
+- INVALIDはreason付きnon-result、partialは読込区間、syntheticは操作デモ。STALE中は出力・候補転送を禁止します。
+- Runtimeは端末・気象区間数・fin密度に依存します。cap64は性能SLAではありません。
+
 ## In-app guide boundary
 
 - Guideはstatic client contentで、計算engine、weather parser、preset schema、CSV/PDF結果contractへ新しい物理挙動を追加しません。
