@@ -18,13 +18,17 @@
 
 ## M8 Current State
 
-`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。accepted exact-head Preview evidenceはproduct head `25ad78ca18519c0c8e6f211545f83d883000025a`に紐づきます。
+`COMPLETE`。PR #13 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`、Git自動Production `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`のpost-merge provenance / canonical alias / HTTP-assets / browser smoke PASS。[証拠](USER_GUIDE.md#m8-post-merge-closeout--m9-phase-0)。以下accepted product head `25ad78ca18519c0c8e6f211545f83d883000025a`のreview/acceptanceはhistorical checkpointとして保持します。
 
 - Independent FULL Review: A. PASS / Required Fix: NONE（Human報告）。
 - Human UX Review: PASS。上部Guide導線、3分ガイド、Parameter Reference、中間フィンpitch / count、Beginner / Technical Manual階層、390px responsive、manual print / PDF usabilityを含む。
 - Human manual print / PDF visual acceptance: PASS。Agent-side local PDF generationが歴史的にUNVERIFIEDだった記録は保持し、Agent verificationへ書き換えない。
-- PR #13はOPEN / Draft。Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpending / NOT_RUN。manual Production mutationなし。
+- PR #13はMERGED。M8 remaining tasksなし。manual Production mutationなし。
 - M5は`LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING`。Radiance / EnergyPlus / SPAはNOT_RUNで、formal absolute-kWh validationは主張しない。
+
+## M9 Current State
+
+`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。Focused Independent Re-Review / Human UX PASS、Required Fix NONE OPEN（Human報告、accepted implementation head `abdceeaf83f934eadd72617aa1fb08d3ffc65417`）。このM9集約状態のPRE-MERGE GATE PASSはTerminal Evidence Sync Task PacketのHuman受理判断であり、匿名HTTP200測定PASSではありません。accepted Git Preview `dpl_6BKxuATMaQcbGUX3zjxXSTM1kawF` / READYの匿名HTTP証拠はUNVERIFIED / Deployment ProtectionによるBLOCKED（index302）を保持します。一般のHTTP測定gateや過去のops:verify結果を変更せず、browser表示から200を補完しません。docs-only terminal headとaccepted implementation / PreviewのSHAを区別し、最終head・差分・checksはPR本文へ記録します。PR #14はOPEN / Draft、Ready / mergeは別Human承認待ち、merge / post-merge Production confirmationはpending。M10 NOT STARTED。[受理証拠と帰属](PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。
 
 ## 判定
 

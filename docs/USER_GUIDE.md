@@ -2,7 +2,7 @@
 
 ## Status
 
-`IMPLEMENTATION_COMPLETE / INDEPENDENT_FULL_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`
+`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記post-merge証拠）。M9で追加した探索章は[独立した探索contract](PARAMETRIC_EXPLORER.md)に従い、RF-M9-UX-01 RESOLVED / Focused Independent Re-Review PASS / Human UX PASS / Human受理PRE-MERGE GATE PASS（accepted implementation head `abdceeaf83f934eadd72617aa1fb08d3ffc65417`）。PR #14はDraft維持、merge / post-merge Production confirmationはpending。匿名HTTP200はUNVERIFIED / protection BLOCKED、RF修正後のsaved-file再acceptanceは主張しません。
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 
@@ -30,6 +30,7 @@ Guide内の章anchorは`#guide-` prefixを使います。これにより同じUR
 | Single / Multi | mode cards / structure flow | 最大4案、Floor composition、cross-floor非対応 |
 | Parameter Reference | static SVG / parameter cards | UI名、単位、意味、増減、注意。pitch例と最大枚数 |
 | Study examples | 3 study cards | 庇、フィン、Multi。結果数値・優劣をhard-codeしない |
+| Parametric Explorer | `#guide-explorer` | 7-step Single探索、max64、range、Worker、snapshot/stale、canonical engine、INVALID、非最適化 |
 | Results Guide | result cards | period、baseline/delta、「庇あり/なし」、Building Total |
 | Export / Preset | export cards | current snapshot、stale禁止、input-only JSON、再計算 |
 | Technical Manual | details / pipeline / formula | solar、direct v1/v2、diffuse、ground、gain、Multi |
@@ -92,8 +93,20 @@ Accepted exact-head Preview evidence remains tied to product head `25ad78ca18519
 - Human UX Review: **PASS**。上部「使い方・技術情報」の視認性、3分ガイドの操作理解、Parameter Reference、中間フィンpitch / count説明、Beginner / Technical Manualの情報階層、390px responsiveを確認。
 - Human manual print / PDF visual acceptance: **PASS**。
 - 上記Human print / PDF acceptanceは、Agent-side local PDF generationが歴史的に`UNVERIFIED`だった事実をAgent verificationへ書き換えません。Human由来のvisual acceptanceとして記録します。
-- PRE-MERGE GATE: **PASS**。M8 implementationはcomplete。PR #13は`OPEN / Draft`を維持し、Ready / mergeは別Human authorization、merge / post-merge Production confirmationはpendingです。
+- Historical pre-merge checkpoint: PRE-MERGE GATE PASS。下記M8 post-merge closeoutが当時のPR #13 OPEN / Draft / merge pending記述をsupersedeします。
 - このterminal syncはdocumentation/current-state recordsのみ。accepted M8 headからproduct source / engine / tests / runner / expected・Golden behavioral diffは0です。
+
+## M8 post-merge closeout — M9 Phase 0
+
+Read-only checked `2026-09-15T22:39:53.092Z` before M9 implementation:
+
+- PR #13 MERGED、squash merge / origin/main = `d1dc91fd18ea6149424c8b192174ab0a130dcb97`、starting working tree clean。
+- Vercel `dpl_CUM3EEeqj4q3Gs3oy9GGd5srDnb1`: source git / main / exact SHA、production、READY、canonical alias assigned。project/config/provenance gate PASS。
+- Canonical HTTP: `/`、`/assets/index-CTU_qd2s.js`、`/assets/index-DMi5Aj3k.css`、`/favicon.svg` = 200 / non-empty / expected MIME。
+- Authenticated Chrome: direct `#guide`、3分ガイド、Parameter Reference、Technical Manual、Single Demo / finite calculation、Multi Demo / Building Total、390px top navigation + Guide PASS。
+- 390px: viewport 390 / document scrollWidth 375。app-origin fatal/error 0、asset 404 0。extension-origin Sentry errorは除外。
+- Manual Production mutation / branch deletion: none。M8 = MERGED / PRODUCTION_PROVENANCE_PASS / PRODUCTION_HTTP_PASS / PRODUCTION_BROWSER_SMOKE_PASS / COMPLETE。
+- M8再closeout cycleは不要。M9実装とはcheckpointを分離し、物理validation完了を意味しません。
 
 ## M7 post-merge closure used by M8
 

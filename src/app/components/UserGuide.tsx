@@ -1,4 +1,5 @@
 import { GUIDE_MODEL_IDENTITY } from "../guide-contract";
+import { MAX_STUDY_CANDIDATES, CANDIDATE_GENERATION_VERSION } from "../../explorer/types";
 import type { WorkspaceMode } from "../workspace-navigation";
 
 interface ParameterItem {
@@ -89,7 +90,7 @@ const QUICK_STEPS = [
 const TOC = [
   ["はじめに", "guide-intro"], ["3分で試す", "guide-quick"],
   ["単一階 / 複数階", "guide-modes"], ["パラメータ", "guide-parameters"],
-  ["検討例", "guide-examples"], ["結果の読み方", "guide-results"],
+  ["検討例", "guide-examples"], ["パラメトリック探索", "guide-explorer"], ["結果の読み方", "guide-results"],
   ["保存・出力", "guide-exports"], ["技術詳細", "guide-technical"],
   ["適用範囲", "guide-limitations"],
 ] as const;
@@ -247,6 +248,28 @@ export function UserGuide({ onNavigate }: { readonly onNavigate: (mode: Workspac
               <article><span>02</span><h3>中間フィン</h3><p>A: なし / B: <code>D0.6・P2.0</code> / C: <code>D0.6・P1.0</code></p><p>夏期・冬期・月別と基準案差を確認します。数値だけで自動的な優劣は決めません。</p></article>
               <article><span>03</span><h3>Multi-floor</h3><p>1F <code>P2.0</code> / 2F <code>P1.5</code> / 3F <code>P1.0</code></p><p>Building TotalとFloor Breakdownを併読し、全体差と階別寄与を分けて見ます。</p></article>
             </div>
+          </section>
+
+          <section className="guide-section" id="guide-explorer" aria-labelledby="guide-explorer-title">
+            <div className="guide-heading"><p>PARAMETRIC DESIGN EXPLORER</p><h2 id="guide-explorer-title">少しずつ条件を変えて、傾向を見る</h2></div>
+            <p>Singleの選択中の案を基準にする、独立した探索結果です。通常の比較案を一括変更せず、候補を選んでから追加できます。Multi探索は対象外です。</p>
+            <ol>
+              <li>単一階モードでEPWまたはデモ気象を用意し、元にする案を選びます。</li>
+              <li>「パラメトリック探索」→「探索を設定する」を開きます。</li>
+              <li>Axis Aのパラメータ・最小・最大・刻みを設定します。庇やフィンは元の案で先に有効にします。</li>
+              <li>必要なら2Dを有効にし、別のAxis Bを指定します。総候補数は最大{MAX_STUDY_CANDIDATES}です。</li>
+              <li>「探索を実行」。進捗を確認し、必要ならキャンセルします。未完了結果は採用しません。</li>
+              <li>1Dグラフ、2D Heatmap・Trade-offと正確な数値表から候補を選び、完全入力・形状・実フィン枚数を確認します。</li>
+              <li>「比較案に追加」で通常のSingleへ追加し、比較計算を明示実行します。探索CSV・印刷/PDFも利用できます。</li>
+            </ol>
+            <p>Heatmapの色は選択指標の大小だけです。Trade-offは横軸が夏期差、縦軸が冬期差、十字が元の案（0 / 0）。差分 = 候補 − 元の案。小さい値を自動的に「良い」「最適」とは判定しません。</p>
+            <p>元の案・気象・範囲が変わるとSTALEになります。前回snapshotを残しますが、再実行まで比較案追加・結果出力を禁止します。partialは読込期間のみ、syntheticは操作デモであり性能証拠ではありません。</p>
+            <details><summary>探索の技術契約</summary>
+              <p>{CANDIDATE_GENERATION_VERSION}: 小数6桁以内の整数スケール格子 min + index × step ≤ max。浮動小数の繰返し加算をせず、格子にないmaxを追加しません。同一軸の重複・不正な範囲・上限超過は拒否し、候補の形状不成立はINVALIDとして理由を残します。</p>
+              <p>基準案は探索範囲外でも維持。候補の直接影・太陽位置・気象・SHGC・集計は既存のcanonical engineをそのまま呼びます。Web Workerで実行し、キャンセル時はterminate、古いrunの応答は破棄します。元の案・気象と結果snapshotは分離します。</p>
+              <p>CSVは全候補・入力・実配置・model identity・気象出典・実行日時を記録。JSONは入力専用で、結果・EPW・local path・認証情報を含みません。読み込み時は選択中の案の入力置換を確認し、再計算が必要です。</p>
+              <p>物理モデルや精度の拡張ではありません。fin diffuse / cross-floor shadow未実装、M5外部参照NOT_RUN、正式な絶対kWh物理validation未完了を維持します。</p>
+            </details>
           </section>
 
           <section className="guide-section" id="guide-results" aria-labelledby="guide-results-title">
