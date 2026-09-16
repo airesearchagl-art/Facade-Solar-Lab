@@ -12,21 +12,22 @@ import { WeatherCoverageNotice, weatherPeriodLabels } from "../weather-coverage"
 import { GeometryPreview } from "./GeometryPreview";
 import { ExplorerCharts } from "./ExplorerCharts";
 
-function saveText(name: string, value: string, type: string) {
+export function saveText(name: string, value: string, type: string) {
   const url = URL.createObjectURL(new Blob([value], { type }));
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = name;
   document.body.append(anchor); anchor.click(); anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export function AxisEditor({ source, axis, name, otherKey, onChange }: { source: ComparisonCase; axis: SweepAxis; name: string; otherKey?: AxisKey; onChange: (axis: SweepAxis) => void }) {
+export function AxisEditor({ source, axis, name, otherKey, onChange, recommend, unavailable = [] }: { source: ComparisonCase; axis: SweepAxis; name: string; otherKey?: AxisKey; onChange: (axis: SweepAxis) => void; recommend?: (key: AxisKey) => SweepAxis; unavailable?: readonly AxisKey[] }) {
   const { unit } = axisMetadata(axis.key);
+  const recommendation = recommend ?? ((key: AxisKey) => recommendedSweepAxis(source, key));
   return <fieldset className="explorer-axis-editor"><legend>Axis {name}</legend>
-    <label className="field"><span>探索パラメータ {name}</span><select value={axis.key} onChange={event => onChange(recommendedSweepAxis(source, event.target.value as AxisKey))}>
-      {AXES.map(item => <option key={item.key} value={item.key} disabled={item.key === otherKey}>{item.label} [{item.unit}]</option>)}
+    <label className="field"><span>探索パラメータ {name}</span><select value={axis.key} onChange={event => onChange(recommendation(event.target.value as AxisKey))}>
+      {AXES.map(item => <option key={item.key} value={item.key} disabled={item.key === otherKey || unavailable.includes(item.key)}>{item.label} [{item.unit}]</option>)}
     </select></label>
     <div className="explorer-range">{([['min','最小'],['max','最大'],['step','刻み']] as const).map(([key, label]) =>
       <label className="field" key={key}><span>{label} {name} [{unit}]</span><input type="number" step="any" value={Number.isFinite(axis[key]) ? axis[key] : ""} onChange={event => onChange({ ...axis, [key]: event.target.valueAsNumber })} /></label>)}</div>
-    <button type="button" className="secondary-button" onClick={() => onChange(recommendedSweepAxis(source, axis.key))}>推奨値に戻す</button>
+    <button type="button" className="secondary-button" onClick={() => onChange(recommendation(axis.key))}>推奨値に戻す</button>
   </fieldset>;
 }
 export function ExplorerResults({ study, selected, onSelect, metric, metricLabel }: { study: StudyResult; selected: string; onSelect: (id: string) => void; metric: Metric; metricLabel: string }) {

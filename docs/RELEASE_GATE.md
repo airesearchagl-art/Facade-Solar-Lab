@@ -28,7 +28,11 @@
 
 ## M9 Current State
 
-`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。Focused Independent Re-Review / Human UX PASS、Required Fix NONE OPEN（Human報告、accepted implementation head `abdceeaf83f934eadd72617aa1fb08d3ffc65417`）。このM9集約状態のPRE-MERGE GATE PASSはTerminal Evidence Sync Task PacketのHuman受理判断であり、匿名HTTP200測定PASSではありません。accepted Git Preview `dpl_6BKxuATMaQcbGUX3zjxXSTM1kawF` / READYの匿名HTTP証拠はUNVERIFIED / Deployment ProtectionによるBLOCKED（index302）を保持します。一般のHTTP測定gateや過去のops:verify結果を変更せず、browser表示から200を補完しません。docs-only terminal headとaccepted implementation / PreviewのSHAを区別し、最終head・差分・checksはPR本文へ記録します。PR #14はOPEN / Draft、Ready / mergeは別Human承認待ち、merge / post-merge Production confirmationはpending。M10 NOT STARTED。[受理証拠と帰属](PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。
+`COMPLETE`。PR #14 squash merge/main `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099`、Git自動Production `dpl_3LkxDP1izwbW5GRzQrCdPV7Es8wN` READY、provenance・canonical HTTP/assets/Worker PASS（M10 Phase 0 read-only）。merge前のHuman受理状態と匿名Preview HTTP BLOCKEDは[M9履歴](PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)として保持。
+
+## M10 Current State
+
+`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。新exact-head Git Previewとbrowser/HTTPの実測結果はPR本文で同期。Human UX / Independent FULL ReviewはAgentで代行せず、Ready / merge / post-merge Productionは別gate。M11 NOT STARTED。[M10 acceptanceと未検証項目](MULTIFLOOR_PARAMETRIC_EXPLORER.md)。
 
 ## 判定
 

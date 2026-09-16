@@ -2,7 +2,7 @@
 
 ## Status
 
-`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記post-merge証拠）。M9で追加した探索章は[独立した探索contract](PARAMETRIC_EXPLORER.md)に従い、RF-M9-UX-01 RESOLVED / Focused Independent Re-Review PASS / Human UX PASS / Human受理PRE-MERGE GATE PASS（accepted implementation head `abdceeaf83f934eadd72617aa1fb08d3ffc65417`）。PR #14はDraft維持、merge / post-merge Production confirmationはpending。匿名HTTP200はUNVERIFIED / protection BLOCKED、RF修正後のsaved-file再acceptanceは主張しません。
+`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記証拠）。M9もPR #14 merge / Production provenance・HTTP/assets確認済みでCOMPLETE。過去の保護Preview HTTP未確認・saved-file未再検証の帰属は[M9履歴](PARAMETRIC_EXPLORER.md)に保持。M10の複数階探索章は実装済み、Human UX / Independent FULL Review pending。[M10 contract](MULTIFLOOR_PARAMETRIC_EXPLORER.md)。
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 
@@ -31,6 +31,7 @@ Guide内の章anchorは`#guide-` prefixを使います。これにより同じUR
 | Parameter Reference | static SVG / parameter cards | UI名、単位、意味、増減、注意。pitch例と最大枚数 |
 | Study examples | 3 study cards | 庇、フィン、Multi。結果数値・優劣をhard-codeしない |
 | Parametric Explorer | `#guide-explorer` | 7-step Single探索、max64、range、Worker、snapshot/stale、canonical engine、INVALID、非最適化 |
+| Multi-floor Explorer | `#guide-multi-explorer` | 選択階／全階scope、2F庇と全階SHGC例、Building Total=Floor和、geometry、max4 transfer、input-only exports |
 | Results Guide | result cards | period、baseline/delta、「庇あり/なし」、Building Total |
 | Export / Preset | export cards | current snapshot、stale禁止、input-only JSON、再計算 |
 | Technical Manual | details / pipeline / formula | solar、direct v1/v2、diffuse、ground、gain、Multi |

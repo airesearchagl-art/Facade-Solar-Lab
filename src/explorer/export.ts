@@ -1,6 +1,6 @@
 import type { StudyResult } from "./types";
 
-function cell(value: string | number): string {
+export function cell(value: string | number): string {
   if (typeof value === "number" && !Number.isFinite(value)) throw new RangeError("CSV値は有限値が必要です。");
   const text = typeof value === "string" && /^\s*[=+\-@]/u.test(value) ? `'${value}` : String(value);
   return `"${text.replaceAll('"', '""')}"`;

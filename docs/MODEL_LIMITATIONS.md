@@ -12,10 +12,10 @@ M8の[in-app Guide](USER_GUIDE.md)は、これらの適用範囲をBeginner Guid
 
 ## M9 explorer boundary
 
-- Singleの1D/2D候補展開・感度表示であり自動最適化ではありません。最大64候補、通常比較へ戻せるのは最大4案です。Multi sweepは未実装です。
+- Singleの1D/2D候補展開・感度表示であり自動最適化ではありません。最大64候補、通常比較へ戻せるのは最大4案です。M10は同じ契約を選択階／全階共通のMulti探索へ拡張します。階ごとの独立組合せ探索ではありません。
 - 各候補は既存canonical engineへ渡します。大量比較・同一engineとのexact一致・Worker導入は物理validationの代替ではありません。
 - INVALIDはreason付きnon-result、partialは読込区間、syntheticは操作デモ。STALE中は出力・候補転送を禁止します。
-- Runtimeは端末・気象区間数・fin密度に依存します。cap64は性能SLAではありません。
+- Runtimeは端末・気象区間数・fin密度・Floor数に依存します。cap64は性能SLAではありません。M10でも既存Multi routeのFloor合算のみでcross-floor遮蔽を導入しません。方位角/地面反射率は建物共通なので全階scopeのみ。共通推奨範囲がない場合はエラー、候補の一階が不成立なら建物候補全体INVALID。外部solver検証ではありません。
 
 ## In-app guide boundary
 

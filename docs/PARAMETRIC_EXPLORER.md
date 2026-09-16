@@ -2,9 +2,9 @@
 
 ## Current state / resume
 
-`IMPLEMENTATION_COMPLETE / RF-M9-UX-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`。
+`COMPLETE`。PR #14は `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099` へsquash merge済み。Git自動Production / canonical HTTP-assets-Workerのread-only結果は[M10 Phase 0](MULTIFLOOR_PARAMETRIC_EXPLORER.md#m9-closeout--phase-0)。以下のterminal acceptanceはmerge前のhistorical evidenceであり、当時のDraft / merge pending / M10 NOT STARTED記述をCurrent Stateへ再適用しません。
 Branch: `feat/m9-parametric-design-explorer`。Base: M8 squash merge `d1dc91fd18ea6149424c8b192174ab0a130dcb97`。
-live HEAD / Draft PR / exact Git PreviewはGitとPR本文からfreshに解決し、下記の実装・測定checkpointと区別します。Ready / merge / manual Production / branch deletionは未許可。M10 NOT STARTED。
+M9のremaining tasksはありません。M10は別Human Task Packetによる[複数階探索](MULTIFLOOR_PARAMETRIC_EXPLORER.md)。M9共有range/Worker contractと過去のHuman/Agent attributionを維持し、closeout自身のmerge記録のために別cycleを作りません。
 
 ## Terminal acceptance / evidence attribution
 
@@ -23,7 +23,7 @@ live HEAD / Draft PR / exact Git PreviewはGitとPR本文からfreshに解決し
 
 ## Product contract
 
-Singleの選択中Caseと同じWeatherDatasetを使用します。Explorerに別のEPW入力を設けません。通常比較が未実行でも、有効な気象とCaseがあれば設定・実行できます。Multi sweep、自動最適化、ランキング、推奨案、scoreは対象外です。
+M9 Singleは選択中Caseと同じWeatherDatasetを使用します。別EPW入口なし。通常比較が未実行でも、有効な気象とCaseがあれば実行できます。M10 Multi adapterは別contractに従います。自動最適化、ランキング、推奨案、scoreは対象外です。
 
 - `src/explorer/`: Pure TSのrange生成、candidate、study、protocol、CSV、入力専用preset。
 - `src/app/explorer.worker.ts`: Vite標準module Worker。既存`simulateFacade()`をexact reuse。
