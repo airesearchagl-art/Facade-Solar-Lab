@@ -2,6 +2,10 @@
 
 ## Current state / resume
 
+M10 `COMPLETE`。PR #15はsquash merge済み、main `56a0f19eb4103c5231f09ec1c79dcfe2f782d783` / Git Production `dpl_FLzFM4fpWcXr2NSZmCe71ez4dwY3` READY。M11 Phase 0のprovenance・canonical HTTP/assets/両Explorer Worker確認は[こちら](WEATHER_SCENARIO_MATRIX.md#m10-post-merge-fresh-closeout)。M10残作業なし、再closeout cycleは作成しません。以下のpre-merge状態はhistorical / supersededで、M11開始禁止やReady/merge待ちをcurrent指示として実行しないこと。
+
+### Historical pre-merge handoff
+
 `IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`（Human報告）。Required Fix: NONE OPEN。
 Branch: `feat/m10-multifloor-parametric-explorer`。Base: `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099`。
 PR #15 OPEN / Draft。live HEAD / exact Git PreviewはGitとPR本文からfreshに解決し、下記reviewed checkpointsと区別します。このファイルを含むcommit SHAを自己参照固定しません。既存PRを再作成しないこと。次はReady transition authorization待ち。merge / post-merge Production確認はpending。Ready / merge / manual Production / branch deletionは未許可。M11 NOT STARTED。

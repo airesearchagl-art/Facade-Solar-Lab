@@ -6,7 +6,9 @@
 
 ## Current state
 
-**M10 — Multi-floor Parametric Explorer: IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS**（Human報告）。Required Fix: NONE OPEN。Multiの選択階のみ／全階共通scope、1D/2D探索（最大64）、Building TotalとFloor Breakdown・形状、通常Multiへの追加（最大4案）、CSV・入力専用JSON・印刷/PDFを実装。M9のrange/Workerと既存Multi計算を再利用し、物理式は変更しません。[M10 contract・証拠の帰属・PDF Advisory](docs/MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。PR #15 OPEN / Draft、Ready承認・merge・post-merge Production確認は後続Gate。M11 NOT STARTED。
+**M11 — Climate / Weather Scenario Matrix: IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING**。Single/Multiの「気象シナリオ比較」で最大4気象×4設計を比較。Design ΔとWeather Δを区別し、期間不一致はNOT_COMPARABLE。canonical計算、Worker、snapshot/STALE、matrix/chart/階別詳細、CSV・入力専用JSON・A4横向き印刷を実装。[契約・検証・未確認項目](docs/WEATHER_SCENARIO_MATRIX.md)。Ready / merge / post-merge Productionは後続Human Gate。M12 NOT STARTED。
+
+**M10 — Multi-floor Parametric Explorer: COMPLETE**。PR #15 squash merge `56a0f19eb4103c5231f09ec1c79dcfe2f782d783`、Git Production READY・canonical HTTP/assets/Single/Multi Explorer Worker PASS（M11 Phase 0 read-only）。[過去のreview・Human受理・PDF Advisory](docs/MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)の帰属は維持し、再reviewしたとは扱いません。
 
 **M9 — Parametric Design Explorer: COMPLETE**。PR #14 squash merge `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099`、Git自動Production provenance・HTTP/assets/Worker PASS。[M9履歴](docs/PARAMETRIC_EXPLORER.md)。Singleの15軸・1D/2D・canonical Worker・immutable snapshot/STALE・CSV/JSON/printを維持。Ready / merge / manual Productionは別Human Gateです。
 
@@ -29,7 +31,7 @@
 - Single-floor Comparison: Case追加・複製・baseline・期間別/月別の日射熱取得・入力差分・代表日参考線・全案形状PDF・CSV・入力専用JSONプリセットを実装済み
 - Multi-floor Comparison: Building Case / Floor追加・複製・削除、建物合計・階別Case比較・階別月次比較、積層立面・断面・全階の参考線、PDF・CSV・入力専用JSONプリセットを実装済み
 - Backend / Database: なし
-- Production確認checkpoint: main `9d2efd6c3db0afcc45c6bbfc5cb19f78e0464099` / `dpl_3LkxDP1izwbW5GRzQrCdPV7Es8wN`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・explorer Worker・favicon.svg各200（M10 Phase 0 read-only）。M9 Human UX/Reviewは再実施していません。deployment成功は物理validationではありません。
+- Production確認checkpoint: main `56a0f19eb4103c5231f09ec1c79dcfe2f782d783` / `dpl_FLzFM4fpWcXr2NSZmCe71ez4dwY3`、Git自動Production READY。[canonical URL](https://facade-solar-lab.vercel.app/)のindex・JS・CSS・Single/Multi Explorer Worker・favicon.svg各200（M11 Phase 0 read-only）。M10 Human UX/Reviewは再実施していません。deployment成功は物理validationではありません。
 
 旧MVP v0.1原本は `legacy/mvp-v0.1/` に改変せず保存しています。Single/Multiはcanonical `simulateFacade()`へ渡し、有効フィンなしなら既存`facade-v1-weather`、ありなら`facade-v2-weather`を使います。各Floorで1回だけ実行し、Building Totalは単純合算です。solar / weather / SHGC / energy aggregationは共有し、M7でdirect shadowだけを拡張しています。
 
@@ -104,4 +106,4 @@ npm audit
 
 ## Development status
 
-M4.5 / M6 / M7 / M8 / M9はCOMPLETE。M5はIndependent Review A. PASSを経てLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M10はcurrent milestoneで、Draft PR #15上で実装済み・Required Fix解消・Focused Independent Re-Review / Human UX受理済みです。Ready / merge / post-merge Production confirmationは後続Gateとして扱い、M11 NOT STARTEDです。
+M4.5 / M6 / M7 / M8 / M9 / M10はCOMPLETE。M5はLOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDINGで、絶対値 `[kWh]` の正式な物理validationは未完了です。M11はcurrent milestoneとして実装済み・Draft review / Human acceptance対象です。Ready / merge / post-merge Production confirmationは後続Gateとして扱い、M12 NOT STARTEDです。

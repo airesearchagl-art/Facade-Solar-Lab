@@ -10,6 +10,13 @@ M5: LOCAL_VALIDATION_COMPLETE / EXTERNAL_REFERENCE_PENDING。Radiance / EnergyPl
 
 M8の[in-app Guide](USER_GUIDE.md)は、これらの適用範囲をBeginner Guide / Parameter Reference / Results Guide / Technical Manualへ整理したdocumentation layerです。Guide追加は計算精度、外部solver比較、absolute-kWh validationの状態を変更しません。
 
+## M11 weather scenario boundary
+
+- 既存設計案×最大4気象（最大16組合せ）の感度比較。parametric sweepとの直積、ranking、future climate生成、外部weather APIはありません。Single/Multi canonical計算・aggregationを変更しません。
+- Weather Δは年を除くlocal月日・時分・区間長の順序が一致する場合のみ。8760/8784、hourly/sub-hour、異なるpartial期間はNOT_COMPARABLE。Design Δは同じ気象内のみ。不一致を0や年換算で補いません。
+- INVALIDはreason付き数値なし。MultiはFloor位置を下から対応し、基準に対応階がなければそのFloor Design ΔはINVALIDです。Cross-floor shading未実装、formal absolute-kWh physical validation未完了。
+- 入力JSONはraw EPWを含まずUNRESOLVEDで復元。一致する気象fingerprintでのみbind。versioned non-cryptographic fingerprintは誤接続防止用であり、署名や暗号学的完全性保証ではありません。
+
 ## M9 explorer boundary
 
 - Singleの1D/2D候補展開・感度表示であり自動最適化ではありません。最大64候補、通常比較へ戻せるのは最大4案です。M10は同じ契約を選択階／全階共通のMulti探索へ拡張します。階ごとの独立組合せ探索ではありません。

@@ -2,7 +2,9 @@
 
 ## Status
 
-`COMPLETE`。M8はPR #13 merge / automatic Production verification済み（下記証拠）。M9もPR #14 merge / Production provenance・HTTP/assets確認済みでCOMPLETE。過去の保護Preview HTTP未確認・saved-file未再検証の帰属は[M9履歴](PARAMETRIC_EXPLORER.md)に保持。M10の複数階探索章は実装済み、RF-M10-REVIEW-01 RESOLVED、Focused Independent Re-Review / Human UX PASS（Human報告）。保存JSONはHuman受理、CSV/PDFは実装セッション外のartifact inspectionを区別し、PDF向き・末尾空白ページはAdvisoryのみ。[M10証拠の帰属](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)。PR #15 Draft、merge / post-merge Production確認はpending。
+`COMPLETE`（M8）。M9/M10もmerge / Git Production確認済みでCOMPLETE。過去のreview/Human/saved-file帰属・非blocking PDF Advisoryは[M10履歴](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)に保持。M11追加章「複数気象で比較する」(`#guide-weather-scenario`) は実装済み・Human UX / Independent FULL Review待ち。
+
+M11章は大阪／東京／福岡EPW例で、現在のSingle/Multi設計×最大4気象、Design Δ／Weather Δ、NOT_COMPARABLE、partial読込期間、synthetic警告、入力JSONのUNRESOLVED／EPW再照合を説明します。予測・future climate生成・weather API・自動最適化ではありません。Guide往復では設計・気象を保持し、Single/Multi source切替ではM11 snapshotをSTALEにします。
 
 本書はin-app manualの実装contractと保守ルールです。利用者向け本文の正本はアプリ上部の「使い方・技術情報」 (`#guide`) とし、本書へ同じ長文を複製しません。M8は計算物理モデルを追加・変更しないdocumentation / navigation milestoneです。
 

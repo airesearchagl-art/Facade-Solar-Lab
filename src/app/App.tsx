@@ -61,6 +61,7 @@ import { MonthlyChart } from "./components/MonthlyChart";
 import { MultiFloorWorkspace } from "./components/MultiFloorWorkspace";
 import { UserGuide } from "./components/UserGuide";
 import { ParametricExplorer } from "./components/ParametricExplorer";
+import { WeatherScenarioPanel } from "./components/WeatherScenarioPanel";
 import { transferCandidate } from "../explorer/study";
 import "./explorer.css";
 import { applyPresetToAppState } from "./preset-state";
@@ -470,7 +471,7 @@ function downloadTextFile(filename: string, contents: string, mediaType: string)
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function SingleFloorWorkspace() {
+function SingleFloorWorkspace({ active = true }: { active?: boolean }) {
   const { colors, setColor, resetColors } = useCaseColors();
   const [workspace, setWorkspace] = useState<ComparisonWorkspace>(() => createComparisonWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("case-a");
@@ -822,6 +823,10 @@ function SingleFloorWorkspace() {
         </div>
       </section>
 
+      <WeatherScenarioPanel source={{ mode: "single", workspace }} dataset={dataset} loadingWeather={loadingWeather} active={active} colors={colors}
+        onBaseline={id => mutateWorkspace(current => setBaselineCase(current, id))}
+        onCurrentWeather={next => { setDataset(next); setWeatherFailure(null); setDirty(true); }}
+        onImport={next => { if (next.mode === "single") { mutateWorkspace(() => next.workspace, next.workspace.cases[0]!.id); resetColors(); } }} />
       <ParametricExplorer
         dataset={dataset}
         source={selectedCase}
@@ -951,8 +956,8 @@ export function App() {
         <button type="button" aria-pressed={mode === "multi"} className={mode === "multi" ? "active" : undefined} onClick={() => navigate("multi")}>複数階モード</button>
         <button type="button" aria-pressed={mode === "guide"} className={mode === "guide" ? "active" : undefined} onClick={() => navigate("guide")}>使い方・技術情報</button>
       </nav>
-      <section data-workspace="single" hidden={mode !== "single"}><SingleFloorWorkspace /></section>
-      <section data-workspace="multi" hidden={mode !== "multi"}><MultiFloorWorkspace /></section>
+      <section data-workspace="single" hidden={mode !== "single"}><SingleFloorWorkspace active={mode !== "multi"} /></section>
+      <section data-workspace="multi" hidden={mode !== "multi"}><MultiFloorWorkspace active={mode !== "single"} /></section>
       <section data-workspace="guide" hidden={mode !== "guide"}><UserGuide onNavigate={navigate} /></section>
     </>
   );
