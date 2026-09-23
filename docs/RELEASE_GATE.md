@@ -32,7 +32,11 @@
 
 ## M10 Current State
 
-`IMPLEMENTATION_COMPLETE / RF-M10-REVIEW-01_RESOLVED / FOCUSED_INDEPENDENT_RE_REVIEW_PASS / HUMAN_UX_REVIEW_PASS / PRE_MERGE_GATE_PASS`（Human報告）。初回FULL Review B. REQUIRED FIXのREADME P2はfix head `6a5d305e04a24397612bc623ed75f90b51c2cabe`で解消、Focused Independent Re-Review PASS、Required Fix NONE OPEN。HumanはUXと保存CSV/JSON・PDFを受理。実装セッション外のCSV/PDF inspection、JSON Human-only attribution、非blocking PDF向き・末尾空白ページAdvisoryは[M10証拠](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)を参照。匿名Preview HTTP/assetsはProtectionによりUNVERIFIED / BLOCKEDのままで、受理状態をHTTP200測定証拠へ変換しません。PR #15 OPEN / Draft、Ready承認待ち、merge / post-merge Production確認PENDING。新docs-only headはGit/PRで別途記録し、過去Previewの測定SHAと混同しません。M11 NOT STARTED。
+`COMPLETE`。PR #15はMERGED、squash/main `56a0f19eb4103c5231f09ec1c79dcfe2f782d783`、Git Production `dpl_FLzFM4fpWcXr2NSZmCe71ez4dwY3` READY。canonical HTTP/assets/Single・Multi Explorer Worker PASS。[M11 Phase 0 read-only証拠](WEATHER_SCENARIO_MATRIX.md#m10-post-merge-fresh-closeout)。以前のreview/Human/saved-fileの帰属と保護Preview未確認、非blocking PDF Advisoryは[M10履歴](MULTIFLOOR_PARAMETRIC_EXPLORER.md#terminal-acceptance--evidence-attribution)に保持。
+
+## M11 Current State
+
+`IMPLEMENTATION_COMPLETE / HUMAN_UX_REVIEW_PENDING / INDEPENDENT_FULL_REVIEW_PENDING`。実装セッションのlocal tests/browser evidenceは[専用文書](WEATHER_SCENARIO_MATRIX.md)へ分離。final exact head / Git Preview metadataはDraft PR本文で取得・記録し、文書の自己参照SHAは固定しません。Human UX・保存CSV/JSON/PDF・未確認browser事項・独立review・Ready・merge・post-merge Productionは別Gate。保護Previewの画面表示をHTTP200の証拠へ変換しません。M12 NOT STARTED。
 
 ## 判定
 

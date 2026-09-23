@@ -49,6 +49,7 @@ import { FloorInputDifferences } from "./FloorInputDifferences";
 import { MultiFloorResults } from "./MultiFloorResults";
 import { CaseColorPicker, CaseMarker, getCaseStyle, useCaseColors } from "../case-colors";
 import { MultiParametricExplorer } from "./MultiParametricExplorer";
+import { WeatherScenarioPanel } from "./WeatherScenarioPanel";
 import { transferMultiCandidate } from "../../explorer/multi-study";
 
 const WEATHER_ISSUE_MESSAGES: Record<WeatherParseIssue["code"], string> = {
@@ -134,7 +135,7 @@ export function MultiFloorPrintSummary({ result, dataset }: { readonly result: M
   );
 }
 
-export function MultiFloorWorkspace() {
+export function MultiFloorWorkspace({ active = true }: { active?: boolean } = {}) {
   const { colors, setColor, resetColors } = useCaseColors();
   const [workspace, setWorkspace] = useState<MultiFloorWorkspaceState>(() => initialWorkspace());
   const [selectedCaseId, setSelectedCaseId] = useState("building-a");
@@ -302,6 +303,10 @@ export function MultiFloorWorkspace() {
 
       <section className="panel preset-panel no-print" aria-labelledby="multifloor-preset-title"><div><p className="section-kicker">入力専用JSON</p><h2 id="multifloor-preset-title">複数階条件を保存・再利用</h2><p>Case / Floors / baseline / selectedを保存します。計算結果、raw weather、EPW bytes、ブラウザlocal pathは含みません。</p></div><div className="preset-actions"><button type="button" className="secondary-button" onClick={saveCase}>この建物案を保存</button><button type="button" className="secondary-button" onClick={saveWorkspace}>複数階比較セットを保存</button><label className="file-button preset-file-button"><span>複数階JSONを読み込む</span><input type="file" accept=".json,.multifloor.json" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file !== undefined) void loadPreset(file); event.currentTarget.value = ""; }} /></label></div>{presetMessage === null ? null : <div className="message success-message" role="status">{presetMessage}</div>}{presetError === null ? null : <div className="message error-message" role="alert">{presetError}</div>}</section>
 
+      <WeatherScenarioPanel source={{ mode: "multi", workspace }} dataset={dataset} loadingWeather={loadingWeather} active={active} colors={colors}
+        onBaseline={id => mutateWorkspace(current => setMultiFloorBaseline(current, id))}
+        onCurrentWeather={next => { setDataset(next); setWeatherFailure(null); setDirty(true); }}
+        onImport={next => { if (next.mode === "multi") { mutateWorkspace(() => next.workspace, { caseId: next.workspace.cases[0]!.id, floorId: next.workspace.cases[0]!.floors[0]!.id }); resetColors(); } }} />
       <MultiParametricExplorer dataset={dataset} source={selectedCase} selectedFloorId={selectedFloor.id} caseCount={workspace.cases.length} weatherLoading={loadingWeather}
         onTransfer={candidate => mutateWorkspace(current => transferMultiCandidate(current, candidate, true))}
         onImport={input => mutateWorkspace(current => replaceMultiFloorCase(current, { ...input.source, id: selectedCase.id }), { floorId: input.selectedFloorId })} />

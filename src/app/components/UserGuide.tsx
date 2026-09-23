@@ -92,6 +92,7 @@ const TOC = [
   ["単一階 / 複数階", "guide-modes"], ["パラメータ", "guide-parameters"],
   ["検討例", "guide-examples"], ["パラメトリック探索", "guide-explorer"], ["結果の読み方", "guide-results"],
   ["複数階探索", "guide-multi-explorer"], ["保存・出力", "guide-exports"], ["技術詳細", "guide-technical"],
+  ["複数気象で比較する", "guide-weather-scenario"],
   ["適用範囲", "guide-limitations"],
 ] as const;
 
@@ -298,6 +299,14 @@ export function UserGuide({ onNavigate }: { readonly onNavigate: (mode: Workspac
             <p className="guide-hvac-note">表示値は開口を通る日射熱取得量であり、HVAC cooling/heating loadではありません。</p>
           </section>
 
+          <section className="guide-section" id="guide-weather-scenario" aria-labelledby="guide-weather-scenario-title">
+            <div className="guide-heading"><p>WEATHER SCENARIO MATRIX</p><h2 id="guide-weather-scenario-title">複数気象で比較する</h2></div>
+            <p>Single / Multiの「気象シナリオ比較」を開きます。現在のWorkspaceの設計案・基準案をそのまま使い、最大4気象 × 4設計＝16組合せを比較します。パラメトリック探索との直積ではありません。</p>
+            <ol><li>例: 大阪EPWと同じ庇案A/Bを準備します。</li><li>東京EPW・福岡EPWを追加し、出典・coverage・区間数を確認します。</li><li>比較を実行し、夏期／冬期の日射熱取得量をmatrix・chartで確認します。Multiではセルを選ぶとBuilding TotalとFloor Breakdownが見られます。</li><li>CSV / 入力JSON / A4横向きPDFで共有します。気象を含まない入力JSONは、読込後に対応するEPWを再選択しfingerprintを照合します。</li></ol>
+            <p><strong>Design Δ</strong>は同じ気象内の設計−基準案。<strong>Weather Δ</strong>は同じ設計の気象−参照気象です。時間区間が違う場合はNOT_COMPARABLEで数値を出しません。partialは読込期間の値で、通年性能ではありません。補間・年間換算はしません。</p>
+            <p>気象差の感度比較であり、気象予測・future climate生成・weather API・自動最適化ではありません。synthetic weatherは実測ではありません。M5外部参照はNOT_RUN、絶対kWhの正式な物理validationは未完了です。上下階の物理的な影は未実装です。</p>
+            <p>入力・気象・ラベル・基準／参照・Workspace切替後はSTALEとなります。元に戻しても再実行が必要です。キャンセルはWorkerを終了し、未完了結果は採用しません。</p>
+          </section>
           <section className="guide-section" id="guide-exports" aria-labelledby="guide-exports-title">
             <div className="guide-heading"><p>EXPORT &amp; PRESETS</p><h2 id="guide-exports-title">保存・出力</h2></div>
             <div className="export-guide-grid">
