@@ -12,7 +12,7 @@ import { runScenario, scenarioInputKey, scenarioMetric, validateScenario } from 
 import { scenarioCsv } from "../src/scenario/export";
 import { bindScenarioWeather, parseScenarioPreset, scenarioPreset } from "../src/scenario/preset";
 import { handleScenario, type ScenarioMessage, type ScenarioRequest } from "../src/scenario/protocol";
-import type { ScenarioInput } from "../src/scenario/types";
+import type { ScenarioCell, ScenarioInput } from "../src/scenario/types";
 import { RunClient, type RunWorker } from "../src/app/explorer-client";
 import { WeatherScenarioResults } from "../src/app/components/WeatherScenarioResults";
 import { WeatherScenarioPanel } from "../src/app/components/WeatherScenarioPanel";
@@ -131,6 +131,64 @@ describe("M11 canonical equality and deltas", () => {
     const shorter={...multi,workspace:{...multi.workspace,cases:multi.workspace.cases.map((c,i)=>i?c:{...c,floors:c.floors.slice(0,1)})}};
     const c=runScenario(shorter,time).cells[1]!;if(c.status!=="VALID")throw new Error();
     expect(c.floors[0]!.designDelta.status).toBe("VALID");expect(c.floors[1]!.designDelta.status).toBe("INVALID");
+  });
+  it.each([false, true])("omits nested Multi deltas with an INVALID baseline (reversed order: %s)", reverse => {
+    const workspace = createMultiFloorDemoWorkspace();
+    const cases = workspace.cases.map(c => c.id !== workspace.baselineCaseId ? c : {
+      ...c, floors: c.floors.map(f => f.id !== "floor-1" ? f : { ...f, floorHeightM: 0 }),
+    });
+    const input: ScenarioInput = { mode: "multi", workspace: { ...workspace, cases: reverse ? [...cases].reverse() : cases },
+      slots: [slots[0]!], referenceId: "current" };
+    const progress: ScenarioCell[] = [];
+    const result = runScenario(input, time, (_completed, _total, cell) => { if (cell) progress.push(cell); });
+    expect(result.cells.find(c => c.designId === workspace.baselineCaseId)).toMatchObject({
+      status: "INVALID", reason: expect.stringContaining("floor-1"),
+    });
+    const candidate = result.cells.find(c => c.designId !== workspace.baselineCaseId)!;
+    expect(candidate.status).toBe("VALID");
+    if (candidate.status !== "VALID") throw new Error("valid nonbaseline building must continue");
+    expect(candidate.designDelta.status).toBe("INVALID");
+    expect(candidate.designDelta).not.toHaveProperty("values");
+    expect(candidate.building).toBeDefined();
+    // The whole field must be absent, including annual/summer/winter/monthly kWh and percent.
+    expect(candidate.building).not.toHaveProperty("deltaFromBaseline");
+    expect(JSON.stringify(candidate.building)).not.toContain('"deltaFromBaseline"');
+    for (const floor of candidate.floors) {
+      expect(floor.designDelta.status).toBe("INVALID");
+      expect(floor.designDelta).not.toHaveProperty("values");
+    }
+    const design = workspace.cases.find(c => c.id === candidate.designId)!;
+    const { deltaFromBaseline: _isolatedDelta, ...canonical } = runMultiFloorComparison(weather, {
+      cases: [design], baselineCaseId: design.id,
+    }).cases[0]!;
+    expect(candidate.building).toEqual(canonical);
+    // Progress is published before scenario baseline resolution: it must not leak self-deltas either.
+    expect(progress).toHaveLength(cases.length);
+    for (const cell of progress) if (cell.status === "VALID") expect(cell.building).not.toHaveProperty("deltaFromBaseline");
+  });
+  it("preserves valid Multi period/monthly deltas and baseline self-cell semantics", () => {
+    if (multi.mode !== "multi") throw new Error();
+    const result = runScenario({ ...multi, slots: [slots[0]!] }, time);
+    const canonical = runMultiFloorComparison(weather, multi.workspace);
+    for (const cell of result.cells) {
+      if (cell.status !== "VALID") throw new Error("valid fixture");
+      const expected = canonical.cases.find(c => c.caseId === cell.designId)!;
+      expect(cell.building?.deltaFromBaseline).toEqual(expected.deltaFromBaseline);
+      expect(cell.building?.deltaFromBaseline?.monthly).toHaveLength(12);
+      if (cell.designDelta.status !== "VALID") throw new Error("valid baseline");
+      for (const period of ["annual", "summer", "winter"] as const) {
+        expect(cell.designDelta.values[period]).toBe(expected.deltaFromBaseline[period].kWh);
+      }
+      if (cell.designId === multi.workspace.baselineCaseId) {
+        expect(cell.designDelta.values).toEqual({ annual: 0, summer: 0, winter: 0 });
+        for (const delta of [expected.deltaFromBaseline.annual, expected.deltaFromBaseline.summer,
+          expected.deltaFromBaseline.winter, ...expected.deltaFromBaseline.monthly]) {
+          expect(delta.kWh).toBe(0);
+          expect(delta.percent === 0 || delta.percent === null).toBe(true);
+        }
+      }
+    }
+    expect(() => runScenario({ ...multi, workspace: { ...multi.workspace, baselineCaseId: "missing" } }, time)).toThrow("基準案がありません");
   });
 });
 describe("M11 exports / rendering",()=>{

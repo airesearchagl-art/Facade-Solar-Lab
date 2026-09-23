@@ -66,8 +66,9 @@ export function runScenario(input: ScenarioInput, executedAt: string,
         const issues = validateMultiFloorWorkspace(workspace);
         if (issues.length) throw new RangeError(issues.map(v => `${v.floorId ?? "Building"} / ${v.path}: ${v.message}`).join(" / "));
         // One isolated canonical comparison per combination: an invalid baseline
-        // must not suppress another valid building. Study deltas are added below.
-        const building = runMultiFloorComparison(slot.dataset, workspace).cases[0]!;
+        // must not suppress another valid building. Discard isolated self-deltas
+        // before publishing progress; only a valid scenario baseline adds them below.
+        const { deltaFromBaseline: _isolatedDelta, ...building } = runMultiFloorComparison(slot.dataset, workspace).cases[0]!;
         result = { designId, weatherId: slot.id, status: "VALID", building,
           values: { annual: building.total.annualKWh, summer: building.total.summerKWh, winter: building.total.winterKWh },
           model: [...new Set(building.floors.map(f => f.simulation.modelVersion))].join(" / "),

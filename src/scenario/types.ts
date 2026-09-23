@@ -18,9 +18,13 @@ export type Delta = { readonly status: "VALID"; readonly values: Values } | { re
 export interface ScenarioFloor { readonly id: string; readonly name: string; readonly model: string; readonly values: Values;
   readonly designDelta: Delta; readonly weatherDelta: Delta }
 interface CellIdentity { readonly designId: string; readonly weatherId: string; readonly runtimeMs: number }
+export type ScenarioBuildingResult = Omit<MultiFloorCaseResult, "deltaFromBaseline"> & {
+  /** Present only after a valid scenario baseline is resolved, never an isolated self-delta. */
+  readonly deltaFromBaseline?: MultiFloorCaseResult["deltaFromBaseline"];
+};
 export type ScenarioCell = CellIdentity & (
   | { readonly status: "INVALID"; readonly reason: string }
-  | { readonly status: "VALID"; readonly values: Values; readonly simulation?: FacadeSimulationResult; readonly building?: MultiFloorCaseResult;
+  | { readonly status: "VALID"; readonly values: Values; readonly simulation?: FacadeSimulationResult; readonly building?: ScenarioBuildingResult;
       readonly model: string; readonly designDelta: Delta; readonly weatherDelta: Delta; readonly floors: readonly ScenarioFloor[] }
 );
 export interface ScenarioResult { readonly snapshot: ScenarioSnapshot; readonly cells: readonly ScenarioCell[]; readonly runtimeMs: number }
