@@ -1,0 +1,27 @@
+.glazing-workspace { max-width: 1280px; margin: auto; padding: 24px; color: #193442; }
+.glazing-workspace * { box-sizing: border-box; min-width: 0; }
+.glazing-workspace h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+.glazing-workspace p, .glazing-workspace dd { overflow-wrap: anywhere; }
+.glazing-workspace label { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.glazing-workspace input, .glazing-workspace textarea, .glazing-workspace select { width: 100%; max-width: 100%; min-height: 44px; padding: 10px; border: 1px solid #6a8797; border-radius: 6px; background: white; color: #193442; }
+.glazing-workspace button, .glazing-workspace summary, .glazing-workspace header a { min-height: 44px; padding: 12px; }
+.glazing-workspace button { border: 1px solid #29637a; border-radius: 6px; color: #173b4b; background: #edf5f8; cursor: pointer; overflow-wrap: anywhere; }
+.glazing-workspace button:disabled { opacity: .5; cursor: not-allowed; }
+.glazing-workspace :focus-visible { outline: 3px solid #a05b00; outline-offset: 3px; }
+.glazing-workspace fieldset { border: 1px solid #b9cbd3; padding: 16px; }
+.glazing-workspace details { border: 1px solid #c4d4db; padding: 8px; margin: 12px 0; }
+.glazing-workspace summary { cursor: pointer; overflow-wrap: anywhere; }
+.glazing-workspace pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.glazing-workspace small { display: block; margin-top: 8px; overflow-wrap: anywhere; }
+.glazing-workspace .glazing-check { flex-direction: row; align-items: center; min-height: 44px; }
+.glazing-workspace .glazing-check input { width: 24px; min-height: 24px; }
+.glazing-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.glazing-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.glazing-table-scroll { max-width: 100%; overflow-x: auto; border: 1px solid #c4d4db; }
+.glazing-table-scroll table { border-collapse: collapse; min-width: 620px; width: 100%; table-layout: fixed; }
+.glazing-table-scroll th, .glazing-table-scroll td { padding: 12px; text-align: left; border: 1px solid #c4d4db; overflow-wrap: anywhere; }
+.glazing-workspace dl > div { display: grid; grid-template-columns: minmax(130px, 1fr) 2fr; border-bottom: 1px solid #d4e0e5; padding: 8px 0; }
+.glazing-workspace dt { font-weight: 600; overflow-wrap: anywhere; }
+.glazing-workspace dd { margin: 0; }
+.glazing-import-review { background: #f1f7ee; border: 2px solid #648853; padding: 16px; }
+@media (max-width: 600px) { .glazing-workspace { padding: 12px; } .glazing-metric-grid { grid-template-columns: 1fr; } .glazing-workspace dl > div { grid-template-columns: 1fr; gap: 5px; } .glazing-actions > button { flex: 1 1 150px; } }

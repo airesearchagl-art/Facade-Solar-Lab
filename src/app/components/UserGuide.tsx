@@ -92,7 +92,7 @@ const TOC = [
   ["単一階 / 複数階", "guide-modes"], ["パラメータ", "guide-parameters"],
   ["検討例", "guide-examples"], ["パラメトリック探索", "guide-explorer"], ["結果の読み方", "guide-results"],
   ["複数階探索", "guide-multi-explorer"], ["保存・出力", "guide-exports"], ["技術詳細", "guide-technical"],
-  ["適用範囲", "guide-limitations"],
+  ["ガラス性能比較", "guide-glazing"], ["適用範囲", "guide-limitations"],
 ] as const;
 
 function ParameterDiagram() {
@@ -173,6 +173,7 @@ export function UserGuide({ onNavigate }: { readonly onNavigate: (mode: Workspac
         <span>表示する絶対値[kWh]はHVAC負荷・BEI・性能保証値ではなく、正式な物理validationは未完了です。</span>
       </aside>
 
+      <section id="guide-glazing" className="guide-scope-note"><h2>ガラス性能比較</h2><p>手入力・利用者のローカルJSONから最大4案のη、ガラス中央部Ug、可視光透過率、可視光反射率と構成・出典を比較します。Ugは窓全体Uwではありません。未知値はUNKNOWNで、評価条件の一致やメーカー性能は保証しません。</p><p>編集後はSTALEとなり「比較を更新」が必要です。JSONはUTF-8で最大256 KiB、保存はCurrent時だけ。製品を再読込した場合は出典の同一版を明示照合します。外部送信・自動保存・公開カタログ・自動性能算定・Single/Multiへの転送はありません。</p><ModeButton mode="glazing" onNavigate={onNavigate}>ガラス性能比較へ</ModeButton></section>
       <div className="guide-layout">
         <nav className="guide-toc no-print" aria-label="使い方・技術情報の目次">
           <strong>目次</strong>

@@ -1,3 +1,5 @@
+import { GlazingWorkspace } from "./components/glazing/GlazingWorkspace";
+import "./glazing.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -949,10 +951,12 @@ export function App() {
         <span>Workspace</span>
         <button type="button" aria-pressed={mode === "single"} className={mode === "single" ? "active" : undefined} onClick={() => navigate("single")}>単一階モード</button>
         <button type="button" aria-pressed={mode === "multi"} className={mode === "multi" ? "active" : undefined} onClick={() => navigate("multi")}>複数階モード</button>
+        <button type="button" aria-pressed={mode === "glazing"} className={mode === "glazing" ? "active" : undefined} onClick={() => navigate("glazing")}>ガラス性能比較</button>
         <button type="button" aria-pressed={mode === "guide"} className={mode === "guide" ? "active" : undefined} onClick={() => navigate("guide")}>使い方・技術情報</button>
       </nav>
       <section data-workspace="single" hidden={mode !== "single"}><SingleFloorWorkspace /></section>
       <section data-workspace="multi" hidden={mode !== "multi"}><MultiFloorWorkspace /></section>
+      <section data-workspace="glazing" hidden={mode !== "glazing"}><GlazingWorkspace /></section>
       <section data-workspace="guide" hidden={mode !== "guide"}><UserGuide onNavigate={navigate} /></section>
     </>
   );
