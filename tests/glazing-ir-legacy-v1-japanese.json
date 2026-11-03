@@ -1,0 +1,136 @@
+{
+  "kind": "facade-solar-lab-glazing-workspace-preset",
+  "schemaVersion": 1,
+  "workspace": {
+    "entries": [
+      {
+        "id": "IR-COMPAT",
+        "name": "Independent compatibility",
+        "origin": "user_entry",
+        "userRevision": "U1",
+        "metrics": {
+          "etaShgc": {
+            "value": null,
+            "unit": "fraction",
+            "evaluationScope": "UNKNOWN",
+            "incidenceSide": "UNKNOWN",
+            "incidenceAngleDeg": null,
+            "calculationOrTestStandard": null,
+            "boundaryConditions": null,
+            "evidenceRef": "user-entry:IR-COMPAT:etaShgc",
+            "verificationStatus": "UNVERIFIED",
+            "resolvedSource": {
+              "sourceRef": "user-entry:IR-COMPAT",
+              "manufacturer": "UNKNOWN",
+              "originalSourceUrl": null,
+              "originalTable": "UNKNOWN",
+              "rowIdentifier": "UNKNOWN",
+              "rowNumber": null,
+              "rowDescriptor": null,
+              "sourceEdition": null,
+              "sourceRevision": null,
+              "manufacturerProductRevision": null,
+              "effectiveDate": null,
+              "retrievedAt": null,
+              "retrievalDateBasis": "USER_ENTERED_NOT_SOURCE_RETRIEVAL",
+              "accessStatus": "USER_ENTRY",
+              "verificationStatus": "UNVERIFIED",
+              "evidenceReference": "USER_DECLARED"
+            }
+          },
+          "ugWm2K": {
+            "value": null,
+            "unit": "W/m2K",
+            "evaluationScope": "UNKNOWN",
+            "incidenceSide": "NOT_APPLICABLE",
+            "incidenceAngleDeg": null,
+            "calculationOrTestStandard": null,
+            "boundaryConditions": null,
+            "evidenceRef": "user-entry:IR-COMPAT:ugWm2K",
+            "verificationStatus": "UNVERIFIED",
+            "resolvedSource": {
+              "sourceRef": "user-entry:IR-COMPAT",
+              "manufacturer": "UNKNOWN",
+              "originalSourceUrl": null,
+              "originalTable": "UNKNOWN",
+              "rowIdentifier": "UNKNOWN",
+              "rowNumber": null,
+              "rowDescriptor": null,
+              "sourceEdition": null,
+              "sourceRevision": null,
+              "manufacturerProductRevision": null,
+              "effectiveDate": null,
+              "retrievedAt": null,
+              "retrievalDateBasis": "USER_ENTERED_NOT_SOURCE_RETRIEVAL",
+              "accessStatus": "USER_ENTRY",
+              "verificationStatus": "UNVERIFIED",
+              "evidenceReference": "USER_DECLARED"
+            }
+          },
+          "visibleTransmittance": {
+            "value": null,
+            "unit": "fraction",
+            "evaluationScope": "UNKNOWN",
+            "incidenceSide": "UNKNOWN",
+            "incidenceAngleDeg": null,
+            "calculationOrTestStandard": null,
+            "boundaryConditions": null,
+            "evidenceRef": "user-entry:IR-COMPAT:visibleTransmittance",
+            "verificationStatus": "UNVERIFIED",
+            "resolvedSource": {
+              "sourceRef": "user-entry:IR-COMPAT",
+              "manufacturer": "UNKNOWN",
+              "originalSourceUrl": null,
+              "originalTable": "UNKNOWN",
+              "rowIdentifier": "UNKNOWN",
+              "rowNumber": null,
+              "rowDescriptor": null,
+              "sourceEdition": null,
+              "sourceRevision": null,
+              "manufacturerProductRevision": null,
+              "effectiveDate": null,
+              "retrievedAt": null,
+              "retrievalDateBasis": "USER_ENTERED_NOT_SOURCE_RETRIEVAL",
+              "accessStatus": "USER_ENTRY",
+              "verificationStatus": "UNVERIFIED",
+              "evidenceReference": "USER_DECLARED"
+            }
+          },
+          "visibleReflectance": {
+            "value": null,
+            "unit": "fraction",
+            "evaluationScope": "UNKNOWN",
+            "incidenceSide": "UNKNOWN",
+            "incidenceAngleDeg": null,
+            "calculationOrTestStandard": null,
+            "boundaryConditions": null,
+            "evidenceRef": "user-entry:IR-COMPAT:visibleReflectance",
+            "verificationStatus": "UNVERIFIED",
+            "resolvedSource": {
+              "sourceRef": "user-entry:IR-COMPAT",
+              "manufacturer": "UNKNOWN",
+              "originalSourceUrl": "https://example.invalid/table?%E5%89%B2%E5%90%88%25=10",
+              "originalTable": "UNKNOWN",
+              "rowIdentifier": "UNKNOWN",
+              "rowNumber": null,
+              "rowDescriptor": null,
+              "sourceEdition": null,
+              "sourceRevision": null,
+              "manufacturerProductRevision": null,
+              "effectiveDate": null,
+              "retrievedAt": null,
+              "retrievalDateBasis": "USER_ENTERED_NOT_SOURCE_RETRIEVAL",
+              "accessStatus": "USER_ENTRY",
+              "verificationStatus": "UNVERIFIED",
+              "evidenceReference": "USER_DECLARED"
+            }
+          }
+        },
+        "assemblyDescription": null,
+        "assembly": null,
+        "entryContentDigest": "glz-user-entry-v1:sha256:c370fda30c477eac64014c6996413f612f6df12cd25b9f9215466fc7849651c5"
+      }
+    ],
+    "selectedEntryId": "IR-COMPAT"
+  }
+}

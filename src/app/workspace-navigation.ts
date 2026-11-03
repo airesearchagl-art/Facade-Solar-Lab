@@ -1,4 +1,4 @@
-export const WORKSPACE_MODES = ["single", "multi", "guide"] as const;
+export const WORKSPACE_MODES = ["single", "multi", "guide", "glazing"] as const;
 
 export type WorkspaceMode = (typeof WORKSPACE_MODES)[number];
 
@@ -8,6 +8,7 @@ export type WorkspaceMode = (typeof WORKSPACE_MODES)[number];
  */
 export function workspaceModeFromHash(hash: string): WorkspaceMode {
   const normalized = hash.trim().toLowerCase();
+  if (normalized === "#glazing") return "glazing";
   if (normalized === "#multi") return "multi";
   if (normalized === "#guide" || normalized.startsWith("#guide-")) return "guide";
   return "single";
