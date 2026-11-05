@@ -17,11 +17,29 @@
 .glazing-workspace .glazing-check input { width: 24px; min-height: 24px; }
 .glazing-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
 .glazing-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.glazing-table-scroll { max-width: 100%; overflow-x: auto; border: 1px solid #c4d4db; }
-.glazing-table-scroll table { border-collapse: collapse; min-width: 620px; width: 100%; table-layout: fixed; }
-.glazing-table-scroll th, .glazing-table-scroll td { padding: 12px; text-align: left; border: 1px solid #c4d4db; overflow-wrap: anywhere; }
+.glazing-scroll-help { font-size: .9rem; }
+.glazing-table-scroll { --glazing-label-width: 160px; --glazing-case-width: 240px; max-width: 100%; max-height: 70vh; overflow-x: auto; overflow-y: auto; scroll-padding-left: var(--glazing-label-width); scroll-snap-type: x mandatory; border: 1px solid #c4d4db; }
+.glazing-table-scroll table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
+.glazing-table-scroll .glazing-metric-column { width: var(--glazing-label-width); }
+.glazing-table-scroll th, .glazing-table-scroll td { padding: 12px; text-align: left; border-inline-end: 1px solid #c4d4db; border-block-end: 1px solid #c4d4db; overflow-wrap: anywhere; vertical-align: top; }
+.glazing-table-scroll th { background: #edf5f8; }
+.glazing-table-scroll td { background: #fffdf7; }
+.glazing-table-scroll th[scope="row"] { position: sticky; left: 0; z-index: 1; }
+.glazing-table-scroll thead th { position: sticky; top: 0; z-index: 2; }
+.glazing-table-scroll thead th:not(:first-child) { scroll-snap-align: start; scroll-snap-stop: always; }
+.glazing-table-scroll thead th:first-child { left: 0; z-index: 3; }
+@media (max-width: 600px) {
+  .glazing-table-scroll { --glazing-label-width: 104px; --glazing-case-width: 224px; }
+  .glazing-table-scroll th, .glazing-table-scroll td { padding: 8px; }
+}
 .glazing-workspace dl > div { display: grid; grid-template-columns: minmax(130px, 1fr) 2fr; border-bottom: 1px solid #d4e0e5; padding: 8px 0; }
 .glazing-workspace dt { font-weight: 600; overflow-wrap: anywhere; }
 .glazing-workspace dd { margin: 0; }
 .glazing-import-review { background: #f1f7ee; border: 2px solid #648853; padding: 16px; }
 @media (max-width: 600px) { .glazing-workspace { padding: 12px; } .glazing-metric-grid { grid-template-columns: 1fr; } .glazing-workspace dl > div { grid-template-columns: 1fr; gap: 5px; } .glazing-actions > button { flex: 1 1 150px; } }
+
+.glazing-construction-info, .glazing-sample-warning { padding: 12px 16px; border-inline-start: 4px solid; }
+.glazing-construction-info { background: #edf5f8; border-color: #397084; }
+.glazing-construction-info p { margin: 6px 0; }
+.glazing-sample-warning { color: #673700; background: #fff2cd; border-color: #996000; }
+.glazing-table-scroll td small { white-space: pre-wrap; }
