@@ -91,3 +91,16 @@ describe("M8 in-app user guide", () => {
     expect(html).not.toContain('aria-hidden="true"><h');
   });
 });
+
+it("keeps the scope aside separate from the complete glazing guide section", () => {
+  const aside = html.match(/<aside class="guide-scope-note"[^>]*>([\s\S]*?)<\/aside>/)?.[1];
+  expect(aside).toBeDefined();
+  expect(aside).toContain("<strong>");
+  expect(aside).toContain("<span>");
+  const section = html.match(/<section id="guide-glazing" class="guide-scope-note guide-glazing-note">([\s\S]*?)<\/section>/)?.[1];
+  expect(section).toBeDefined();
+  expect(section).toContain("<h2>");
+  expect(section?.match(/<p>/g)).toHaveLength(2);
+  expect(section).toContain('type="button"');
+  for (const value of ["UNKNOWN", "STALE", "UTF-8", "256 KiB", "Current", "Ug", "Uw"]) expect(section).toContain(value);
+});

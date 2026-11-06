@@ -20,7 +20,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  min-width: 320px;
+  min-width: 0;
   min-height: 100vh;
   margin: 0;
   background:
@@ -50,12 +50,10 @@ summary:focus-visible,
 }
 
 .mode-switch {
-  position: sticky;
-  z-index: 10;
-  top: 12px;
+  position: static;
   display: flex;
   width: fit-content;
-  margin: 12px auto -26px;
+  margin: 12px auto 0;
   padding: 5px;
   border: 1px solid #abb0a8;
   border-radius: 999px;
@@ -148,6 +146,7 @@ summary:focus-visible,
   align-items: baseline;
   gap: 22px;
 }
+.guide-glazing-note { grid-template-columns: minmax(0, 1fr); }
 .guide-scope-note strong { color: var(--accent-dark); font-size: 0.82rem; }
 .guide-scope-note span { color: #70533c; font-size: 0.76rem; line-height: 1.6; }
 
@@ -958,6 +957,8 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
 }
 
 @media (max-width: 720px) {
+  /* Wrapped navigation stays in document flow and cannot cover focused inputs. */
+  .mode-switch { position: static; max-width: calc(100% - 16px); }
   .app-shell { width: min(100% - 24px, 1480px); padding-top: 20px; }
   .app-header { align-items: flex-start; flex-direction: column; }
   .critical-warning { grid-template-columns: 1fr; gap: 8px; }
@@ -1007,7 +1008,7 @@ footer { display: flex; padding: 18px 0 0; color: var(--muted); font-size: 0.68r
   .preset-dialog { padding: 22px 18px; }
   .preset-dialog-actions { align-items: stretch; flex-direction: column-reverse; }
   footer { flex-direction: column; }
-  .mode-switch { top: 6px; width: calc(100% - 16px); margin-bottom: -14px; }
+  .mode-switch { width: calc(100% - 16px); }
   .mode-switch > span { display: none; }
   .mode-switch button { flex: 1; }
   .floor-heading .case-actions { flex-direction: column; }
