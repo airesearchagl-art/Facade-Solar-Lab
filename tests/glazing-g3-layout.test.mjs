@@ -31,3 +31,18 @@ it('keeps narrow navigation in flow and provides bounded two-axis table context'
   expect(css).toMatch(/th\[scope="row"\][^{]*\{[^}]*position: sticky;[^}]*left: 0/);
   expect(css).toMatch(/thead th\s*\{[^}]*position: sticky;[^}]*top: 0/);
 });
+
+it('separates the four-child Guide section from the two-child scope aside', () => {
+  const css = source('styles.css');
+  expect(css).toMatch(/\.guide-scope-note\s*\{[^}]*grid-template-columns:\s*auto minmax\(0, 1fr\)/);
+  expect(css).toMatch(/\.guide-glazing-note\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/);
+});
+
+it('keeps navigation in flow at every width without forcing a 320px body', () => {
+  const css = source('styles.css');
+  const blocks = [...css.matchAll(/\.mode-switch\s*\{([^}]*)\}/g)];
+  expect(blocks[0][1]).toMatch(/position:\s*static/);
+  for (const [, block] of blocks) expect(block).not.toMatch(/position:\s*(?:fixed|sticky|absolute)/);
+  expect(css).toMatch(/body\s*\{[^}]*min-width:\s*0;/);
+  expect(css.match(/body\s*\{[^}]*\}/g).join('')).not.toMatch(/overflow-x:\s*(?:hidden|clip)/);
+});
